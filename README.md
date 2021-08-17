@@ -2,16 +2,16 @@
 
 ## Start Up ( Linux or wsl )
 
-1.) Download node js v16.5.0 and nvm (Node version manager)
+1.) Download node js v14.17.5 and nvm (Node version manager)
 
     sudo apt-get update
     sudo apt-get install nodejs
     sudo apt-get install npm
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm. Now you can use nvm
-    node -v
-
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install 14.17.5
+    nvm use 14.17.5
 
 3.) Download php 7.4.22 
 
@@ -48,6 +48,7 @@
 6.) Check if it's working
 
     nvm --version
+    npm --version
     node --version
     php --version
     composer --version
