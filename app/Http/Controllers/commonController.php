@@ -1,0 +1,266 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Exports\csoExport;
+use Excel;
+
+
+class commonController extends Controller
+{
+    public function getLROStatus(){
+        $get_status = DB::table("lro_status")->select(DB::raw("status_name as text, status_name as value"))->get();
+        $status_list = [];
+        if($get_status){
+            foreach ($get_status as $key => $row){
+                $status_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $status_list;
+    }
+
+    public function getDocumentType(){
+        $get_type = DB::table("document_type")->select(DB::raw("document_type as text, document_type as value"))->get();
+        $type_list = [];
+        if($get_type){
+            foreach ($get_type as $key => $row){
+                $type_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $type_list;
+    }
+
+    public function getDocumentOwner(){
+        $get_owner = DB::table("document_owner")->select(DB::raw("document_owner as text, document_owner as value"))->get();
+        $owner_list = [];
+        if($get_owner){
+            foreach ($get_owner as $key => $row){
+                $owner_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $owner_list;
+    }
+
+    public function getCategories(){
+        $get_categories = DB::table("categories")->select(DB::raw("category as text, category as value"))->orderBy("seq")->get();
+        $category_list = [];
+        if($get_categories){
+            foreach ($get_categories as $key => $row){
+                $category_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $category_list;
+    }
+
+    public function getIndicatorStatus(){
+        $get_status = DB::table("indicator_status")->select(DB::raw("indicator_status as text, indicator_status as value"))->get();
+        $status_list = [];
+        if($get_status){
+            foreach ($get_status as $key => $row){
+                $status_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $status_list;
+    }
+
+    public function getFrequencies(){
+        $get_frequencies = DB::table("frequencies")->select(DB::raw("frequency as text, frequency as value"))->get();
+        $frequency_list = [];
+        if($get_frequencies){
+            foreach ($get_frequencies as $key => $row){
+                $frequency_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $frequency_list;
+    }
+
+    public function getIndicatorType(){
+        $get_type = DB::table("indicator_type")->select(DB::raw("indicator_type as text, indicator_type as value"))->get();
+        $type_list = [];
+        if($get_type){
+            foreach ($get_type as $key => $row){
+                $type_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $type_list;
+    }
+
+    public function getParticipants(){
+        $get_participant = DB::table("participant_profile")->select(DB::raw("participant_name as text, participant_id as value"))->get();
+        $participant_list = [];
+        if($get_participant){
+            foreach ($get_participant as $key => $row){
+                $participant_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $participant_list;
+    }
+
+    public function getCourses(){
+        $get_course = DB::table("courses")->select(DB::raw("course_name as text, course_id as value"))->get();
+        $course_list = [];
+        if($get_course){
+            foreach ($get_course as $key => $row){
+                $course_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $course_list;
+    }
+
+
+
+
+    public function getPermission(Request $request){
+        $role_id = Auth::user()->role_id;
+        $pages = $request['page_id'];
+        $get_permission = DB::table("role_has_permissions")->select(DB::raw("`name` AS user_permission "))
+            ->join("permissions", "permission_id", "id")
+            ->where("role_id",$role_id)
+            ->where("page_id", $pages)
+            ->get();
+        $permission_list = array();
+        $permission_list['access'] = false;
+        $permission_list['add'] = false;
+        $permission_list['delete'] = false;
+        $permission_list['export_excel'] = false;
+        $permission_list['import_data'] = false;
+        $permission_list['print'] = false;
+        $permission_list['update'] = false;
+        $permission_list['view'] = false;
+        if($get_permission){
+            foreach ($get_permission as $row){
+
+                switch($row->user_permission){
+                    case 'access';
+                        $permission_list['access'] = true;
+                        break;
+                    case 'add';
+                        $permission_list['add'] = true;
+                        break;
+                    case 'delete';
+                        $permission_list['delete'] = true;
+                        break;
+                    case 'export_excel';
+                        $permission_list['export_excel'] = true;
+                        break;
+                    case 'import_data';
+                        $permission_list['import_data'] = true;
+                        break;
+                    case 'print';
+                        $permission_list['print'] = true;
+                        break;
+                    case 'update';
+                        $permission_list['update'] = true;
+                        break;
+                    case 'view';
+                        $permission_list['view'] = true;
+                        break;
+
+                }
+            }
+        }
+
+        return response()->json($permission_list, 200);
+
+    }
+
+    public function exportExcel(Request $request){
+        $tableName = $request['tableName'];
+        $fileName = $tableName.'.xlsx';
+        $dataExport = "";
+        switch ($tableName){
+            case "CSO2 Indicator":
+                $dataExport = DB::table("cso_indicator")->select(
+                        DB::raw("cso_indicator.cso_category AS Category"),
+                        DB::raw("cso_indicator.cso_description AS Description"),
+                        DB::raw("cso_indicator.cso_status AS Status"),
+                        DB::raw("indicator.indicator_no AS 'Indicator No'"),
+                        DB::raw("indicator.indicator AS Indicator"),
+                        DB::raw("indicator.indicator_type AS Type"),
+                        DB::raw("indicator.data_source AS 'Data Source'"),
+                        DB::raw("indicator.frequency AS Frequency"),
+                        DB::raw("indicator.unit_measure AS 'Unit of Measure'"),
+                        DB::raw("indicator.ppr AS PPR"),
+                        DB::raw("indicator.baseline_date AS 'Baseline Date'"),
+                        DB::raw("indicator.baseline_value AS 'Baseline Value'"),
+                        DB::raw("indicator.target_date AS 'Target Date'"),
+                        DB::raw("indicator.target_value AS 'Target Value'"),
+                        DB::raw("indicator.actual_date AS 'Actual Date'"),
+                        DB::raw("indicator.mov_file AS MOV")
+                    )
+                    ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
+                    ->whereRaw("cso_indicator.deleted_at IS NULL")
+                    ->whereRaw("indicator.deleted_at IS NULL")
+                    ->where("cso_indicator.cso_category", $request['category'])
+                    ->get();
+
+                break;
+            case "CSO Profile":
+                $dataExport = DB::table("cso_profile")->select(
+                    DB::raw("is_lro AS 'Is LRO'"),
+                    DB::raw("proj_area AS 'Project Area'"),
+                    DB::raw("cso_name AS 'Full name of the CSO/CSO Network'"),
+                    DB::raw("cso_type AS 'Type of CSO/CSO Network'"),
+                    DB::raw("cso_abbreviation AS 'Abbreviation'"),
+                    DB::raw("cso_address AS 'Address'"),
+                    DB::raw("cso_phone AS 'Telephone'"),
+                    DB::raw("cso_mobile AS 'Mobile Number'"),
+                    DB::raw("cso_email AS 'Email Address'"),
+                    DB::raw("cso_website AS 'Website/Url'"),
+                    DB::raw("cso_facebook AS 'Facebook Account'"),
+                    DB::raw("cso_twitter AS 'Twitter Account'"),
+                    DB::raw("cso_instagram AS 'Instagram Account'"),
+                    DB::raw("cso_youtube AS 'Youtube Account'"),
+                    DB::raw("cso_socmed AS 'Other Social Media Account'")
+                )
+                ->whereRaw("deleted_at IS NULL")
+                ->get();
+                break;
+            case "Finance Tracker":
+                $dataExport = DB::table("finance")->select(
+                    DB::raw("finance_code,
+                                finance_name,
+                                finance_location,
+                                finance_cost_center,
+                                finance_project_code,
+                                finance_sof,
+                                finance_dea,
+                                finance_partner,
+                                finance_budget,
+                                finance_tranche1,
+                                finance_tranche2,
+                                finance_tranche3,
+                                finance_tranche4,
+                                finance_retention,
+                                finance_total,
+                                finance_actuals,
+                                finance_variance,
+                                finance_burn1,
+                                finance_burn2,
+                                finance_burn3,
+                                finance_burn4,
+                                finance_burn_rate")
+                )->whereRaw("deleted_at IS NULL")->get();
+                break;
+            case "Project Tracking Document":
+                break;
+            case "LMS":
+                break;
+        }
+
+        return Excel::download( (new csoExport)->forTableName($tableName)->forDataExport($dataExport),  $fileName);
+    }
+}
