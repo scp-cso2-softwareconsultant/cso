@@ -13,7 +13,7 @@
     nvm install 14.17.5
     nvm use 14.17.5
 
-3.) Download php 7.4.22 
+3.) Download php 7.4.22 and MySql
 
     sudo apt update
     sudo apt install apache2
