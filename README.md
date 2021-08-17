@@ -1,14 +1,15 @@
 
 
 Start Up (Linux or wsl )
-1.) Download node js 14.7.5 and nvm (Node version manager)
+1.) Download node js v16.5.0 and nvm (Node version manager)
 
     sudo apt-get update
     sudo apt-get install nodejs
     sudo apt-get install npm
-    nvm install v14.7.5
-    nvm install -g 14.7.5
-    nodejs -v
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm. Now you can use nvm
+    node -v
 
 
 3.) Download php 7.4.22 
