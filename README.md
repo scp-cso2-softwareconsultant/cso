@@ -44,10 +44,20 @@
 5.) Download laravel Installer 4.2.7
 
     composer global require "laravel/installer"
+    
+6.) Check if it's working
 
+    nvm --version
+    node --version
+    php --version
+    composer --version
+    laravel --version
+    
+  
 --
 
-## Starting up environment 
+
+## Setting up environment 
 
 1.) Clone repository
 
