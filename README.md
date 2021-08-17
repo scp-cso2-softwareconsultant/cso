@@ -6,8 +6,8 @@ Start Up (Linux or wsl )
     sudo apt-get update
     sudo apt-get install nodejs
     sudo apt-get install npm
-    sudo nvm install v14.7.5
-    npm install -g 14.7.5
+    nvm install v14.7.5
+    nvm install -g 14.7.5
     nodejs -v
 
 
