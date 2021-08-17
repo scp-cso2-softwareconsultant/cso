@@ -1,7 +1,7 @@
 
 
 Start Up (Linux or wsl )
-1.) Download node js 14.7.5 and npm (Node package manager)
+1.) Download node js 14.7.5 and nvm (Node version manager)
 
     sudo apt-get update
     sudo apt-get install nodejs
