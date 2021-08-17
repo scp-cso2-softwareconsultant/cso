@@ -1,3 +1,52 @@
+
+
+Start Up (Linux or wsl )
+1.) Download node js 14.7.5 and npm (Node package manager)
+
+    sudo apt-get update
+    sudo apt-get install nodejs
+    sudo apt-get install npm
+    sudo nvm install v14.7.5
+    npm install -g 14.7.5
+    nodejs -v
+
+
+3.) Download php 7.4.22 
+
+    sudo apt update
+    sudo apt install apache2
+    sudo apt install php libapache2-mod-php
+    sudo apt install php-{bcmath,bz2,curl,gd,json,mbstring,mysql,xml,zip}
+    sudo apt install mysql-server
+    sudo systemctl start mysql
+    sudo systemctl restart apache2
+
+
+4.) Download composer php package manager
+
+    sudo apt update
+    sudo apt install php-cli unzip
+    cd ~
+    curl -sS https://getcomposer.org/installer -o composer-setup.php
+
+    HASH=`curl -sS https://composer.github.io/installer.sig`
+    echo $HASH
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    composer
+
+    apt search mbstring
+    sudo apt install php-mbstring
+    
+
+5.) Download laravel Installer 4.2.7
+
+    composer global require "laravel/installer"
+
+
+
+Starting up environment 
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
