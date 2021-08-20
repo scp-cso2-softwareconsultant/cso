@@ -257,42 +257,53 @@ class commonController extends Controller
                 break;
             case "Assessment":
                     $dataExport = DB::table("lro_assessment")->select(
-                        DB::raw("lro_id AS 'LRO ID'"),
-                        DB::raw("domain AS 'Domain'"),
-                        DB::raw("final_score AS 'Final Score'"),
-                        DB::raw("assessment_date AS 'Assessment Date'"),
-                        DB::raw("conducted_by AS 'Conducted By'"),
-                        DB::raw("tool_used AS 'Tool Used'"),
-                        DB::raw("mov AS 'Mov'"),
-                        DB::raw("status AS 'Status'"),
-                        DB::raw("created_at AS 'Created At'"),
-                        DB::raw("created_by AS 'Created By'"),
-                        DB::raw("updated_at AS 'Updated At'"),
-                        DB::raw("updated_by AS 'Updated By'"),
-                        DB::raw("deleted_at AS 'Deleted At'"),
-                        DB::raw("deleted_by AS 'Deleted By'"),
-                    )->whereRaw("deleted_at IS NULL")->get();
+                        DB::raw("cso_profile.cso_name,lro_assessment.domain"),
+                        DB::raw(
+                            "lro_assessment.tool_used,
+                            lro_assessment.conducted_by,
+                            lro_assessment.created_at,
+                            lro_assessment.final_score,
+                            lro_assessment.mov,
+                            lro_assessment.status,
+                            lro_assessment.created_by,
+                            lro_assessment.updated_at,
+                            lro_assessment.updated_by
+                            ")
+                    )
+                    ->leftJoin('cso_profile','cso_profile_id','lro_id')
+                    ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))
+                    ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();
                     break;
             case "Project Tracking Document":
                 break;
             case "Participant Profile":
+                /*
+                "PARTICIPANT ID",
+                "PARTICIPANT NAME",
+                "PARTICIPANT LOCATION",
+                "NAME OF LRO",
+                "PARTICIPANT SKILLS"
+                */
                     $dataExport = DB::table("participant_profile")->select(
-                        DB::raw("participant_id,
-                        participant_name,
-                        participant_location,
-                        participant_address,
-                        participant_position,
-                        lro_id,
-                        participant_gender,
-                        participant_age,
-                        participant_skills,
-                        created_at,
-                        created_by,
-                        updated_at,
-                        updated_by,
-                        deleted_at,
-                        deleted_by")
-                    )->whereRaw("deleted_at IS NULL")->get();
+                        DB::raw("
+                        participant_profile.participant_id,
+                        participant_profile.participant_name, 
+                        participant_profile.participant_location,
+                        participant_profile.participant_address,
+                        cso_profile.cso_name,
+                        participant_profile.participant_skills,
+                        participant_profile.participant_position,
+                        participant_profile.participant_gender,
+                        participant_profile.participant_age,
+                        participant_profile.created_at,
+                        participant_profile.created_by,
+                        participant_profile.updated_at,
+                        participant_profile.updated_by
+                        ")
+                    )
+                    ->leftJoin('cso_profile','cso_profile_id','lro_id')
+                    ->whereRaw(DB::raw("participant_profile.deleted_at IS NULL"))
+                    ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();        
                 break;
             case "Courses":
                 $dataExport = DB::table("courses")->select(
@@ -304,9 +315,7 @@ class commonController extends Controller
                     created_at,
                     created_by,
                     updated_at,
-                    updated_by,
-                    deleted_at,
-                    deleted_by")
+                    updated_by")
                 )->whereRaw("deleted_at IS NULL")->get();
             break; 
             case "Training Attendees":
@@ -331,10 +340,7 @@ class commonController extends Controller
                         training_attendees.created_at,
                         training_attendees.created_by,
                         training_attendees.updated_at,
-                        training_attendees.updated_by,
-                        training_attendees.deleted_at,
-                        training_attendees.deleted_by
-                        "
+                        training_attendees.updated_by"
                         )
                 )
                 ->leftJoin('participant_profile','participant_profile.participant_id','training_attendees.participant_id')

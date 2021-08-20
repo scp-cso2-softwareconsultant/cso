@@ -26,51 +26,62 @@ class csoExport implements FromCollection, WithHeadings
         switch ($this->tableName){
             case "CSO2 Indicator":
                 $header = [
-                            'Category', 'Description', 'Status', 'Indicator No', 'Indicator', 'Type', 'Data Source',
-                            'Frequency', 'Unit of Measure', 'PPR', 'Baseline Date', 'Baseline Value',
-                            'Target Date', 'Target Value', 'Actual Date', 'MOV'
+                            'CATEGORY', 'DESCRIPTION', 'STATUS', 'INDICATOR NO', 'INDICATOR', 'TYPE', 'DATA SOURCE',
+                            'FREQUENCY', 'UNIT OF MEASURE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
+                            'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE', 'MOV'
                         ];
                 break;
             case "CSO Profile":
                 $header = [
-                            'Is LRO', 'Project Area', 'Full name of the CSO/CSO Network', 'Type of CSO/CSO Network',
-                            'Abbreviation', 'Address', 'Telephone', 'Mobile Number', 'Email Address',
-                            'Website/Url', 'Facebook Account', 'Instagram Account', 'Youtube Account',
-                            'Other Social Media Account'
+                            'IS LRO', 'PROJECT AREA', 'FULL NAME OF THE CSO/CSO NETWORK', 'TYPE OF CSO/CSO NETWORK',
+                            'ABBREVIATION', 'ADDRESS', 'TELEPHONE', 'MOBILE NUMBER', 'EMAIL ADDRESS',
+                            'WEBSITE/URL', 'FACEBOOK ACCOUNT', 'INSTAGRAM ACCOUNT', 'YOUTUBE ACCOUNT',
+                            'OTHER SOCIAL MEDIA ACCOUNT'
                         ];
                 break;
             case "Finance Tracker":
                 $header = [
-                            'Code', 'Name', 'Location', 'Cost Center', 'Project Code', 'SOF', 'DEA', 'Partners Name',
-                            'Budget', '1st Tranche', '2nd Tranche', '3rd Tranche', '4th Tranche', 'Retention', 'Total',
-                            'Actuals', 'Variance', 'Burn Rate (1st Liq)', 'Burn Rate (2nd Liq)', 'Burn Rate (3rd Liq)',
-                            'Burn Rate (4th Liq)', 'Burn Rate (Total)'
+                            'CODE', 'NAME', 'LOCATION', 'COST CENTER', 'PROJECT CODE', 'SOF', 'DEA', 'PARTNERS NAME',
+                            'BUDGET', '1ST TRANCHE', '2ND TRANCHE', '3RD TRANCHE', '4TH TRANCHE', 'RETENTION', 'TOTAL',
+                            'ACTUALS', 'VARIANCE', 'BURN RATE (1ST LIQ)', 'BURN RATE (2ND LIQ)', 'BURN RATE (3RD LIQ)',
+                            'BURN RATE (4TH LIQ)', 'BURN RATE (TOTAL)'
                         ];
                 break;
             case "Assessment":
                 $header = [
-                    "lro id","domain","final score","assessment date","conducted by","tool used","mov",
-                    "status","created at","created by","updated at","updated by","deleted at","deleted by"
+                    "NAME OF LRO","DOMAIN","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS",
+                    "CREATED BY","UPDATED AT","UPDATED BY"
                 ];  
                 break;
             case "Project Tracking Document":
                 break;
             case "Participant Profile":
                 $header = [
-                    "participant id","participant name","participant location","participant address","participant position","lro id","participan gender","participant age","participant skills",
-                    "created at","created by","updated at","updated by","deleted at","deleted_by"
+                    "PARTICIPANT ID",
+                    "PARTICIPANT NAME",
+                    "PARTICIPANT LOCATION",
+                    "PARTICIPANT ADDRESS",
+                    "NAME OF LRO",
+                    "PARTICIPANT SKILLS",
+                    "PARTICIPANT POSITION",
+                    "PARTICIPANT GENDER",
+                    "PARTICIPANT AGE",
+                    "CREATED AT",
+                    "CREATED BY",
+                    "UPDATED AT",
+                    "UPDATED BY"
                 ];
                 break;
             case "Courses":
-                $header = ["course id","course name","project area","number of modules","developed by",
-                "created at","created by","updated at","updated by","deleted at","deleted by"    
+                $header = ["COURSE ID","COURSE NAME","PROJECT AREA","NUMBER OF MODULES","DEVELOPED BY",
+                "CREATED AT","CREATED BY","UPDATED AT","UPDATED BY"    
             ];
                 break;
                 case "Training Attendees":
                     $header = [
-                        "Training Id","Participant Id","Participant Name","Course Name",
-                        "Project Area","Date Started","Date Completed","Mode Of Training","No Hours","Conducted By","Venue",
-                        "created at","created by","updated at","updated by","deleted at","deleted by"
+                        "TRAINING ID","PARTICIPANT ID","PARTICIPANT NAME","COURSE NAME",
+                        "PROJECT AREA","DATE STARTED","DATE COMPLETED","MODE OF TRAINING","NO HOURS","CONDUCTED BY","VENUE",
+                        "CREATED AT","CREATED BY","UPDATED AT","UPDATED BY"
                     ];
                 break;
         }
