@@ -101,10 +101,36 @@ In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_
 11.) [Optional]: Seed the database
 
     php artisan db:seed
+12.) Run the backend 
+    
+    php artisan serve
+
+13.) Open another Terminal for front-end
+
+    npm run dev
 
 --
 
+## Add Heroku Repo 
 
+1.) Install Heroku 
+   
+    sudo snap install --classic heroku 
+ 
+2.) Add remote from heroku 
+
+    heroku git:remote -a cso-deployment
+    
+3.) Push some changes to heroku
+    
+4.) Change Key value
+    
+    heroku config:add APP_KEY=< copy your APP_ENV value from your .env file >
+    # if not seen type 
+    php artisan key:generate
+    
+    
+--
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
