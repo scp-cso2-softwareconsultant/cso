@@ -47,9 +47,31 @@ class csoExport implements FromCollection, WithHeadings
                             'Burn Rate (4th Liq)', 'Burn Rate (Total)'
                         ];
                 break;
+            case "Assessment":
+                $header = [
+                    "lro id","domain","final score","assessment date","conducted by","tool used","mov",
+                    "status","created at","created by","updated at","updated by","deleted at","deleted by"
+                ];  
+                break;
             case "Project Tracking Document":
                 break;
-            case "LMS":
+            case "Participant Profile":
+                $header = [
+                    "participant id","participant name","participant location","participant address","participant position","lro id","participan gender","participant age","participant skills",
+                    "created at","created by","updated at","updated by","deleted at","deleted_by"
+                ];
+                break;
+            case "Courses":
+                $header = ["course id","course name","project area","number of modules","developed by",
+                "created at","created by","updated at","updated by","deleted at","deleted by"    
+            ];
+                break;
+                case "Training Attendees":
+                    $header = [
+                        "Training Id","Participant Id","Participant Name","Course Name",
+                        "Project Area","Date Started","Date Completed","Mode Of Training","No Hours","Conducted By","Venue",
+                        "created at","created by","updated at","updated by","deleted at","deleted by"
+                    ];
                 break;
         }
 

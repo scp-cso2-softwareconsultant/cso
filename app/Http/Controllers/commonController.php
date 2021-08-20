@@ -255,10 +255,94 @@ class commonController extends Controller
                                 finance_burn_rate")
                 )->whereRaw("deleted_at IS NULL")->get();
                 break;
+            case "Assessment":
+                    $dataExport = DB::table("lro_assessment")->select(
+                        DB::raw("lro_id AS 'LRO ID'"),
+                        DB::raw("domain AS 'Domain'"),
+                        DB::raw("final_score AS 'Final Score'"),
+                        DB::raw("assessment_date AS 'Assessment Date'"),
+                        DB::raw("conducted_by AS 'Conducted By'"),
+                        DB::raw("tool_used AS 'Tool Used'"),
+                        DB::raw("mov AS 'Mov'"),
+                        DB::raw("status AS 'Status'"),
+                        DB::raw("created_at AS 'Created At'"),
+                        DB::raw("created_by AS 'Created By'"),
+                        DB::raw("updated_at AS 'Updated At'"),
+                        DB::raw("updated_by AS 'Updated By'"),
+                        DB::raw("deleted_at AS 'Deleted At'"),
+                        DB::raw("deleted_by AS 'Deleted By'"),
+                    )->whereRaw("deleted_at IS NULL")->get();
+                    break;
             case "Project Tracking Document":
                 break;
-            case "LMS":
+            case "Participant Profile":
+                    $dataExport = DB::table("participant_profile")->select(
+                        DB::raw("participant_id,
+                        participant_name,
+                        participant_location,
+                        participant_address,
+                        participant_position,
+                        lro_id,
+                        participant_gender,
+                        participant_age,
+                        participant_skills,
+                        created_at,
+                        created_by,
+                        updated_at,
+                        updated_by,
+                        deleted_at,
+                        deleted_by")
+                    )->whereRaw("deleted_at IS NULL")->get();
                 break;
+            case "Courses":
+                $dataExport = DB::table("courses")->select(
+                    DB::raw("course_id,
+                    course_name,
+                    project_area,
+                    number_of_modules,
+                    developed_by,
+                    created_at,
+                    created_by,
+                    updated_at,
+                    updated_by,
+                    deleted_at,
+                    deleted_by")
+                )->whereRaw("deleted_at IS NULL")->get();
+            break; 
+            case "Training Attendees":
+                $dataExport = DB::table("training_attendees")
+                ->select(
+                    DB::raw("
+                        training_attendees.training_id,
+                        training_attendees.participant_id,
+                        participant_profile.participant_name"
+                    ),
+                    DB::raw(
+                        "courses.course_name,
+                        courses.project_area"
+                    ),
+                    DB::raw(
+                        "training_attendees.date_started,
+                        training_attendees.date_completed,
+                        training_attendees.training_mode,
+                        training_attendees.no_hrs,
+                        training_attendees.conducted_by,
+                        training_attendees.venue,
+                        training_attendees.created_at,
+                        training_attendees.created_by,
+                        training_attendees.updated_at,
+                        training_attendees.updated_by,
+                        training_attendees.deleted_at,
+                        training_attendees.deleted_by
+                        "
+                        )
+                )
+                ->leftJoin('participant_profile','participant_profile.participant_id','training_attendees.participant_id')
+                ->leftJoin('courses','courses.course_id','training_attendees.course_id')
+                ->whereRaw(DB::raw("participant_profile.deleted_at IS NULL"))
+                ->whereRaw(DB::raw("training_attendees.deleted_at IS NULL"))
+                ->whereRaw(DB::raw("courses.deleted_at IS NULL"))->get();
+            break; 
         }
 
         return Excel::download( (new csoExport)->forTableName($tableName)->forDataExport($dataExport),  $fileName);

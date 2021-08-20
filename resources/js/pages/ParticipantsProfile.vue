@@ -155,6 +155,14 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+                    &nbsp;&nbsp;
+                        <v-btn color="lightgray"
+                                               class="mb-2"
+                                               :loading="btnLoader"
+                                               @click="exportExcel('Participant Profile','')" >
+                                            Export
+                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
+                                        </v-btn>
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
@@ -387,6 +395,23 @@ export default {
                 this.btnLoader = false;
             }
         },
+        exportExcel: function(tableName,value){
+            this.btnLoader = true;
+            let filename = tableName + '.xlsx';
+            var formData = new FormData();
+            formData.append('tableName', tableName);
+            formData.append('category', value);
+            axios.post('/export-excel', formData, {responseType: 'blob'}).then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                this.btnLoader = false;
+            });
+
+        }
     },
 
 }

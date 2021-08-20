@@ -812,8 +812,6 @@ export default {
                 this.btnLoader = false;
             }
         },
-
-
         exportExcel: function(tableName, value){
             this.btnLoader = true;
             let filename = tableName + '.xlsx';
@@ -828,7 +826,6 @@ export default {
                 link.click();
                 this.btnLoader = false;
             });
-
         }
     },
 }
