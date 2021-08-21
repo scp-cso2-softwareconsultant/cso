@@ -113,7 +113,11 @@ In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_
 13.) Open another Terminal for front-end
 
     npm run dev
+    
+14.) After building run
 
+    npm run watch-poll
+    
 --
 
 ## Add Heroku Repo 
