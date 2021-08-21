@@ -110,7 +110,7 @@ In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_
     
     php artisan serve
 
-13.) Open another Terminal for front-end. This will load js files , html files, and css files
+13.) Open another Terminal for front-end. This will load js files , html files, and css files. Keep in mind that scss errors are normal 
 
     npm run dev
     
