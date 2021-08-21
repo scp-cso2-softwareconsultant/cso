@@ -101,6 +101,13 @@ In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_
 11.) [Optional]: Seed the database
 
     php artisan db:seed
+    
+12.) Open mysql service and apache2 server 
+
+     sudo service mysql start
+     sudo service apache2 restart
+
+
 12.) Run the backend 
     
     php artisan serve
