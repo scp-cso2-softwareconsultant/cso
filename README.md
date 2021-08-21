@@ -13,7 +13,7 @@
     nvm install 14.17.5
     nvm use 14.17.5
 
-3.) Download php 7.4.22 and MySql
+3.) Download php 7.4.22 , MySql, vue 
 
     sudo apt update
     sudo apt install apache2
@@ -22,6 +22,7 @@
     sudo apt install mysql-server
     sudo systemctl start mysql
     sudo systemctl restart apache2
+    npm install vue
 
 
 4.) Download composer php package manager
