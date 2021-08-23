@@ -69,7 +69,7 @@ export default {
                 { text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },
                 { text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
                 { text: 'LMS', icon: 'mdi-finance', linkTo: '/lms-data', has_sub_items: false },
-                // { text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
+                { text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
             ],
 
         }

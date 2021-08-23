@@ -388,7 +388,7 @@ export default {
                 this.$noty.error('No file uploaded!');
                 validate = false;
             }
-            if(validate){
+            if(validate){ 
                 var formData = new FormData();
                 formData.append('data', JSON.stringify(this.editedItem));
                 formData.append('form_mode', this.editedIndex);

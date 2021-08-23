@@ -1,95 +1,61 @@
 <template>
     <v-app>
         <h3 class="subheading grey--text">System Users</h3>
-        <v-data-table
-            :headers="headers"
-            :items="usersList"
-            :search="searchBy"
-            class="elevation-1"
-        >
+        <v-data-table :headers="headers" :items="usersList" :search="searchBy" class="elevation-1" >
             <template v-slot:top>
-                <v-toolbar
-                    flat
-                >
-                    <v-text-field
-                        v-model="searchBy"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
+                <v-toolbar flat >
+                    <v-text-field  v-model="searchBy" append-icon="mdi-magnify" label="Search" single-line hide-details ></v-text-field>
                     <v-spacer></v-spacer>
-                    <v-dialog
-                        v-model="dialog"
-                        max-width="500px"
-                    >
+                    <v-dialog v-model="dialog" max-width="500px" >
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                color="lightgray"
-                                class="mb-2"
-                                v-bind="attrs"
-                                v-on="on"
-                            >
-                                New Item
+                            <v-btn color="lightgray" class="mb-2" v-bind="attrs" v-on="on" >
+                                New Account
                             </v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
                                 <span class="text-h5">{{ formTitle }}</span>
                             </v-card-title>
-
-                            <v-card-text>
-                                <v-container>
+                            <v-card-text >
+                                <v-container dense>
                                     <v-row>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            md="4"
-                                        >
-                                            <v-text-field
-                                                v-model="editedItem.name"
-                                                label="Dessert name"
-                                            ></v-text-field>
+                                        <v-col cols="12" mr='2'>
+                                            <v-text-field v-model="editedItem.firstname" label="First name" ></v-text-field>
                                         </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            md="4"
-                                        >
-                                            <v-text-field
-                                                v-model="editedItem.calories"
-                                                label="Calories"
-                                            ></v-text-field>
+                                        <v-col cols="12" mr='2' >
+                                            <v-text-field v-model="editedItem.lastname" label="Last name" ></v-text-field>
                                         </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            md="4"
-                                        >
-                                            <v-text-field
-                                                v-model="editedItem.fat"
-                                                label="Fat (g)"
-                                            ></v-text-field>
+                                        <v-col cols="12" mr='2'>
+                                            <v-text-field v-model="editedItem.email" type="email" label="email"></v-text-field>
                                         </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            md="4"
-                                        >
-                                            <v-text-field
-                                                v-model="editedItem.carbs"
-                                                label="Carbs (g)"
-                                            ></v-text-field>
+                                        <v-col cols="12" mr='2'>
+
+                                            <v-row class="mt-0" v-if="!detailsReadonly">
+                                                <v-col cols="12" sm="12" md="12"  >
+                                                    <v-select v-if="roles_id"
+                                                        :items="roles_id"
+                                                        :item-text="'role'"
+                                                        :item-value="'role_id'"
+                                                        v-model="editedItem.role_id"
+                                                        name="role_id"
+                                                        label="Account Role *" dense
+                                                        :rules="[rules.required]"
+                                                    ></v-select>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row class="mt-0" v-if="detailsReadonly">
+                                                <v-col cols="12" sm="12" md="12"  >
+                                                    <v-text-field v-model="editedItem.cso_name" label="Account Role *" dense readonly></v-text-field>
+                                                </v-col>
+                                            </v-row>
                                         </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            md="4"
-                                        >
-                                            <v-text-field
-                                                v-model="editedItem.protein"
-                                                label="Protein (g)"
-                                            ></v-text-field>
+
+
+                                        <v-col cols="12" mr='2'>
+                                            <v-text-field v-model="editedItem.password" type="password" label="password" ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" mr='2'>
+                                            <v-text-field v-model="editedItem.confirm_password" type="password" label="confirm_password" ></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -97,20 +63,8 @@
 
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="close"
-                                >
-                                    Cancel
-                                </v-btn>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="save"
-                                >
-                                    Save
-                                </v-btn>
+                                <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
+                                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -133,10 +87,13 @@
 <script>
 export default {
     data: () => ({
+         
         dialog: false,
         dialogDelete: false,
+        detailsReadonly: false,
         searchBy:"",
         expanded: [],
+        roles_id: [],
         singleExpand: false,
         headers: [
             { text: 'First Name', align: 'start', sortable: false, value: 'firstname', width: '15%' },
@@ -151,14 +108,28 @@ export default {
             firstname: '',
             lastname: '',
             email: '',
-            role: '',
+            role_id: '',
+            password:'',
+            confirm_password:'',
 
         },
         defaultItem: {
             firstname: '',
             lastname: '',
             email: '',
-            role: '',
+            role_id: '',
+            password:'',
+            confirm_password:'',
+        },
+        rules: {
+            required: v => !!v || 'This field is required',
+            number: v  => {
+                if (!isNaN(v)) return true;
+                if (!isNaN(v) && v.toString().indexOf('.') != -1) return 'The value entered was not valid.';
+                if (!isNaN(parseFloat(v)) && v >= 0) return true;
+                return 'The value entered was not valid.';
+
+            },
         },
     }),
 
@@ -183,7 +154,10 @@ export default {
 
     methods: {
         initialize () {
-
+            this.roles_id = [
+                {role: "Admin" , "role_id": 1},
+                {role: "User" , "role_id": 2}
+            ];
             axios.get('/system-users').then( response => {
                 this.usersList = response.data;
             })
@@ -196,6 +170,7 @@ export default {
         },
 
         deleteItem (item) {
+           
             this.editedIndex = this.desserts.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
@@ -207,7 +182,8 @@ export default {
         },
 
         close () {
-            this.dialog = false
+            this.dialog = false;
+            this.detailsReadonly = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -215,20 +191,76 @@ export default {
         },
 
         closeDelete () {
+            this.detailsReadonly = false;
             this.dialogDelete = false
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
         },
-
+        validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        },
         save () {
-            if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem)
-            } else {
-                this.desserts.push(this.editedItem)
+
+            let validate = true;
+            if(!this.editedItem.firstname){
+                this.$noty.error('First Name is empty!');
+                validate = false;
             }
-            this.close()
+            if(!this.editedItem.lastname){
+                this.$noty.error('Last Name is empty!');
+                validate = false;
+            }
+            if(!this.editedItem.email){
+                this.$noty.error('Email is empty!');
+                validate = false;
+            }
+            if( !this.validateEmail(this.editedItem.email) ){
+                this.$noty.error('Email is not valid!');
+                validate = false;
+            }
+
+            if(!this.editedItem.password || this.editedItem.password.length < 8){
+                this.$noty.error('password should be minimum 8 characters !');
+                validate = false;        
+            }
+            if(!this.editedItem.confirm_password){
+                this.$noty.error('confirm password can\'t be empty !');
+                validate = false;        
+            }
+            
+            if(this.editedItem.confirm_password != this.editedItem.password){
+                this.$noty.error('Password and confirm password should be same ');
+                validate = false;        
+            }
+            if(!this.editedItem.role_id){
+                this.$noty.error('The Role of the Account should not be empty')
+                validate = false;
+            }
+           
+            if(validate){
+                var formData = new FormData();
+                formData.append('data', JSON.stringify(this.editedItem));
+                axios.post('/save-user', formData ).then(response => {
+                    if (response.data.success) {
+                        this.initialize();
+                        if (this.editedIndex < 0) {
+                            console.log("added");
+                            this.$noty.success("Successfully Added.")
+                        } else {
+                            console.log("updated");
+                            this.$noty.success("Successfully Updated.")
+                        }
+                        this.close();
+                    }else{
+                        this.close();
+                    }
+                })
+            }else{
+                this.btnLoader = false;
+            }
         },
         getColor (status) {
 

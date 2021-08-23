@@ -619,8 +619,6 @@ export default {
                 var formData = new FormData();
                 formData.append('data', JSON.stringify(this.editedItem));
                 formData.append('form_mode', this.editedIndex);
-                formData.append('upload_file', this.file_attached);
-                formData.append('file_name', this.file_name);
                 axios.post('/save-lro-assessment', formData).then(response => {
                     if (response.data.success) {
                         this.initialize();

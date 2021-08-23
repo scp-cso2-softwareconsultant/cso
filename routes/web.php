@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
+/* 
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -20,9 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware'=> ['auth']], function (){
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/app', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/system-users', [App\Http\Controllers\UserController::class, 'index'])->name('user');
-
+    Route::post('/save-user', [App\Http\Controllers\UserController::class, 'saveUser'])->name('save-user');
 // CSO2 INDICATOR
     Route::get('/cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicator'])->name('cso-indicator');
     Route::post('/cso-indicator-list', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicatorList'])->name('cso-indicator-list');
