@@ -1,15 +1,12 @@
 <template>
     <v-app>
         <navbar ref="navbar"></navbar>
-
         <app-header @toggle-drawer="$refs.navbar.drawer = !$refs.navbar.drawer"></app-header>
-
         <v-main>
             <v-container>
                 <router-view></router-view>
             </v-container>
         </v-main>
-
         <app-footer></app-footer>
     </v-app>
 
@@ -29,6 +26,8 @@ export default {
         'app-header': Header,
         'app-footer': Footer
     },
-
+    created(){
+        router.push('/dashboard')
+    }
 }
 </script>
