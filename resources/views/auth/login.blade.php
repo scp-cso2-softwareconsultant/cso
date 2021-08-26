@@ -70,50 +70,49 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card">
-            <div class="card-header">
-                <h3>Sign In</h3>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+        <div class="card w-50">
+            <div class="align-middle bg-light">
+                <div class="card-header border-0 mt-3 bg-transparent">
+                    <img src="img/bg.svg" class="w-50 p-3" >
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="px-4" action="{{ route('login') }}">
+                        @csrf
+                        <div class="input-group form-group pt-2">
+                            <input id="email" type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                name="email" value="{{ old('email') }}" required
+                                placeholder="Email"
+                                autocomplete="email" autofocus>
+
+                            @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                            @enderror
+
                         </div>
-                        <input id="email" type="email"
-                               class="form-control @error('email') is-invalid @enderror"
-                               name="email" value="{{ old('email') }}" required
-                               placeholder="Username"
-                               autocomplete="email" autofocus>
+                        <div class="input-group form-group">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                                placeholder="Password"
+                                name="password" required autocomplete="current-password">
 
-                        @error('email')
-                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                        @enderror
-
-                    </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                            @enderror
                         </div>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                               placeholder="Password"
-                               name="password" required autocomplete="current-password">
-
-                        @error('password')
-                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-warning float-right login_btn font-weight-bold">
-                            {{ __('Login') }}
-                        </button>
-                    </div>
-                </form>
+                        <div class="mt-2 d-flex justify-content-between">
+                            <a href="#" class="card-link">Forgot Password</a>
+                        </div>
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-block text-white login_btn bg-primary font-weight-bold">
+                                {{ __('Login') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
