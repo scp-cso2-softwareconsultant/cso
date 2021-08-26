@@ -16,6 +16,7 @@
 import Navbar from './Navbar'
 import Header from './Header'
 import Footer from './Footer'
+import Router from '../router';
 
 export default {
     data: () => ({
@@ -27,7 +28,7 @@ export default {
         'app-footer': Footer
     },
     created(){
-        router.push('/dashboard')
+        // Router.push('/dashboard').catch(err => {})
     }
 }
 </script>
