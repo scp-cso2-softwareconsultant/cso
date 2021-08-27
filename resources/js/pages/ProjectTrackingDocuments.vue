@@ -12,10 +12,10 @@
                     <v-card class="ma-1 border-top">
                         <v-list-item>
                             <v-list-item-content>
-                                <div class="overline text-right">
+                                <div class="overline text-left">
                                     SOF number:
                                 </div>
-                                <v-list-item-title class="headline  text-right"
+                                <v-list-item-title class="headline  text-left"
                                     >60900090</v-list-item-title
                                 >
                             </v-list-item-content>
@@ -53,17 +53,17 @@
                                     Current Date : <strong> {{curDate}} </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    Days Completed :<strong> 144 </strong>
+                                    Days Completed :<strong> {{daysCompleted}} </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    Days Left : <strong> 936 </strong>
+                                    Days Left : <strong> {{daysLeft}} </strong>
                                 </div>
                                 <div class="overline text-left">
                                     End Date: <strong> {{endDate}} </strong>
                                 </div>
                                 <div class="overline text-left">
                                     Percent Complete :
-                                    <strong>  </strong>
+                                    <strong> {{percentComplete}} </strong>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
@@ -83,7 +83,7 @@
                                     ></v-text-field>
                                 </div>
                                 <div class="overline text-left">
-                                    Remaining: <strong> $ 1,964,999 </strong>
+                                    Remaining: <strong> <vue-numeric currency="$" separator="," read-only v-model="remaining"></vue-numeric> </strong>
                                 </div>
                                 <div class="overline text-left">
                                     Burn rate: <strong>{{ burnRate }}</strong>
@@ -371,6 +371,7 @@
 </template>
 <script>
 import VueNumeric from "vue-numeric";
+const days360 = require('days360');
 
 export default {
     components: {
@@ -390,7 +391,8 @@ export default {
             endDate : '-/-/-',
             daysCompleted : 0,
             daysLeft : 0,
-            percentComplete : 0
+            percentComplete : 0,
+            remaing : 0
         };
     },
     methods: {
@@ -398,6 +400,7 @@ export default {
             console.log(this.startDate)
             if(!isNaN(Number.parseFloat(this.spentToDate))){
                 this.burnRate = ((Number.parseFloat(this.spentToDate) / this.totalBudget)*100).toFixed(2)+'%'
+                this.computeRemaining()
                 return;
             }
             this.burnRate = "-.-%"
@@ -407,13 +410,24 @@ export default {
         },
         getRealDate(date){
             return new Date(date);
+        },
+        computeRemaining(){
+            this.remaining = this.totalBudget - this.spentToDate
+        }
+        ,
+        init(){
+            this.setBurnRate();
+            this.curDate = this.getParsedDate(new Date());
+            this.endDate = this.getParsedDate(new Date(this.rawDate.endDate))
+            this.startDate = this.getParsedDate(new Date(this.rawDate.startDate))
+            this.daysCompleted = days360(this.getRealDate(this.rawDate.startDate), new Date())
+            this.daysLeft = days360(new Date(),this.getRealDate(this.rawDate.endDate))
+            this.percentComplete = `${(this.daysCompleted/(this.daysLeft + this.daysCompleted) * 100).toFixed(2)} %`
+            this.computeRemaining()
         }
     },
     created(){
-        this.setBurnRate();
-        this.curDate = this.getParsedDate(new Date());
-        this.endDate = this.getParsedDate(new Date(this.rawDate.endDate))
-        this.startDate = this.getParsedDate(new Date(this.rawDate.startDate))
+        this.init();
     }
 };
 </script>

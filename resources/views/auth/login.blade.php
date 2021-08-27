@@ -1,10 +1,10 @@
-
 <style>
     /* Made with love by Mutiullah Samim*/
 
     @import url('https://fonts.googleapis.com/css?family=Numans');
 
-    html,body{
+    html,
+    body {
         background-image: url('');
         background-size: cover;
         background-repeat: no-repeat;
@@ -15,74 +15,71 @@
         overflow: hidden;
     }
 
-    .container{
+    .container {
         height: 100%;
         align-content: center;
     }
 
-    .card{
+    .card {
         height: 250px;
         margin-top: auto;
         margin-bottom: auto;
         width: 400px;
-        background-color: rgba(0,0,0,0.5) !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
     }
 
-    .social_icon span{
+    .social_icon span {
         font-size: 60px;
         margin-left: 10px;
         color: #FFC312;
     }
 
-    .card-header h3{
+    .card-header h3 {
         color: white;
     }
 
-    .input-group-prepend span{
+    .input-group-prepend span {
         opacity: 1;
         width: 50px;
         background-color: #FFC312;
         color: black;
-        border:0 !important;
+        border: 0 !important;
     }
 
-    input:focus{
-        outline: 0 0 0 0  !important;
+    input:focus {
+        outline: 0 0 0 0 !important;
         box-shadow: 0 0 0 0 !important;
 
     }
 
-    .login_btn{
+    .login_btn {
         color: black;
         background-color: #FFC312;
         width: 100px;
     }
 
-    .login_btn:hover{
+    .login_btn:hover {
         color: black;
         background-color: white;
     }
-    .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
+
+    .modal_desu {
+        display: none;
+        position: fixed;
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        width: 100%;
+        z-index: 198259812;
+        background-color: #202020b9;
     }
 
-    /* Modal Content/Box */
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
-    }
+    .model_show{ display : flex }
+
+    .modal_desu_formBox{
+        background-color: #202020b9;
+        border: 1px solid #3E3E3E;
+        height: auto;
+    }   
 
     /* The Close Button */
     .close {
@@ -104,42 +101,64 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
+    <div id="modal_desu" class="modal_desu justify-content-center h-100">
+        <div class="card modal_desu_formBox w-25">
+            <div class="align-middle bg-light">
+                <div class="card-header d-flex flex-row border-0 mt-3 bg-transparent">
+                    <img class='w-25 pr-4' src="img/wind_art.png">
+                    <p>Please Contact Administrator To Change Your Password</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group mt-4">
+                        <button type="button" onclick="actModalDesu()" class="btn btn-block btn-info">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var modal_desu = document.getElementById("modal_desu");
+        var isHidden = true;
+
+        function actModalDesu(){
+            isHidden = !isHidden;
+
+            if(isHidden)
+                modal_desu.classList.add('model_show');
+            else
+                modal_desu.classList.remove('model_show');
+        }
+    </script>
     <div class="d-flex justify-content-center h-75">
         <div class="card  w-50">
             <div class="align-middle bg-light">
                 <div class="card-header border-0 mt-3 bg-transparent">
-                    <img src="img/usaid_logo.png" class="w-50 p-3" >
+                    <img src="img/usaid_logo.png" class="w-50 p-3">
                 </div>
                 <div class="card-body">
                     <form method="POST" class="px-4" action="{{ route('login') }}">
                         @csrf
                         <div class="input-group form-group pt-2">
-                            <input id="email" type="email"
-                                class="form-control @error('email') is-invalid @enderror"
-                                name="email" value="{{ old('email') }}" required
-                                placeholder="Email"
-                                autocomplete="email" autofocus>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Email" autocomplete="email" autofocus>
 
                             @error('email')
                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
+                                <strong>{{ $message }}</strong>
+                            </span>
                             @enderror
 
                         </div>
                         <div class="input-group form-group">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                                placeholder="Password"
-                                name="password" required autocomplete="current-password">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" name="password" required autocomplete="current-password">
 
                             @error('password')
                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
+                                <strong>{{ $message }}</strong>
+                            </span>
                             @enderror
                         </div>
                         <div class="mt-2 d-flex justify-content-between">
-                            <a href="#" class="card-link">Forgot Password</a>
+                            <a href="#" onclick="actModalDesu()" class="card-link">Forgot Password</a>
                         </div>
                         <div class="form-group mt-4">
                             <button type="submit" class="btn btn-block text-white login_btn bg-primary font-weight-bold">
