@@ -73,7 +73,7 @@
         <div class="card  w-50">
             <div class="align-middle bg-light">
                 <div class="card-header border-0 mt-3 bg-transparent">
-                    <img src="img/bg.svg" class="w-50 p-3" >
+                    <img src="img/usaid_logo.png" class="w-50 p-3" >
                 </div>
                 <div class="card-body">
                     <form method="POST" class="px-4" action="{{ route('login') }}">
