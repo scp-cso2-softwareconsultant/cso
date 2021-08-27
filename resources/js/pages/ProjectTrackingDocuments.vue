@@ -40,13 +40,11 @@
                 <v-card class="ma-1">
                     <v-list-item  >
                         <v-list-item-content>
-                      
-                                <div class="overline text-left"> Total Budget (USD) : <strong> $ 1,999,998.57 </strong> </div>
-                                <div class="overline text-left"> Spent to date:  <strong> $ 35,000 </strong> </div>
-                                <div class="overline text-left"> Remaining:  <strong> $ 1,964,999 </strong> </div>
-                                <div class="overline text-left"> Burn rate:  <strong> 1.75% </strong> </div>
-                                <div class="overline text-left"> Next donor report due to Awards:  <strong> 'Quarter 3 -- July 31, 2021 (covers Apr 1 to June 30, 2021)  </strong> </div>
-                              
+                            <div class="overline text-left"> Total Budget (USD) : <strong> $ 1,999,998.57 </strong> </div>
+                            <div class="overline text-left"> Spent to date:  <strong> $ 35,000 </strong> </div>
+                            <div class="overline text-left"> Remaining:  <strong> $ 1,964,999 </strong> </div>
+                            <div class="overline text-left"> Burn rate:  <strong> 1.75% </strong> </div>
+                            <div class="overline text-left"> Next donor report due to Awards:  <strong> 'Quarter 3 -- July 31, 2021 (covers Apr 1 to June 30, 2021)  </strong> </div>
                         </v-list-item-content>
                     </v-list-item>
                 </v-card>

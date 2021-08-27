@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
@@ -27,13 +26,33 @@ class UserController extends Controller
     {
         
         $raw_data = json_decode($request['data']);
-        return User::insert([
-            'firstname' => $raw_data->firstname,
-            'lastname' => $raw_data->lastname,
-            'email' => $raw_data->email,
-            'password' => Hash::make($raw_data->password ),
-            'role_id' => $raw_data->role_id
-        ]);
+        $form_mode = $request['form_mode'];
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+        if( $user->role_id == 1 ){
+            if(  $raw_data-> id_exist && User::findOrFail( $raw_data->id ) ){
+                return DB::table('users')->where('id',$raw_data->id )->update(array(
+                    'firstname' => $raw_data->firstname,
+                    'lastname' => $raw_data->lastname,
+                    'email' => $raw_data->email,
+                    'password' => Hash::make($raw_data->password ),
+                    'role_id' => $raw_data->role_id
+                ));
+
+               
+            }else{
+                return User::insert([
+                    'firstname' => $raw_data->firstname,
+                    'lastname' => $raw_data->lastname,
+                    'email' => $raw_data->email,
+                    'password' => Hash::make($raw_data->password ),
+                    'role_id' => $raw_data->role_id
+                ]);
+            }
+            
+        }
+        return $raw_data;
+        
     
     }
     
