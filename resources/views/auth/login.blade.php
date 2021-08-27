@@ -5,7 +5,7 @@
     @import url('https://fonts.googleapis.com/css?family=Numans');
 
     html,body{
-        background-image: url('img/bg.png');
+        background-image: url('');
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
@@ -69,8 +69,8 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <div class="d-flex justify-content-center h-100">
-        <div class="card w-50">
+    <div class="d-flex justify-content-center h-75">
+        <div class="card  w-50">
             <div class="align-middle bg-light">
                 <div class="card-header border-0 mt-3 bg-transparent">
                     <img src="img/bg.svg" class="w-50 p-3" >
