@@ -116,19 +116,6 @@
             </div>
         </div>
     </div>
-    <script>
-        var modal_desu = document.getElementById("modal_desu");
-        var isHidden = true;
-
-        function actModalDesu(){
-            isHidden = !isHidden;
-
-            if(isHidden)
-                modal_desu.classList.add('model_show');
-            else
-                modal_desu.classList.remove('model_show');
-        }
-    </script>
     <div class="d-flex justify-content-center h-75">
         <div class="card  w-50">
             <div class="align-middle bg-light">
@@ -170,5 +157,6 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('js/php_modal.js') }}"></script>
 </div>
 @endsection
