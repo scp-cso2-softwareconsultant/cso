@@ -15,7 +15,7 @@
                         </v-list-item-content>
                     </v-list-item>
                 </v-card>
-                    <v-card class="ma-1">
+                    <v-card class="ma-1 mt-6">
                         <v-list-item  >
                             <v-list-item-content>
                                 <div class="overline text-left"> Project Holder : <strong>   Magdalena Lopez </strong></div>
@@ -25,7 +25,7 @@
                             </v-list-item-content>
                     </v-list-item>
                 </v-card>
-                <v-card class="ma-1">
+                <v-card class="ma-1 mt-6">
                     <v-list-item  >
                         <v-list-item-content>
                             <div class="overline text-left">Start Date :<strong>  2/1/2021 </strong></div>
@@ -37,7 +37,7 @@
                         </v-list-item-content>
                     </v-list-item>
                 </v-card>
-                <v-card class="ma-1">
+                <v-card class="ma-1 mt-6">
                     <v-list-item  >
                         <v-list-item-content>
                             <div class="overline text-left"> Total Budget (USD) : <strong> $ 1,999,998.57 </strong> </div>
@@ -50,7 +50,7 @@
                 </v-card>
             </v-col >
             <v-col cols="12" sm="6" md="6" ma='1'>
-                 <v-card class="ma-1">
+                 <v-card class="ma-1 mt-6">
                     <v-list-item  >
                         <v-list-item-content>
                             <v-list-item-title class="headline  text-left ma-1 mb-5" >Project Summary:  </v-list-item-title>
@@ -59,8 +59,8 @@
                         </v-list-item-content>
                     </v-list-item>
                 </v-card>
-                <v-card class="ma-1">
-                    <v-list-item  >
+                <v-card class="ma-1 mt-6">
+                    <v-list-item>
                         <v-list-item-content>
                             <v-card-text >
                                 <v-container dense>
