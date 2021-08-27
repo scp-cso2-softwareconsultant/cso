@@ -20,6 +20,10 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::get('/app', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/system-users', [App\Http\Controllers\UserController::class, 'index'])->name('user');
     Route::post('/save-user', [App\Http\Controllers\UserController::class, 'saveUser'])->name('save-user');
+
+// Roles 
+    Route::get('/user-roles', [App\Http\Controllers\RoleController::class, 'index'])->name('user-roles');
+
 // CSO2 INDICATOR
     Route::get('/cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicator'])->name('cso-indicator');
     Route::post('/cso-indicator-list', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicatorList'])->name('cso-indicator-list');

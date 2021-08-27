@@ -1,11 +1,15 @@
 <template>
     <v-app>
         <h3 class="subheading grey--text">System Users</h3>
+                
         <v-data-table :headers="headers" :items="usersList" :search="searchBy" class="elevation-1" >
+            
             <template v-slot:top>
+
                 <v-toolbar flat >
                     <v-text-field  v-model="searchBy" append-icon="mdi-magnify" label="Search" single-line hide-details ></v-text-field>
                     <v-spacer></v-spacer>
+                    
                     <v-dialog v-model="dialog" max-width="500px" >
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn color="lightgray" class="mb-2" v-bind="attrs" v-on="on" >
@@ -29,15 +33,14 @@
                                             <v-text-field v-model="editedItem.email" type="email" label="email"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" mr='2'>
-
                                             <v-row class="mt-0" v-if="!detailsReadonly">
                                                 <v-col cols="12" sm="12" md="12"  >
-                                                    <v-select v-if="roles_id"
-                                                        :items="roles_id"
-                                                        :item-text="'role'"
-                                                        :item-value="'role_id'"
+                                                    <v-select v-if="roles"
+                                                        :items="roles"
+                                                        :item-text="'name'"
+                                                        :item-value="'id'"
                                                         v-model="editedItem.role_id"
-                                                        name="role_id"
+                                                        name="id"
                                                         label="Account Role *" dense
                                                         :rules="[rules.required]"
                                                     ></v-select>
@@ -81,6 +84,10 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
+            <template v-slot:item.actions="{ item }">
+                <v-icon @click="editItem(item)" small class="mr-2" color="yellow" > mdi-pencil </v-icon>
+                <v-icon @click="deleteItem(item)" small color="red" > mdi-delete </v-icon>
+            </template>
         </v-data-table>
     </v-app>
 </template>
@@ -93,7 +100,7 @@ export default {
         detailsReadonly: false,
         searchBy:"",
         expanded: [],
-        roles_id: [],
+        roles: [],
         singleExpand: false,
         headers: [
             { text: 'First Name', align: 'start', sortable: false, value: 'firstname', width: '15%' },
@@ -154,31 +161,30 @@ export default {
 
     methods: {
         initialize () {
-            this.roles_id = [
-                {role: "Admin" , "role_id": 1},
-                {role: "User" , "role_id": 2}
-            ];
+            axios.get('/user-roles').then( response => {
+                this.roles =  response.data ;
+            })
             axios.get('/system-users').then( response => {
                 this.usersList = response.data;
             })
         },
-
-        editItem (item) {
-            this.editedIndex = this.desserts.indexOf(item)
+        
+        editItem(item) {
+            this.editedIndex = this.usersList.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
+            console.log(item);
         },
 
         deleteItem (item) {
-           
-            this.editedIndex = this.desserts.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialogDelete = true
+            // this.editedIndex = this.desserts.indexOf(item)
+            // this.editedItem = Object.assign({}, item)
+            // this.dialogDelete = true
         },
 
         deleteItemConfirm () {
-            this.desserts.splice(this.editedIndex, 1)
-            this.closeDelete()
+            // this.desserts.splice(this.editedIndex, 1)
+            // this.closeDelete()
         },
 
         close () {
@@ -198,12 +204,13 @@ export default {
                 this.editedIndex = -1
             })
         },
+
         validateEmail(email) {
             const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(String(email).toLowerCase());
         },
-        save () {
 
+        save () {
             let validate = true;
             if(!this.editedItem.firstname){
                 this.$noty.error('First Name is empty!');
@@ -239,7 +246,8 @@ export default {
                 this.$noty.error('The Role of the Account should not be empty')
                 validate = false;
             }
-           
+
+            this.editedItem['id_exist'] =  this.editedItem.hasOwnProperty("id")
             if(validate){
                 var formData = new FormData();
                 formData.append('data', JSON.stringify(this.editedItem));
@@ -247,10 +255,8 @@ export default {
                     if (response.data.success) {
                         this.initialize();
                         if (this.editedIndex < 0) {
-                            console.log("added");
                             this.$noty.success("Successfully Added.")
                         } else {
-                            console.log("updated");
                             this.$noty.success("Successfully Updated.")
                         }
                         this.close();

@@ -142,7 +142,6 @@ class commonController extends Controller
         $permission_list['view'] = false;
         if($get_permission){
             foreach ($get_permission as $row){
-
                 switch($row->user_permission){
                     case 'access';
                         $permission_list['access'] = true;
