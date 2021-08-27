@@ -1,14 +1,13 @@
 <template>
   <v-app>
     <h3 class="subheading grey--text">Dashboard</h3>
-  
+<!--   
     
     <v-flex >
         <v-card class="ma-1">
             <v-list-item  >
                 <v-list-item-avatar tile class="mt-n7"  >
                     <v-sheet color="green" width="80" height="80" elevation="10">
-                        <!-- <v-icon dark large>store</v-icon> -->
                     </v-sheet>
                 </v-list-item-avatar>
                 
@@ -20,8 +19,6 @@
                 </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-                <!-- <v-icon text class="ma-2">person</v-icon>
-                <div class="overline">Iyad</div> -->
             </v-card-actions>
         </v-card>
     </v-flex>
@@ -30,7 +27,6 @@
             <v-list-item  >
                 <v-list-item-avatar tile class="mt-n7"  >
                     <v-sheet color="green" width="80" height="80" elevation="10">
-                        <!-- <v-icon dark large>store</v-icon> -->
                     </v-sheet>
                 </v-list-item-avatar>
                 
@@ -42,8 +38,6 @@
                 </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-                <!-- <v-icon text class="ma-2">person</v-icon>
-                <div class="overline">Iyad</div> -->
             </v-card-actions>
         </v-card>
     </v-flex>
@@ -52,7 +46,6 @@
             <v-list-item  >
                 <v-list-item-avatar tile class="mt-n7"  >
                     <v-sheet color="green" width="80" height="80" elevation="10">
-                        <!-- <v-icon dark large>store</v-icon> -->
                     </v-sheet>
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -63,8 +56,6 @@
                 </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-                <!-- <v-icon text class="ma-2">person</v-icon>
-                <div class="overline">Iyad</div> -->
             </v-card-actions>
         </v-card>
     </v-flex>
@@ -74,7 +65,6 @@
             <v-list-item  >
                 <v-list-item-avatar tile class="mt-n7"  >
                     <v-sheet color="green" width="80" height="80" elevation="10">
-                        <!-- <v-icon dark large>store</v-icon> -->
                     </v-sheet>
                 </v-list-item-avatar>
                 
@@ -86,8 +76,6 @@
                 </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-                <!-- <v-icon text class="ma-2">person</v-icon>
-                <div class="overline">Iyad</div> -->
             </v-card-actions>
         </v-card>
     </v-flex>
@@ -96,7 +84,6 @@
             <v-list-item  >
                 <v-list-item-avatar tile class="mt-n7"  >
                     <v-sheet color="green" width="80" height="80" elevation="10">
-                        <!-- <v-icon dark large>store</v-icon> -->
                     </v-sheet>
                 </v-list-item-avatar>
                 
@@ -108,8 +95,6 @@
                 </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-                <!-- <v-icon text class="ma-2">person</v-icon>
-                <div class="overline">Iyad</div> -->
             </v-card-actions>
         </v-card>
     </v-flex>
@@ -118,7 +103,6 @@
             <v-list-item  >
                 <v-list-item-avatar tile class="mt-n7"  >
                     <v-sheet color="green" width="80" height="80" elevation="10">
-                        <!-- <v-icon dark large>store</v-icon> -->
                     </v-sheet>
                 </v-list-item-avatar>
                 
@@ -131,12 +115,10 @@
                 </v-list-item-content>
             </v-list-item>
             <v-card-actions>
-                <!-- <v-icon text class="ma-2">person</v-icon>
-                <div class="overline">Iyad</div> -->
             </v-card-actions>
         </v-card>
     </v-flex>
-    
+     -->
     
   </v-app>
 </template>
@@ -153,9 +135,29 @@ export default {
     },
     methods:{
         initialize () {
-            console.log("Helloo world");
+           
             this.series_4 = [{ data:  this.generateDayWiseTimeSeries(new Date('11 Feb 2017').getTime(), 10, { min: 10, max: 20  }) }]
             this.series_5= [{ data:  this.generateDayWiseTimeSeries(new Date('11 Feb 2017').getTime(),10, { min: 10, max: 20  }) }]
+            this.CSO2IndicatorsChart();
+            this.CSOProfile();
+            this.assessment();
+            this.financeTracker();
+            this.ProjectTrackingDocument();
+        },
+        CSO2IndicatorsChart(){
+
+        },
+        CSOProfile(){
+
+        },
+        assessment(){
+            
+        },
+        financeTracker(){
+
+        },
+        ProjectTrackingDocument(){
+
         },
         generateDayWiseTimeSeries: function(baseval, count, yrange) {
             var i = 0;
