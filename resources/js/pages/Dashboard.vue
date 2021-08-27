@@ -1,6 +1,25 @@
 <template>
   <v-app>
     <h3 class="subheading grey--text">Dashboard</h3>
+    <v-flex sm6>
+        <v-card class="ma-1">
+            <v-list-item  >
+                <v-list-item-avatar tile class="mt-n7"  >
+                    <v-sheet color="green" width="80" height="80" elevation="10">
+                    </v-sheet>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                    <div class="overline text-right">Project Tracking document</div>
+                    <v-list-item-title class="headline mb-1 text-right" >523614</v-list-item-title>
+                    <div><v-divider></v-divider></div>
+                    <apexchart type="donut" :options="chartOptions_3" :series="series_3"></apexchart>
+                </v-list-item-content>
+            </v-list-item>
+            <v-card-actions>
+            </v-card-actions>
+        </v-card>
+    </v-flex>
+
 <!--   
     
     <v-flex >
@@ -41,24 +60,7 @@
             </v-card-actions>
         </v-card>
     </v-flex>
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-avatar tile class="mt-n7"  >
-                    <v-sheet color="green" width="80" height="80" elevation="10">
-                    </v-sheet>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                    <div class="overline text-right">Project Tracking document</div>
-                    <v-list-item-title class="headline mb-1 text-right" >523614</v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="donut" :options="chartOptions_3" :series="series_3"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-            <v-card-actions>
-            </v-card-actions>
-        </v-card>
-    </v-flex>
+    
 
     <v-flex >
         <v-card class="ma-1">
