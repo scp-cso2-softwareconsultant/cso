@@ -51,7 +51,7 @@ class UserController extends Controller
             }
             
         }
-        return $raw_data;
+        return '';
         
     
     }

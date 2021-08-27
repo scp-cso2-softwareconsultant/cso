@@ -250,4 +250,9 @@ class CSOIndicatorController extends Controller
             ->update( array('cso_completion' => $completion, 'cso_status' =>$status, 'cso_count' => $cso_count) );
     }
 
+    public function chartCSOIndicator(){
+        $dataExport = DB::table('cso_indicator')->select("*")->get(); 
+        return $dataExport;
+    }
+
 }
