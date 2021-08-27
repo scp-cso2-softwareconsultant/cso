@@ -387,7 +387,10 @@ export default {
             burnRate: "-.-%",
             startDate: '-/-/-',
             curDate : '-/-/-',
-            endDate : '-/-/-'
+            endDate : '-/-/-',
+            daysCompleted : 0,
+            daysLeft : 0,
+            percentComplete : 0
         };
     },
     methods: {
@@ -401,6 +404,9 @@ export default {
         },
         getParsedDate(date){
             return `${date.toLocaleString('en-us', { month: 'long' })}/${date.getDate()}/${date.getFullYear()}`
+        },
+        getRealDate(date){
+            return new Date(date);
         }
     },
     created(){
