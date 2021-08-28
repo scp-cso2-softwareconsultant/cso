@@ -1136,7 +1136,8 @@ export default {
 
     methods: {
         initialize() {
-            // category_items: ['Impact', 'Outcome', 'Activity'],
+            
+            category_items: ['Impact', 'Outcome', 'Activity'],
             this.loadCSOIndicator = true;
             axios.get("/get-categories").then(response => {
                 this.category_items = response.data;

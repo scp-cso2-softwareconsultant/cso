@@ -15,7 +15,7 @@
             <v-list nav dense >
                 <v-list-item-group v-model="selectedItem" color="primary">
                     <div v-for="(item, i) in items" :key="i" >
-                        <v-list-item v-if="!item.has_sub_items" :to="item.linkTo">
+                        <v-list-item v-if="!item.has_sub_items && !item.linkTo.includes('https:')" :to="item.linkTo" >
                             <v-list-item-icon>
                                 <v-icon v-text="item.icon"></v-icon>
                             </v-list-item-icon>
@@ -26,11 +26,7 @@
                                 <v-icon>mdi-menu-down</v-icon>
                             </v-list-item-action>
                         </v-list-item>
-                    </div>
-                </v-list-item-group>
-                <v-list-item-group v-model="link_items" color="primary">
-                    <div v-for="(item, i) in link_items" :key="i" >
-                        <v-list-item v-if="!item.has_sub_items" v-bind:href="item.linkTo">
+                        <v-list-item v-else-if="!item.has_sub_items" v-bind:href="item.linkTo" >
                             <v-list-item-icon>
                                 <v-icon v-text="item.icon"></v-icon>
                             </v-list-item-icon>
@@ -65,20 +61,17 @@ export default {
             selectedItem: 0,
             items: [
                 { text: 'Dashboard', icon: 'mdi-view-dashboard-outline', linkTo: '/dashboard', has_sub_items: false },
-                { text: 'CSO2 Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
+                { text: 'CSO2 (supercript) Project Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
                 { text: 'CSO Profile', icon: 'mdi-animation', linkTo: '/cso-profile', has_sub_items: false },
                 { text: 'Assessment', icon: 'mdi-animation', linkTo: '/assessment', has_sub_items: false },
                 { text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },
                 { text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
                 { text: 'LMS', icon: 'mdi-finance', linkTo: '/lms-data', has_sub_items: false },
                 { text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
-            ],
-            link_items:[
                 { text: 'Acitiviy Feedbacking', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
                 { text: 'CBLD Indicators', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/cbld.php', has_sub_items: false },
                 { text: 'DIS', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/dis.php', has_sub_items: false },
-            ]
-
+            ],
         }
     },
     methods: {
