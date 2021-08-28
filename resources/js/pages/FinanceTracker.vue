@@ -391,11 +391,13 @@ export default {
             this.editedIndex = this.financeList.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
+            this.computeBurnRate();
         },
         editItem (item) {
             this.editedIndex = this.financeList.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
+            this.computeBurnRate();
         },
 
         deleteItem (item) {
@@ -403,6 +405,7 @@ export default {
             this.editedIndex = this.financeList.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
+            this.computeBurnRate();
         },
 
         deleteItemConfirm () {
@@ -471,7 +474,9 @@ export default {
             }
         },
 
-
+        computeBurnRate: function( ){
+            console.log( this.editedIndex )
+        },
         formatAsCurrency: function(amt, dec) {
             amt = parseFloat(amt);
             if(amt){

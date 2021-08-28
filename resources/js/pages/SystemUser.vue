@@ -250,7 +250,7 @@ export default {
             this.editedItem['id_exist'] =  this.editedItem.hasOwnProperty("id")
             if(validate){
                 var formData = new FormData();
-                formData.append('data', JSON.stringify(this.editedItem));
+                formData.append( 'data', JSON.stringify(this.editedItem) );
                 axios.post('/save-user', formData ).then(response => {
                     if (response.data.success) {
                         this.initialize();
