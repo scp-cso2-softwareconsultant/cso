@@ -147,8 +147,9 @@ export default {
             this.responsibleOrganization = ["lead SCP", "Ateneo CORD", "AHA BD", "PICPA"]
         },
         CSO2IndicatorsChart(){
-           
-            axios.get('/chart-cso-indicator').then( response => {
+            var formData = new FormData();
+            formData.append('data', JSON.stringify( {"category":"32"} ));
+            axios.get('/chart-cso-indicator',formData).then( response => {
                 console.log(response.data)
             })
         },

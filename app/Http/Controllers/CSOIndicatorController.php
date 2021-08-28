@@ -250,9 +250,31 @@ class CSOIndicatorController extends Controller
             ->update( array('cso_completion' => $completion, 'cso_status' =>$status, 'cso_count' => $cso_count) );
     }
 
-    public function chartCSOIndicator(){
-        $dataExport = DB::table('cso_indicator')->select("*")->get(); 
-        return $dataExport;
+    public function chartCSOIndicator(Request $request){
+        $dataExport = DB::table("cso_indicator")->select(
+            DB::raw("cso_indicator.cso_category AS Category"),
+            DB::raw("cso_indicator.cso_description AS Description"),
+            DB::raw("cso_indicator.cso_status AS Status"),
+            DB::raw("indicator.indicator_no AS 'Indicator No'"),
+            DB::raw("indicator.indicator AS Indicator"),
+            DB::raw("indicator.indicator_type AS Type"),
+            DB::raw("indicator.data_source AS 'Data Source'"),
+            DB::raw("indicator.frequency AS Frequency"),
+            DB::raw("indicator.unit_measure AS 'Unit of Measure'"),
+            DB::raw("indicator.ppr AS PPR"),
+            DB::raw("indicator.baseline_date AS 'Baseline Date'"),
+            DB::raw("indicator.baseline_value AS 'Baseline Value'"),
+            DB::raw("indicator.target_date AS 'Target Date'"),
+            DB::raw("indicator.target_value AS 'Target Value'"),
+            DB::raw("indicator.actual_date AS 'Actual Date'"),
+            DB::raw("indicator.mov_file AS MOV")
+        )
+        ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
+        ->whereRaw("cso_indicator.deleted_at IS NULL")
+        ->whereRaw("indicator.deleted_at IS NULL")
+        ->where("cso_indicator.cso_category", $request['category'])
+        // ->get(); 
+        return  $request;
     }
 
 }
