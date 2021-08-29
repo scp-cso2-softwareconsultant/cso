@@ -1,11 +1,18 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text"> CSO2 (supercript) Project Indicator </h3>
+        <h3 class="subheading grey--text">
+            CSO2 (supercript) Project Indicator
+        </h3>
         <div class="d-flex m-4 flex-between align-items-center">
             <p class="mb-0">
                 <strong class="text-primary">Status Legends</strong>
             </p>
-            <v-col class="mx-3" cols="2" v-for="(stats, idx) in status_list" :key="idx">
+            <v-col
+                class="mx-3"
+                cols="2"
+                v-for="(stats, idx) in status_list"
+                :key="idx"
+            >
                 <v-progress-linear
                     class="rounded-top rounded-bottom text-white text-center"
                     height="35"
@@ -837,7 +844,7 @@
                                         </v-btn>
                                     </v-toolbar>
                                 </template>
-                                <template v-slot:item.cso_status="{ item }">
+                                <template class="" v-slot:item.cso_status="{ item }">
                                     <v-progress-linear
                                         class="rounded-top  text-white text-center"
                                         height="23"
@@ -878,7 +885,7 @@
                                         small
                                         @click="deleteItem(item)"
                                         color="red"
-                                       data-toggle="tooltip"
+                                        data-toggle="tooltip"
                                         data-placement="top"
                                         title="Delete This Item"
                                     >
@@ -917,8 +924,8 @@
                                                     @click="editSubItem(item)"
                                                     color="blue darken-2"
                                                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit Indicator Details"
+                                                    data-placement="top"
+                                                    title="Edit Indicator Details"
                                                 >
                                                     mdi-pencil
                                                 </v-icon>
@@ -928,8 +935,8 @@
                                                     @click="deleteSubItem(item)"
                                                     color="red"
                                                     data-toggle="tooltip"
-                    data-placement="top"
-                    title="Delete This Item"
+                                                    data-placement="top"
+                                                    title="Delete This Item"
                                                 >
                                                     mdi-delete
                                                 </v-icon>
@@ -1022,13 +1029,6 @@ export default {
             }
         ],
         headers: [
-            {
-                text: "Category",
-                align: "start",
-                sortable: false,
-                value: "cso_category",
-                width: "15%"
-            },
             {
                 text: "Description",
                 align: "start",
@@ -1132,37 +1132,36 @@ export default {
 
     methods: {
         initialize() {
-            document.title = "CSO2 | (supercript) Project Indicator"
+            document.title = "CSO2 | (supercript) Project Indicator";
             category_items: ["Impact", "Outcome", "Activity"],
                 (this.loadCSOIndicator = true);
             axios.get("/get-categories").then(response => {
                 this.category_items = response.data;
-                
             });
             //     indicator_type_list: ['Performance/Custom'],
             this.loadCSOIndicator = true;
             axios.get("/get-indicator-type").then(response => {
                 this.indicator_type_list = response.data;
-               
             });
             //     frequency_list:['Annually','Yearly','Bi-Annual'],
             this.loadCSOIndicator = true;
             axios.get("/get-frequencies").then(response => {
                 this.frequency_list = response.data;
-               
             });
             //     status_list: ['Entry', 'In Progress', 'Completed', 'Delayed'],
             this.loadCSOIndicator = true;
             axios.get("/get-indicator-status").then(response => {
-                console.log( response.data )
+                console.log(response.data);
                 this.status_list = response.data;
-                
             });
 
-
             axios.get("/cso-indicator").then(response => {
-                console.log( response.data )
+                console.log(response.data);
                 this.indicators_list = response.data;
+                this.indicators_list.map(function(item) {
+                    delete item.cso_category;
+                    return item;
+                });
                 this.loadCSOIndicator = false;
             });
         },
@@ -1173,6 +1172,10 @@ export default {
                 .post("/cso-indicator-list", { category: categorySelected })
                 .then(response => {
                     this.indicators_list = response.data;
+                    this.indicators_list.map(function(item) {
+                        delete item.cso_category;
+                        return item;
+                    });
                     this.loadCSOIndicator = false;
                 });
         },
