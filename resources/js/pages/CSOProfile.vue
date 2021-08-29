@@ -533,7 +533,7 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
-                    color="yellow"
+                    color="blue darken-2"
                 >
                     mdi-pencil
                 </v-icon>

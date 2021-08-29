@@ -840,7 +840,7 @@
                                 <template v-slot:item.cso_status="{ item }">
                                     <v-progress-linear
                                         class="rounded-top  text-white text-center"
-                                        height="30"
+                                        height="23"
                                         value="100"
                                         :color="getColor(item.cso_status)"
                                     ></v-progress-linear>
@@ -867,7 +867,7 @@
                                         small
                                         class="mr-2"
                                         @click="editItem(item)"
-                                        color="yellow"
+                                        color="blue darken-2"
                                         data-toggle="tooltip"
                                         data-placement="top"
                                         title="Edit CSO2 Indicator"
@@ -912,7 +912,7 @@
                                                     small
                                                     class="mr-2"
                                                     @click="editSubItem(item)"
-                                                    color="yellow"
+                                                    color="blue darken-2"
                                                 >
                                                     mdi-pencil
                                                 </v-icon>
@@ -1358,7 +1358,6 @@ export default {
             }
         },
         getColor(status) {
-            console.log(status);
             if (status === "In Progress/Delayed" || status === "Delay")
                 return "red";
             else if (status === "In Progress") return "blue";
