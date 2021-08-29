@@ -212,6 +212,7 @@ export default {
     methods: {
         initialize () {
             this.loadCourse = true;
+            document.title = "CSO | Courses"
             axios.get('/courses').then( response => {
                 this.courseList = response.data;
                 this.loadCourse = false;

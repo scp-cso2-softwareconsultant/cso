@@ -1123,6 +1123,7 @@ export default {
 
     methods: {
         initialize() {
+            document.title = "CSO2 | (supercript) Project Indicator"
             category_items: ["Impact", "Outcome", "Activity"],
                 (this.loadCSOIndicator = true);
             axios.get("/get-categories").then(response => {

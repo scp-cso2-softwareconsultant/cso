@@ -704,6 +704,7 @@ export default {
 
     methods: {
         initialize () {
+            document.title = "CSO | Profile"
             this.loadCSOProfile = true;
             axios.get('/cso-profile').then( response => {
                 this.cso_profile_list = response.data;

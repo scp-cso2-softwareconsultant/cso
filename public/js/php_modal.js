@@ -1,8 +1,8 @@
 
 var isHidden = true;
-
+document.title = "CSO | Login"
 function actModalDesu(){
-
+    
     var modal_desu = document.getElementById("modal_desu");
 
     if(isHidden)

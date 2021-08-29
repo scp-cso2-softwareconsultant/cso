@@ -127,7 +127,7 @@ export default {
     },
     methods:{
         initialize () {
-           
+            document.title = "CSO | Dashboard"
             this.CSO2IndicatorsChart();
             this.CSOProfile();
             this.assessment();

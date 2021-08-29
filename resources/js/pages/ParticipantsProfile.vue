@@ -275,6 +275,7 @@ export default {
 
     methods: {
         initialize () {
+            document.title = "CSO | Participant Profile"
             this.loadLMS = true;
             axios.get('/cso-name-list').then(response =>{
                 this.cso_name_items = response.data;
