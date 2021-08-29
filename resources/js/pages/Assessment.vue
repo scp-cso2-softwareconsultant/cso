@@ -322,7 +322,7 @@
                         small
                         class="mr-2"
                         @click="editItem(item)"
-                        color="yellow"
+                        color="blue darken-2"
                     >
                         mdi-pencil
                     </v-icon>
@@ -346,7 +346,7 @@
                                     small
                                     class="mr-2"
                                     @click="editSubItem(item)"
-                                    color="yellow"
+                                    color="blue darken-2"
                                 >
                                     mdi-pencil
                                 </v-icon>

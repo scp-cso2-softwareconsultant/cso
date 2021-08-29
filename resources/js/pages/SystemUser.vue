@@ -85,7 +85,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon @click="editItem(item)" small class="mr-2" color="yellow" > mdi-pencil </v-icon>
+                <v-icon @click="editItem(item)" small class="mr-2" color="blue darken-2" > mdi-pencil </v-icon>
                 <v-icon @click="deleteItem(item)" small color="red" > mdi-delete </v-icon>
             </template>
         </v-data-table>
