@@ -2,43 +2,16 @@
     <v-app>
         <h3 class="subheading grey--text">CSO2 Indicator</h3>
         <div class="d-flex m-4 flex-between align-items-center">
-            <p class="mb-0"><strong class="text-primary">Legends</strong></p>
-            <v-col cols="2">
-                <v-progress-linear
-                    class="rounded-top rounded-bottom text-white text-center mx-3"
-                    height="35"
-                    :color="getColor('Completed')"
-                    value="100"
-                    >Entry</v-progress-linear
-                >
-            </v-col>
-            <v-col cols="2">
-            <v-progress-linear
-                class="rounded-top rounded-bottom text-white text-center mx-3"
-                height="35"
-                :color="getColor('Work in Progress')"
-                value="100"
-                >Work in Progress</v-progress-linear
-            >
-            </v-col>
-            <v-col cols="2">
-            <v-progress-linear
-                class="rounded-top rounded-bottom text-white text-center mx-3"
-                height="35"
-                :color="getColor('Delay')"
-                value="100"
-                >Delayed</v-progress-linear
-            >
-            </v-col>
-            <v-col cols="2">
-            <v-progress-linear
-                class="rounded-top rounded-bottom text-white text-center mx-3"
-                height="35"
-                :color="getColor('Cancelled')"
-                value="100"
-                >Cancelled</v-progress-linear
-            >
-            </v-col>
+            <p class="mb-0"><strong class="text-primary">Status Legends</strong></p>
+                <v-col cols="2" v-for="(stats,idx) in status_list" :key="idx">
+                    <v-progress-linear
+                        class="rounded-top rounded-bottom text-white text-center mx-3"
+                        height="35"
+                        :color="getColor(stats.text)"
+                        value="100"
+                        >{{stats.value}}</v-progress-linear
+                    >
+                </v-col>
         </div>
         <br />
         <template>
@@ -859,10 +832,9 @@
                                 </template>
                                 <template v-slot:item.cso_status="{ item }">
                                     <v-progress-linear
-                                        indeterminate
-                                        striped
                                         class="rounded-top rounded-bottom text-white text-center"
                                         height="35"
+                                        value="100"
                                         :color="getColor(item.cso_status)"
                                         ></v-progress-linear
                                     >
@@ -1370,10 +1342,9 @@ export default {
             }
         },
         getColor(status) {
-            console.log(status);
-            if (status === "In Progress/delayed" || status === "Delay")
-                return "red";
-            else if (status === "Work in Progress") return "blue";
+            console.log(status)
+            if (status === "In Progress/Delayed" || status === "Delay") return "red";
+            else if (status === "In Progress") return "blue";
             else if (status === "Completed") return "green";
             else if (status === "Cancelled") return "grey";
             else if (status === "Not Yet Started") return "orange";
@@ -1409,7 +1380,6 @@ export default {
         },
 
         exportExcel: function(tableName, value) {
-            console.log(tableName, value);
             this.btnLoader = true;
             let filename = tableName + ".xlsx";
             var formData = new FormData();
