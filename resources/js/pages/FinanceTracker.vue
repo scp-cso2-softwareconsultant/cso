@@ -102,7 +102,9 @@
                                             <v-col cols="12" sm="12" md="12" >
                                                 <v-text-field :readonly="detailsReadonly"
                                                               :rules="[rules.number]"
-                                                              v-model="editedItem.finance_tranche1" label="1st Tranche" dense></v-text-field>
+                                                              v-model="editedItem.finance_tranche1" label="1st Tranche" 
+                                                              v-on:keyup="editTranch(1,editedItem)"
+                                                              dense></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
@@ -379,6 +381,7 @@ export default {
     },
 
     methods: {
+
         initialize () {
             this.loadFinanceTracker = true;
             axios.get('/finance-tracker').then( response => {
@@ -473,8 +476,13 @@ export default {
                 this.btnLoader = false;
             }
         },
-
+        editTranch(trancheMode, item){
+            console.log(item.finance_tranche1)
+        },
         computeBurnRate: function( ){
+            // Auto Computed 
+            // Not editable
+            // Can't Access 2nd Tranche if 1st Tranche is blank
             console.log( this.editedIndex )
         },
         formatAsCurrency: function(amt, dec) {
