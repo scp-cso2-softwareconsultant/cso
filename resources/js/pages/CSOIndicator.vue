@@ -1030,6 +1030,13 @@ export default {
         ],
         headers: [
             {
+                text: "Activity #",
+                width:"8%",
+                align: "start",
+                sortable: false,
+                value: "cso_act_no"
+            },
+            {
                 text: "Description",
                 align: "start",
                 sortable: false,
