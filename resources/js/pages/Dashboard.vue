@@ -1,6 +1,156 @@
 <template>
   <v-app>
     <h3 class="subheading grey--text">Dashboard</h3>
+    <v-flex >
+        <v-card class="ma-1">
+            <v-list-item  >
+                <v-list-item-content>
+                    <div class="card-group">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"> Responsible Organization </h5>
+                                    <p class="card-text">
+                                        <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
+                                    </p>
+                                    <p class="card-text"><small class="text-muted">
+                                        <v-select v-on:change="CSO2IndicatorsChart()" v-model="editedItem.CSO2Indicators" :items="responsibleOrganization" class="p-3" label="Category *" dense ></v-select> 
+                                    
+                                    </small></p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">  Top 3 Accreditation Bodies </h5>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-sm-2">
+                                            <div class="card-box bg-red">
+                                                <div class="inner">
+                                                    <h3> 82% </h3>
+                                                    <h5> CSO</h5>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fa fa-users"></i>
+                                                </div>
+                                                <a href="#" class="card-box-footer"> <i class="fa fa-arrow-circle-right"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-sm-6">
+                                            <div class="card-box bg-orange">
+                                                <div class="inner">
+                                                    <h3> 16%</h3>
+                                                    <h5> Social Enterprise </h5>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fa fa-user-plus" aria-hidden="true"> </i>
+                                                </div>
+                                                <a href="#" class="card-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-sm-6">
+                                            <div class="card-box bg-green">
+                                                <div class="inner">
+                                                    <h3> 2% </h3>
+                                                    <h5> Academe </h5>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                                </div>
+                                                <a href="#" class="card-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                </v-list-item-content>
+            </v-list-item>
+        </v-card>
+    </v-flex>
+   
+ 
+   
+    <v-flex >
+        <v-card class="ma-1">
+            <v-list-item  >
+                <v-list-item-content>
+                    <div class="overline text-right"> CSO2 Indicators </div>
+                    <div class="text-center">
+                        <apexchart  type="bar" height="350" :options="CSOProfilePrimaryStakeholderChartOptions" :series="CSOProfilePrimaryStakeholderSeries"></apexchart>
+                    </div>
+                </v-list-item-content>
+            </v-list-item>
+        </v-card>
+    </v-flex>
+    <v-flex>
+        <v-card class="ma-1">
+            <v-list-item  >
+                <v-list-item-content>
+                     <div class="card-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"> Responsible Organization </h5>
+                                <p class="card-text"><small class="text-muted">
+                                <apexchart type="donut" width="380" :options="CSOProfileTypesOfOrganizationChartOptions" :series="CSOProfileTypesOfOrganizationSeries"></apexchart>
+                                </small></p>
+                            </div>
+                        </div>
+                    
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">  Top 3 Accreditation Bodies </h5>
+                                <apexchart type="radar" height="350" :options="assessmentSubDomainPerYearChartOptions" :series="assessmentSubDomainPerYearSeries"></apexchart>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </v-list-item-content>
+            </v-list-item>
+        </v-card>
+    </v-flex>
+
+    <v-flex >
+        <v-card class="ma-1">
+            <v-list-item  >
+                <v-list-item-content>
+                    <div class="overline text-right"> CSO2 Indicators </div>
+                    <div class="text-center">
+                       <apexchart type="line" height="350" :options="financeTrackerBudgetChartOptions" :series="financeTrackerBudgetSeries"></apexchart>
+                    </div>
+                </v-list-item-content>
+            </v-list-item>
+        </v-card>
+    </v-flex>
+    
+    <v-flex>
+        <v-card class="ma-1">
+            <v-list-item  >
+                <v-list-item-content>
+                     <div class="card-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"> Responsible Organization </h5>
+                                <p class="card-text"><small class="text-muted">
+                                <apexchart type="bar" height="350" :options="burnRateChartOptions" :series="burnRateSeries"></apexchart>
+                                </small></p>
+                            </div>
+                        </div>
+                    
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">  Top 3 Accreditation Bodies </h5>
+                                 <apexchart type="bar" height="380" :options="projectTrackingDocumentChartOptions" :series="projectTrackingDocumentSeries"></apexchart>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </v-list-item-content>
+            </v-list-item>
+        </v-card>
+    </v-flex>
+   
+  <!--
     <v-flex sm6>
         <v-card class="ma-1">
             <v-list-item  >
@@ -15,6 +165,27 @@
             </v-list-item>
         </v-card>
     </v-flex>
+
+    <v-card >
+        <v-card-text>
+            <v-container dense >
+                <v-row>
+                    <v-col cols="12" lg="6" >
+                        <div id="chartRadar">
+                            <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
+                        </div>
+                    </v-col>
+                    <v-col cols="12" lg="6" >
+                        <div id="chartGroup">
+                            <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
+                        </div>
+                    </v-col>
+                    
+                    
+                </v-row>
+            </v-container>
+        </v-card-text>
+    </v-card>
 
     <v-flex sm6>
         <v-card class="ma-1">
@@ -109,9 +280,9 @@
                 </v-list-item-content>
             </v-list-item>
         </v-card>
-    </v-flex>
+    </v-flex> 
     
-    
+    --> 
   </v-app>
 </template>
 
@@ -173,7 +344,7 @@ export default {
                 });
                 this.CSOProfileTypesOfOrganizationSeries = series ;
                 this.CSOProfileTypesOfOrganizationChartOptions = {
-                    ...this.CSOProfileChartOptions,
+                    ...this.CSOProfileTypesOfOrganizationChartOptions,
                     labels: labels,
                 }
             })
@@ -262,8 +433,8 @@ export default {
         CSOProfileTypesOfOrganizationSeries: [44, 55, 13, 43],
         CSOProfileTypesOfOrganizationChartOptions: {
             chart: {
-                width: 380,
-                type: 'pie',
+                width: 480,
+                type: 'donut',
             },
             labels: ['lead SCP', 'Ateneo CORD', 'AHA BD', 'PICPA' ],
             responsive: [{
