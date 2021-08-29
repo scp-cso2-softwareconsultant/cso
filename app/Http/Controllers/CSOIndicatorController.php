@@ -249,9 +249,6 @@ class CSOIndicatorController extends Controller
             ->update( array('cso_completion' => $completion, 'cso_status' =>$status, 'cso_count' => $cso_count) );
     }
 
-    public function chartCSOIndicator(Request $request){
-       
-        return  $request;
-    }
+   
 
 }

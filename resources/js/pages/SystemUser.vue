@@ -161,6 +161,7 @@ export default {
 
     methods: {
         initialize () {
+            document.title = "CSO | System User"
             axios.get('/user-roles').then( response => {
                 this.roles =  response.data ;
             })

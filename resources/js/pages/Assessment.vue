@@ -481,6 +481,7 @@ export default {
     methods: {
         initialize () {
             this.loadLROAssessment = true;
+            document.title = "CSO | Assessment"
             axios.get('/cso-name-list').then(response =>{
                 this.cso_name_items = response.data;
             })

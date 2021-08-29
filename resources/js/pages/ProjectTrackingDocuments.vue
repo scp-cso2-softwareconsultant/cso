@@ -396,6 +396,10 @@ export default {
         };
     },
     methods: {
+        initialize() {
+            document.title = "CSO | Project Trackin Document"
+            
+        },  
         setBurnRate() {
             console.log(this.startDate)
             if(!isNaN(Number.parseFloat(this.spentToDate))){
@@ -426,8 +430,9 @@ export default {
             this.computeRemaining()
         }
     },
+
     created(){
-        this.init();
+        this.initialize();
     }
 };
 </script>

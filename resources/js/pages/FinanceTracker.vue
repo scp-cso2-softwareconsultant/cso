@@ -637,7 +637,13 @@ export default {
     },
 
     methods: {
+<<<<<<< HEAD
         initialize() {
+=======
+
+        initialize () {
+            document.title = "CSO | Finance Tracker"
+>>>>>>> 26c8c0e514429ec2794eac00113817674e241740
             this.loadFinanceTracker = true;
             axios.get("/finance-tracker").then(response => {
                 this.financeList = response.data;
