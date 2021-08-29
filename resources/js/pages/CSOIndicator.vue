@@ -864,9 +864,7 @@
                                         class="rounded-top rounded-bottom text-white text-center"
                                         height="35"
                                         :color="getColor(item.cso_status)"
-                                        >{{
-                                            item.cso_status
-                                        }}</v-progress-linear
+                                        ></v-progress-linear
                                     >
                                 </template>
                                 <template v-slot:item.actions="{ item }">
