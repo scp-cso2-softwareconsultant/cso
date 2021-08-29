@@ -2,16 +2,25 @@
     <v-app>
         <h3 class="subheading grey--text">CSO2 Indicator</h3>
         <div class="d-flex m-4 flex-between align-items-center">
-            <p class="mb-0"><strong class="text-primary">Status Legends</strong></p>
-                <v-col cols="2" v-for="(stats,idx) in status_list" :key="idx">
-                    <v-progress-linear
-                        class="rounded-top rounded-bottom text-white text-center mx-3"
-                        height="35"
-                        :color="getColor(stats.text)"
-                        value="100"
-                        >{{stats.value}}</v-progress-linear
-                    >
-                </v-col>
+            <p class="mb-0">
+                <strong class="text-primary">Status Legends</strong>
+            </p>
+            <v-col class="mx-3" cols="2" v-for="(stats, idx) in status_list" :key="idx">
+                <v-progress-linear
+                    class="rounded-top rounded-bottom text-white text-center"
+                    height="35"
+                    :color="getColor(stats.text)"
+                    value="100"
+                    >{{ stats.value }}</v-progress-linear
+                >
+
+                <v-progress-linear
+                    indeterminate
+                    class="rounded-bottom text-white text-center"
+                    height="2"
+                    :color="getColor(stats.text)"
+                ></v-progress-linear>
+            </v-col>
         </div>
         <br />
         <template>
@@ -52,17 +61,15 @@
                                         <v-dialog
                                             v-model="dialog"
                                             max-width="500px"
-                                        >   
-
+                                        >
                                             <template
                                                 v-slot:activator="{ on, attrs }"
-                                            >   
+                                            >
                                                 <v-btn
                                                     color="lightgray"
                                                     class="mb-2"
                                                     v-bind="attrs"
                                                     v-on="on"
-                                                    
                                                 >
                                                     New
                                                     <v-icon color="green"
@@ -832,21 +839,27 @@
                                 </template>
                                 <template v-slot:item.cso_status="{ item }">
                                     <v-progress-linear
-                                        class="rounded-top rounded-bottom text-white text-center"
-                                        height="35"
+                                        class="rounded-top  text-white text-center"
+                                        height="30"
                                         value="100"
                                         :color="getColor(item.cso_status)"
-                                        ></v-progress-linear
-                                    >
+                                    ></v-progress-linear>
+                                    <v-progress-linear
+                                        indeterminate
+                                        class="rounded-bottom text-white text-center"
+                                        height="2"
+                                        :color="getColor(item.cso_status)"
+                                    ></v-progress-linear>
                                 </template>
                                 <template v-slot:item.actions="{ item }">
-
                                     <v-icon
                                         small
                                         class="mr-2"
                                         @click="addSubItem(item)"
                                         color="green"
-                                        data-toggle="tooltip" data-placement="top" title="New Indicator Details"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="New Indicator Details"
                                     >
                                         mdi-sticker-plus-outline
                                     </v-icon>
@@ -855,7 +868,9 @@
                                         class="mr-2"
                                         @click="editItem(item)"
                                         color="yellow"
-                                        data-toggle="tooltip" data-placement="top" title="Edit CSO2 Indicator"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit CSO2 Indicator"
                                     >
                                         mdi-pencil
                                     </v-icon>
@@ -863,7 +878,9 @@
                                         small
                                         @click="deleteItem(item)"
                                         color="red"
-                                        data-toggle="tooltip" data-placement="top" title="Delete"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete"
                                     >
                                         mdi-delete
                                     </v-icon>
@@ -1106,9 +1123,8 @@ export default {
 
     methods: {
         initialize() {
-            
-            category_items: ['Impact', 'Outcome', 'Activity'],
-            this.loadCSOIndicator = true;
+            category_items: ["Impact", "Outcome", "Activity"],
+                (this.loadCSOIndicator = true);
             axios.get("/get-categories").then(response => {
                 this.category_items = response.data;
             });
@@ -1342,8 +1358,9 @@ export default {
             }
         },
         getColor(status) {
-            console.log(status)
-            if (status === "In Progress/Delayed" || status === "Delay") return "red";
+            console.log(status);
+            if (status === "In Progress/Delayed" || status === "Delay")
+                return "red";
             else if (status === "In Progress") return "blue";
             else if (status === "Completed") return "green";
             else if (status === "Cancelled") return "grey";
