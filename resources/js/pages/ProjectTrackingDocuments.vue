@@ -47,23 +47,29 @@
                         <v-list-item>
                             <v-list-item-content>
                                 <div class="overline text-left">
-                                    Start Date :<strong> {{startDate}} </strong>
+                                    Start Date :<strong>
+                                        {{ startDate }}
+                                    </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    Current Date : <strong> {{curDate}} </strong>
+                                    Current Date :
+                                    <strong> {{ curDate }} </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    Days Completed :<strong> {{daysCompleted}} </strong>
+                                    Days Completed :<strong>
+                                        {{ daysCompleted }}
+                                    </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    Days Left : <strong> {{daysLeft}} </strong>
+                                    Days Left :
+                                    <strong> {{ daysLeft }} </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    End Date: <strong> {{endDate}} </strong>
+                                    End Date: <strong> {{ endDate }} </strong>
                                 </div>
                                 <div class="overline text-left">
                                     Percent Complete :
-                                    <strong> {{percentComplete}} </strong>
+                                    <strong> {{ percentComplete }} </strong>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
@@ -73,7 +79,14 @@
                             <v-list-item-content>
                                 <div class="overline text-left">
                                     Total Budget (USD) :
-                                    <strong> <vue-numeric currency="$" separator="," read-only v-model="totalBudget"></vue-numeric></strong>
+                                    <strong>
+                                        <vue-numeric
+                                            currency="$"
+                                            separator=","
+                                            read-only
+                                            v-model="totalBudget"
+                                        ></vue-numeric
+                                    ></strong>
                                 </div>
                                 <div class="overline text-left">
                                     <v-text-field
@@ -83,7 +96,15 @@
                                     ></v-text-field>
                                 </div>
                                 <div class="overline text-left">
-                                    Remaining: <strong> <vue-numeric currency="$" separator="," read-only v-model="remaining"></vue-numeric> </strong>
+                                    Remaining:
+                                    <strong>
+                                        <vue-numeric
+                                            currency="$"
+                                            separator=","
+                                            read-only
+                                            v-model="remaining"
+                                        ></vue-numeric>
+                                    </strong>
                                 </div>
                                 <div class="overline text-left">
                                     Burn rate: <strong>{{ burnRate }}</strong>
@@ -93,7 +114,6 @@
                                         ><v-text-field
                                             type="email"
                                             label="Next donor report due to Awards : "
-                                            
                                         ></v-text-field
                                     ></strong>
                                 </div>
@@ -175,7 +195,7 @@
                             </th>
                             <th scope="col" class="p-4">Next month planning</th>
                             <th scope="col" class="p-4">
-                                Estimated progress to date
+                                Estimated progress to date in (%)
                             </th>
                         </tr>
                     </thead>
@@ -217,7 +237,7 @@
                                     auto-grow
                                     rows="2"
                                     label=""
-                                    value="30%"
+                                    value="30"
                                     dense
                                 ></v-textarea>
                             </td>
@@ -308,7 +328,14 @@
                         </tr>
                         <tr>
                             <th scope="row" class="p-4">Objective 4:</th>
-                            <td class="p-3"></td>
+                            <td class="p-3">
+                                <v-textarea
+                                    auto-grow
+                                    rows="2"
+                                    label=""
+                                    dense
+                                ></v-textarea>
+                            </td>
                             <td>
                                 <v-textarea
                                     auto-grow
@@ -366,12 +393,21 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-card>
+            <v-btn
+                class="ma-2"
+                color="primary"
+                block
+                :loading="btnLoader"
+                @click="save"
+            >
+                Save
+            </v-btn>
         </v-container>
     </v-app>
 </template>
 <script>
 import VueNumeric from "vue-numeric";
-const days360 = require('days360');
+const days360 = require("days360");
 
 export default {
     components: {
@@ -381,57 +417,77 @@ export default {
         return {
             totalBudget: 1999998.57,
             spentToDate: 0,
-            rawDate : {
-                startDate : "2/1/2021",
-                endDate : "1/31/2024"
+            btnLoader: false,
+            rawDate: {
+                startDate: "2/1/2021",
+                endDate: "1/31/2024"
             },
             burnRate: "-.-%",
-            startDate: '-/-/-',
-            curDate : '-/-/-',
-            endDate : '-/-/-',
-            daysCompleted : 0,
-            daysLeft : 0,
-            percentComplete : 0,
-            remaing : 0
+            startDate: "-/-/-",
+            curDate: "-/-/-",
+            endDate: "-/-/-",
+            daysCompleted: 0,
+            daysLeft: 0,
+            percentComplete: 0,
+            remaining: 0
         };
     },
     methods: {
         initialize() {
-            document.title = "CSO | Project Trackin Document"
-            
-        },  
+            document.title = "CSO | Project Trackin Document";
+        },
         setBurnRate() {
-            console.log(this.startDate)
-            if(!isNaN(Number.parseFloat(this.spentToDate))){
-                this.burnRate = ((Number.parseFloat(this.spentToDate) / this.totalBudget)*100).toFixed(2)+'%'
-                this.computeRemaining()
+            console.log(this.startDate);
+            if (!isNaN(Number.parseFloat(this.spentToDate))) {
+                this.burnRate =
+                    (
+                        (Number.parseFloat(this.spentToDate) /
+                            this.totalBudget) *
+                        100
+                    ).toFixed(2) + "%";
+                this.computeRemaining();
                 return;
             }
-            this.burnRate = "-.-%"
+            this.burnRate = "-.-%";
         },
-        getParsedDate(date){
-            return `${date.toLocaleString('en-us', { month: 'long' })}/${date.getDate()}/${date.getFullYear()}`
+        getParsedDate(date) {
+            return `${date.toLocaleString("en-us", {
+                month: "long"
+            })}/${date.getDate()}/${date.getFullYear()}`;
         },
-        getRealDate(date){
+        getRealDate(date) {
             return new Date(date);
         },
-        computeRemaining(){
-            this.remaining = this.totalBudget - this.spentToDate
-        }
-        ,
-        init(){
+        computeRemaining() {
+            this.remaining = this.totalBudget - this.spentToDate;
+        },
+        init() {
             this.setBurnRate();
             this.curDate = this.getParsedDate(new Date());
-            this.endDate = this.getParsedDate(new Date(this.rawDate.endDate))
-            this.startDate = this.getParsedDate(new Date(this.rawDate.startDate))
-            this.daysCompleted = days360(this.getRealDate(this.rawDate.startDate), new Date())
-            this.daysLeft = days360(new Date(),this.getRealDate(this.rawDate.endDate))
-            this.percentComplete = `${(this.daysCompleted/(this.daysLeft + this.daysCompleted) * 100).toFixed(2)} %`
-            this.computeRemaining()
+            this.endDate = this.getParsedDate(new Date(this.rawDate.endDate));
+            this.startDate = this.getParsedDate(
+                new Date(this.rawDate.startDate)
+            );
+            this.daysCompleted = days360(
+                this.getRealDate(this.rawDate.startDate),
+                new Date()
+            );
+            this.daysLeft = days360(
+                new Date(),
+                this.getRealDate(this.rawDate.endDate)
+            );
+            this.percentComplete = `${(
+                (this.daysCompleted / (this.daysLeft + this.daysCompleted)) *
+                100
+            ).toFixed(2)} %`;
+            this.computeRemaining();
+        },
+        save() {
+            this.btnLoader = true;
         }
     },
 
-    created(){
+    created() {
         this.initialize();
     }
 };

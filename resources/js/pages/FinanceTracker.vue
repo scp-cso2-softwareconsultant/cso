@@ -152,6 +152,7 @@
                                                     :readonly="detailsReadonly"
                                                     :rules="[rules.number]"
                                                     ref="refBudget"
+                                                    v-on:keyup="computeBurnRate"
                                                     v-model="
                                                         editedItem.finance_budget
                                                     "
@@ -182,6 +183,7 @@
                                                         editedItem.finance_tranche1 !=
                                                             0.00
                                                     "
+                                                    v-on:keyup="computeBurnRate"
                                                     :readonly="detailsReadonly"
                                                     :rules="[rules.number]"
                                                     v-model="
@@ -210,6 +212,7 @@
                                                         editedItem.finance_tranche2 !=
                                                             0.00
                                                     "
+                                                    v-on:keyup="computeBurnRate"
                                                     :readonly="detailsReadonly"
                                                     :rules="[rules.number]"
                                                     v-model="
@@ -238,6 +241,7 @@
                                                         editedItem.finance_tranche3 !=
                                                             0.00
                                                     "
+                                                    v-on:keyup="computeBurnRate"
                                                     :readonly="detailsReadonly"
                                                     :rules="[rules.number]"
                                                     v-model="
@@ -465,6 +469,9 @@
                         class="mr-2"
                         @click="detailsItem(item)"
                         color="blue"
+                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Finance Tracker Details"
                     >
                         mdi-information-outline
                     </v-icon>
@@ -473,11 +480,17 @@
                         class="mr-2"
                         @click="editItem(item)"
                         color="blue darken-2"
+                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit Finance Tracker"
                     >
                         mdi-pencil
                     </v-icon>
-                    <v-icon small @click="deleteItem(item)" color="red">
+                    <v-icon small @click="deleteItem(item)" color="red" data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete This Item"
                         mdi-delete
+                        
                     </v-icon>
                 </template>
             </v-data-table>
@@ -637,13 +650,9 @@ export default {
     },
 
     methods: {
-<<<<<<< HEAD
-        initialize() {
-=======
 
         initialize () {
             document.title = "CSO | Finance Tracker"
->>>>>>> 26c8c0e514429ec2794eac00113817674e241740
             this.loadFinanceTracker = true;
             axios.get("/finance-tracker").then(response => {
                 this.financeList = response.data;
@@ -746,21 +755,20 @@ export default {
         },
         computeBurnRate: function() {
             var CpyItm = this.editedItem;
-            console.log(CpyItm.finance_tranche1, CpyItm.finance_budget);
             this.editedItem.finance_burn1 = this.getBurn(
-                CpyItm.finance_tranche1,
+                parseFloat(CpyItm.finance_tranche1),
                 CpyItm.finance_budget
             );
             this.editedItem.finance_burn2 = this.getBurn(
-                CpyItm.finance_tranche2,
+                (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2)),
                 CpyItm.finance_budget
             );
             this.editedItem.finance_burn3 = this.getBurn(
-                CpyItm.finance_tranche3,
+                (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3)),
                 CpyItm.finance_budget
             );
             this.editedItem.finance_burn4 = this.getBurn(
-                CpyItm.finance_tranche4,
+                (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3) + parseFloat(CpyItm.finance_tranche4)),
                 CpyItm.finance_budget
             );
         },

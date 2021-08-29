@@ -122,6 +122,9 @@
                     class="mr-2"
                     @click="detailsItem(item)"
                     color="blue"
+                    data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Course Details"
                 >
                     mdi-information-outline
                 </v-icon>
@@ -130,6 +133,9 @@
                     class="mr-2"
                     @click="editItem(item)"
                     color="blue darken-2"
+                    data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit Course"
                 >
                     mdi-pencil
                 </v-icon>
@@ -137,6 +143,9 @@
                     small
                     @click="deleteItem(item)"
                     color="red"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                   title="Delete This Item"
                 >
                     mdi-delete
                 </v-icon>

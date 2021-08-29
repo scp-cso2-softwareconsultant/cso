@@ -307,6 +307,9 @@
                         class="mr-2"
                         @click="addSubItem(item)"
                         color="green"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="New Sub Domain"
                     >
                         mdi-sticker-plus-outline
                     </v-icon>
@@ -315,6 +318,9 @@
                         class="mr-2"
                         @click="detailsItem(item)"
                         color="blue"
+                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Assessment Details"
                     >
                         mdi-information-outline
                     </v-icon>
@@ -323,6 +329,9 @@
                         class="mr-2"
                         @click="editItem(item)"
                         color="blue darken-2"
+                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit Assessment"
                     >
                         mdi-pencil
                     </v-icon>
@@ -330,6 +339,9 @@
                         small
                         @click="deleteItem(item)"
                         color="red"
+                        data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete This Item"
                     >
                         mdi-delete
                     </v-icon>
@@ -347,6 +359,9 @@
                                     class="mr-2"
                                     @click="editSubItem(item)"
                                     color="blue darken-2"
+                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit Subdomain"
                                 >
                                     mdi-pencil
                                 </v-icon>
@@ -354,6 +369,9 @@
                                     small
                                     @click="deleteSubItem(item)"
                                     color="red"
+                                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete This Item"
                                 >
                                     mdi-delete
                                 </v-icon>

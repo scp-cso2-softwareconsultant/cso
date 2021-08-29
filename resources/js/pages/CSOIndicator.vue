@@ -878,9 +878,9 @@
                                         small
                                         @click="deleteItem(item)"
                                         color="red"
-                                        data-toggle="tooltip"
+                                       data-toggle="tooltip"
                                         data-placement="top"
-                                        title="Delete"
+                                        title="Delete This Item"
                                     >
                                         mdi-delete
                                     </v-icon>
@@ -904,6 +904,9 @@
                                                         detailsSubItem(item)
                                                     "
                                                     color="blue"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Indicator Details"
                                                 >
                                                     mdi-information-outline
                                                 </v-icon>
@@ -913,6 +916,9 @@
                                                     class="mr-2"
                                                     @click="editSubItem(item)"
                                                     color="blue darken-2"
+                                                    data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit Indicator Details"
                                                 >
                                                     mdi-pencil
                                                 </v-icon>
@@ -921,6 +927,9 @@
                                                     small
                                                     @click="deleteSubItem(item)"
                                                     color="red"
+                                                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete This Item"
                                                 >
                                                     mdi-delete
                                                 </v-icon>
@@ -1366,12 +1375,7 @@ export default {
             }
         },
         getColor(status) {
-<<<<<<< HEAD
             if (status === "In Progress/Delayed" || status === "Delay")
-=======
-            // console.log(status);
-            if (status === "In Progress/delayed" || status === "Delay")
->>>>>>> 26c8c0e514429ec2794eac00113817674e241740
                 return "red";
             else if (status === "In Progress") return "blue";
             else if (status === "Completed") return "green";

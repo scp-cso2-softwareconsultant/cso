@@ -245,6 +245,9 @@
                     class="mr-2"
                     @click="detailsItem(item)"
                     color="blue"
+                    data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Training Attendees Details"
                 >
                     mdi-information-outline
                 </v-icon>
@@ -252,7 +255,10 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
-                    color="yellow"
+                    color="blue darken-2"
+                    data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit Training Attendees"
                 >
                     mdi-pencil
                 </v-icon>
@@ -260,6 +266,9 @@
                     small
                     @click="deleteItem(item)"
                     color="red"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete This Item"
                 >
                     mdi-delete
                 </v-icon>
