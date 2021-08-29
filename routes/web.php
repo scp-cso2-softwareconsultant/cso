@@ -31,7 +31,7 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::post('/save-cso-indicator-details', [App\Http\Controllers\CSOIndicatorController::class, 'saveCSOIndicatorDetails'])->name('save-cso-indicator-details');
     Route::post('/delete-cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'deleteCSOIndicator'])->name('delete-cso-indicator');
     Route::post('/delete-cso-indicator-details', [App\Http\Controllers\CSOIndicatorController::class, 'deleteCSOIndicatorDetails'])->name('delete-cso-indicator-details');
-    Route::get('/chart-cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'chartCSOIndicator'])->name('chart-cso-indicator');
+   
 // CSO PROFILE
     Route::get('/cso-profile', [App\Http\Controllers\CSOProfileController::class, 'getCSOProfile'])->name('cso-profile');
     Route::get('/cso-name-list', [App\Http\Controllers\CSOProfileController::class, 'getCSONameList'])->name('cso-name-list');

@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text">CSO2 Indicator</h3>
+        <h3 class="subheading grey--text"> CSO2 (supercript) Project Indicator </h3>
         <div class="d-flex m-4 flex-between align-items-center">
             <p class="mb-0"><strong class="text-primary">Legends</strong></p>
             <v-col cols="2">
@@ -1141,24 +1141,31 @@ export default {
             this.loadCSOIndicator = true;
             axios.get("/get-categories").then(response => {
                 this.category_items = response.data;
+                
             });
             //     indicator_type_list: ['Performance/Custom'],
             this.loadCSOIndicator = true;
             axios.get("/get-indicator-type").then(response => {
                 this.indicator_type_list = response.data;
+               
             });
             //     frequency_list:['Annually','Yearly','Bi-Annual'],
             this.loadCSOIndicator = true;
             axios.get("/get-frequencies").then(response => {
                 this.frequency_list = response.data;
+               
             });
             //     status_list: ['Entry', 'In Progress', 'Completed', 'Delayed'],
             this.loadCSOIndicator = true;
             axios.get("/get-indicator-status").then(response => {
+                console.log( response.data )
                 this.status_list = response.data;
+                
             });
 
+
             axios.get("/cso-indicator").then(response => {
+                console.log( response.data )
                 this.indicators_list = response.data;
                 this.loadCSOIndicator = false;
             });
@@ -1372,7 +1379,7 @@ export default {
             }
         },
         getColor(status) {
-            console.log(status);
+            // console.log(status);
             if (status === "In Progress/delayed" || status === "Delay")
                 return "red";
             else if (status === "Work in Progress") return "blue";
@@ -1411,7 +1418,7 @@ export default {
         },
 
         exportExcel: function(tableName, value) {
-            console.log(tableName, value);
+            // console.log(tableName, value);
             this.btnLoader = true;
             let filename = tableName + ".xlsx";
             var formData = new FormData();
