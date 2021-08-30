@@ -3,88 +3,12 @@
         <h3 class="subheading grey--text">
             CSO2 (supercript) Project Indicator
         </h3>
-        <div class="d-flex m-4 flex-between align-items-center">
-            <p class="mb-0">
-                <strong class="text-primary">Status Legends</strong>
-            </p>
-            <v-col
-                class="mx-3"
-                cols="2"
-                v-for="(stats, idx) in status_list"
-                :key="idx"
-            >
-                <v-progress-linear
-                    class="rounded-top rounded-bottom text-white text-center"
-                    height="35"
-                    :color="getColor(stats.text)"
-                    value="100"
-                    >{{ stats.value }}</v-progress-linear
-                >
-
-                <v-progress-linear
-                    indeterminate
-                    class="rounded-bottom text-white text-center"
-                    height="2"
-                    :color="getColor(stats.text)"
-                ></v-progress-linear>
-            </v-col>
-        </div>
-        <br />
-        <template>
-            <v-card>
-                <v-tabs v-model="tabCategory">
-                    <v-tab
-                        v-for="item in category_tabs"
-                        :key="item.value"
-                        @click="getIndicator(item.value)"
-                    >
-                        {{ item.text }}
-                    </v-tab>
-                </v-tabs>
-                <v-tabs-items v-model="tabCategory">
-                    <v-tab-item v-for="item in category_tabs" :key="item.value">
-                        <v-card>
-                            <v-data-table
-                                :headers="headers"
-                                :items="indicators_list"
-                                :single-expand="singleExpand"
-                                :expanded.sync="expanded"
-                                :search="searchBy"
-                                item-key="cso_indicator_id"
-                                :loading="loadCSOIndicator"
-                                show-expand
-                                class="elevation-1"
-                            >
-                                <template v-slot:top>
-                                    <v-toolbar flat dense>
-                                        <v-text-field
-                                            v-model="searchBy"
-                                            append-icon="mdi-magnify"
-                                            label="Search"
-                                            single-line
-                                            hide-details
-                                        ></v-text-field>
-                                        <v-spacer></v-spacer>
-                                        <v-dialog
+        <v-dialog
                                             v-model="dialog"
                                             max-width="500px"
                                         >
-                                            <template
-                                                v-slot:activator="{ on, attrs }"
-                                            >
-                                                <v-btn
-                                                    color="lightgray"
-                                                    class="mb-2"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                >
-                                                    New
-                                                    <v-icon color="green"
-                                                        >mdi-plus-thick</v-icon
-                                                    >
-                                                </v-btn>
-                                            </template>
-                                            <v-card>
+
+<v-card>
                                                 <v-card-title>
                                                     <span class="text-h5">{{
                                                         formTitle
@@ -204,7 +128,9 @@
                                                     </v-btn>
                                                 </v-card-actions>
                                             </v-card>
+
                                         </v-dialog>
+
                                         <v-dialog
                                             v-model="dialogDelete"
                                             max-width="500px"
@@ -878,6 +804,86 @@
                                                 </v-card-actions>
                                             </v-card>
                                         </v-dialog>
+        <div class="d-flex m-4 flex-between align-items-center">
+            <p class="mb-0">
+                <strong class="text-primary">Status Legends</strong>
+            </p>
+            <v-col
+                class="mx-3"
+                cols="2"
+                v-for="(stats, idx) in status_list"
+                :key="idx"
+            >
+                <v-progress-linear
+                    class="rounded-top rounded-bottom text-white text-center"
+                    height="35"
+                    :color="getColor(stats.text)"
+                    value="100"
+                    >{{ stats.value }}</v-progress-linear
+                >
+
+                <v-progress-linear
+                    indeterminate
+                    class="rounded-bottom text-white text-center"
+                    height="2"
+                    :color="getColor(stats.text)"
+                ></v-progress-linear>
+            </v-col>
+        </div>
+        <br />
+        <template>
+            <v-card>
+                <v-tabs v-model="tabCategory">
+                    <v-tab
+                        v-for="item in category_tabs"
+                        :key="item.value"
+                        @click="getIndicator(item.value)"
+                    >
+                        {{ item.text }}
+                    </v-tab>
+                </v-tabs>
+                <v-tabs-items v-model="tabCategory">
+                    <v-tab-item v-for="item in category_tabs" :key="item.value">
+                        <v-card>
+                            <v-data-table
+                                :headers="headers"
+                                :items="indicators_list"
+                                :single-expand="singleExpand"
+                                :expanded.sync="expanded"
+                                :search="searchBy"
+                                item-key="cso_indicator_id"
+                                :loading="loadCSOIndicator"
+                                show-expand
+                                class="elevation-1"
+                            >
+                                <template v-slot:top>
+                                    <v-toolbar flat dense>
+                                        <v-text-field
+                                            v-model="searchBy"
+                                            append-icon="mdi-magnify"
+                                            label="Search"
+                                            single-line
+                                            hide-details
+                                        ></v-text-field>
+                                        <v-spacer></v-spacer>
+                                        
+                                            <template
+                                                v-slot:activator="{ on, attrs }"
+                                            >
+                                                <v-btn
+                                                    color="lightgray"
+                                                    class="mb-2"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                >
+                                                    New
+                                                    <v-icon color="green"
+                                                        >mdi-plus-thick</v-icon
+                                                    >
+                                                </v-btn>
+                                            </template>
+                                            
+                                        
                                         &nbsp;&nbsp;
                                         <v-btn
                                             color="lightgray"
