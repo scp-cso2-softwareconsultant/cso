@@ -26,7 +26,7 @@ class csoExport implements FromCollection, WithHeadings
         switch ($this->tableName){
             case "CSO2 Indicator":
                 $header = [
-                            'CATEGORY', 'DESCRIPTION', 'STATUS', 'INDICATOR NO', 'INDICATOR', 'TYPE', 'DATA SOURCE',
+                            'CATEGORY','ACTIVITY NO','DESCRIPTION', 'STATUS', 'INDICATOR NO', 'INDICATOR', 'TYPE', 'DATA SOURCE',
                             'FREQUENCY', 'UNIT OF MEASURE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
                             'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE', 'MOV'
                         ];

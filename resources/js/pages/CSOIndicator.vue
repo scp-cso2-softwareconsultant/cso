@@ -109,6 +109,7 @@
                                                                     :rules="[
                                                                         rules.required
                                                                     ]"
+                                                                    value="editedItem.cso_category"
                                                                     label="Category *"
                                                                     dense
                                                                 ></v-select>
@@ -135,6 +136,29 @@
                                                                 </v-textarea>
                                                             </v-col>
                                                         </v-row>
+                                                        <v-row class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                </v-textarea>
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        editedItem.cso_act_no
+                                                                    "
+                                                                    :rules="[
+                                                                        rules.required
+                                                                    ]"
+                                                                    color="purple darken-2"
+                                                                    label="Activity No *"
+                                                                    required
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    dense
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
                                                         <v-row>
                                                             <v-col
                                                                 cols="12"
@@ -149,7 +173,7 @@
                                                                         status_list
                                                                     "
                                                                     v-model="
-                                                                        editedSubItem.cso_status
+                                                                        editedItem.cso_status
                                                                     "
                                                                     label="Status"
                                                                     dense
@@ -781,7 +805,10 @@
                                                                     </div>
                                                                     <div v-else>
                                                                         <v-file-input
-                                                                        v-if="file_name != ''"
+                                                                            v-if="
+                                                                                file_name !=
+                                                                                    ''
+                                                                            "
                                                                             show-size
                                                                             label="Upload MOV"
                                                                             @change="
@@ -792,7 +819,7 @@
                                                                             "
                                                                         ></v-file-input>
                                                                         <v-file-input
-                                                                        v-else
+                                                                            v-else
                                                                             show-size
                                                                             label="Upload MOV"
                                                                             @change="
@@ -805,14 +832,22 @@
                                                                     </div>
                                                                 </div>
                                                                 <div v-else>
-                                                                    
-                                                                    <template>
-                                                                    <v-btn 
-                                                                    block
-                                                                    @click="downloadMov(editedSubItem.mov_file)"
-                                                                    >
-                                                                        {{editedSubItem.mov_file}}
-                                                                    </v-btn>
+                                                                    <template v-if="editedSubItem.mov_file != null">
+                                                                        <v-btn
+                                                                            block
+                                                                            @click="
+                                                                                downloadMov(
+                                                                                    editedSubItem.mov_file
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            {{
+                                                                                editedSubItem.mov_file
+                                                                            }}
+                                                                        </v-btn>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <p>No Attatched MOV</p>
                                                                     </template>
                                                                 </div>
                                                             </v-col>
@@ -979,6 +1014,7 @@ import VueNoty from "vuejs-noty";
 Vue.use(VueNoty);
 export default {
     data: () => ({
+        catSelectedTab: 'Activity',
         tabCategory: null,
         isEditting: false,
         btnLoader: false,
@@ -1083,11 +1119,15 @@ export default {
         editedIndex: -1,
         editedItem: {
             cso_category: "",
-            cso_description: ""
+            cso_description: "",
+            cso_act_no:"",
+            cso_status:""
         },
         defaultItem: {
             cso_category: "",
-            cso_description: ""
+            cso_description: "",
+            cso_act_no:"",
+            cso_status:""
         },
         cso_id: "",
         formSubTitle: "",
@@ -1184,27 +1224,30 @@ export default {
                 this.status_list = response.data;
             });
 
+            if(this.catSelectedTab === 'Activity')
             axios.get("/cso-indicator").then(response => {
                 // console.log( response.data )
                 this.indicators_list = response.data;
-                this.indicators_list.map(function(item) {
-                    delete item.cso_category;
-                    return item;
-                });
+                // this.indicators_list.map(function(item) {
+                //     delete item.cso_category;
+                //     return item;
+                // });
                 this.loadCSOIndicator = false;
             });
+            else
+                this.getFilteredIndicator();
         },
         getIndicator: function(categorySelected) {
+            this.catSelectedTab = categorySelected
             this.indicators_list = [];
             this.loadCSOIndicator = true;
+            this.getFilteredIndicator();
+        },
+        getFilteredIndicator(){
             axios
-                .post("/cso-indicator-list", { category: categorySelected })
+                .post("/cso-indicator-list", { category: this.catSelectedTab })
                 .then(response => {
                     this.indicators_list = response.data;
-                    this.indicators_list.map(function(item) {
-                        delete item.cso_category;
-                        return item;
-                    });
                     this.loadCSOIndicator = false;
                 });
         },
@@ -1227,7 +1270,7 @@ export default {
         },
 
         detailsSubItem(item) {
-            this.isEditting = false
+            this.isEditting = false;
             this.file_name = "";
 
             this.formSubTitle = "Indicator Details";
@@ -1244,7 +1287,7 @@ export default {
 
         editSubItem(item) {
             this.isEditting = true;
-            console.log(this.isEditting)
+            console.log(this.isEditting);
             this.removeFile();
             this.editedIndex = 1;
             this.formSubTitle = "Edit Indicator Details";
@@ -1294,7 +1337,6 @@ export default {
             }
             this.closeDelete();
         },
-        
 
         close() {
             this.detailsReadonly = false;
@@ -1304,8 +1346,8 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
             });
-            this.file_name = ""
-            this.isEditting = false
+            this.file_name = "";
+            this.isEditting = false;
         },
 
         closeSub() {
@@ -1316,7 +1358,7 @@ export default {
             this.subdialog = false;
             this.removeFile();
             this.isEditting = false;
-            console.log(this.isEditting)
+            console.log(this.isEditting);
         },
 
         closeDelete() {
@@ -1339,6 +1381,7 @@ export default {
                 this.$noty.error("Description is empty!");
                 validate = false;
             }
+            console.log(this.editedItem)
             if (validate) {
                 axios
                     .post("/save-cso-indicator", {
