@@ -80,18 +80,13 @@
                                 <div class="overline text-left">
                                     Total Budget (USD) :
                                     <strong>
-                                        <vue-numeric
-                                            currency="$"
-                                            separator=","
-                                            read-only
-                                            v-model="totalBudget"
-                                        ></vue-numeric
+                                        <vue-numeric currency="$" separator="," read-only v-model="totalBudget" ></vue-numeric
                                     ></strong>
                                 </div>
                                 <div class="overline text-left">
                                     <v-text-field
                                         label="Spent To Date : "
-                                        v-model="spentToDate"
+                                        v-model="editedItem.spent_to_date"
                                         v-on:keyup="setBurnRate"
                                     ></v-text-field>
                                 </div>
@@ -114,6 +109,7 @@
                                         ><v-text-field
                                             type="email"
                                             label="Next donor report due to Awards : "
+                                            v-model="editedItem.donor_report"
                                         ></v-text-field
                                     ></strong>
                                 </div>
@@ -208,38 +204,16 @@
                                 support CSOs in their network.
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label=""  v-model="editedItem.objective[0].Implementation_vs_target"> </v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[0].challanges"></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[0].next_month_planning"></v-textarea>
                             </td>
                             <td class="text-center">
-                                <v-textarea
-                                    class="text-center"
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    value="30"
-                                    dense
-                                ></v-textarea>
+                                <v-textarea class="text-center" auto-grow rows="2" label="" v-model="editedItem.objective[0].estimated_progress" type="number" @keypress="onlyNumber" dense ></v-textarea>
                             </td>
                         </tr>
                         <tr>
@@ -250,38 +224,16 @@
                                 CSOs/CSO networks and donors
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[1].Implementation_vs_target" ></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[1].challanges"  ></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[1].next_month_planning"></v-textarea>
                             </td>
                             <td class="text-center">
-                                <v-textarea
-                                    class="text-center"
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    value="0%"
-                                    dense
-                                ></v-textarea>
+                                <v-textarea class="text-center" auto-grow rows="2" label=""  v-model="editedItem.objective[1].estimated_progress" dense type="number"  @keypress="onlyNumber" ></v-textarea>
                             </td>
                         </tr>
                         <tr>
@@ -292,81 +244,34 @@
                                 their network.
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[2].Implementation_vs_target" ></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[2].challanges"></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow  rows="2" label="" dense v-model="editedItem.objective[2].next_month_planning"></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    class="text-center"
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    value="0%"
-                                    dense
-                                ></v-textarea>
+                                <v-textarea class="text-center" auto-grow rows="2" label=""  v-model="editedItem.objective[2].estimated_progress" type="number" @keypress="onlyNumber" dense></v-textarea>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="p-4">Objective 4:</th>
                             <td class="p-3">
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[3].indicators"></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" v-model="editedItem.objective[3].Implementation_vs_target" append-outer-icon=""dense> </v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[3].challanges"></v-textarea>
                             </td>
                             <td>
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[3].next_month_planning"></v-textarea>
                             </td>
                             <td class="text-center">
-                                <v-textarea
-                                    auto-grow
-                                    rows="2"
-                                    label=""
-                                    dense
-                                ></v-textarea>
+                                <v-textarea auto-grow rows="2" label=""  v-model="editedItem.objective[3].estimated_progress" type="number" @keypress="onlyNumber" dense></v-textarea>
                             </td>
                         </tr>
                     </tbody>
@@ -381,12 +286,7 @@
                                     Actions or support needed (include person
                                     responsible): <strong> (PDQ TA) </strong>
                                 </div>
-                                <v-textarea
-                                    auto-grow
-                                    rows="3"
-                                    label="Description *"
-                                    dense
-                                >
+                                <v-textarea auto-grow  rows="3" label="Description *" dense v-model="editedItem.actions_or_support">
                                 </v-textarea>
                             </v-container>
                         </v-card-text>
@@ -415,8 +315,48 @@ export default {
     },
     data() {
         return {
+            canBeSaved: false,
+            editedItem:{
+                donor_report:"",
+                spent_to_date:0,
+                actions_or_support:"",
+                objective:[
+                    {
+                        Implementation_vs_target:"",
+                        Objective:"",
+                        challanges:"",
+                        estimated_progress:0,
+                        indicators:"",
+                        next_month_planning:""
+                    },
+                    {
+                        Implementation_vs_target:"",
+                        Objective:"",
+                        challanges:"",
+                        estimated_progress:0,
+                        indicators:"",
+                        next_month_planning:""
+                    },
+                    {
+                        Implementation_vs_target:"",
+                        Objective:"",
+                        challanges:"",
+                        estimated_progress:0,
+                        indicators:"",
+                        next_month_planning:""
+                    },
+                    {
+                        Implementation_vs_target:"",
+                        Objective:"",
+                        challanges:"",
+                        estimated_progress:0,
+                        indicators:"",
+                        next_month_planning:""
+                    }
+                ],
+            },
             totalBudget: 1999998.57,
-            spentToDate: 0,
+        
             btnLoader: false,
             rawDate: {
                 startDate: "2/1/2021",
@@ -429,19 +369,57 @@ export default {
             daysCompleted: 0,
             daysLeft: 0,
             percentComplete: 0,
-            remaining: 0
+            remaining: 0,
+            donor_report:""
         };
     },
     methods: {
         initialize() {
             document.title = "CSO | Project Trackin Document";
+            this.getData();  
+        },
+      
+        onlyNumber ($event) {
+            //console.log($event.keyCode); //keyCodes value
+            let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+            if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 is dot
+                $event.preventDefault();
+            }
+        },    
+         save() {
+            if(this.canBeSaved){
+                this.btnLoader = true;
+                axios.post("/save-project-tracking-document", { data: JSON.stringify(this.editedItem) }).then(response => {
+                  
+                    this.btnLoader = false;
+                })
+                
+            }
+            // console.log(this.editedItem)
+           
+        },
+        getData(){
+            
+             axios.get('/get-project-tracking-document').then(response =>{
+                const data = response.data[0];
+                this.editedItem =  data[0]
+                this.editedItem['objective'] = data[1]
+                
+                   
+                
+                console.log( data )
+                // editedItem.objective.Implementation_vs_target
+                this.setBurnRate();
+                this.canBeSaved = true;
+            })
+            
         },
         setBurnRate() {
-            console.log(this.startDate);
-            if (!isNaN(Number.parseFloat(this.spentToDate))) {
+            // console.log(this.startDate);
+            if (!isNaN(Number.parseFloat(this.editedItem.spent_to_date))) {
                 this.burnRate =
                     (
-                        (Number.parseFloat(this.spentToDate) /
+                        (Number.parseFloat(this.editedItem.spent_to_date) /
                             this.totalBudget) *
                         100
                     ).toFixed(2) + "%";
@@ -459,7 +437,7 @@ export default {
             return new Date(date);
         },
         computeRemaining() {
-            this.remaining = this.totalBudget - this.spentToDate;
+            this.remaining = this.totalBudget - this.editedItem.spent_to_date;
         },
         init() {
             this.setBurnRate();
@@ -482,13 +460,12 @@ export default {
             ).toFixed(2)} %`;
             this.computeRemaining();
         },
-        save() {
-            this.btnLoader = true;
-        }
+       
     },
 
     created() {
         this.initialize();
+        this.init();
     }
 };
 </script>

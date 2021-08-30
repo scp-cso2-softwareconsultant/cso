@@ -61,7 +61,7 @@ export default {
             selectedItem: 0,
             items: [
                 { text: 'Dashboard', icon: 'mdi-view-dashboard-outline', linkTo: '/dashboard', has_sub_items: false },
-                { text: 'CSO2 (supercript) Project Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
+                { text: 'CSO² Project Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
                 { text: 'CSO Profile', icon: 'mdi-animation', linkTo: '/cso-profile', has_sub_items: false },
                 { text: 'Assessment', icon: 'mdi-animation', linkTo: '/assessment', has_sub_items: false },
                 { text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },

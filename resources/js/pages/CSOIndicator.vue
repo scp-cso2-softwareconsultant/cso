@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text"> CSO2 (supercript) Project Indicator </h3>
+        <h3 class="subheading grey--text"> CSO² Project Indicator </h3>
         <div class="d-flex m-4 flex-between align-items-center">
             <p class="mb-0">
                 <strong class="text-primary">Status Legends</strong>
@@ -1154,14 +1154,14 @@ export default {
             //     status_list: ['Entry', 'In Progress', 'Completed', 'Delayed'],
             this.loadCSOIndicator = true;
             axios.get("/get-indicator-status").then(response => {
-                console.log( response.data )
+                // console.log( response.data )
                 this.status_list = response.data;
                 
             });
 
 
             axios.get("/cso-indicator").then(response => {
-                console.log( response.data )
+                // console.log( response.data )
                 this.indicators_list = response.data;
                 this.loadCSOIndicator = false;
             });

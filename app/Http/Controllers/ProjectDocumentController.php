@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\User;
 class ProjectDocumentController extends Controller
 {
     public function getDocument(){
         $get_document = DB::table("document")
             ->whereRaw(DB::raw("document.deleted_at IS NULL"))->get();
         $document_list = [];
-        if($get_document){
+        if($get_document){ 
             foreach ($get_document as $key => $row){
                 $document_list[$key] = json_decode(json_encode($row), true);
             }
@@ -22,6 +22,70 @@ class ProjectDocumentController extends Controller
         return $document_list;
     }
 
+    public function getProjectTrackingDocument(){
+        $project_document = DB::table("project_tracking_document")->get()->first();
+        $first =  [$project_document];
+        $second = [DB::table("project_tracking_objectives")->select('*')->where('project_tracking_document_id',$project_document->id)->get()];
+
+        $collection = collect($first);
+        $merged     = $collection->merge($second);
+        $result[]   = $merged->all();
+
+
+        return $result;
+    }
+
+    public function saveProjectTrackingDocument(Request $request ) {
+        $raw_data = json_decode($request['data']);
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+
+        
+        $document= "";
+        if( $user->role_id == 1 ){
+            if(  $raw_data->id ){
+                $document = DB::table('project_tracking_document')->where('id',$raw_data->id )->update(array(
+                    'donor_report' => $raw_data->donor_report,
+                    'actions_or_support' => $raw_data->actions_or_support,
+                    'spent_to_date' => $raw_data->spent_to_date,
+                ));
+            }else{
+                $document = DB::table('project_tracking_document')->insert([
+                    'donor_report' => $raw_data->donor_report,
+                    'actions_or_support' => $raw_data->actions_or_support,
+                    'spent_to_date' => $raw_data->spent_to_date,
+                ]);
+            }
+        }
+
+        $objective = "";
+        foreach ( $raw_data->objective as $key => $row){
+            if( $row->id ){
+                $objective = DB::table('project_tracking_objectives')->where('id', $row->id )->update(array(
+                    'Implementation_vs_target' => $row->Implementation_vs_target,
+                    'Objective' => $row->Objective,
+                    'challanges' => $row->challanges,
+                    'estimated_progress' => $row->estimated_progress,
+                    'indicators' => $row->indicators,
+                    'next_month_planning' => $row->next_month_planning,
+                    "project_tracking_document_id" =>$raw_data->id 
+                ));
+               
+            }else{
+                DB::table('project_tracking_objective')->insert([
+                    'Implementation_vs_target' => $row->Implementation_vs_target,
+                    'Objective' => $row->Objective,
+                    'challanges' => $row->challanges,
+                    'estimated_progress' => $row->estimated_progress,
+                    'indicators' => $row->indicators,
+                    'next_month_planning' => $row->next_month_planning,
+                    'project_tracking_document_id'=>$raw_data->id
+                ]);
+            }
+        }
+    
+        return $document;
+    }
     public function saveDocument(Request $request){
         $raw_data = json_decode($request['data']);
         $form_mode = $request['form_mode'];

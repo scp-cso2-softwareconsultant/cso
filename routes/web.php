@@ -23,7 +23,7 @@ Route::group(['middleware'=> ['auth']], function (){
 
 // Roles 
     Route::get('/user-roles', [App\Http\Controllers\RoleController::class, 'index'])->name('user-roles');
-
+    
 // CSO2 INDICATOR
     Route::get('/cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicator'])->name('cso-indicator');
     Route::post('/cso-indicator-list', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicatorList'])->name('cso-indicator-list');
@@ -55,7 +55,8 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::get('/document', [App\Http\Controllers\ProjectDocumentController::class,'getDocument'])->name('document');
     Route::post('/save-document', [App\Http\Controllers\ProjectDocumentController::class,'saveDocument'])->name('save-document');
     Route::post('/delete-document', [App\Http\Controllers\ProjectDocumentController::class,'deleteDocument'])->name('delete-document');
-
+    Route::get('/get-project-tracking-document', [App\Http\Controllers\ProjectDocumentController::class,'getProjectTrackingDocument'])->name('get-project-tracking-document');
+    Route::post('/save-project-tracking-document', [App\Http\Controllers\ProjectDocumentController::class,'saveProjectTrackingDocument'])->name('get-project-tracking-document');  
 // LMS
     Route::get('/participants-profile', [App\Http\Controllers\LMSController::class,'getParticipantsProfile'])->name('participants-profile');
     Route::post('/save-participants-profile', [App\Http\Controllers\LMSController::class,'saveParticipantsProfile'])->name('save-participants-profile');

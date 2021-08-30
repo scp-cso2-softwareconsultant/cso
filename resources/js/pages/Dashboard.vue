@@ -306,7 +306,6 @@ export default {
             this.ProjectTrackingDocument();
             this.responsibleOrganization = ["lead SCP", "Ateneo CORD", "AHA BD", "PICPA"]
             this.editedItem.CSO2Indicators =  this.responsibleOrganization[0];
-            console.log("HEllo world")
         },
         
         CSO2IndicatorsChart(){

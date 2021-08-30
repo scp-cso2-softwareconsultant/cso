@@ -174,7 +174,7 @@ export default {
             this.editedIndex = this.usersList.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
-            console.log(item);
+            // console.log(item);
         },
 
         deleteItem (item) {
