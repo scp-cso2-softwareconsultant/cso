@@ -149,7 +149,7 @@
                                                                         status_list
                                                                     "
                                                                     v-model="
-                                                                        editedItem.cso_status
+                                                                        editedSubItem.cso_status
                                                                     "
                                                                     label="Status"
                                                                     dense
@@ -759,43 +759,61 @@
                                                                 <!--                                            ></v-file-input>-->
                                                                 <div
                                                                     v-if="
-                                                                        isRemove
+                                                                        isEditting
                                                                     "
                                                                 >
-                                                                    <v-btn
-                                                                        background
-                                                                        depressed
-                                                                        @click="
-                                                                            removeFile
-                                                                        "
-                                                                        >{{
-                                                                            file_name
-                                                                        }}
-                                                                    </v-btn>
-                                                                </div>
-                                                                <div v-else>
-                                                                    <v-btn
-                                                                        text
-                                                                        small
-                                                                        :loading="
-                                                                            isSelecting
-                                                                        "
-                                                                        color="blue darken-1"
-                                                                        @click="
-                                                                            onButtonClick
+                                                                    <div
+                                                                        v-if="
+                                                                            isRemove
                                                                         "
                                                                     >
-                                                                        Upload
-                                                                        MOV
+                                                                        <v-btn
+                                                                            background
+                                                                            depressed
+                                                                            readonly
+                                                                            @click="
+                                                                                removeFile
+                                                                            "
+                                                                            >{{
+                                                                                file_name
+                                                                            }}
+                                                                        </v-btn>
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        <v-file-input
+                                                                        v-if="file_name != ''"
+                                                                            show-size
+                                                                            label="Upload MOV"
+                                                                            @change="
+                                                                                removeFile
+                                                                            "
+                                                                            v-model="
+                                                                                file_name
+                                                                            "
+                                                                        ></v-file-input>
+                                                                        <v-file-input
+                                                                        v-else
+                                                                            show-size
+                                                                            label="Upload MOV"
+                                                                            @change="
+                                                                                onFileChanged
+                                                                            "
+                                                                            v-model="
+                                                                                file_name
+                                                                            "
+                                                                        ></v-file-input>
+                                                                    </div>
+                                                                </div>
+                                                                <div v-else>
+                                                                    
+                                                                    <template>
+                                                                    <v-btn 
+                                                                    block
+                                                                    @click="downloadMov(editedSubItem.mov_file)"
+                                                                    >
+                                                                        {{editedSubItem.mov_file}}
                                                                     </v-btn>
-                                                                    <input
-                                                                        ref="uploader"
-                                                                        class="d-none"
-                                                                        type="file"
-                                                                        @change="
-                                                                            onFileChanged
-                                                                        "
-                                                                    />
+                                                                    </template>
                                                                 </div>
                                                             </v-col>
                                                         </v-row>
@@ -844,7 +862,10 @@
                                         </v-btn>
                                     </v-toolbar>
                                 </template>
-                                <template class="" v-slot:item.cso_status="{ item }">
+                                <template
+                                    class=""
+                                    v-slot:item.cso_status="{ item }"
+                                >
                                     <v-progress-linear
                                         class="rounded-top  text-white text-center"
                                         height="23"
@@ -959,6 +980,7 @@ Vue.use(VueNoty);
 export default {
     data: () => ({
         tabCategory: null,
+        isEditting: false,
         btnLoader: false,
         detailsReadonly: false,
         category_tabs: [
@@ -1031,7 +1053,7 @@ export default {
         headers: [
             {
                 text: "Activity #",
-                width:"8%",
+                width: "8%",
                 align: "start",
                 sortable: false,
                 value: "cso_act_no"
@@ -1158,7 +1180,6 @@ export default {
             //     status_list: ['Entry', 'In Progress', 'Completed', 'Delayed'],
             this.loadCSOIndicator = true;
             axios.get("/get-indicator-status").then(response => {
-                console.log(response.data);
                 this.status_list = response.data;
             });
 
@@ -1205,13 +1226,24 @@ export default {
         },
 
         detailsSubItem(item) {
+            this.isEditting = false
+            this.file_name = "";
+
             this.formSubTitle = "Indicator Details";
             this.editedSubItem = Object.assign({}, item);
+            console.log(this.editedSubItem.mov_file);
             this.detailsReadonly = true;
             this.subdialog = true;
+
+            if (item.mov_file) {
+                this.file_name = item.mov_file;
+                this.isRemove = true;
+            }
         },
 
         editSubItem(item) {
+            this.isEditting = true;
+            console.log(this.isEditting)
             this.removeFile();
             this.editedIndex = 1;
             this.formSubTitle = "Edit Indicator Details";
@@ -1261,6 +1293,7 @@ export default {
             }
             this.closeDelete();
         },
+        
 
         close() {
             this.detailsReadonly = false;
@@ -1270,6 +1303,8 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
             });
+            this.file_name = ""
+            this.isEditting = false
         },
 
         closeSub() {
@@ -1279,6 +1314,8 @@ export default {
             this.editedIndex = -1;
             this.subdialog = false;
             this.removeFile();
+            this.isEditting = false;
+            console.log(this.isEditting)
         },
 
         closeDelete() {
@@ -1408,12 +1445,12 @@ export default {
                 { once: true }
             );
 
-            this.$refs.uploader.click();
+            this.$refs.uploader.input.click();
         },
         onFileChanged: function(e) {
-            var files = e.target.files || e.dataTransfer.files;
-            this.file_attached = files[0];
-            this.file_name = files[0].name;
+            var files = e;
+            this.file_attached = files;
+            this.file_name = files.name;
             this.isRemove = true;
         },
         removeFile: function(item) {
