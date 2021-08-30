@@ -1,12 +1,8 @@
 <template>
     <v-app>
-<<<<<<< HEAD
-        <h3 class="subheading grey--text"> CSO² Project Indicator </h3>
-=======
         <h3 class="subheading grey--text">
             CSO2 (supercript) Project Indicator
         </h3>
->>>>>>> 517135e3ad09a3ffb68263dd1d9ffff192862989
         <div class="d-flex m-4 flex-between align-items-center">
             <p class="mb-0">
                 <strong class="text-primary">Status Legends</strong>
@@ -1065,7 +1061,7 @@ export default {
             {
                 text: "Description",
                 align: "start",
-                sortable: false,
+                sortable: true,
                 value: "cso_description"
             },
             {
