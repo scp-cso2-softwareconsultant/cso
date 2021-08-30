@@ -51,7 +51,6 @@ class CSOIndicatorController extends Controller
         $get_indicator = DB::table("cso_indicator")
             ->where("cso_category",$request['category'])
             ->whereRaw(DB::raw("deleted_at IS NULL"))
-            ->whereRaw("cso_status != 'Cancelled'")
             ->get();
         $cso_indicator = [];
         if($get_indicator){
