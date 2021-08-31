@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <h3 class="subheading grey--text">
-            CSO2 (supercript) Project Indicator
+            CSO² Project Indicator
         </h3>
         <v-dialog
                                             v-model="dialog"
@@ -1198,7 +1198,7 @@ export default {
 
     methods: {
         initialize() {
-            document.title = "CSO2 | (supercript) Project Indicator";
+            document.title = "CSO² | Project Indicator";
             category_items: ["Impact", "Outcome", "Activity"],
                 (this.loadCSOIndicator = true);
             axios.get("/get-categories").then(response => {
