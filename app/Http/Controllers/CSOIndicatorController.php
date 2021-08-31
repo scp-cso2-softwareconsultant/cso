@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 //delete to later :: for loggin purpose only
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CSOIndicatorController extends Controller
 {
@@ -18,6 +19,17 @@ class CSOIndicatorController extends Controller
     {
         return $this->getCSOIndicator();
         return User::all();
+    }
+
+    public function downloadMov(Request $request){
+        $file_name = $request['file_name'];
+        $path= Storage::disk('public')->path("cso_indicators/Activity/$request->file_name");
+        $content = file_get_contents($path);
+        return response($content)->withHeaders([
+            'Content-Type'=>mime_content_type($path),
+            'Content-Description' => 'File Transfer',
+            'Content-Disposition' => 'attachment;filename='.$file_name
+        ]);
     }
 
     public function getCSOIndicator(){

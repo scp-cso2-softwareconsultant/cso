@@ -759,18 +759,9 @@
                                                                 </div>
                                                                 <div v-else>
                                                                     <template v-if="editedSubItem.mov_file != null">
-                                                                        <v-btn
-                                                                            block
-                                                                            @click="
-                                                                                downloadMov(
-                                                                                    editedSubItem.mov_file
-                                                                                )
-                                                                            "
-                                                                        >
-                                                                            {{
-                                                                                editedSubItem.mov_file
-                                                                            }}
-                                                                        </v-btn>
+                                                                        <a :href="getLink(editedSubItem.mov_file)" target="blank">
+                                                                            {{editedSubItem.mov_file}}
+                                                                        </a>
                                                                     </template>
                                                                     <template v-else>
                                                                         <p>No Attatched MOV</p>
@@ -1529,7 +1520,8 @@ export default {
                     link.click();
                     this.btnLoader = false;
                 });
-        }
+        },
+        getLink(file){ return `/downloadMov/?file_name=${file}` }
     }
 };
 </script>
