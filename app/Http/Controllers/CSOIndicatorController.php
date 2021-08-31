@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+
+//delete to later :: for loggin purpose only
+use Illuminate\Support\Facades\Log;
+
 class CSOIndicatorController extends Controller
 {
     public function index()
@@ -17,7 +21,6 @@ class CSOIndicatorController extends Controller
     }
 
     public function getCSOIndicator(){
-
         $get_category = DB::table("categories")->where("seq",1)->first();
         $category = "Activity";
         if($get_category){
@@ -85,16 +88,19 @@ class CSOIndicatorController extends Controller
             $insertData = DB::table('cso_indicator')->insert([
                 'cso_category' => $raw_data->cso_category,
                 'cso_description' => $raw_data->cso_description,
-                'cso_status' => 'Entry',
+                'cso_act_no' => $raw_data->cso_act_no,
+                'cso_status' => 'Not Yet Started',
                 'created_by' => $user_name
             ]);
             if($insertData) $success=true;
         }else{
+            Log::info($request->all());
             $updateData = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)
                 ->update(array(
                     'cso_category' => $raw_data->cso_category,
-                    'cso_description' => $raw_data->cso_description,
+                    'cso_act_no' => $raw_data->cso_act_no,
                     'cso_status' => $raw_data->cso_status,
+                    'cso_description' => $raw_data->cso_description,
                     'updated_at' => date("Y-m-d h:i:s"),
                     'updated_by' => $user_name
                 ));

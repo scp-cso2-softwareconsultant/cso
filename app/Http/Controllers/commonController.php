@@ -184,6 +184,7 @@ class commonController extends Controller
             case "CSO2 Indicator":
                 $dataExport = DB::table("cso_indicator")->select(
                         DB::raw("cso_indicator.cso_category AS Category"),
+                        DB::raw("cso_indicator.cso_act_no AS ActivityNo"),
                         DB::raw("cso_indicator.cso_description AS Description"),
                         DB::raw("cso_indicator.cso_status AS Status"),
                         DB::raw("indicator.indicator_no AS 'Indicator No'"),
