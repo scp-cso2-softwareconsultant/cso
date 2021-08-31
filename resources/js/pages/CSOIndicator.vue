@@ -701,7 +701,8 @@
                                                                 cols="12"
                                                                 sm="12"
                                                                 md="12"
-                                                            >
+                                                            ><p class="mt-4 font-weight-bold">Attatched File</p>
+                                                                        
                                                                 <!--                                            <v-file-input-->
                                                                 <!--                                                label="MOV"-->
                                                                 <!--                                                v-model="editedSubItem.mov_file"-->
