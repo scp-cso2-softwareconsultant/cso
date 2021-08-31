@@ -1522,7 +1522,7 @@ export default {
                     this.btnLoader = false;
                 });
         },
-        // Generate Link for downloading MOV File
+        // Generate Link for downloading MOV FileDesu
         getLink(file){ return `/downloadMov/?file_name=${file}` }
     }
 };
