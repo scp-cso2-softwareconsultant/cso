@@ -404,7 +404,7 @@ export default {
             { text: 'Domain', value: 'domain',width: '15%',sortable: false},
             { text: 'Tool Used', value: 'tool_used',width: '10%',sortable: false, },
             { text: 'Conducted By', value: 'conducted_by',width: '15%',sortable: false, },
-            { text: 'Date of Assessment', value: 'assessment_date',width: '12%',sortable: false, },
+            { text: 'Date of Assessment', value: 'displayDate',width: '12%',sortable: false, },
             { text: 'Final Score', value: 'final_score',width: '10%',sortable: false, align: 'right' },
             { text: 'MOV', value: 'mov',width: '3%',sortable: false, align: 'center'},
             { text: 'Status', value: 'status',width: '10%',sortable: false, },
@@ -510,8 +510,17 @@ export default {
 
             axios.get('/lro-assessment').then( response => {
                 this.lroList = response.data;
+                this.lroList.forEach((item)=>{
+                    item.displayDate = this.formatDate(item.assessment_date)
+                })
+                console.log("LROLOST:",this.lroList)
                 this.loadLROAssessment = false;
             })
+        },
+        formatDate(date){
+            if(date === null || date === undefined) return "No Date"
+            let ddate = new Date(date);
+            return `${ddate.getMonth()+1}/${ddate.getDate()}/${ddate.getFullYear()}`
         },
         detailsItem(item){
             this.detailsReadonly = true;
