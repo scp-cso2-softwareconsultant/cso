@@ -1,21 +1,34 @@
 <template>
   <v-app>
     <h3 class="subheading grey--text">Dashboard</h3>
-    <v-flex >
+    <div class="card p-md-5">
+        <h4 class="subheading card-text ">CSO² Indicator</h4>
+        <div class="card-body ">
+            <h5 class="card-title"> Responsible Organization </h5>
+            <p class="card-text row justify-content-md-center">
+                <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
+            </p>
+            <p class="card-text text-center">
+                <small class="text-muted">
+                    <v-select v-on:change="CSO2IndicatorsChart()" v-model="editedItem.CSO2Indicators" :items="responsibleOrganization" class="p-3" label="Category *" dense ></v-select>                     
+                </small>
+            </p>
+        </div>
+    </div>
+  
+    
+    <div class="card p-md-5">
+        <h4 class="subheading card-text "> CSO and CSO Network Members Profile</h4>
         <v-card class="ma-1">
             <v-list-item  >
                 <v-list-item-content>
                     <div class="card-group">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title"> Responsible Organization </h5>
+                                    <h5 class="card-title"> Types of Organization </h5>
                                     <p class="card-text">
-                                        <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
+                                       <apexchart type="donut" width="380" :options="CSOProfileTypesOfOrganizationChartOptions" :series="CSOProfileTypesOfOrganizationSeries"></apexchart>
                                     </p>
-                                    <p class="card-text"><small class="text-muted">
-                                        <v-select v-on:change="CSO2IndicatorsChart()" v-model="editedItem.CSO2Indicators" :items="responsibleOrganization" class="p-3" label="Category *" dense ></v-select> 
-                                    
-                                    </small></p>
                                 </div>
                             </div>
                             <div class="card">
@@ -60,229 +73,81 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                    <p class="card-text"> Securities and Exchange Commission (SEC) 58% </p>
+                                    <p class="card-text"> LGU Development Council 21 </p>
+                                    <p class="card-text"> Department of Social Welfare and Development 16% </p>
                                 </div>
+                                
                             </div>
                         </div>
                 </v-list-item-content>
             </v-list-item>
         </v-card>
-    </v-flex>
+        <v-flex >
+            <v-card class="ma-1">
+                <v-list-item  >
+                    <v-list-item-content>
+                        <h5 class="card-title"> Primary Stakeholders  </h5>
+                        <div class="text-center">
+                            <apexchart  type="bar" height="350" :options="CSOProfilePrimaryStakeholderChartOptions" :series="CSOProfilePrimaryStakeholderSeries"></apexchart>
+                        </div>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-card>
+        </v-flex>
+    </div>
    
- 
-   
-    <v-flex >
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <div class="text-center">
-                        <apexchart  type="bar" height="350" :options="CSOProfilePrimaryStakeholderChartOptions" :series="CSOProfilePrimaryStakeholderSeries"></apexchart>
-                    </div>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-    <v-flex>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                     <div class="card-group">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"> Responsible Organization </h5>
-                                <p class="card-text"><small class="text-muted">
-                                <apexchart type="donut" width="380" :options="CSOProfileTypesOfOrganizationChartOptions" :series="CSOProfileTypesOfOrganizationSeries"></apexchart>
-                                </small></p>
-                            </div>
-                        </div>
-                    
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">  Top 3 Accreditation Bodies </h5>
-                                <apexchart type="radar" height="350" :options="assessmentSubDomainPerYearChartOptions" :series="assessmentSubDomainPerYearSeries"></apexchart>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-
-    <v-flex >
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <div class="text-center">
-                       <apexchart type="line" height="350" :options="financeTrackerBudgetChartOptions" :series="financeTrackerBudgetSeries"></apexchart>
-                    </div>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
     
-    <v-flex>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                     <div class="card-group">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"> Responsible Organization </h5>
-                                <p class="card-text"><small class="text-muted">
-                                <apexchart type="bar" height="350" :options="burnRateChartOptions" :series="burnRateSeries"></apexchart>
-                                </small></p>
-                            </div>
-                        </div>
-                    
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">  Top 3 Accreditation Bodies </h5>
-                                 <apexchart type="bar" height="380" :options="projectTrackingDocumentChartOptions" :series="projectTrackingDocumentSeries"></apexchart>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
    
-  <!--
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    <v-select v-on:change="CSO2IndicatorsChart()" v-model="editedItem.CSO2Indicators" :items="responsibleOrganization" class="p-3" label="Category *" dense ></v-select> 
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
 
-    <v-card >
-        <v-card-text>
-            <v-container dense >
-                <v-row>
-                    <v-col cols="12" lg="6" >
-                        <div id="chartRadar">
-                            <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
-                        </div>
-                    </v-col>
-                    <v-col cols="12" lg="6" >
-                        <div id="chartGroup">
-                            <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
-                        </div>
-                    </v-col>
-                    
-                    
-                </v-row>
-            </v-container>
-        </v-card-text>
-    </v-card>
-
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                  
-        
-                    <apexchart type="pie" width="380" :options="CSOProfileAccreditationBodiesChartOptions" :series=" CSOProfileAccreditationBodiesSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="pie" width="380" :options="CSOProfileTypesOfOrganizationChartOptions" :series="CSOProfileTypesOfOrganizationSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="bar" height="350" :options="CSOProfilePrimaryStakeholderChartOptions" :series="CSOProfilePrimaryStakeholderSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="radar" height="350" :options="assessmentSubDomainPerYearChartOptions" :series="assessmentSubDomainPerYearSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="line" height="350" :options="financeTrackerBudgetChartOptions" :series="financeTrackerBudgetSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="bar" height="350" :options="burnRateChartOptions" :series="burnRateSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex>
-    <v-flex sm6>
-        <v-card class="ma-1">
-            <v-list-item  >
-                <v-list-item-content>
-                    <div class="overline text-right"> CSO2 Indicators </div>
-                    <v-list-item-title class="headline text-right" >
-                    </v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                    <apexchart type="bar" height="380" :options="projectTrackingDocumentChartOptions" :series="projectTrackingDocumentSeries"></apexchart>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
-    </v-flex> 
+    <div class="card p-md-5">
+        <h4 class="subheading card-text ">Assessment</h4>
+        <div class="card-body ">
+            <p class="card-text row justify-content-md-center">
+              <apexchart type="radar" height="350" :options="assessmentSubDomainPerYearChartOptions" :series="assessmentSubDomainPerYearSeries"></apexchart>
+            </p>
+           
+        </div>
+    </div>
     
-    --> 
+
+    <div class="card p-md-5">
+        <h4 class="subheading card-text ">  Finance Tracker </h4>
+        <v-flex >
+            <v-card class="ma-1">
+                <v-list-item  >
+                    <v-list-item-content>
+                        <h5 class="card-title"> Budget vs Actual Expenditures  </h5>
+                        <div class="text-center">
+                            <apexchart type="line" height="350" :options="financeTrackerBudgetChartOptions" :series="financeTrackerBudgetSeries"></apexchart>
+                        </div>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-card>
+        </v-flex>
+        <v-flex >
+            <v-card class="ma-1">
+                <v-list-item  >
+                    <v-list-item-content>
+                        <h5 class="card-title"> Burn Rate </h5>
+                        <div class="text-center">
+                           <apexchart type="bar" height="350" :options="burnRateChartOptions" :series="burnRateSeries"></apexchart>
+                        </div>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-card>
+        </v-flex>
+    </div>
+    <div class="card p-md-5">
+        <h4 class="subheading card-text ">Project Tracking Document</h4>
+        <div class="card-body ">
+            <p class="card-text">
+                <apexchart type="bar" height="380" :options="projectTrackingDocumentChartOptions" :series="projectTrackingDocumentSeries"></apexchart>
+            </p>
+        </div>
+    </div>
+    
+   
   </v-app>
 </template>
 
@@ -449,7 +314,7 @@ export default {
             }]
         },
         CSOProfilePrimaryStakeholderSeries: [{
-            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+            data: [21, 40, 60, 35, 12, 40]
         }],
         CSOProfilePrimaryStakeholderChartOptions: {
             chart: {
@@ -466,9 +331,13 @@ export default {
                 enabled: false
             },
             xaxis: {
-                categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
-                    'United States', 'China', 'Germany'
-                ],
+                categories: [
+                    "local policy makers", 
+                    "private sector support organizations and CSRs", 
+                    "peer CSOs or related networks", 
+                    "larger CSOs/CSO Network in Manila, Cebu or Davao", 
+                    "local researchers and scholars",
+                    "potential donors"],
             }
         },
         
@@ -478,11 +347,11 @@ export default {
         }],
         assessmentSubDomainPerYearChartOptions: {
             chart: {
-                height: 350,
+                height: 450,
                 type: 'radar',
             },
             title: {
-                text: 'Basic Radar Chart'
+                text: 'average of SUBDOMAIN, per YEAR'
             },
             xaxis: {
               categories: ['January', 'February', 'March', 'April', 'May', 'June']
@@ -490,15 +359,20 @@ export default {
         },
         
         financeTrackerBudgetSeries: [{
-                name: 'Income',
+                name: 'Approved Budget',
                 type: 'column',
                 data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
             }, {
-                name: 'Cashflow',
+                name: 'Actual Expenditure',
                 type: 'column',
                 data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
-            }, {
-                name: 'Revenue',
+            },  {
+                name: 'Budget Remaining',
+                type: 'column',
+                data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
+            },
+            {
+                name: 'Burn rate',
                 type: 'line',
                 data: [20, 29, 37, 36, 44, 45, 50, 58]
             }],
@@ -516,12 +390,12 @@ export default {
                 width: [1, 1, 4]
                 },
             title: {
-                text: 'XYZ - Stock Analysis (2009 - 2016)',
-                align: 'left',
+                text: 'Budget vs Actual Expenditures',
+                align: 'center',
                 offsetX: 110
             },
             xaxis: {
-                categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
+                categories: [1, 2, 3, 4, 5, 6, 7, 8],
             },
             yaxis: [
             {
@@ -538,7 +412,7 @@ export default {
                     }
                 },
                 title: {
-                    text: "Income (thousand crores)",
+                    text: "Budget",
                     style: {
                         color: '#008FFB',
                     }
@@ -546,28 +420,6 @@ export default {
                 tooltip: {
                     enabled: true
                 }
-            },
-            {
-                seriesName: 'Income',
-                opposite: true,
-                axisTicks: {
-                    show: true,
-                },
-                axisBorder: {
-                    show: true,
-                    color: '#00E396'
-                },
-                labels: {
-                    style: {
-                        colors: '#00E396',
-                    }
-                },
-                title: {
-                    text: "Operating Cashflow (thousand crores)",
-                    style: {
-                        color: '#00E396',
-                    }
-                },
             },
             {
                 seriesName: 'Revenue',
@@ -606,13 +458,13 @@ export default {
         }, 
 
         burnRateSeries: [{
-            name: 'Net Profit',
+            name: 'Burn Rate (1st Liq)',
             data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
         },{
-            name: 'Revenue',
+            name: 'Burn Rate (2st Liq)',
             data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
         },{
-            name: 'Free Cash Flow',
+            name: 'Burn Rate (3st Liq)',
             data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
         }],
         burnRateChartOptions: {
@@ -636,7 +488,7 @@ export default {
                 colors: ['transparent']
             },
             xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                categories: ['AHA!BD', "PICPA", "AteneoCORD"],
             },
             yaxis: {
                 title: {
@@ -656,7 +508,7 @@ export default {
         },
         
         projectTrackingDocumentSeries: [{
-            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+            data: [10, 2 , 30, 0, 0, 0]
         }],
         projectTrackingDocumentChartOptions: {
             chart: {
@@ -671,8 +523,13 @@ export default {
                     dataLabels: {
                         position: 'bottom'
                     },
-                }
+                },
+                
             },
+            xaxis: {
+                min: 0,
+                max: 100,
+             },
             colors: ['#33b2df', '#546E7A', '#d4526e', '#13d8aa', '#A5978B', '#2b908f', '#f9a3a4', '#90ee7e', '#f48024', '#69d2e7'  ],
             dataLabels: {
                 enabled: true,
@@ -693,7 +550,14 @@ export default {
                 colors: ['#fff']
             },
             xaxis: {
-                categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan', 'United States', 'China', 'India' ],
+                categories: [
+                    "Progress bar of days completed",
+                    "Progress bar of burn rate",
+                    "Progress bar for Objective 1",
+                    "Progress bar for Objective 2",
+                    "Progress bar for Objective 3",
+                    "Progress bar for Objective 4"
+                ],
             },
             yaxis: {
                 labels: {
