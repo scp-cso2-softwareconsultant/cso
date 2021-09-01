@@ -564,15 +564,6 @@ export default {
                     show: false
                 }
             },
-            title: {
-                text: 'Custom DataLabels',
-                align: 'center',
-                floating: true
-            },
-            subtitle: {
-                text: 'Category Names as DataLabels inside bars',
-                align: 'center',
-            },
             tooltip: {
                 theme: 'dark',
                 x: {
