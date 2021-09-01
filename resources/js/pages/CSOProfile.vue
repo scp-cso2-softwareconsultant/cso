@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text">CSO Profile</h3>
+        <h3 class="subheading grey--text">CSO Network Members Profile</h3>
         <br>
         <v-card>
             <v-data-table
@@ -713,7 +713,7 @@ export default {
 
     methods: {
         initialize () {
-            document.title = "CSO | Profile"
+            document.title = "CSO | CSO Network Members Profile"
             this.loadCSOProfile = true;
             axios.get('/cso-profile').then( response => {
                 this.cso_profile_list = response.data;
