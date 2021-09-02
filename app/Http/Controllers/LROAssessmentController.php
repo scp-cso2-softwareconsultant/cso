@@ -7,8 +7,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Storage; 
+
 class LROAssessmentController extends Controller
 {
+
+    public function downloadMov(Request $request){
+        $file_name = $request['file_name'];
+        $path= Storage::disk('public')->path("lro_assessment/$request->file_name");
+        $content = file_get_contents($path);
+        return response($content)->withHeaders([
+            'Content-Type'=>mime_content_type($path),
+            'Content-Description' => 'File Transfer',
+            'Content-Disposition' => 'attachment;filename='.$file_name
+        ]);
+    }
+
     public function getLROAssessment(){
         $get_lro = DB::table("lro_assessment")
             ->select(

@@ -101,6 +101,7 @@ class CSOIndicatorController extends Controller
                 'cso_category' => $raw_data->cso_category,
                 'cso_description' => $raw_data->cso_description,
                 'cso_act_no' => $raw_data->cso_act_no,
+                'cso_lead_organization' => $raw_data->cso_lead_organization,
                 'cso_status' => 'Not Yet Started',
                 'created_by' => $user_name
             ]);
@@ -112,6 +113,7 @@ class CSOIndicatorController extends Controller
                     'cso_category' => $raw_data->cso_category,
                     'cso_act_no' => $raw_data->cso_act_no,
                     'cso_status' => $raw_data->cso_status,
+                    'cso_lead_organization' => $raw_data-> cso_lead_organization,
                     'cso_description' => $raw_data->cso_description,
                     'updated_at' => date("Y-m-d h:i:s"),
                     'updated_by' => $user_name
@@ -143,6 +145,8 @@ class CSOIndicatorController extends Controller
                 'data_source' => $raw_data->data_source,
                 'frequency' => $raw_data->frequency,
                 'unit_measure' => $raw_data->unit_measure,
+                'indicator_status' => $raw_data->indicator_status,
+                'indicator_remarks' => $raw_data -> indicator_remarks,
                 'ppr' => $raw_data->ppr,
                 'baseline_date' => (key_exists('baseline_date', $_raw_data) ? $raw_data->baseline_date : NULL),
                 'baseline_value' => (key_exists('baseline_value', $_raw_data) ? $raw_data->baseline_value : ''),
@@ -162,6 +166,8 @@ class CSOIndicatorController extends Controller
                 'data_source' => $raw_data->data_source,
                 'frequency' => $raw_data->frequency,
                 'unit_measure' => $raw_data->unit_measure,
+                'indicator_status' => $raw_data->indicator_status,
+                'indicator_remarks' => $raw_data -> indicator_remarks,
                 'ppr' => $raw_data->ppr,
                 'baseline_date' => $raw_data->baseline_date,
                 'baseline_value' => $raw_data->baseline_value,

@@ -3,7 +3,148 @@
         <h3 class="subheading grey--text">
             CSO² Project Indicator
         </h3>
-        
+                                        <v-dialog v-model="dialog" max-width="500px">
+                                            <v-card>
+                                                <v-card-title>
+                                                    <span class="text-h5">{{
+                                                        formTitle
+                                                    }}</span>
+                                                </v-card-title>
+
+                                                <v-card-text>
+                                                    <v-container dense>
+                                                        <v-row class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-select
+                                                                    :items="
+                                                                        category_items
+                                                                    "
+                                                                    v-model="
+                                                                        editedItem.cso_category
+                                                                    "
+                                                                    :rules="[
+                                                                        rules.required
+                                                                    ]"
+                                                                    value="editedItem.cso_category"
+                                                                    label="Category *"
+                                                                    dense
+                                                                ></v-select>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-textarea
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    :rules="[
+                                                                        rules.required
+                                                                    ]"
+                                                                    v-model="
+                                                                        editedItem.cso_description
+                                                                    "
+                                                                    label="Description *"
+                                                                    dense
+                                                                >
+                                                                </v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-textarea
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    :rules="[
+                                                                        rules.required
+                                                                    ]"
+                                                                    v-model="
+                                                                        editedItem.cso_lead_organization
+                                                                    "
+                                                                    label="Lead Organization *"
+                                                                    dense
+                                                                >
+                                                                </v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                </v-textarea>
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        editedItem.cso_act_no
+                                                                    "
+                                                                    :rules="[
+                                                                        rules.required
+                                                                    ]"
+                                                                    color="purple darken-2"
+                                                                    label="Activity No *"
+                                                                    required
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    dense
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row>
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                                v-if="
+                                                                    editedItem.created_at
+                                                                "
+                                                            >
+                                                                <v-select
+                                                                    :items="
+                                                                        status_list
+                                                                    "
+                                                                    v-model="
+                                                                        editedItem.cso_status
+                                                                    "
+                                                                    label="Status"
+                                                                    dense
+                                                                ></v-select>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-container>
+                                                </v-card-text>
+                                                <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn
+                                                        color="blue darken-1"
+                                                        text
+                                                        @click="close"
+                                                        dense
+                                                    >
+                                                        Cancel
+                                                    </v-btn>
+                                                    <v-btn
+                                                        color="blue darken-1"
+                                                        text
+                                                        @click="save"
+                                                        dense
+                                                        :loading="btnLoader"
+                                                    >
+                                                        Save
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-card>
+                                        </v-dialog>
                                         <v-dialog
                                             v-model="dialogDelete"
                                             max-width="500px"
@@ -35,6 +176,8 @@
                                                 </v-card-actions>
                                             </v-card>
                                         </v-dialog>
+
+                                        
                                         <v-dialog
                                             v-model="subdialog"
                                             max-width="500px"
@@ -45,7 +188,6 @@
                                                         formSubTitle
                                                     }}</span>
                                                 </v-card-title>
-
                                                 <v-card-text>
                                                     <v-container dense>
                                                         <v-row class="mt-0">
@@ -62,14 +204,13 @@
                                                                         rules.required
                                                                     ]"
                                                                     :readonly="
-                                                                        detailsReadonly
+                                                                        !isEditting
                                                                     "
-                                                                    label="Indicator No. *"
+                                                                    :label="this.subHeaders[0].text"
                                                                     dense
                                                                 ></v-text-field>
                                                             </v-col>
                                                         </v-row>
-
                                                         <v-row class="mt-0">
                                                             <v-col
                                                                 cols="12"
@@ -83,21 +224,18 @@
                                                                         rules.required
                                                                     ]"
                                                                     :readonly="
-                                                                        detailsReadonly
+                                                                        !isEditting
                                                                     "
                                                                     v-model="
                                                                         editedSubItem.indicator
                                                                     "
-                                                                    label="Indicator *"
+                                                                    label="Description *"
                                                                     dense
                                                                 ></v-textarea>
                                                             </v-col>
                                                         </v-row>
                                                         <v-row
                                                             class="mt-0"
-                                                            v-if="
-                                                                !detailsReadonly
-                                                            "
                                                         >
                                                             <v-col
                                                                 cols="12"
@@ -107,6 +245,9 @@
                                                                 <v-select
                                                                     :items="
                                                                         indicator_type_list
+                                                                    "
+                                                                    :readonly="
+                                                                        !isEditting
                                                                     "
                                                                     v-model="
                                                                         editedSubItem.indicator_type
@@ -119,27 +260,6 @@
                                                                 ></v-select>
                                                             </v-col>
                                                         </v-row>
-                                                        <v-row
-                                                            class="mt-0"
-                                                            v-if="
-                                                                detailsReadonly
-                                                            "
-                                                        >
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                            >
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        editedSubItem.indicator_type
-                                                                    "
-                                                                    label="Type *"
-                                                                    dense
-                                                                    readonly
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
                                                         <v-row class="mt-0">
                                                             <v-col
                                                                 cols="12"
@@ -153,7 +273,7 @@
                                                                         rules.required
                                                                     ]"
                                                                     :readonly="
-                                                                        detailsReadonly
+                                                                        !isEditting
                                                                     "
                                                                     v-model="
                                                                         editedSubItem.data_source
@@ -163,12 +283,7 @@
                                                                 ></v-textarea>
                                                             </v-col>
                                                         </v-row>
-                                                        <v-row
-                                                            class="mt-0"
-                                                            v-if="
-                                                                !detailsReadonly
-                                                            "
-                                                        >
+                                                        <v-row class="mt-0" >
                                                             <v-col
                                                                 cols="12"
                                                                 sm="12"
@@ -183,31 +298,13 @@
                                                                     "
                                                                     label="Frequency *"
                                                                     dense
+                                                                    :readonly="
+                                                                        !isEditting
+                                                                    "
                                                                     :rules="[
                                                                         rules.required
                                                                     ]"
                                                                 ></v-select>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row
-                                                            class="mt-0"
-                                                            v-if="
-                                                                detailsReadonly
-                                                            "
-                                                        >
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                            >
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        editedSubItem.frequency
-                                                                    "
-                                                                    label="Frequency *"
-                                                                    dense
-                                                                    readonly
-                                                                ></v-text-field>
                                                             </v-col>
                                                         </v-row>
                                                         <v-row class="mt-0">
@@ -223,7 +320,7 @@
                                                                         rules.required
                                                                     ]"
                                                                     :readonly="
-                                                                        detailsReadonly
+                                                                        !isEditting
                                                                     "
                                                                     v-model="
                                                                         editedSubItem.unit_measure
@@ -233,11 +330,47 @@
                                                                 ></v-textarea>
                                                             </v-col>
                                                         </v-row>
+                                                        <v-row>
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-select
+                                                                    :items="
+                                                                        status_list
+                                                                    "
+                                                                    v-model="
+                                                                        editedSubItem.indicator_status
+                                                                    "
+                                                                    label="Status"
+                                                                    :readonly="!isEditting"
+                                                                    dense
+                                                                ></v-select>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-textarea
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    :readonly="
+                                                                        !isEditting
+                                                                    "
+                                                                    v-model="
+                                                                        editedSubItem.indicator_remarks
+                                                                    "
+                                                                    label="Remarks"
+                                                                    dense
+                                                                ></v-textarea>
+                                                            </v-col>
+                                                        </v-row>
                                                         <v-row
                                                             class="mt-0"
-                                                            v-if="
-                                                                !detailsReadonly
-                                                            "
                                                         >
                                                             <v-col
                                                                 cols="12"
@@ -253,33 +386,16 @@
                                                                     "
                                                                     label="PPR *"
                                                                     dense
+                                                                    :readonly="
+                                                                        !isEditting
+                                                                    "
                                                                     :rules="[
                                                                         rules.required
                                                                     ]"
                                                                 ></v-select>
                                                             </v-col>
                                                         </v-row>
-                                                        <v-row
-                                                            class="mt-0"
-                                                            v-if="
-                                                                detailsReadonly
-                                                            "
-                                                        >
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                            >
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        editedSubItem.ppr
-                                                                    "
-                                                                    label="PPR *"
-                                                                    dense
-                                                                    readonly
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
+                                                        
                                                         <v-row
                                                             class="mt-0"
                                                             v-if="
@@ -585,12 +701,18 @@
                                                                     v-if="
                                                                         isEditting
                                                                     "
-                                                                >
+                                                                >   
+                                                                    <div v-if="isAddingNew">
+                                                                        <template>
+                                                                            <p>No Attatched MOV (You can only attatch file on Edit after saving this)</p>
+                                                                        </template>
+                                                                    </div>
                                                                     <div
-                                                                        v-if="
+                                                                        v-else-if="
                                                                             isRemove
                                                                         "
-                                                                    >
+                                                                    >   
+                                                                        <p>Click Current MOV to replace & Upload a new MOV</p>
                                                                         <v-btn
                                                                             background
                                                                             depressed
@@ -638,7 +760,7 @@
                                                                         </a>
                                                                     </template>
                                                                     <template v-else>
-                                                                        <p>No Attatched MOV</p>
+                                                                        <p>No Attatched MOV </p>
                                                                     </template>
                                                                 </div>
                                                             </v-col>
@@ -646,7 +768,7 @@
                                                     </v-container>
                                                 </v-card-text>
                                                 <v-card-actions
-                                                    v-if="!detailsReadonly"
+                                                    v-if="isEditting"
                                                 >
                                                     <v-spacer></v-spacer>
                                                     <v-btn
@@ -731,145 +853,16 @@
                                             hide-details
                                         ></v-text-field>
                                         <v-spacer></v-spacer>
-                                        <v-dialog
-                                            v-model="dialog"
-                                            max-width="500px"
-                                        >
-                                             <template
-                                                v-slot:activator="{ on, attrs }"
-                                            >
                                                 <v-btn
                                                     color="lightgray"
                                                     class="mb-2"
-                                                    v-bind="attrs"
-                                                    v-on="on"
+                                                    @click="newActivity"
                                                 >
                                                     New
                                                     <v-icon color="green"
                                                         >mdi-plus-thick</v-icon
                                                     >
                                                 </v-btn>
-                                            </template>
-                                            <v-card>
-                                                <v-card-title>
-                                                    <span class="text-h5">{{
-                                                        formTitle
-                                                    }}</span>
-                                                </v-card-title>
-
-                                                <v-card-text>
-                                                    <v-container dense>
-                                                        <v-row class="mt-0">
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                            >
-                                                                <v-select
-                                                                    :items="
-                                                                        category_items
-                                                                    "
-                                                                    v-model="
-                                                                        editedItem.cso_category
-                                                                    "
-                                                                    :rules="[
-                                                                        rules.required
-                                                                    ]"
-                                                                    value="editedItem.cso_category"
-                                                                    label="Category *"
-                                                                    dense
-                                                                ></v-select>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row class="mt-0">
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                            >
-                                                                <v-textarea
-                                                                    auto-grow
-                                                                    rows="1"
-                                                                    :rules="[
-                                                                        rules.required
-                                                                    ]"
-                                                                    v-model="
-                                                                        editedItem.cso_description
-                                                                    "
-                                                                    label="Description *"
-                                                                    dense
-                                                                >
-                                                                </v-textarea>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row class="mt-0">
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                            >
-                                                                </v-textarea>
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        editedItem.cso_act_no
-                                                                    "
-                                                                    :rules="[
-                                                                        rules.required
-                                                                    ]"
-                                                                    color="purple darken-2"
-                                                                    label="Activity No *"
-                                                                    required
-                                                                    auto-grow
-                                                                    rows="1"
-                                                                    dense
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
-                                                        <v-row>
-                                                            <v-col
-                                                                cols="12"
-                                                                sm="12"
-                                                                md="12"
-                                                                v-if="
-                                                                    editedItem.created_at
-                                                                "
-                                                            >
-                                                                <v-select
-                                                                    :items="
-                                                                        status_list
-                                                                    "
-                                                                    v-model="
-                                                                        editedItem.cso_status
-                                                                    "
-                                                                    label="Status"
-                                                                    dense
-                                                                ></v-select>
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-container>
-                                                </v-card-text>
-                                                <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn
-                                                        color="blue darken-1"
-                                                        text
-                                                        @click="close"
-                                                        dense
-                                                    >
-                                                        Cancel
-                                                    </v-btn>
-                                                    <v-btn
-                                                        color="blue darken-1"
-                                                        text
-                                                        @click="save"
-                                                        dense
-                                                        :loading="btnLoader"
-                                                    >
-                                                        Save
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-card>
-                                        </v-dialog>
                                         &nbsp;&nbsp;
                                         <v-btn
                                             color="lightgray"
@@ -890,7 +883,6 @@
                                     </v-toolbar>
                                 </template>
                                 <template
-                                    class=""
                                     v-slot:item.cso_status="{ item }"
                                 >
                                     <v-progress-linear
@@ -949,6 +941,22 @@
                                             :items="item.subItems"
                                             class="elevation-1"
                                         >
+                                            <template
+                                                v-slot:item.indicator_status="{ item }"
+                                            >
+                                                <v-progress-linear
+                                                    class="rounded-top  text-white text-center"
+                                                    height="23"
+                                                    value="100"
+                                                    :color="getColor(item.indicator_status)"
+                                                ></v-progress-linear>
+                                                <v-progress-linear
+                                                    indeterminate
+                                                    class="rounded-bottom text-white text-center"
+                                                    height="2"
+                                                    :color="getColor(item.indicator_status)"
+                                                ></v-progress-linear>
+                                            </template>
                                             <template
                                                 v-slot:item.actions="{ item }"
                                             >
@@ -1034,13 +1042,13 @@ export default {
     singleExpand: false,
     subHeaders: [
       {
-        text: "Indicator No.",
+        text: "Sub-Activity #",
         value: "indicator_no",
         width: "12%",
         sortable: true,
       },
       {
-        text: "Indicator",
+        text: "Description",
         value: "indicator",
         width: "20%",
         sortable: true,
@@ -1060,21 +1068,33 @@ export default {
       {
         text: "Frequency",
         value: "frequency",
-        width: "15%",
+        width: "10%",
         sortable: true,
       },
       {
         text: "Unit of Measure",
         value: "unit_measure",
-        width: "15%",
+        width: "10%",
         sortable: true,
       },
-      { text: "PPR", value: "ppr", width: "3%", sortable: false },
+      //{ text: "PPR", value: "ppr", width: "3%", sortable: false },
+      {
+        text: "Status",
+        value: "indicator_status",
+        width: "8%",
+        sortable: true,
+      },
+      {
+        text: "Remarks",
+        value: "indicator_remarks",
+        width: "8%",
+        sortable: true,
+      },
       {
         text: "Action",
         value: "actions",
-        width: "5%",
-        align: "center",
+        width: "8%",
+        align: "right",
         sortable: false,
       },
     ],
@@ -1091,6 +1111,13 @@ export default {
         align: "start",
         sortable: true,
         value: "cso_description",
+      },
+      {
+        text: "Lead Organization",
+        align: "start",
+        sortable: true,
+        width: "15%",
+        value: "cso_lead_organization",
       },
       {
         text: "Status",
@@ -1113,12 +1140,14 @@ export default {
       cso_category: "",
       cso_description: "",
       cso_act_no: "",
+      cso_lead_organization: "",
       cso_status: "",
     },
     defaultItem: {
       cso_category: "",
       cso_description: "",
       cso_act_no: "",
+      cso_lead_organization: "",
       cso_status: "",
     },
     cso_id: "",
@@ -1131,6 +1160,8 @@ export default {
       data_source: "",
       frequency: "",
       unit_measure: "",
+      indicator_remarks: "-",
+      indicator_status: "Not Yet Started",
       ppr: "",
       baseline_date: "",
       baseline_value: "",
@@ -1146,6 +1177,8 @@ export default {
       data_source: "",
       frequency: "",
       unit_measure: "",
+      indicator_remarks: "-",
+      indicator_status: "Not Yet Started",
       ppr: "",
       baseline_date: "",
       baseline_value: "",
@@ -1168,6 +1201,7 @@ export default {
     file_name: "",
     file_attached: "",
     isRemove: false,
+    isAddingNew: true,
   }),
 
   computed: {
@@ -1230,7 +1264,15 @@ export default {
     },
     getIndicator: function (categorySelected) {
       this.catSelectedTab = categorySelected;
-      this.headers[0].text = categorySelected + " #"
+      this.subHeaders[0].text = "Indicator #";
+      this.headers[0].text = categorySelected + " #";
+      if (categorySelected === "Output") {
+        // todo
+        this.subHeaders[0].text = "Sub-Output #";
+      } else if (categorySelected === "Activity") {
+        // todo
+        this.subHeaders[0].text = "Sub-Activity #";
+      }
       this.indicators_list = [];
       this.loadCSOIndicator = true;
       this.getFilteredIndicator();
@@ -1255,8 +1297,13 @@ export default {
     },
 
     addSubItem(item) {
+      this.isEditting = true;
+      this.isAddingNew = true;
+      this.isRemove = false;
+      this.editedIndex = -1;
       this.cso_id = item.cso_indicator_id;
       this.formSubTitle = "New Indicator Details";
+      this.removeFile();
       this.editedSubItem = Object.assign({}, item);
       this.subdialog = true;
     },
@@ -1267,7 +1314,7 @@ export default {
 
       this.formSubTitle = "Indicator Details";
       this.editedSubItem = Object.assign({}, item);
-      console.log(this.editedSubItem.mov_file);
+      //console.log(this.editedSubItem.mov_file);
       this.detailsReadonly = true;
       this.subdialog = true;
 
@@ -1279,7 +1326,7 @@ export default {
 
     editSubItem(item) {
       this.isEditting = true;
-      console.log(this.isEditting);
+      this.isAddingNew = false;
       this.removeFile();
       this.editedIndex = 1;
       this.formSubTitle = "Edit Indicator Details";
@@ -1329,7 +1376,9 @@ export default {
       }
       this.closeDelete();
     },
-
+    newActivity() {
+      this.dialog = true;
+    },
     close() {
       this.detailsReadonly = false;
       this.btnLoader = false;
@@ -1350,7 +1399,7 @@ export default {
       this.subdialog = false;
       this.removeFile();
       this.isEditting = false;
-      console.log(this.isEditting);
+      this.isAddingNew = false;
     },
 
     closeDelete() {
@@ -1373,7 +1422,6 @@ export default {
         this.$noty.error("Description is empty!");
         validate = false;
       }
-      console.log(this.editedItem);
       if (validate) {
         axios
           .post("/save-cso-indicator", {
@@ -1456,7 +1504,8 @@ export default {
       }
     },
     getColor(status) {
-      if (status === "In Progress/Delayed" || status === "Delay") return "red";
+      if (status === "In Progress/Delayed" || status === "Delayed")
+        return "red";
       else if (status === "In Progress") return "blue";
       else if (status === "Completed") return "green";
       else if (status === "Cancelled") return "grey";

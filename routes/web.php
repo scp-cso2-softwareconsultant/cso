@@ -47,6 +47,7 @@ Route::group(['middleware'=> ['auth']], function (){
 
     Route::post('/save-lro-sub-assessment', [App\Http\Controllers\LROAssessmentController::class,'saveLROAssessmentSub'])->name('save-lro-sub-assessment');
     Route::post('/delete-lro-sub-assessment', [App\Http\Controllers\LROAssessmentController::class,'deleteLROAssessmenSub'])->name('delete-lro-sub-assessment');
+    Route::get('/downloadAssessMov', [App\Http\Controllers\LROAssessmentController::class, 'downloadMov'])->name('downloadMov');
 
 // FINANCE TRACKER
     Route::get('/finance-tracker', [App\Http\Controllers\FinanceTrackerController::class,'getFinanceTracker'])->name('finance-tracker');

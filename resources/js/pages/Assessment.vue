@@ -2,45 +2,10 @@
     <v-app>
         <h3 class="subheading grey--text">Assessment</h3>
         <br>
-        <v-card>
-            <v-data-table
-                :headers="headers"
-                :items="lroList"
-                :single-expand="singleExpand"
-                :expanded.sync="expanded"
-                :search="searchBy"
-                item-key="lro_assessment_id"
-                :loading="loadLROAssessment"
-                show-expand
-                class="elevation-1"
-            >
-                <template v-slot:top>
-                    <v-toolbar
-                        flat
-                    >
-                        <v-text-field
-                            v-model="searchBy"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            single-line
-                            hide-details
-                        ></v-text-field>
-                        <v-spacer></v-spacer>
-                        <v-dialog
+        <v-dialog
                             v-model="dialog"
                             max-width="500px"
                         >
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                    color="lightgray"
-                                    class="mb-2"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                >
-                                    New
-                                    <v-icon color="green">mdi-plus-thick</v-icon>
-                                </v-btn>
-                            </template>
                             <v-card>
                                 <v-card-title>
                                     <span class="text-h5" v-if="!detailsReadonly">{{ formTitle }}</span>
@@ -280,6 +245,38 @@
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
+        <v-card>
+            <v-data-table
+                :headers="headers"
+                :items="lroList"
+                :single-expand="singleExpand"
+                :expanded.sync="expanded"
+                :search="searchBy"
+                item-key="lro_assessment_id"
+                :loading="loadLROAssessment"
+                show-expand
+                class="elevation-1"
+            >
+                <template v-slot:top>
+                    <v-toolbar
+                        flat
+                    >
+                        <v-text-field
+                            v-model="searchBy"
+                            append-icon="mdi-magnify"
+                            label="Search"
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                                    color="lightgray"
+                                    class="mb-2"
+                                    @click="newAsessment"
+                                >
+                                    New
+                                    <v-icon color="green">mdi-plus-thick</v-icon>
+                                </v-btn>
                         &nbsp;&nbsp;
                         <v-btn color="lightgray"
                                                class="mb-2"
@@ -292,13 +289,18 @@
                 </template>
                 <template v-slot:item.mov="{ item }">
                     <div v-if="item.mov">
-                        <v-btn text color="primary"
+                        <!-- <v-btn text color="primary"
                                @click="downloadFile(item.mov)">
                             {{ item.file_name_old }}
                             <v-icon center color="primary">
                                 mdi-file-download-outline
                             </v-icon>
-                        </v-btn>
+                        </v-btn> -->
+                        <a :href="getLink(item.mov)" target="blank">
+                            <v-icon center color="primary">
+                                mdi-file-download-outline
+                            </v-icon>
+                        </a>
                     </div>
                 </template>
                 <template v-slot:item.actions="{ item }">
@@ -437,7 +439,7 @@ export default {
             domain: '',
             tool_used: '',
             conducted_by: '',
-            assessment_date: '',
+            assessment_date: new Date(),
             final_score: '',
             mov: '',
             status: '',
@@ -513,7 +515,7 @@ export default {
                 this.lroList.forEach((item)=>{
                     item.displayDate = this.formatDate(item.assessment_date)
                 })
-                console.log("LROLOST:",this.lroList)
+                //console.log("LROLOST:",this.lroList)
                 this.loadLROAssessment = false;
             })
         },
@@ -647,6 +649,8 @@ export default {
                 var formData = new FormData();
                 formData.append('data', JSON.stringify(this.editedItem));
                 formData.append('form_mode', this.editedIndex);
+                formData.append("upload_file", this.file_attached);
+                formData.append("file_name", this.file_name);
                 axios.post('/save-lro-assessment', formData).then(response => {
                     if (response.data.success) {
                         this.initialize();
@@ -656,6 +660,7 @@ export default {
                             this.$noty.success("Successfully Updated.")
                         }
                         this.close();
+                        this.removeFile();
                     }else{
                         this.close();
                     }
@@ -699,7 +704,9 @@ export default {
                 this.btnLoader = false;
             }
         },
-
+    newAsessment(){
+        this.dialog = true;
+    },
 
         onButtonClick: function() {
             this.isSelecting = true
@@ -726,8 +733,11 @@ export default {
             this.isRemove = false;
             this.file_attached = "";
         },
-        downloadFile: function(encoded_url){
-            window.open("download/"+encoded_url);
+        // downloadFile: function(encoded_url){
+        //     window.open("download/"+encoded_url);
+        // },
+        getLink(file) {
+            return `/downloadAssessMov/?file_name=${file}`;
         },
         exportExcel: function(tableName,value){
             this.btnLoader = true;
