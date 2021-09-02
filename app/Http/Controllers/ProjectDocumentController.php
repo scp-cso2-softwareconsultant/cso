@@ -42,7 +42,7 @@ class ProjectDocumentController extends Controller
 
         
         $document= "";
-        if( $user->role_id == 1 ){
+        if( $user->roles_id == 1 ){
             if(  $raw_data->id ){
                 $document = DB::table('project_tracking_document')->where('id',$raw_data->id )->update(array(
                     'donor_report' => $raw_data->donor_report,

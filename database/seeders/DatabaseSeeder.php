@@ -24,12 +24,7 @@ class DatabaseSeeder extends Seeder
         DB::table('crud_guard')->truncate();
         DB::statement("SET foreign_key_checks=1");
 
-        DB::table('users')->insertGetId([
-            'firstname' => 'admin',
-            'lastname' => 'web',
-            'email'=>'admin@email.com',
-            'password'=>Hash::make('admin')
-        ]);
+        
 
 
 
@@ -947,18 +942,19 @@ class DatabaseSeeder extends Seeder
 
         foreach ( $collection  as $role => $roles_permission){
 
-            $users = DB::table('users')->insert([
-                'firstname' =>  $role,
-                'lastname' => 'web',
-                'email'=>  $role . '@email.com',
-                'password'=>Hash::make( $role)
-            ]);
-
             $roles_id = DB::table('roles')->insertGetId([
                 'name' => $role,
                 'guard_name' => 'web',
             ]);
-            
+
+            $users = DB::table('users')->insert([
+                'firstname' =>  $role,
+                'lastname' => 'web',
+                'email'=>  $role . '@email.com',
+                'password'=>Hash::make($role),
+                'roles_id' => $roles_id,
+            ]);
+
             foreach ($roles_permission as $module => $crude_guard ){
                 $roles_permission_id = DB::table('roles_permission')->insertGetId([
                     'module' => $module,
@@ -976,26 +972,15 @@ class DatabaseSeeder extends Seeder
                     'print' => $crude_guard[ 'print' ],
                     'upload' => $crude_guard['upload'],
                 ]);
-
             }
-            
-            
         }
 
-
-
-
-        // $multiplied = $collection->map(function ($item, $key) {
-        //     // DB::table('roles')->insert([
-        //     //     'name' => $item,
-        //     //     'guard_name' => 'web',
-        //     // ]);
-        //     var_dump($item);
-        // });
-
+        DB::table('users')->insertGetId([
+            'firstname' => 'admin',
+            'lastname' => 'web',
+            'email'=>'admin@email.com',
+            'password'=>Hash::make('admin'),
+            'roles_id' => 1,
+        ]);
     }
-
-   
-
-   
 }

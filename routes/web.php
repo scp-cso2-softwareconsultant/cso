@@ -23,6 +23,7 @@ Route::group(['middleware'=> ['auth']], function (){
 
 // Roles 
     Route::get('/user-roles', [App\Http\Controllers\RoleController::class, 'index'])->name('user-roles');
+    Route::get('/user-roles-permission', [App\Http\Controllers\RoleController::class, 'getUserRolesPermission'])->name('user-roles-permission');
     
 // CSO2 INDICATOR
     Route::get('/cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicator'])->name('cso-indicator');

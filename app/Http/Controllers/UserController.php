@@ -29,14 +29,14 @@ class UserController extends Controller
         $form_mode = $request['form_mode'];
         $userId = Auth::id();
         $user = User::findOrFail($userId);
-        if( $user->role_id == 1 ){
+        if( $user->roles_id == 1 ){
             if(  $raw_data-> id_exist && User::findOrFail( $raw_data->id ) ){
                 return DB::table('users')->where('id',$raw_data->id )->update(array(
                     'firstname' => $raw_data->firstname,
                     'lastname' => $raw_data->lastname,
                     'email' => $raw_data->email,
                     'password' => Hash::make($raw_data->password ),
-                    'role_id' => $raw_data->role_id
+                    'roles_id' => $raw_data->roles_id
                 ));
 
                
@@ -46,7 +46,7 @@ class UserController extends Controller
                     'lastname' => $raw_data->lastname,
                     'email' => $raw_data->email,
                     'password' => Hash::make($raw_data->password ),
-                    'role_id' => $raw_data->role_id
+                    'roles_id' => $raw_data->roles_id
                 ]);
             }
             

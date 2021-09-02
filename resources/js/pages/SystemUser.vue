@@ -39,7 +39,7 @@
                                                         :items="roles"
                                                         :item-text="'name'"
                                                         :item-value="'id'"
-                                                        v-model="editedItem.role_id"
+                                                        v-model="editedItem.roles_id"
                                                         name="id"
                                                         label="Account Role *" dense
                                                         :rules="[rules.required]"
@@ -115,7 +115,7 @@ export default {
             firstname: '',
             lastname: '',
             email: '',
-            role_id: '',
+            roles_id: '',
             password:'',
             confirm_password:'',
 
@@ -124,7 +124,7 @@ export default {
             firstname: '',
             lastname: '',
             email: '',
-            role_id: '',
+            roles_id: '',
             password:'',
             confirm_password:'',
         },
@@ -243,7 +243,7 @@ export default {
                 this.$noty.error('Password and confirm password should be same ');
                 validate = false;        
             }
-            if(!this.editedItem.role_id){
+            if(!this.editedItem.roles_id){
                 this.$noty.error('The Role of the Account should not be empty')
                 validate = false;
             }
