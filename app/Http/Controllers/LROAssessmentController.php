@@ -14,7 +14,7 @@ class LROAssessmentController extends Controller
 
     public function downloadMov(Request $request){
         $file_name = $request['file_name'];
-        $path= Storage::disk('public')->path("lro_assessment/$request->file_name");
+        $path= Storage::disk('public')->path($request->file_name);
         $content = file_get_contents($path);
         return response($content)->withHeaders([
             'Content-Type'=>mime_content_type($path),
