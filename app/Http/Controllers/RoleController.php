@@ -18,6 +18,17 @@ class RoleController extends Controller
         $dataExport = DB::table("roles")->select("*")->get(); 
         $userId = Auth::id();
         $user = User::findOrFail($userId);
-        return DB::table('users')->where('id',$userId )->get();
+        $roles_id = DB::table('users')->where('id',$userId )->value('roles_id');
+        $roles_permission = DB::table('roles_permission')->where('roles_id',$roles_id)->get()->toArray(); 
+        $roles = [];
+        foreach ( $roles_permission as $key => $row){
+            $crud_guard  = DB::table('crud_guard')->where('roles_permission_id',$row->id)->get(); 
+            $roles[$row->id] =array(
+                'id'=>$row->id,
+                'name' => $row->module,
+                'crud_guard' => $crud_guard,
+            );
+        }
+        return $roles;
     }
 }
