@@ -14,22 +14,6 @@ import LMS from "../pages/LMS";
 import Users from "../pages/SystemUser";
 
 
-
-
-
-// axios.get('/user-roles-permission').then( response => {
-//     const data = response.data;
-//     for( var i = 0 ; i < this.item_list.length ; i++){
-//         const name = this.item_list[i].name;
-//         if(  typeof name == "undefined" )
-//             this.items.push(this.item_list[i]);
-//         else
-//            for (var key in data) 
-//                 if( data[key].name ==  name && data[key].crud_guard[0].view )
-//                     this.items.push(this.item_list[i]);
-//     }
-// })
-
 const routes = [
     {
         component: Dashboard,
@@ -80,25 +64,7 @@ const routes = [
 ];
 
 
-const restrict_paths=()=>{
-    
-    axios.get('/user-roles-permission').then( response => {
-        const data = response.data;
-        for( var i = 0 ; i < this.item_list.length ; i++){
-            const name = this.item_list[i].name;
-            if(  typeof name == "undefined" )
-                this.items.push(this.item_list[i]);
-            else
-               for (var key in data) 
-                    if( data[key].name ==  name && data[key].crud_guard[0].view )
-                        this.items.push(this.item_list[i]);
-        }
-        
-    })
 
-
-
-}
 
 export default  new VueRouter(
     {
