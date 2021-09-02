@@ -946,35 +946,39 @@ class DatabaseSeeder extends Seeder
         );
 
         foreach ( $collection  as $role => $roles_permission){
-            $roles_id = DB::table('roles')->insertGetId([
-                'name' => $role,
-                'guard_name' => 'web',
-            ]);
-            foreach ($roles_permission as $module => $crude_guard ){
-                $roles_permission_id = DB::table('roles_permission')->insertGetId([
-                    'module' => $module,
-                    'roles_id' => $roles_id,
-                ]);
-                $crude_guard = DB::table('crud_guard')->insertGetId([
-                    'roles_permission_id' => $roles_permission_id,
-                    'create' => $crude_guard['upload'],
-                    'read' => $crude_guard['upload'],
-                    'update' => $crude_guard['upload'],
-                    'delete'=> $crude_guard['upload'],
-                    'view' => $crude_guard['upload'],
-                    'export' =>$crude_guard['upload'],
-                    'download' => $crude_guard['upload'],
-                    'print' => $crude_guard['upload'],
-                    'upload' => $crude_guard['upload'],
-                ]);
-                var_dump($crude_guard);
-            }
-            DB::table('users')->insertGetId([
+
+            $users = DB::table('users')->insert([
                 'firstname' =>  $role,
                 'lastname' => 'web',
                 'email'=>  $role . '@email.com',
                 'password'=>Hash::make( $role)
             ]);
+
+            $roles_id = DB::table('roles')->insertGetId([
+                'name' => $role,
+                'guard_name' => 'web',
+            ]);
+            
+            foreach ($roles_permission as $module => $crude_guard ){
+                $roles_permission_id = DB::table('roles_permission')->insertGetId([
+                    'module' => $module,
+                    'roles_id' => $roles_id,
+                ]);
+                $crude_guard = DB::table('crud_guard')->insert([
+                    'roles_permission_id' => $roles_permission_id,
+                    'create' => $crude_guard['create'],
+                    'read' => $crude_guard['read'],
+                    'update' => $crude_guard[ 'update'],
+                    'delete'=> $crude_guard[ 'delete' ],
+                    'view' => $crude_guard[ 'view' ],
+                    'export' =>$crude_guard[ 'export'  ],
+                    'download' => $crude_guard[ 'download'  ],
+                    'print' => $crude_guard[ 'print' ],
+                    'upload' => $crude_guard['upload'],
+                ]);
+
+            }
+            
             
         }
 
