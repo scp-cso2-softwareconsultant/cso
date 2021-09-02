@@ -124,11 +124,11 @@ class commonController extends Controller
 
 
     public function getPermission(Request $request){
-        $role_id = Auth::user()->role_id;
+        $roles_id = Auth::user()->roles_id;
         $pages = $request['page_id'];
         $get_permission = DB::table("role_has_permissions")->select(DB::raw("`name` AS user_permission "))
             ->join("permissions", "permission_id", "id")
-            ->where("role_id",$role_id)
+            ->where("roles_id",$roles_id)
             ->where("page_id", $pages)
             ->get();
         $permission_list = array();

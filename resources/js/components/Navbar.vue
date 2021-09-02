@@ -74,7 +74,15 @@ export default {
             ],
         }
     },
+    created () {
+        this.initialize()
+    },
     methods: {
+        initialize(){
+            axios.get('/user-roles-permission').then( response => {
+                console.log(response.data);
+            })
+        },
         logoutUser(){
             axios.post('/logout').then( response => {
                 window.location.href = "login";
