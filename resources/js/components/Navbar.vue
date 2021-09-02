@@ -59,15 +59,16 @@ export default {
         return {
             drawer: true,
             selectedItem: 0,
-            items: [
-                { text: 'Dashboard', icon: 'mdi-view-dashboard-outline', linkTo: '/dashboard', has_sub_items: false },
-                { text: 'CSO² Project Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
-                { text: 'CSO Network Members Profile', icon: 'mdi-animation', linkTo: '/cso-profile', has_sub_items: false },
-                { text: 'Assessment', icon: 'mdi-animation', linkTo: '/assessment', has_sub_items: false },
-                { text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },
-                { text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
-                { text: 'LMS', icon: 'mdi-finance', linkTo: '/lms-data', has_sub_items: false },
-                { text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
+            items: [],
+            item_list: [
+                { name: "Dashboard",text: 'Dashboard', icon: 'mdi-view-dashboard-outline', linkTo: '/dashboard', has_sub_items: false },
+                { name: "CSOIndicator", text: 'CSO² Project Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
+                { name: "CSOProfile", text: 'CSO Network Members Profile', icon: 'mdi-animation', linkTo: '/cso-profile', has_sub_items: false },
+                { name: "Assessment", text: 'Assessment', icon: 'mdi-animation', linkTo: '/assessment', has_sub_items: false },
+                { name: "FinanceTracker", text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },
+                { name: "ProjectTrackingDocument", text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
+                { name: "LMS", text: 'LMS', icon: 'mdi-finance', linkTo: '/lms-data', has_sub_items: false },
+                { name: "Users", text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
                 { text: 'Acitiviy Feedbacking', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
                 { text: 'CBLD Indicators', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/cbld.php', has_sub_items: false },
                 { text: 'DIS', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/dis.php', has_sub_items: false },
@@ -80,7 +81,18 @@ export default {
     methods: {
         initialize(){
             axios.get('/user-roles-permission').then( response => {
-                console.log(response.data);
+                
+                const data = response.data;
+                console.log(data);
+                for( var i = 0 ; i < this.item_list.length ; i++){
+                    const name = this.item_list[i].name;
+                    if(  typeof name == "undefined" )
+                        this.items.push(this.item_list[i]);
+                    else
+                        for (var key in data) 
+                            if( data[key].name ==  name && data[key].crud_guard[0].view )
+                                this.items.push(this.item_list[i]);
+                }
             })
         },
         logoutUser(){

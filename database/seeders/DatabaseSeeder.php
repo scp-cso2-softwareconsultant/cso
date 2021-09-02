@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
 
         $collection = array(
-            'Admininstrator' => array(
+            'Administrator' => array(
                 "login"=>array(
                     'create'=>true,
                     'read'=>true,
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -85,7 +85,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -96,7 +96,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -107,7 +107,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -118,7 +118,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -142,7 +142,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -153,7 +153,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -164,7 +164,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -175,7 +175,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -186,7 +186,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -197,7 +197,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -208,7 +208,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -219,7 +219,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -243,7 +243,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -254,7 +254,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -265,7 +265,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -276,7 +276,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -287,7 +287,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -298,7 +298,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -309,7 +309,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>true,
@@ -320,7 +320,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -344,7 +344,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -355,7 +355,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -366,7 +366,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -377,7 +377,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -388,7 +388,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -399,7 +399,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -410,7 +410,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -421,7 +421,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -445,7 +445,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -456,7 +456,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -467,7 +467,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -478,7 +478,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -489,7 +489,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -500,7 +500,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -511,7 +511,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -522,7 +522,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -546,7 +546,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -557,7 +557,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -568,7 +568,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -579,7 +579,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -590,7 +590,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -601,7 +601,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -612,7 +612,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -623,7 +623,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>true,
                     'read'=>true,
                     'update'=>true,
@@ -647,7 +647,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -658,7 +658,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -669,7 +669,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -680,7 +680,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -691,7 +691,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -702,7 +702,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -713,7 +713,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -724,7 +724,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>true,
@@ -748,7 +748,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -759,7 +759,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -770,7 +770,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -781,7 +781,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -792,7 +792,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>true,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -803,7 +803,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -814,7 +814,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -825,7 +825,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>true,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -849,7 +849,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "administrator page"=>array(
+                "Users"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -860,7 +860,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "dashboard" => array(
+                "Dashboard" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -871,7 +871,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "cso2 indicator" => array(
+                "CSOIndicator" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -882,7 +882,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "assessment" => array(
+                "Assessment" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -893,7 +893,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "finance" => array(
+                "FinanceTracker" => array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -904,7 +904,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "cso profile"=>array(
+                "CSOProfile"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -915,7 +915,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "project tracking document"=>array(
+                "ProjectTrackingDocuments"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -926,7 +926,7 @@ class DatabaseSeeder extends Seeder
                     'print'=>false,
                     'upload'=>false,
                 ),
-                "lms Data"=>array(
+                "LMS"=>array(
                     'create'=>false,
                     'read'=>false,
                     'update'=>false,
@@ -979,7 +979,7 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'admin',
             'lastname' => 'web',
             'email'=>'admin@email.com',
-            'password'=>Hash::make('admin'),
+            'password'=>Hash::make('password'),
             'roles_id' => 1,
         ]);
     }
