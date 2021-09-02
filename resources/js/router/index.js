@@ -30,55 +30,58 @@ import Users from "../pages/SystemUser";
 //     }
 // })
 
+const routes = [
+    {
+        component: Dashboard,
+        name: "Dashboard",
+        path: "/app"
+    },
+    {
+        component: Dashboard,
+        name: "Dashboard",
+        path: "/dashboard"
+    },
+    {
+        component: CSOIndicator,
+        name: "CSOIndicator",
+        path: "/cso-indicator"
+    },
+    {
+        component: CSOProfile,
+        name: "CSOProfile",
+        path: "/cso-profile"
+    },
+    {
+        component: Assessment,
+        name: "Assessment",
+        path: "/assessment"
+    },
+    {
+        component: FinanceTracker,
+        name: "FinanceTracker",
+        path: "/finance-tracker"
+    },
+    {
+        component: ProjectTrackingDocuments,
+        name: "ProjectTrackingDocuments",
+        path: "/project-tracking-documents"
+    },
+    {
+        component: LMS,
+        name: "LMS",
+        path: "/lms-data"
+    },
+    {
+        component: Users,
+        name: "Users",
+        path: "/system-users"
+    },
+
+];
+
+
 const restrict_paths=()=>{
-    const routes = [
-        {
-            component: Dashboard,
-            name: "Dashboard",
-            path: "/app"
-        },
-        {
-            component: Dashboard,
-            name: "Dashboard",
-            path: "/dashboard"
-        },
-        {
-            component: CSOIndicator,
-            name: "CSOIndicator",
-            path: "/cso-indicator"
-        },
-        {
-            component: CSOProfile,
-            name: "CSOProfile",
-            path: "/cso-profile"
-        },
-        {
-            component: Assessment,
-            name: "Assessment",
-            path: "/assessment"
-        },
-        {
-            component: FinanceTracker,
-            name: "FinanceTracker",
-            path: "/finance-tracker"
-        },
-        {
-            component: ProjectTrackingDocuments,
-            name: "ProjectTrackingDocuments",
-            path: "/project-tracking-documents"
-        },
-        {
-            component: LMS,
-            name: "LMS",
-            path: "/lms-data"
-        },
-        {
-            component: Users,
-            name: "Users",
-            path: "/system-users"
-        },
     
-    ];
     axios.get('/user-roles-permission').then( response => {
         const data = response.data;
         for( var i = 0 ; i < this.item_list.length ; i++){
@@ -92,13 +95,13 @@ const restrict_paths=()=>{
         }
         
     })
-    return routes;
+
 
 
 }
 
 export default  new VueRouter(
     {
-        routes:restrict_paths()
+        routes
     }
 );
