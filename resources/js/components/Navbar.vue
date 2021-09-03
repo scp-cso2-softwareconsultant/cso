@@ -66,7 +66,7 @@ export default {
                 { name: "CSOProfile", text: 'CSO Network Members Profile', icon: 'mdi-animation', linkTo: '/cso-profile', has_sub_items: false },
                 { name: "Assessment", text: 'Assessment', icon: 'mdi-animation', linkTo: '/assessment', has_sub_items: false },
                 { name: "FinanceTracker", text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },
-                { name: "ProjectTrackingDocument", text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
+                { name: "ProjectTrackingDocuments", text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
                 { name: "LMS", text: 'LMS', icon: 'mdi-finance', linkTo: '/lms-data', has_sub_items: false },
                 { name: "Users", text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
                 { text: 'Acitiviy Feedbacking', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
@@ -81,9 +81,7 @@ export default {
     methods: {
         initialize(){
             axios.get('/user-roles-permission').then( response => {
-                
                 const data = response.data;
-                console.log(data);
                 for( var i = 0 ; i < this.item_list.length ; i++){
                     const name = this.item_list[i].name;
                     if(  typeof name == "undefined" )

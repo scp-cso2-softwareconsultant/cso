@@ -29,6 +29,6 @@ class RoleController extends Controller
                 'crud_guard' => $crud_guard,
             );
         }
-        return $roles;
+        return response()->json($roles, 200);
     }
 }

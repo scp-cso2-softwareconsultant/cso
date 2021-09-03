@@ -121,61 +121,6 @@ class commonController extends Controller
     }
 
 
-
-
-    public function getPermission(Request $request){
-        $roles_id = Auth::user()->roles_id;
-        $pages = $request['page_id'];
-        $get_permission = DB::table("role_has_permissions")->select(DB::raw("`name` AS user_permission "))
-            ->join("permissions", "permission_id", "id")
-            ->where("roles_id",$roles_id)
-            ->where("page_id", $pages)
-            ->get();
-        $permission_list = array();
-        $permission_list['access'] = false;
-        $permission_list['add'] = false;
-        $permission_list['delete'] = false;
-        $permission_list['export_excel'] = false;
-        $permission_list['import_data'] = false;
-        $permission_list['print'] = false;
-        $permission_list['update'] = false;
-        $permission_list['view'] = false;
-        if($get_permission){
-            foreach ($get_permission as $row){
-                switch($row->user_permission){
-                    case 'access';
-                        $permission_list['access'] = true;
-                        break;
-                    case 'add';
-                        $permission_list['add'] = true;
-                        break;
-                    case 'delete';
-                        $permission_list['delete'] = true;
-                        break;
-                    case 'export_excel';
-                        $permission_list['export_excel'] = true;
-                        break;
-                    case 'import_data';
-                        $permission_list['import_data'] = true;
-                        break;
-                    case 'print';
-                        $permission_list['print'] = true;
-                        break;
-                    case 'update';
-                        $permission_list['update'] = true;
-                        break;
-                    case 'view';
-                        $permission_list['view'] = true;
-                        break;
-
-                }
-            }
-        }
-
-        return response()->json($permission_list, 200);
-
-    }
-
     public function exportExcel(Request $request){
         $tableName = $request['tableName'];
         $fileName = $tableName.'.xlsx';
