@@ -21,5 +21,6 @@ class AccessAdmin
        
         if( Auth::user()->role_permission( Auth::id(), $role_permission,$crud_guard) )
             return $next($request);
+        return response()->json( "User not allowed", 401); 
     }
 }

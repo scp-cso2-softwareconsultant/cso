@@ -444,7 +444,7 @@
                             color="lightgray"
                             class="mb-2"
                             :loading="btnLoader"
-                            @click="exportExcel('Finance Tracker', '')"
+                            @click="exportExcel('FinanceTracker', '')"
                         >
                             Export
                             <v-icon color="green">mdi-microsoft-excel</v-icon>

@@ -514,7 +514,7 @@
                     <v-btn color="lightgray"
                            class="mb-2"
                            :loading="btnLoader"
-                           @click="exportExcel('CSO Profile', '')" >
+                           @click="exportExcel('CSOProfile', '')" >
                         Export
                         <v-icon color="green">mdi-microsoft-excel</v-icon>
                     </v-btn>

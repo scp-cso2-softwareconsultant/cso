@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exports\csoExport;
 use Excel;
-
+use App\Models\User;
 
 class commonController extends Controller
 {
@@ -125,8 +126,27 @@ class commonController extends Controller
         $tableName = $request['tableName'];
         $fileName = $tableName.'.xlsx';
         $dataExport = "";
+
+        // Get the role of the user and check if export is ok  
+        // $dataExport = DB::table("roles")->select("*")->get(); 
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+        $roles_id = DB::table('users')->where('id',$userId )->value('roles_id');
+        $roles_permission = DB::table('roles_permission')->where('roles_id',$roles_id)->get()->toArray();
+
+        foreach ( $roles_permission as $key => $row){
+            if( $row->module == $tableName ){
+                $crud_guard  = DB::table('crud_guard')->where('roles_permission_id',$row->id)->get(); 
+                if( $crud_guard[0]->export == 0 )
+                    return  response()->json(  "User not allowed", 401);
+                break; 
+            }
+        }
+
+        
+
         switch ($tableName){
-            case "CSO2 Indicator":
+            case "CSOIndicator":
                 $dataExport = DB::table("cso_indicator")->select(
                         DB::raw("cso_indicator.cso_category AS Category"),
                         DB::raw("cso_indicator.cso_act_no AS ActivityNo"),
@@ -153,7 +173,7 @@ class commonController extends Controller
                     ->get();
 
                 break;
-            case "CSO Profile":
+            case "CSOProfile":
                 $dataExport = DB::table("cso_profile")->select(
                     DB::raw("is_lro AS 'Is LRO'"),
                     DB::raw("proj_area AS 'Project Area'"),
@@ -174,7 +194,7 @@ class commonController extends Controller
                 ->whereRaw("deleted_at IS NULL")
                 ->get();
                 break;
-            case "Finance Tracker":
+            case "FinanceTracker":
                 $dataExport = DB::table("finance")->select(
                     DB::raw("finance_code,
                                 finance_name,
@@ -219,9 +239,9 @@ class commonController extends Controller
                     ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))
                     ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();
                     break;
-            case "Project Tracking Document":
+            case "ProjectTrackingDocuments":
                 break;
-            case "Participant Profile":
+            case "CSOProfile":
                 /*
                 "PARTICIPANT ID",
                 "PARTICIPANT NAME",
