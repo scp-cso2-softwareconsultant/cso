@@ -134,13 +134,22 @@ class commonController extends Controller
         $roles_id = DB::table('users')->where('id',$userId )->value('roles_id');
         $roles_permission = DB::table('roles_permission')->where('roles_id',$roles_id)->get()->toArray();
 
+
+        // LSM sub modules
+        $is_lsm = false;  
+        if(  $tableName == 'Training Attendees' ||  $tableName == 'Courses'  ||  $tableName == 'Participants Profile'){
+            $is_lsm = true ;
+        }
+
         foreach ( $roles_permission as $key => $row){
-            if( $row->module == $tableName ){
-                $crud_guard  = DB::table('crud_guard')->where('roles_permission_id',$row->id)->get(); 
+            if( $row->module == $tableName  || ($is_lsm && $row->module =='LMS') ){
+                $crud_guard  = DB::table('crud_guard')->where('roles_permission_id',$row->id)->get();
                 if( $crud_guard[0]->export == 0 )
                     return  response()->json(  "User not allowed", 401);
                 break; 
             }
+
+            
         }
 
         
@@ -241,7 +250,7 @@ class commonController extends Controller
                     break;
             case "ProjectTrackingDocuments":
                 break;
-            case "CSOProfile":
+            case "Participants Profile":
                 /*
                 "PARTICIPANT ID",
                 "PARTICIPANT NAME",

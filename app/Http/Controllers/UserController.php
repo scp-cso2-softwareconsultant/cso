@@ -29,32 +29,44 @@ class UserController extends Controller
         $form_mode = $request['form_mode'];
         $userId = Auth::id();
         $user = User::findOrFail($userId);
-        if( $user->roles_id == 1 ){
-            if(  $raw_data-> id_exist && User::findOrFail( $raw_data->id ) ){
-                return DB::table('users')->where('id',$raw_data->id )->update(array(
-                    'firstname' => $raw_data->firstname,
-                    'lastname' => $raw_data->lastname,
-                    'email' => $raw_data->email,
-                    'password' => Hash::make($raw_data->password ),
-                    'roles_id' => $raw_data->roles_id
-                ));
-
-               
-            }else{
-                return User::insert([
-                    'firstname' => $raw_data->firstname,
-                    'lastname' => $raw_data->lastname,
-                    'email' => $raw_data->email,
-                    'password' => Hash::make($raw_data->password ),
-                    'roles_id' => $raw_data->roles_id
-                ]);
-            }
-            
+        
+        $success = false;
+        if(  $raw_data-> id_exist && User::findOrFail( $raw_data->id ) ){
+            $success = DB::table('users')->where('id',$raw_data->id )->update(array(
+                'firstname' => $raw_data->firstname,
+                'lastname' => $raw_data->lastname,
+                'email' => $raw_data->email,
+                'password' => Hash::make($raw_data->password ),
+                'roles_id' => $raw_data->roles_id
+             ));
+        }else{
+            $success = User::insert([
+                'firstname' => $raw_data->firstname,
+                'lastname' => $raw_data->lastname,
+                'email' => $raw_data->email,
+                'password' => Hash::make($raw_data->password ),
+                'roles_id' => $raw_data->roles_id
+            ]);
         }
-        return '';
+         
+        $data_arr = [
+            "success" => $success
+        ];
+        return response()->json($data_arr, 200);
         
     
     }
     
+
+    public function deleteUser(Request $request)
+    {
+        $success = false;
+        $deleted_id = json_decode($request['id']);
+        $success = User::destroy($deleted_id);
+        $data_arr = [
+            "success" => $success
+        ];
+        return response()->json($data_arr, 200);
+    }
 
 }

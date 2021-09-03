@@ -29,6 +29,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="crud_guard.create"
                             >
                                 New
                                 <v-icon color="green">mdi-plus-thick</v-icon>
@@ -157,12 +158,14 @@
                     </v-dialog>
                     &nbsp;&nbsp;
                         <v-btn color="lightgray"
-                                               class="mb-2"
-                                               :loading="btnLoader"
-                                               @click="exportExcel('CSOProfile','')" >
-                                            Export
-                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
-                                        </v-btn>
+                            class="mb-2"
+                            :loading="btnLoader"
+                            @click="exportExcel('Participants Profile','')" 
+                            v-show="crud_guard.export"
+                            >
+                                Export
+                            <v-icon color="green">mdi-microsoft-excel</v-icon>
+                        </v-btn>
                 </v-toolbar>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
@@ -172,8 +175,9 @@
                     @click="detailsItem(item)"
                     color="blue"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="LMS Profile"
+                    data-placement="top"
+                    title="LMS Profile"
+                    v-show="crud_guard.view"
                 >
                     mdi-information-outline
                 </v-icon>
@@ -183,8 +187,9 @@
                     @click="editItem(item)"
                     color="blue darken-2"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit LMS"
+                    data-placement="top"
+                    title="Edit LMS"
+                    v-show="crud_guard.update"
                 >
                     mdi-pencil
                 </v-icon>
@@ -195,6 +200,7 @@
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Delete This Item"
+                    v-show="crud_guard.delete"
                 >
                     mdi-delete
                 </v-icon>
@@ -211,6 +217,17 @@ export default {
         dialogDelete: false,
         loadLMS: false,
         detailsReadonly: false,
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         genderList : [{value:'Male', text:'Male'}, {value:'Female', text:'Female'}],
         // hideProjArea: true,
         cso_name_items: [],
@@ -286,6 +303,19 @@ export default {
         initialize () {
             document.title = "CSO | Participant Profile"
             this.loadLMS = true;
+             axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'LMS';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+                console.log("Load ms something")
+            })
             axios.get('/cso-name-list').then(response =>{
                 this.cso_name_items = response.data;
             })

@@ -28,6 +28,7 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::get('/user-roles', [App\Http\Controllers\RoleController::class, 'index'])->name('user-roles')->middleware('roles_permission:Users,read');
         Route::get('/system-users', [App\Http\Controllers\UserController::class, 'index'])->name('user')->middleware('roles_permission:Users,read');
         Route::post('/save-user', [App\Http\Controllers\UserController::class, 'saveUser'])->name('save-user')->middleware('roles_permission:Users,create');
+        Route::post('/delete-user', [App\Http\Controllers\UserController::class, 'deleteUser'])->name('delete-user')->middleware('roles_permission:Users,delete');
     });
 
 // Dashboard 

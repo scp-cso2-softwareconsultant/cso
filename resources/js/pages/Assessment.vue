@@ -260,7 +260,7 @@
                 <template v-slot:top>
                     <v-toolbar
                         flat
-                    >
+                    > 
                         <v-text-field
                             v-model="searchBy"
                             append-icon="mdi-magnify"
@@ -270,21 +270,23 @@
                         ></v-text-field>
                         <v-spacer></v-spacer>
                         <v-btn
-                                    color="lightgray"
-                                    class="mb-2"
-                                    @click="newAsessment"
-                                >
+                            v-if="crud_guard.create"
+                            color="lightgray"
+                            class="mb-2"
+                            @click="newAsessment"
+                        >
                                     New
-                                    <v-icon color="green">mdi-plus-thick</v-icon>
-                                </v-btn>
+                             <v-icon color="green">mdi-plus-thick</v-icon>
+                         </v-btn>
                         &nbsp;&nbsp;
                         <v-btn color="lightgray"
-                                               class="mb-2"
-                                               :loading="btnLoader"
-                                               @click="exportExcel('Assessment','')" >
-                                            Export
-                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
-                                        </v-btn>
+                            v-if="crud_guard.export"
+                            class="mb-2"
+                            :loading="btnLoader"
+                            @click="exportExcel('Assessment','')" >
+                                Export
+                            <v-icon color="green">mdi-microsoft-excel</v-icon>
+                        </v-btn>
                     </v-toolbar>
                 </template>
                 <template v-slot:item.mov="{ item }">
@@ -305,6 +307,7 @@
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon
+                        v-if="crud_guard.create"
                         small
                         class="mr-2"
                         @click="addSubItem(item)"
@@ -316,6 +319,7 @@
                         mdi-sticker-plus-outline
                     </v-icon>
                     <v-icon
+                        v-if="crud_guard.view"
                         small
                         class="mr-2"
                         @click="detailsItem(item)"
@@ -327,6 +331,7 @@
                         mdi-information-outline
                     </v-icon>
                     <v-icon
+                        v-if="crud_guard.update"
                         small
                         class="mr-2"
                         @click="editItem(item)"
@@ -338,6 +343,7 @@
                         mdi-pencil
                     </v-icon>
                     <v-icon
+                        v-if="crud_guard.delete"
                         small
                         @click="deleteItem(item)"
                         color="red"
@@ -357,6 +363,7 @@
                         >
                             <template v-slot:item.actions="{ item }">
                                 <v-icon
+                                    v-if="crud_guard.update"
                                     small
                                     class="mr-2"
                                     @click="editSubItem(item)"
@@ -368,6 +375,7 @@
                                     mdi-pencil
                                 </v-icon>
                                 <v-icon
+                                    v-if="crud_guard.delete"
                                     small
                                     @click="deleteSubItem(item)"
                                     color="red"
@@ -400,7 +408,18 @@ export default {
         expanded: [],
         tool_list: ['OCAT','OPI'],
         singleExpand: false,
-        searchBy: "",
+        searchBy: "", 
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         headers: [
             { text: 'Name of LRO', align: 'start', sortable: false, value: 'cso_name', width: '15%' },
             { text: 'Domain', value: 'domain',width: '15%',sortable: false},
@@ -502,6 +521,22 @@ export default {
         initialize () {
             this.loadLROAssessment = true;
             document.title = "CSO | Assessment"
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'Assessment';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
+        
+
+
+
             axios.get('/cso-name-list').then(response =>{
                 this.cso_name_items = response.data;
             })
@@ -518,6 +553,7 @@ export default {
                 //console.log("LROLOST:",this.lroList)
                 this.loadLROAssessment = false;
             })
+            
         },
         formatDate(date){
             if(date === null || date === undefined) return "No Date"
