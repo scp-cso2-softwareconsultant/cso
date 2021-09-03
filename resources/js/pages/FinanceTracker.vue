@@ -682,7 +682,6 @@ export default {
                         break;
                     }
                 }
-                console.log(  this.crud_guard );
             })
 
             this.loadFinanceTracker = true;

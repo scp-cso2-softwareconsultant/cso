@@ -314,7 +314,6 @@ export default {
                         break;
                     }
                 }
-                console.log("Load ms something")
             })
             axios.get('/cso-name-list').then(response =>{
                 this.cso_name_items = response.data;
