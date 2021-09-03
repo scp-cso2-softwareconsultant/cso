@@ -844,7 +844,7 @@
                                 class="elevation-1"
                             >
                                 <template v-slot:top>
-                                    <v-toolbar flat dense>
+                                    <v-toolbar class='py-4' flat dense>
                                         <v-text-field
                                             v-model="searchBy"
                                             append-icon="mdi-magnify"
@@ -852,33 +852,36 @@
                                             single-line
                                             hide-details
                                         ></v-text-field>
-                                        <v-spacer></v-spacer>
-                                                <v-btn
-                                                    color="lightgray"
-                                                    class="mb-2"
-                                                    @click="newActivity"
-                                                >
-                                                    New
-                                                    <v-icon color="green"
-                                                        >mdi-plus-thick</v-icon
-                                                    >
-                                                </v-btn>
-                                        &nbsp;&nbsp;
-                                        <v-btn
-                                            color="lightgray"
-                                            class="mb-2"
-                                            :loading="btnLoader"
-                                            @click="
-                                                exportExcel(
-                                                    'CSO2 Indicator',
-                                                    item.value
-                                                )
-                                            "
-                                        >
-                                            Export
+                                            <v-col cols="3">
+                                                <v-combobox
+                                                v-model="selected_filter_item"
+                                                :items="filter_items"
+                                                label="Filter By"
+                                                @change="initFilter2Items"
+                                                chips
+                                                dense
+                                                ></v-combobox>
+                                            </v-col>
+                                            <v-col v-if="selected_filter_item != 'All'" cols="4">
+                                                <v-combobox
+                                                v-model="selected_filter_item2"
+                                                :items="filter_items2"
+                                                :label="filter2_label"
+                                                @change="initialize"
+                                                dense
+                                                chips
+                                                ></v-combobox>
+                                            </v-col>
+                                        <v-btn color="lightgray" class="mb-2" @click="newActivity" >
+                                            New
                                             <v-icon color="green"
-                                                >mdi-microsoft-excel</v-icon
+                                                >mdi-plus-thick</v-icon
                                             >
+                                        </v-btn>
+                                        &nbsp;&nbsp;
+                                        <v-btn color="lightgray" class="mb-2" :loading="btnLoader" @click="exportExcel( 'CSO2 Indicator', item.value )">
+                                            Export
+                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
                                         </v-btn>
                                     </v-toolbar>
                                 </template>
@@ -1014,6 +1017,15 @@ import VueNoty from "vuejs-noty";
 Vue.use(VueNoty);
 export default {
   data: () => ({
+    //filter
+    selected_filter_item : ["All"],
+    filter_items:["All","Lead Organization","Status"],
+
+    selected_filter_item2:[],
+    filter_items2:[],
+    filter2_label:"",
+    //
+
     catSelectedTab: "Activity",
     tabCategory: null,
     isEditting: false,
@@ -1029,6 +1041,7 @@ export default {
     indicator_type_list: [],
     frequency_list: [],
     status_list: [],
+    lead_orgs: [],
     ppr_list: ["Yes", "No"],
     modelBaselineDate: false,
     modelTargetDate: false,
@@ -1252,15 +1265,53 @@ export default {
 
       if (this.catSelectedTab === "Activity")
         axios.get("/cso-indicator").then((response) => {
-          // console.log( response.data )
-          this.indicators_list = response.data;
+          
+          //console.log(this.indicators_list);
           // this.indicators_list.map(function(item) {
           //     delete item.cso_category;
           //     return item;
           // });
+          this.indicators_list = this.filterData(response);
+
           this.loadCSOIndicator = false;
         });
       else this.getFilteredIndicator();
+    },
+    //filter response before displaying to table
+    filterData(response){
+        var m_filter_value = this.selected_filter_item;
+          var filter_value = '';
+
+          if(this.selected_filter_item2.text) filter_value = this.selected_filter_item2.text
+          else filter_value = this.selected_filter_item2
+        
+          this.lead_orgs = [];
+
+          response.data.forEach(element => {
+              if(!this.lead_orgs.includes(element.cso_lead_organization))
+                this.lead_orgs.push(element.cso_lead_organization)
+          });
+
+          if( m_filter_value === "Lead Organization" && !(this.selected_filter_item === "All" || filter_value.length === 0))
+            return response.data.filter(item => (item.cso_lead_organization == filter_value))
+          else if( m_filter_value === "Status")
+            return response.data.filter(item => (item.cso_status == filter_value ))
+          else
+            return response.data;
+    },
+    initFilter2Items(){
+        this.selected_filter_item2 = ''
+        this.filter2_label = `Select ${this.selected_filter_item}`
+        if(this.selected_filter_item === "Lead Organization")
+            this.filter_items2 = this.lead_orgs;
+        else if(this.selected_filter_item === "Status")
+            this.filter_items2 = this.status_list
+        else{
+            this.selected_filter_item = 'All'
+            this.selected_filter_item2 = ''
+        }
+
+        this.initialize()
     },
     getIndicator: function (categorySelected) {
       this.catSelectedTab = categorySelected;
@@ -1281,7 +1332,7 @@ export default {
       axios
         .post("/cso-indicator-list", { category: this.catSelectedTab })
         .then((response) => {
-          this.indicators_list = response.data;
+          this.indicators_list = this.filterData(response);
           this.loadCSOIndicator = false;
         });
     },
@@ -1343,7 +1394,6 @@ export default {
       this.delete_indicator = item.indicator_id;
       this.dialogDelete = true;
     },
-
     deleteItemConfirm() {
       this.btnLoader = true;
       this.indicators_list.splice(this.editedIndex, 1);
