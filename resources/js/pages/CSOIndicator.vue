@@ -2,8 +2,12 @@
     <v-app>
         <h3 class="subheading grey--text">
             CSO² Project Indicator
+            <button @click="test_btn">
+                                                test_btn
+                                            </button>
         </h3>
                                         <v-dialog v-model="dialog" max-width="500px">
+                                            
                                             <v-card>
                                                 <v-card-title>
                                                     <span class="text-h5">{{
@@ -729,7 +733,7 @@
                                                                         <v-file-input
                                                                             v-if="
                                                                                 file_name !=
-                                                                                    ''
+                                                                                    []
                                                                             "
                                                                             show-size
                                                                             label="Upload MOV"
@@ -743,6 +747,7 @@
                                                                         <v-file-input
                                                                             v-else
                                                                             show-size
+                                                                            class='filepick3'
                                                                             label="Upload MOV"
                                                                             @change="
                                                                                 onFileChanged
@@ -1211,8 +1216,8 @@ export default {
       },
     },
     isSelecting: false,
-    file_name: "",
-    file_attached: "",
+    file_name: [],
+    file_attached: [],
     isRemove: false,
     isAddingNew: true,
   }),
@@ -1239,6 +1244,16 @@ export default {
   },
 
   methods: {
+    test_btn(){
+        Array.prototype.insert = function ( index, item ) {
+            this.splice( index, 0, item );
+        };
+        this.headers.insert(2,{text: "Emiddiate Outcome",
+        width: "10%",
+        align: "start",
+        sortable: true,
+        value: "cso_status"});
+    },
     initialize() {
       document.title = "CSO² | Project Indicator";
       category_items: ["Impact", "Outcome", "Activity"],
@@ -1545,6 +1560,7 @@ export default {
             this.closeSub();
             this.removeFile();
           } else {
+            console.log("NOT SUCCESSS",response.data.success)
             this.removeFile();
             this.closeSub();
           }
@@ -1586,9 +1602,9 @@ export default {
       this.isRemove = true;
     },
     removeFile: function (item) {
-      this.file_name = "";
+      this.file_name = [];
       this.isRemove = false;
-      this.file_attached = "";
+      this.file_attached = [];
     },
 
     exportExcel: function (tableName, value) {

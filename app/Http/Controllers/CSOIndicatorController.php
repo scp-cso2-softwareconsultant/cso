@@ -178,7 +178,35 @@ class CSOIndicatorController extends Controller
                 'updated_by' => $user_name,
             ));
 
+            $getCsoIndicatorId = DB::table('indicator')->select('cso_indicator_id')->where('indicator_id',$raw_data->indicator_id)->get();
+            
+            $indicators = DB::table('indicator')->select('indicator_status')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)->
+            get();
+
+            $isCompleted = true;
+
+            foreach($indicators as $r){
+               if($r->indicator_status != 'Completed'){
+                   $isCompleted = !$isCompleted;
+                   break;
+               }
+           }
+
+           if($isCompleted)
+                $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)
+                ->update(array(
+                    'cso_status' => 'Completed',
+                ));
+            else
+                $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)
+                ->update(array(
+                    'cso_status' => 'In Progress',
+                ));
+
             if($updateData) $success=true;
+
+            $data_arr = [ "success" => $success ];
+            return response()->json($data_arr, 200);
         }
 
         if($request->hasFile('upload_file')){
