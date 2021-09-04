@@ -29,6 +29,8 @@ class RolesPermission extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('roles_permission');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

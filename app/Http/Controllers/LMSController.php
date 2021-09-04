@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 class LMSController extends Controller
 {
     public function getParticipantsProfile(){
+        	
+
         $get_profile = DB::table("participant_profile")
             ->select(
                 DB::raw("participant_profile.*"),
@@ -45,8 +47,8 @@ class LMSController extends Controller
         $data_array['lro_id'] = $raw_data->lro_id;
         $data_array['participant_gender'] = $raw_data->participant_gender;
         $data_array['participant_skills'] = $raw_data->participant_skills;
-        $data_array['participant_name'] = $raw_data->participant_name;
-        $data_array['participant_name'] = $raw_data->participant_name;
+        $data_array['name_of_training'] = $raw_data->name_of_training;
+        $data_array['training_organizer'] = $raw_data->training_organizer;
         if($form_mode < 0) {
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('participant_profile')->insert($data_array);
