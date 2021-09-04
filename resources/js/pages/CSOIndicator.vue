@@ -1544,6 +1544,10 @@ export default {
       }
       if (validate) {
         var formData = new FormData();
+    
+        if(!this.editedSubItem.indicator_remarks)
+            this.editedSubItem.indicator_remarks = '';
+
         formData.append("data", JSON.stringify(this.editedSubItem));
         formData.append("form_mode", this.editedIndex);
         formData.append("cso_id", this.cso_id);

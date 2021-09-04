@@ -133,6 +133,8 @@ class CSOIndicatorController extends Controller
         $form_mode = $request['form_mode'];
         $cso_id = $request['cso_id'];
         $cso_type = $request['cso_type'];
+
+        Log::info(json_encode($raw_data));
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
@@ -146,7 +148,7 @@ class CSOIndicatorController extends Controller
                 'frequency' => $raw_data->frequency,
                 'unit_measure' => $raw_data->unit_measure,
                 'indicator_status' => $raw_data->indicator_status,
-                'indicator_remarks' => $raw_data -> indicator_remarks,
+                'indicator_remarks' => $raw_data->indicator_remarks,
                 'ppr' => $raw_data->ppr,
                 'baseline_date' => (key_exists('baseline_date', $_raw_data) ? $raw_data->baseline_date : NULL),
                 'baseline_value' => (key_exists('baseline_value', $_raw_data) ? $raw_data->baseline_value : ''),
@@ -186,7 +188,7 @@ class CSOIndicatorController extends Controller
             $isCompleted = true;
 
             foreach($indicators as $r){
-               if($r->indicator_status != 'Completed'){
+               if($r->indicator_status != 'Completed' && $r->indicator_status != 'Cancelled'){
                    $isCompleted = !$isCompleted;
                    break;
                }
