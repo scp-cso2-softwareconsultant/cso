@@ -134,6 +134,19 @@
                                                           v-model="editedItem.training_organizer" label="Training organizer *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-textarea 
+                                                auto-grow 
+                                                rows="3" 
+                                                :readonly="detailsReadonly"
+                                                v-model="editedItem.remarks"
+                                                label="Remarks"
+                                                dense
+                                            ></v-textarea>
+                                        </v-col>
+                                    </v-row>
+                                            
                                 </v-container>
                             </v-card-text>
 
@@ -272,6 +285,8 @@ export default {
             participant_skills : '',
             name_of_training: '',
             training_organizer: '',
+            remarks:'',
+
         },
         defaultItem: {
             participant_id : '',
@@ -285,6 +300,7 @@ export default {
             participant_skills : '',
             name_of_training: '',
             training_organizer: '',
+            remarks:'',
         },
         delete_lms: '',
         rules: {

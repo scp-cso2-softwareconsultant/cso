@@ -49,6 +49,7 @@ class LMSController extends Controller
         $data_array['participant_skills'] = $raw_data->participant_skills;
         $data_array['name_of_training'] = $raw_data->name_of_training;
         $data_array['training_organizer'] = $raw_data->training_organizer;
+        $data_array['remarks'] = $raw_data->remarks;
         if($form_mode < 0) {
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('participant_profile')->insert($data_array);

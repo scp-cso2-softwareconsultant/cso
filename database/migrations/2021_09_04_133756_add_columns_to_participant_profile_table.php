@@ -16,6 +16,7 @@ class AddColumnsToParticipantProfileTable extends Migration
         Schema::table('participant_profile', function (Blueprint $table) {
             $table->string('name_of_training');
             $table->string('training_organizer');
+            $table->longText('remarks');
          
         });
     }
@@ -31,6 +32,8 @@ class AddColumnsToParticipantProfileTable extends Migration
             //
             $table->dropColumn('name_of_training');
             $table->dropColumn('training_organizer');
+            $table->dropColumn('remarks');
         });
+        
     }
 }
