@@ -134,7 +134,6 @@ class CSOIndicatorController extends Controller
         $cso_id = $request['cso_id'];
         $cso_type = $request['cso_type'];
 
-        Log::info(json_encode($raw_data));
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
