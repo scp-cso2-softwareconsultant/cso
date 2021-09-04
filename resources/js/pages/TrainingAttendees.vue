@@ -29,6 +29,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="crud_guard.create"
                             >
                                 New
                                 <v-icon color="green">mdi-plus-thick</v-icon>
@@ -231,12 +232,14 @@
                     </v-dialog>
                     &nbsp;&nbsp;
                         <v-btn color="lightgray"
-                                               class="mb-2"
-                                               :loading="btnLoader"
-                                               @click="exportExcel('Training Attendees','')" >
-                                            Export
-                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
-                                        </v-btn>
+                            class="mb-2"
+                            :loading="btnLoader"
+                            @click="exportExcel('Training Attendees','')"
+                            v-show="crud_guard.export"
+                            >
+                                Export
+                            <v-icon color="green">mdi-microsoft-excel</v-icon>
+                        </v-btn>
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
@@ -246,8 +249,9 @@
                     @click="detailsItem(item)"
                     color="blue"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Training Attendees Details"
+                    data-placement="top"
+                    title="Training Attendees Details"
+                    v-show="crud_guard.view"
                 >
                     mdi-information-outline
                 </v-icon>
@@ -257,8 +261,9 @@
                     @click="editItem(item)"
                     color="blue darken-2"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit Training Attendees"
+                    data-placement="top"
+                    title="Edit Training Attendees"
+                    v-show="crud_guard.update"
                 >
                     mdi-pencil
                 </v-icon>
@@ -269,6 +274,7 @@
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Delete This Item"
+                    v-show="crud_guard.delete"
                 >
                     mdi-delete
                 </v-icon>
@@ -289,6 +295,17 @@ export default {
         searchBy: "",
         modelDateStarted: false,
         modelDateCompleted: false,
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         headers: [
             { text: 'Participant Name', align: 'start', sortable: false, value: 'participant_name', width: '25%' },
             { text: 'Course Name', align: 'start', sortable: false, value: 'course_name', width: '20%' },
@@ -357,6 +374,18 @@ export default {
     methods: {
         initialize () {
             this.loadTraining = true;
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'LMS';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
             axios.get('/get-participants').then(response =>{
                 this.participant_items = response.data;
             })

@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
         DB::table('roles')->truncate();
         DB::table('roles_permission')->truncate();
         DB::table('crud_guard')->truncate();
+        DB::table('project_tracking_document')->truncate();
+        DB::table('project_tracking_objectives')->truncate();
         DB::statement("SET foreign_key_checks=1");
 
         
@@ -982,5 +984,60 @@ class DatabaseSeeder extends Seeder
             'password'=>Hash::make('password'),
             'roles_id' => 1,
         ]);
+
+
+
+
+        $project_tracking = array(
+            1=> array(
+                "Implementation_vs_target"=>"",
+                "Objective"=>"",
+                "challanges"=>"",
+                "estimated_progress"=>0,
+                "indicators"=>"",
+                "next_month_planning"=>""
+            ),
+            2=>array(
+                "Implementation_vs_target"=>"",
+                "Objective"=>"",
+                "challanges"=>"",
+                "estimated_progress"=>0,
+                "indicators"=>"",
+                "next_month_planning"=>""
+            ),
+            3=>array(
+                "Implementation_vs_target"=>"",
+                "Objective"=>"",
+                "challanges"=>"",
+                "estimated_progress"=>0,
+                "indicators"=>"",
+                "next_month_planning"=>""
+            ),
+            4=> array(
+                "Implementation_vs_target"=>"",
+                "Objective"=>"",
+                "challanges"=>"",
+                "estimated_progress"=>0,
+                "indicators"=>"",
+                "next_month_planning"=>""
+            )
+        );
+        $project_tracking_document_id = DB::table('project_tracking_document')->insertGetId([
+            "donor_report" => "donor report test 1 ",
+            "actions_or_support" => "Actions or support test"	,
+            "spent_to_date"	=> 12345,
+        ]);
+        foreach ($project_tracking as $key => $objective ){
+            DB::table('project_tracking_objectives')->insert([
+                'Implementation_vs_target' => $objective['Implementation_vs_target'],
+                'Objective' => $objective['Objective'],
+                'challanges' =>$objective['challanges'],
+                'estimated_progress' => $objective['estimated_progress'],
+                'indicators' => $objective['indicators'],
+                'next_month_planning' => $objective['next_month_planning'],
+                'project_tracking_document_id'=>$project_tracking_document_id
+            ]);
+        }
+      
     }
 }

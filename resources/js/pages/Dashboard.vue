@@ -179,9 +179,11 @@ export default {
                 const data =  response.data;
                 for( let i = 0 ; i <  data.length ; i ++) labels.push( data[i].value );
                 this.CSOIndicatorChartOptions = { ...this.CSOIndicatorChartOptions ,  labels: labels };
-                axios.get('/cso-indicator' ).then( response => {
+                axios.get('/dashboard-cso-indicator' ).then( response => {
+                    
                     const series = new Array( this.CSOIndicatorChartOptions .labels.length ).fill(0);
                     const data =  response.data;
+                    // console.log(  response.data )
                     const selectedCategory =  this.editedItem.CSO2Indicators; 
                     for( let i = 0 ; i < data.length ; i ++)
                         if( data[i].cso_description.includes( selectedCategory  ))
@@ -193,7 +195,7 @@ export default {
         },
         
         CSOProfile(){
-            axios.get('/cso-profile').then( response => {
+            axios.get('/dashboard-cso-profile').then( response => {
                 const data = response.data; 
                 let legends = {}; 
                 for( let i = 0; i < data.length ; i++)

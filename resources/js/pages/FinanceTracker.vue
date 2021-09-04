@@ -27,6 +27,7 @@
                                     class="mb-2"
                                     v-bind="attrs"
                                     v-on="on"
+                                    v-show="crud_guard.create"
                                 >
                                     New
                                     <v-icon color="green"
@@ -444,7 +445,8 @@
                             color="lightgray"
                             class="mb-2"
                             :loading="btnLoader"
-                            @click="exportExcel('Finance Tracker', '')"
+                            @click="exportExcel('FinanceTracker', '')"
+                            v-show="crud_guard.export"
                         >
                             Export
                             <v-icon color="green">mdi-microsoft-excel</v-icon>
@@ -465,6 +467,7 @@
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon
+                        v-show="crud_guard.view"
                         small
                         class="mr-2"
                         @click="detailsItem(item)"
@@ -476,6 +479,7 @@
                         mdi-information-outline
                     </v-icon>
                     <v-icon
+                        v-show="crud_guard.update"
                         small
                         class="mr-2"
                         @click="editItem(item)"
@@ -483,12 +487,15 @@
                         data-toggle="tooltip"
                                         data-placement="top"
                                         title="Edit Finance Tracker"
+                        
                     >
                         mdi-pencil
                     </v-icon>
                     <v-icon small @click="deleteItem(item)" color="red" data-toggle="tooltip"
                     data-placement="top"
                     title="Delete This Item"
+                    v-show="crud_guard.delete"
+                    >
                         mdi-delete
                         
                     </v-icon>
@@ -509,6 +516,17 @@ export default {
         cso_name_items: [],
         status_list: [],
         searchBy: "",
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         headers: [
             {
                 text: "Name",
@@ -653,6 +671,19 @@ export default {
 
         initialize () {
             document.title = "CSO | Finance Tracker"
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'FinanceTracker';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
+
             this.loadFinanceTracker = true;
             axios.get("/finance-tracker").then(response => {
                 this.financeList = response.data;

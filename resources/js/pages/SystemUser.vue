@@ -12,7 +12,7 @@
                     
                     <v-dialog v-model="dialog" max-width="500px" >
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="lightgray" class="mb-2" v-bind="attrs" v-on="on" >
+                            <v-btn  v-show="crud_guard.create" color="lightgray" class="mb-2" v-bind="attrs" v-on="on" >
                                 New Account
                             </v-btn>
                         </template>
@@ -85,8 +85,8 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon @click="editItem(item)" small class="mr-2" color="blue darken-2" > mdi-pencil </v-icon>
-                <v-icon @click="deleteItem(item)" small color="red" > mdi-delete </v-icon>
+                <v-icon v-show="crud_guard.update" @click="editItem(item)" small class="mr-2" color="blue darken-2" > mdi-pencil </v-icon>
+                <v-icon v-show="crud_guard.delete" @click="deleteItem(item)" small color="red" > mdi-delete </v-icon>
             </template>
         </v-data-table>
     </v-app>
@@ -102,6 +102,17 @@ export default {
         expanded: [],
         roles: [],
         singleExpand: false,
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         headers: [
             { text: 'First Name', align: 'start', sortable: false, value: 'firstname', width: '15%' },
             { text: 'Last Name', align: 'start', sortable: false, value: 'lastname' },
@@ -161,7 +172,22 @@ export default {
 
     methods: {
         initialize () {
-            document.title = "CSO | System User"
+            document.title = "CSO | System User";
+
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'Users';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
+
+
             axios.get('/user-roles').then( response => {
                 this.roles =  response.data ;
             })
@@ -178,14 +204,23 @@ export default {
         },
 
         deleteItem (item) {
-            // this.editedIndex = this.desserts.indexOf(item)
-            // this.editedItem = Object.assign({}, item)
-            // this.dialogDelete = true
+            this.editedIndex = this.usersList.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialogDelete = true
         },
 
         deleteItemConfirm () {
-            // this.desserts.splice(this.editedIndex, 1)
-            // this.closeDelete()
+           this.btnLoader = true;
+            if( this.crud_guard.delete ){
+                axios.post('/delete-user', {id:  this.editedItem.id  }).then(response => {
+                    if (response.data.success) {
+                        this.initialize();
+                        this.$noty.success("Successfully deleted.")
+                        this.closeDelete()
+                    }
+                    this.btnLoader = true;
+                })
+            }
         },
 
         close () {
@@ -249,7 +284,7 @@ export default {
             }
 
             this.editedItem['id_exist'] =  this.editedItem.hasOwnProperty("id")
-            if(validate){
+            if(validate && this.crud_guard.create && this.crud_guard.update){
                 var formData = new FormData();
                 formData.append( 'data', JSON.stringify(this.editedItem) );
                 axios.post('/save-user', formData ).then(response => {

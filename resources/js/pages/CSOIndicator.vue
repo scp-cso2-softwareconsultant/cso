@@ -737,6 +737,7 @@
                                                                             "
                                                                             show-size
                                                                             label="Upload MOV"
+																																						v-show="crud_guard.upload"
                                                                             @change="
                                                                                 removeFile
                                                                             "
@@ -749,6 +750,7 @@
                                                                             show-size
                                                                             class='filepick3'
                                                                             label="Upload MOV"
+																																						v-show="crud_guard.upload"
                                                                             @change="
                                                                                 onFileChanged
                                                                             "
@@ -877,14 +879,14 @@
                                                 chips
                                                 ></v-combobox>
                                             </v-col>
-                                        <v-btn color="lightgray" class="mb-2" @click="newActivity" >
+                                        <v-btn v-show="crud_guard.create" color="lightgray" class="mb-2" @click="newActivity" >
                                             New
                                             <v-icon color="green"
                                                 >mdi-plus-thick</v-icon
                                             >
                                         </v-btn>
                                         &nbsp;&nbsp;
-                                        <v-btn color="lightgray" class="mb-2" :loading="btnLoader" @click="exportExcel( 'CSO2 Indicator', item.value )">
+                                        <v-btn v-show="crud_guard.export" color="lightgray" class="mb-2" :loading="btnLoader" @click="exportExcel( 'CSOIndicator', item.value )">
                                             Export
                                             <v-icon color="green">mdi-microsoft-excel</v-icon>
                                         </v-btn>
@@ -908,6 +910,7 @@
                                 </template>
                                 <template v-slot:item.actions="{ item }">
                                     <v-icon
+																				v-show="crud_guard.create"
                                         small
                                         class="mr-2"
                                         @click="addSubItem(item)"
@@ -919,6 +922,7 @@
                                         mdi-sticker-plus-outline
                                     </v-icon>
                                     <v-icon
+																				v-show="crud_guard.update"
                                         small
                                         class="mr-2"
                                         @click="editItem(item)"
@@ -930,6 +934,7 @@
                                         mdi-pencil
                                     </v-icon>
                                     <v-icon
+																				v-show="crud_guard.delete"
                                         small
                                         @click="deleteItem(item)"
                                         color="red"
@@ -969,6 +974,7 @@
                                                 v-slot:item.actions="{ item }"
                                             >
                                                 <v-icon
+																										v-show="crud_guard.view"
                                                     small
                                                     class="mr-2"
                                                     @click="
@@ -983,6 +989,7 @@
                                                 </v-icon>
                                                 <br />
                                                 <v-icon
+																										v-show="crud_guard.update"
                                                     small
                                                     class="mr-2"
                                                     @click="editSubItem(item)"
@@ -995,6 +1002,7 @@
                                                 </v-icon>
                                                 <br />
                                                 <v-icon
+																										v-show="crud_guard.delete"
                                                     small
                                                     @click="deleteSubItem(item)"
                                                     color="red"
@@ -1030,7 +1038,17 @@ export default {
     filter_items2:[],
     filter2_label:"",
     //
-
+    crud_guard : {
+      create: 0,
+      delete: 0,
+    	download: 0,
+      export: 0,
+      print: 0,
+      read: 0,
+      update: 0,
+      upload: 0,
+      view: 0,
+    },
     catSelectedTab: "Activity",
     tabCategory: null,
     isEditting: false,
@@ -1256,6 +1274,18 @@ export default {
     },
     initialize() {
       document.title = "CSO² | Project Indicator";
+			axios.get('/user-roles-permission').then( response => {
+        const moduleName = 'CSOIndicator';
+        const data = response.data; 
+        for (const key in  data ){
+          if( data[key].name == moduleName ){
+            const crud_guard = data[key].crud_guard[0];
+            if( crud_guard.view == 0 ) this.$router.push("dashboard");
+            else this.crud_guard =  crud_guard ;
+            break;
+          }
+        }
+      })
       category_items: ["Impact", "Outcome", "Activity"],
         (this.loadCSOIndicator = true);
       axios.get("/get-categories").then((response) => {

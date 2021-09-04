@@ -27,6 +27,7 @@
                     >
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
+                                v-show="crud_guard.create"
                                 color="lightgray"
                                 class="mb-2"
                                 v-bind="attrs"
@@ -512,9 +513,10 @@
                     </v-dialog>
                     &nbsp;&nbsp;
                     <v-btn color="lightgray"
+                            v-show="crud_guard.export"
                            class="mb-2"
                            :loading="btnLoader"
-                           @click="exportExcel('CSO Profile', '')" >
+                           @click="exportExcel('CSOProfile', '')" >
                         Export
                         <v-icon color="green">mdi-microsoft-excel</v-icon>
                     </v-btn>
@@ -527,8 +529,9 @@
                     @click="detailsItem(item)"
                     color="blue"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="CSO Profile Details"
+                    data-placement="top"
+                    title="CSO Profile Details"
+                     v-show="crud_guard.view"
                 >
                     mdi-information-outline
                 </v-icon>
@@ -538,8 +541,9 @@
                     @click="editItem(item)"
                     color="blue darken-2"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit CSO Profile"
+                    data-placement="top"
+                    title="Edit CSO Profile"
+                    v-show="crud_guard.update"
                 >
                     mdi-pencil
                 </v-icon>
@@ -550,6 +554,7 @@
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Delete This Item"
+                    v-show="crud_guard.delete"
                 >
                     mdi-delete
                 </v-icon>
@@ -567,6 +572,17 @@ export default {
         dialogDelete: false,
         loadCSOProfile: false,
         searchBy: "",
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         isLRO_list: [
             { value: "Yes", text: "Yes"},
             { value: "No", text: "No"}
@@ -715,6 +731,18 @@ export default {
         initialize () {
             document.title = "CSO | CSO Network Members Profile"
             this.loadCSOProfile = true;
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'CSOProfile';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
             axios.get('/cso-profile').then( response => {
                 this.cso_profile_list = response.data;
                 this.loadCSOProfile = false;

@@ -72,7 +72,7 @@ class ProjectDocumentController extends Controller
                 ));
                
             }else{
-                DB::table('project_tracking_objective')->insert([
+                DB::table('project_tracking_objectives')->insert([
                     'Implementation_vs_target' => $row->Implementation_vs_target,
                     'Objective' => $row->Objective,
                     'challanges' => $row->challanges,

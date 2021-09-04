@@ -294,6 +294,7 @@
                 </v-list-item>
             </v-card>
             <v-btn
+                v-show="crud_guard.update"
                 class="ma-2"
                 color="primary"
                 block
@@ -316,6 +317,17 @@ export default {
     data() {
         return {
             canBeSaved: false,
+            crud_guard : {
+                create: 0,
+                delete: 0,
+                download: 0,
+                export: 0,
+                print: 0,
+                read: 0,
+                update: 0,
+                upload: 0,
+                view: 0,
+            },
             editedItem:{
                 donor_report:"",
                 spent_to_date:0,
@@ -375,7 +387,19 @@ export default {
     },
     methods: {
         initialize() {
-            document.title = "CSO | Project Trackin Document";
+            document.title = "CSO | Project Tracking Document";
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'ProjectTrackingDocuments';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
             this.getData();  
         },
       
@@ -387,10 +411,10 @@ export default {
             }
         },    
          save() {
-            if(this.canBeSaved){
+            if(this.canBeSaved && this.crud_guard.update ){
                 this.btnLoader = true;
                 axios.post("/save-project-tracking-document", { data: JSON.stringify(this.editedItem) }).then(response => {
-                  
+                    
                     this.btnLoader = false;
                 })
                 
@@ -404,10 +428,6 @@ export default {
                 const data = response.data[0];
                 this.editedItem =  data[0]
                 this.editedItem['objective'] = data[1]
-                
-                   
-                
-                console.log( data )
                 // editedItem.objective.Implementation_vs_target
                 this.setBurnRate();
                 this.canBeSaved = true;

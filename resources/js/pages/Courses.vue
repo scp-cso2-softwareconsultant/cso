@@ -29,6 +29,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="crud_guard.create"
                             >
                                 New
                                 <v-icon color="green">mdi-plus-thick</v-icon>
@@ -108,23 +109,26 @@
                     </v-dialog>
                     &nbsp;&nbsp;
                         <v-btn color="lightgray"
-                                               class="mb-2"
-                                               :loading="btnLoader"
-                                               @click="exportExcel('Courses','')" >
-                                            Export
-                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
-                                        </v-btn>
+                            class="mb-2"
+                            :loading="btnLoader"
+                            @click="exportExcel('Courses','')" 
+                            v-show="crud_guard.export"
+                            >
+                                Export
+                            <v-icon color="green">mdi-microsoft-excel</v-icon>
+                        </v-btn>
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
+                    v-show="crud_guard.view"
                     small
                     class="mr-2"
                     @click="detailsItem(item)"
                     color="blue"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Course Details"
+                    data-placement="top"
+                    title="Course Details"
                 >
                     mdi-information-outline
                 </v-icon>
@@ -134,8 +138,9 @@
                     @click="editItem(item)"
                     color="blue darken-2"
                     data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit Course"
+                    data-placement="top"
+                    title="Edit Course"
+                    v-show="crud_guard.update"
                 >
                     mdi-pencil
                 </v-icon>
@@ -146,6 +151,7 @@
                     data-toggle="tooltip"
                     data-placement="top"
                    title="Delete This Item"
+                   v-show="crud_guard.delete"
                 >
                     mdi-delete
                 </v-icon>
@@ -161,6 +167,17 @@ export default {
         dialogDelete: false,
         loadCourse: false,
         detailsReadonly: false,
+        crud_guard : {
+            create: 0,
+            delete: 0,
+            download: 0,
+            export: 0,
+            print: 0,
+            read: 0,
+            update: 0,
+            upload: 0,
+            view: 0,
+        },
         searchBy: "",
         headers: [
             { text: 'ID', align: 'start', sortable: false, value: 'course_id', width: '10%' },
@@ -222,6 +239,18 @@ export default {
         initialize () {
             this.loadCourse = true;
             document.title = "CSO | Courses"
+            axios.get('/user-roles-permission').then( response => {
+                const moduleName = 'LMS';
+                const data = response.data; 
+                for (const key in  data ){
+                    if( data[key].name == moduleName ){
+                        const crud_guard = data[key].crud_guard[0];
+                        if( crud_guard.view == 0 ) this.$router.push("dashboard");
+                        else this.crud_guard =  crud_guard ;
+                        break;
+                    }
+                }
+            })
             axios.get('/courses').then( response => {
                 this.courseList = response.data;
                 this.loadCourse = false;
