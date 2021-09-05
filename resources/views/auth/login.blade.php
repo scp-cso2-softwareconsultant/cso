@@ -5,7 +5,7 @@
 
     html,
     body {
-        background-image: url('');
+        background-image: url('img/Login-background.jpg');
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
@@ -25,7 +25,7 @@
         margin-top: auto;
         margin-bottom: auto;
         width: 400px;
-        background-color: rgba(0, 0, 0, 0.5) !important;
+  
     }
 
     .social_icon span {
@@ -70,13 +70,11 @@
         top: 0;
         width: 100%;
         z-index: 198259812;
-        background-color: #202020b9;
     }
 
     .model_show{ display : flex }
 
     .modal_desu_formBox{
-        background-color: #202020b9;
         border: 1px solid #3E3E3E;
         height: auto;
     }   

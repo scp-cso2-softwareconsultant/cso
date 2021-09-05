@@ -120,6 +120,33 @@
                                                           v-model="editedItem.participant_skills" label="Skills *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field :readonly="detailsReadonly"
+                                                          :rules="[rules.required]"
+                                                          v-model="editedItem.name_of_training" label="Name of Training *" dense></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field :readonly="detailsReadonly"
+                                                          :rules="[rules.required]"
+                                                          v-model="editedItem.training_organizer" label="Training organizer *" dense></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-textarea 
+                                                auto-grow 
+                                                rows="3" 
+                                                :readonly="detailsReadonly"
+                                                v-model="editedItem.remarks"
+                                                label="Remarks"
+                                                dense
+                                            ></v-textarea>
+                                        </v-col>
+                                    </v-row>
+                                            
                                 </v-container>
                             </v-card-text>
 
@@ -236,8 +263,11 @@ export default {
         headers: [
             { text: 'Participant ID', align: 'start', sortable: false, value: 'participant_id', width: '10%' },
             { text: 'Participant Name', align: 'start', sortable: false, value: 'participant_name', width: '25%' },
+            { text: 'Sex', align: 'start', sortable: false, value: 'participant_gender', width: '10%' },
+            { text: 'Age', align: 'start', sortable: false, value: 'participant_age', width: '10%' },
             { text: 'Location', value: 'participant_location',width: '15%',sortable: false, },
-            { text: 'Name of LRO', value: 'cso_name',width: '25%',sortable: false, },
+            { text: 'Name of Training', value: 'name_of_training',width: '25%',sortable: false, },
+            { text: 'Training Organizer', value: 'training_organizer',width: '25%',sortable: false, },
             { text: 'Skills', value: 'participant_skills',width: '15%',sortable: false, },
             { text: 'Actions', value: 'actions',width: '10%',sortable: false, },
         ],
@@ -253,6 +283,10 @@ export default {
             participant_gender : '',
             participant_age : '',
             participant_skills : '',
+            name_of_training: '',
+            training_organizer: '',
+            remarks:'',
+
         },
         defaultItem: {
             participant_id : '',
@@ -264,6 +298,9 @@ export default {
             participant_gender : '',
             participant_age : '',
             participant_skills : '',
+            name_of_training: '',
+            training_organizer: '',
+            remarks:'',
         },
         delete_lms: '',
         rules: {
@@ -320,6 +357,7 @@ export default {
             })
 
             axios.get('/participants-profile').then( response => {
+                console.log(response.data ); 
                 this.lmsList = response.data;
                 this.loadLMS = false;
             })
@@ -411,6 +449,13 @@ export default {
             }
             if(!this.editedItem.participant_skills){
                 this.$noty.error('Skills is empty!');
+                validate = false;
+            }
+            if(!this.editedItem.name_of_training){
+                this.$noty.error('Name of Training is empty!');
+                validate = false;
+            }if(!this.editedItem.training_organizer){
+                this.$noty.error('Training Organizer is empty!');
                 validate = false;
             }
             if(validate){
