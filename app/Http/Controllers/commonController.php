@@ -73,6 +73,18 @@ class commonController extends Controller
         return $status_list;
     }
 
+    public function getLeadOrgs(){
+        $leadOrgs = DB::table("lead_organization")->select(DB::raw("organization_name as text, organization_name as value"))->get();
+        $leadOrgs_list = [];
+        if($leadOrgs){
+            foreach ($leadOrgs as $key => $row){
+                $leadOrgs_list[$key] = json_decode(json_encode($row), true);
+            }
+        }
+
+        return $leadOrgs_list;
+    }
+
     public function getFrequencies(){
         $get_frequencies = DB::table("frequencies")->select(DB::raw("frequency as text, frequency as value"))->get();
         $frequency_list = [];

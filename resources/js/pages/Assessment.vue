@@ -556,9 +556,11 @@ export default {
             
         },
         formatDate(date){
-            if(date === null || date === undefined) return "No Date"
-            let ddate = new Date(date);
-            return `${ddate.getMonth()+1}/${ddate.getDate()}/${ddate.getFullYear()}`
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            return `${mm}/${dd}/${yyyy}`;
         },
         detailsItem(item){
             this.detailsReadonly = true;
