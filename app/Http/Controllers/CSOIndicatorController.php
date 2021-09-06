@@ -22,8 +22,21 @@ class CSOIndicatorController extends Controller
     }
 
     public function downloadMov(Request $request){
+        Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
-        $path= Storage::disk('public')->path("cso_indicators/Activity/$request->file_name");
+        $path= Storage::disk('public')->path("cso_indicators_mov/Activity/$request->file_name");
+        $content = file_get_contents($path);
+        return response($content)->withHeaders([
+            'Content-Type'=>mime_content_type($path),
+            'Content-Description' => 'File Transfer',
+            'Content-Disposition' => 'attachment;filename='.$file_name
+        ]);
+    }
+
+    public function downloadCSOMov(Request $request){
+        Log::info("CALLED DOWNLOAD FILE");
+        $file_name = $request['file_name'];
+        $path= Storage::disk('public')->path("cso_indicators_mov/output_mov/$request->file_name");
         $content = file_get_contents($path);
         return response($content)->withHeaders([
             'Content-Type'=>mime_content_type($path),
@@ -101,11 +114,14 @@ class CSOIndicatorController extends Controller
                 'cso_category' => $raw_data->cso_category,
                 'cso_description' => $raw_data->cso_description,
                 'cso_act_no' => $raw_data->cso_act_no,
+                'cso_indicator_mov' => $raw_data->cso_indicator_mov,
+                'cso_remarks' => $raw_data->cso_remarks,
                 'cso_lead_organization' => $raw_data->cso_lead_organization,
                 'cso_status' => 'Not Yet Started',
                 'created_by' => $user_name
             ]);
             if($insertData) $success=true;
+            Log::info("NEW DATA");
         }else{
             Log::info($request->all());
             $updateData = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)
@@ -113,13 +129,33 @@ class CSOIndicatorController extends Controller
                     'cso_category' => $raw_data->cso_category,
                     'cso_act_no' => $raw_data->cso_act_no,
                     'cso_status' => $raw_data->cso_status,
+                    'cso_indicator_mov'=> $raw_data->cso_indicator_mov,
+                    'cso_remarks'=>$raw_data -> cso_remarks,
                     'cso_lead_organization' => $raw_data-> cso_lead_organization,
                     'cso_description' => $raw_data->cso_description,
                     'updated_at' => date("Y-m-d h:i:s"),
                     'updated_by' => $user_name
                 ));
             if($updateData) $success=true;
+            Log::info("UPDATE DATA");
         }
+
+        if($request->hasFile('upload_file')){
+            Log::info('Theres File Woah!');
+
+            // Get filename with the extension
+            $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('upload_file')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/output_mov',$fileNameToStore);
+            DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)->update(array("cso_indicator_mov" => $fileNameToStore));
+        }else
+            Log::info('No File');
 
         $data_arr = [
             "success" => $success
@@ -133,6 +169,7 @@ class CSOIndicatorController extends Controller
         $form_mode = $request['form_mode'];
         $cso_id = $request['cso_id'];
         $cso_type = $request['cso_type'];
+        $updateData = false;
 
         $success = false;
         $user = Auth::user();
@@ -181,33 +218,28 @@ class CSOIndicatorController extends Controller
 
             $getCsoIndicatorId = DB::table('indicator')->select('cso_indicator_id')->where('indicator_id',$raw_data->indicator_id)->get();
             
-            $indicators = DB::table('indicator')->select('indicator_status')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)->
-            get();
+            $indicators = DB::table('indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)->whereNull('deleted_at')
+            ->get();
 
             $isCompleted = true;
 
             foreach($indicators as $r){
                if($r->indicator_status != 'Completed' && $r->indicator_status != 'Cancelled'){
-                   $isCompleted = !$isCompleted;
+                   $isCompleted = false;
                    break;
                }
            }
 
-           if($isCompleted)
+           if($isCompleted){
                 $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)
-                ->update(array(
-                    'cso_status' => 'Completed',
-                ));
-            else
+                ->update(array('cso_status' => 'Completed'));
+            }
+            else{
                 $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)
                 ->update(array(
                     'cso_status' => 'In Progress',
                 ));
-
-            if($updateData) $success=true;
-
-            $data_arr = [ "success" => $success ];
-            return response()->json($data_arr, 200);
+            }
         }
 
         if($request->hasFile('upload_file')){
@@ -222,15 +254,13 @@ class CSOIndicatorController extends Controller
             // Filename to store
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
             // Upload Image
-            $path = $request->file('upload_file')->storeAs('public/cso_indicators/'.$get_cso_category->cso_category,$fileNameToStore);
-
+            $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/'.$get_cso_category->cso_category,$fileNameToStore);
             DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update(array("mov_file" => $fileNameToStore));
             $this->computeCompletion($raw_data->cso_indicator_id, $get_cso_category->cso_status);
         }
+        if($updateData) $success=true;
 
-        $data_arr = [
-            "success" => $success
-        ];
+        $data_arr = [ "success" => $success ];
         return response()->json($data_arr, 200);
     }
 

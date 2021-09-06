@@ -47,6 +47,8 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::post('/delete-cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'deleteCSOIndicator'])->name('delete-cso-indicator')->middleware('roles_permission:CSOIndicator,delete');
         Route::post('/delete-cso-indicator-details', [App\Http\Controllers\CSOIndicatorController::class, 'deleteCSOIndicatorDetails'])->name('delete-cso-indicator-details')->middleware('roles_permission:CSOIndicator,delete');
         Route::get('/downloadMov', [App\Http\Controllers\CSOIndicatorController::class, 'downloadMov'])->name('downloadMov')->middleware('roles_permission:CSOIndicator,download');
+        Route::get('/downloadCSOMov', [App\Http\Controllers\CSOIndicatorController::class, 'downloadCSOMov'])->name('downloadCSOMov')->middleware('roles_permission:CSOIndicator,download');
+
     });
 
 // CSO PROFILE
@@ -106,6 +108,7 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::get('/get-participants', [App\Http\Controllers\commonController::class,'getParticipants'])->name('get-participants');
     Route::get('/get-courses', [App\Http\Controllers\commonController::class,'getCourses'])->name('get-courses');
     Route::post('/export-excel', [App\Http\Controllers\commonController::class,'exportExcel'])->name('export-excel');
+    Route::get('/get-lead-organization', [App\Http\Controllers\commonController::class,'getLeadOrgs'])->name('get-lead-organization');
 
 });
 

@@ -2,12 +2,10 @@
     <v-app>
         <h3 class="subheading grey--text">
             CSO² Project Indicator
-            <button @click="test_btn">
-                                                test_btn
-                                            </button>
+            <button @click="debug">TEST</button>
         </h3>
                                         <v-dialog v-model="dialog" max-width="500px">
-                                            
+                                            <!-- Hello World -->
                                             <v-card>
                                                 <v-card-title>
                                                     <span class="text-h5">{{
@@ -66,19 +64,16 @@
                                                                 sm="12"
                                                                 md="12"
                                                             >
-                                                                <v-textarea
-                                                                    auto-grow
-                                                                    rows="1"
-                                                                    :rules="[
-                                                                        rules.required
-                                                                    ]"
+                                                                <v-select
+                                                                    :items="
+                                                                        lead_orgs
+                                                                    "
                                                                     v-model="
                                                                         editedItem.cso_lead_organization
                                                                     "
                                                                     label="Lead Organization *"
                                                                     dense
-                                                                >
-                                                                </v-textarea>
+                                                                ></v-select>
                                                             </v-col>
                                                         </v-row>
                                                         <v-row class="mt-0">
@@ -87,7 +82,6 @@
                                                                 sm="12"
                                                                 md="12"
                                                             >
-                                                                </v-textarea>
                                                                 <v-text-field
                                                                     v-model="
                                                                         editedItem.cso_act_no
@@ -96,7 +90,7 @@
                                                                         rules.required
                                                                     ]"
                                                                     color="purple darken-2"
-                                                                    label="Activity No *"
+                                                                    :label="headers[0].text"
                                                                     required
                                                                     auto-grow
                                                                     rows="1"
@@ -123,6 +117,60 @@
                                                                     label="Status"
                                                                     dense
                                                                 ></v-select>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row v-if="catSelectedTab === 'Output'" class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-textarea
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    v-model="
+                                                                        editedItem.cso_remarks
+                                                                    "
+                                                                    label="Remarks"
+                                                                    dense
+                                                                >
+                                                                </v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row v-if="catSelectedTab ==='Output'" class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <p class="mt-4 font-weight-bold">Attatched File</p>
+                                                                <div v-if='isAddingNew'>
+                                                                    <p>You can't add MOV on create, You can add it later on Edit</p>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <div v-if="!isEditting">
+                                                                        <div v-if="file2_name === ''">
+                                                                            No MOV File
+                                                                        </div>
+                                                                        <div v-else>
+                                                                            <a :href="getLink(file2_name)">
+                                                                                {{file_name}}
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        <!--Editing True-->
+                                                                        <div v-if="file2_name.length != 0">
+                                                                            <v-btn background depressed @click="removeFile2">
+                                                                                {{ file2_name }}
+                                                                            </v-btn>
+                                                                        </div>
+                                                                        <div v-else>
+                                                                            <v-file-input v-model="file2_attached" @change="onFileChanged2">
+                                                                            </v-file-input>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </v-col>
                                                         </v-row>
                                                     </v-container>
@@ -695,13 +743,7 @@
                                                                 sm="12"
                                                                 md="12"
                                                             ><p class="mt-4 font-weight-bold">Attatched File</p>
-                                                                        
-                                                                <!--                                            <v-file-input-->
-                                                                <!--                                                label="MOV"-->
-                                                                <!--                                                v-model="editedSubItem.mov_file"-->
-                                                                <!--                                                append-outer-icon="mdi-paperclip"-->
-                                                                <!--                                            ></v-file-input>-->
-                                                                <div
+                                                                <!-- <div
                                                                     v-if="
                                                                         isEditting
                                                                     "
@@ -769,6 +811,33 @@
                                                                     <template v-else>
                                                                         <p>No Attatched MOV </p>
                                                                     </template>
+                                                                </div> -->
+                                                                <div v-if='isAddingNew'>
+                                                                    <p>You can't add MOV on create, You can add it later on Edit</p>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <div v-if="!isEditting">
+                                                                        <div v-if="file_name === ''">
+                                                                            No MOV File
+                                                                        </div>
+                                                                        <div v-else>
+                                                                            <a :href="getLink(file_name)">
+                                                                                {{file_name}}
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        <!--Editing True-->
+                                                                        <div v-if="file_name.length != 0">
+                                                                            <v-btn background depressed readonly @click="removeFile">
+                                                                                {{ file_name }}
+                                                                            </v-btn>
+                                                                        </div>
+                                                                        <div v-else>
+                                                                            <v-file-input v-model="file_attached" @change="onFileChanged">
+                                                                            </v-file-input>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </v-col>
                                                         </v-row>
@@ -840,6 +909,182 @@
                     <v-tab-item v-for="item in category_tabs" :key="item.value">
                         <v-card>
                             <v-data-table
+                                v-if="catSelectedTab === 'Output'"
+                                :headers="headers"
+                                :items="indicators_list"
+                                :single-expand="singleExpand"
+                                :expanded.sync="expanded"
+                                :search="searchBy"
+                                item-key="cso_indicator_id"
+                                :loading="loadCSOIndicator"
+                                class="elevation-1"
+                            >   
+                            <template v-slot:item.cso_indicator_mov="{ item }">
+                                <div v-if="item.cso_indicator_mov">
+                                    <a :href="getLink2(item.cso_indicator_mov)" target="blank">
+                                        <v-icon center color="primary">
+                                            mdi-file-download-outline
+                                        </v-icon>
+                                    </a>
+                                </div>
+                            </template>
+                                <template v-slot:top>
+                                    <v-toolbar class='py-4' flat dense>
+                                        <v-text-field
+                                            v-model="searchBy"
+                                            append-icon="mdi-magnify"
+                                            label="Search"
+                                            single-line
+                                            hide-details
+                                        ></v-text-field>
+                                            <v-col cols="3">
+                                                <v-combobox
+                                                v-model="selected_filter_item"
+                                                :items="filter_items"
+                                                label="Filter By"
+                                                @change="initFilter2Items"
+                                                chips
+                                                dense
+                                                ></v-combobox>
+                                            </v-col>
+                                            <v-col v-if="selected_filter_item != 'All'" cols="4">
+                                                <v-combobox
+                                                v-model="selected_filter_item2"
+                                                :items="filter_items2"
+                                                :label="filter2_label"
+                                                @change="initialize"
+                                                dense
+                                                chips
+                                                ></v-combobox>
+                                            </v-col>
+                                        <v-btn v-show="crud_guard.create" color="lightgray" class="mb-2" @click="newActivity" >
+                                            New
+                                            <v-icon color="green"
+                                                >mdi-plus-thick</v-icon
+                                            >
+                                        </v-btn>
+                                        &nbsp;&nbsp;
+                                        <v-btn v-show="crud_guard.export" color="lightgray" class="mb-2" :loading="btnLoader" @click="exportExcel( 'CSOIndicator', item.value )">
+                                            Export
+                                            <v-icon color="green">mdi-microsoft-excel</v-icon>
+                                        </v-btn>
+                                    </v-toolbar>
+                                </template>
+                                <template
+                                    v-slot:item.cso_status="{ item }"
+                                >
+                                    <v-progress-linear
+                                        class="rounded-top  text-white text-center"
+                                        height="23"
+                                        value="100"
+                                        :color="getColor(item.cso_status)"
+                                    ></v-progress-linear>
+                                    <v-progress-linear
+                                        indeterminate
+                                        class="rounded-bottom text-white text-center"
+                                        height="2"
+                                        :color="getColor(item.cso_status)"
+                                    ></v-progress-linear>
+                                </template>
+                                <template v-slot:item.actions="{ item }">
+                                    <v-icon
+										v-show="crud_guard.update"
+                                        small
+                                        class="mr-2"
+                                        @click="editItem(item)"
+                                        color="blue darken-2"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit CSO2 Indicator"
+                                    >
+                                        mdi-pencil
+                                    </v-icon>
+                                    <v-icon
+										v-show="crud_guard.delete"
+                                        small
+                                        @click="deleteItem(item)"
+                                        color="red"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete This Item"
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                </template>
+                                <template
+                                    v-slot:expanded-item="{ headers, item }"
+                                >
+                                    <td :colspan="headers.length">
+                                        <v-data-table
+                                            :headers="subHeaders"
+                                            :items="item.subItems"
+                                            class="elevation-1"
+                                        >
+                                            <template
+                                                v-slot:item.indicator_status="{ item }"
+                                            >
+                                                <v-progress-linear
+                                                    class="rounded-top  text-white text-center"
+                                                    height="23"
+                                                    value="100"
+                                                    :color="getColor(item.indicator_status)"
+                                                ></v-progress-linear>
+                                                <v-progress-linear
+                                                    indeterminate
+                                                    class="rounded-bottom text-white text-center"
+                                                    height="2"
+                                                    :color="getColor(item.indicator_status)"
+                                                ></v-progress-linear>
+                                            </template>
+                                            <template
+                                                v-slot:item.actions="{ item }"
+                                            >
+                                                <v-icon
+													v-show="crud_guard.view"
+                                                    small
+                                                    class="mr-2"
+                                                    @click="
+                                                        detailsSubItem(item)
+                                                    "
+                                                    color="blue"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Indicator Details"
+                                                >
+                                                    mdi-information-outline
+                                                </v-icon>
+                                                <br />
+                                                <v-icon
+													v-show="crud_guard.update"
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editSubItem(item)"
+                                                    color="blue darken-2"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Edit Indicator Details"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <br />
+                                                <v-icon
+													v-show="crud_guard.delete"
+                                                    small
+                                                    @click="deleteSubItem(item)"
+                                                    color="red"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Delete This Item"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                        </v-data-table>
+                                    </td>
+                                </template>
+                            </v-data-table>
+                            <v-data-table
+                                v-else
                                 :headers="headers"
                                 :items="indicators_list"
                                 :single-expand="singleExpand"
@@ -910,7 +1155,7 @@
                                 </template>
                                 <template v-slot:item.actions="{ item }">
                                     <v-icon
-																				v-show="crud_guard.create"
+                                        v-show="crud_guard.create"
                                         small
                                         class="mr-2"
                                         @click="addSubItem(item)"
@@ -922,7 +1167,7 @@
                                         mdi-sticker-plus-outline
                                     </v-icon>
                                     <v-icon
-																				v-show="crud_guard.update"
+										v-show="crud_guard.update"
                                         small
                                         class="mr-2"
                                         @click="editItem(item)"
@@ -934,7 +1179,7 @@
                                         mdi-pencil
                                     </v-icon>
                                     <v-icon
-																				v-show="crud_guard.delete"
+										v-show="crud_guard.delete"
                                         small
                                         @click="deleteItem(item)"
                                         color="red"
@@ -974,7 +1219,7 @@
                                                 v-slot:item.actions="{ item }"
                                             >
                                                 <v-icon
-																										v-show="crud_guard.view"
+													v-show="crud_guard.view"
                                                     small
                                                     class="mr-2"
                                                     @click="
@@ -989,7 +1234,7 @@
                                                 </v-icon>
                                                 <br />
                                                 <v-icon
-																										v-show="crud_guard.update"
+													v-show="crud_guard.update"
                                                     small
                                                     class="mr-2"
                                                     @click="editSubItem(item)"
@@ -1002,7 +1247,7 @@
                                                 </v-icon>
                                                 <br />
                                                 <v-icon
-																										v-show="crud_guard.delete"
+													v-show="crud_guard.delete"
                                                     small
                                                     @click="deleteSubItem(item)"
                                                     color="red"
@@ -1177,6 +1422,8 @@ export default {
       cso_description: "",
       cso_act_no: "",
       cso_lead_organization: "",
+      cso_indicator_mov : "",
+      cso_remarks : "",
       cso_status: "",
     },
     defaultItem: {
@@ -1184,6 +1431,8 @@ export default {
       cso_description: "",
       cso_act_no: "",
       cso_lead_organization: "",
+      cso_indicator_mov : "",
+      cso_remarks : "",
       cso_status: "",
     },
     cso_id: "",
@@ -1236,6 +1485,8 @@ export default {
     isSelecting: false,
     file_name: [],
     file_attached: [],
+    file2_name: [],
+    file2_attached: [],
     isRemove: false,
     isAddingNew: true,
   }),
@@ -1262,16 +1513,8 @@ export default {
   },
 
   methods: {
-    test_btn(){
-        Array.prototype.insert = function ( index, item ) {
-            this.splice( index, 0, item );
-        };
-        this.headers.insert(2,{text: "Emiddiate Outcome",
-        width: "10%",
-        align: "start",
-        sortable: true,
-        value: "cso_status"});
-    },
+      debug(){
+      },
     initialize() {
       document.title = "CSO² | Project Indicator";
 			axios.get('/user-roles-permission').then( response => {
@@ -1288,6 +1531,11 @@ export default {
       })
       category_items: ["Impact", "Outcome", "Activity"],
         (this.loadCSOIndicator = true);
+      // getLead organization list
+      axios.get("/get-lead-organization").then((res)=>{
+          this.lead_orgs = res.data
+      })
+      //
       axios.get("/get-categories").then((response) => {
         this.category_items = response.data;
       });
@@ -1329,13 +1577,6 @@ export default {
 
           if(this.selected_filter_item2.text) filter_value = this.selected_filter_item2.text
           else filter_value = this.selected_filter_item2
-        
-          this.lead_orgs = [];
-
-          response.data.forEach(element => {
-              if(!this.lead_orgs.includes(element.cso_lead_organization))
-                this.lead_orgs.push(element.cso_lead_organization)
-          });
 
           if( m_filter_value === "Lead Organization" && !(this.selected_filter_item === "All" || filter_value.length === 0))
             return response.data.filter(item => (item.cso_lead_organization == filter_value))
@@ -1360,18 +1601,73 @@ export default {
     },
     getIndicator: function (categorySelected) {
       this.catSelectedTab = categorySelected;
-      this.subHeaders[0].text = "Indicator #";
-      this.headers[0].text = categorySelected + " #";
+      this.headers = this.resetHeaders()
       if (categorySelected === "Output") {
         // todo
-        this.subHeaders[0].text = "Sub-Output #";
+        this.subHeaders[0].text = "Indicator #";
+        this.headers.splice(3,0,{
+            text: "MOV",
+            width: "8%",
+            align: "start",
+            sortable: true,
+            value: "cso_indicator_mov",
+        }),
+        this.headers.splice(5,0,{
+            text: "Remarks",
+            width: "10%",
+            align: "start",
+            sortable: true,
+            value: "cso_remarks",
+        })  
       } else if (categorySelected === "Activity") {
-        // todo
+        // todor
         this.subHeaders[0].text = "Sub-Activity #";
       }
+
+      console.log(this.indicators_list);
+
+      this.headers[0].text = categorySelected + " #";
+
       this.indicators_list = [];
       this.loadCSOIndicator = true;
       this.getFilteredIndicator();
+    },
+    resetHeaders(){
+        return [
+      {
+        text: "Activity #",
+        width: "10%",
+        align: "start",
+        sortable: true,
+        value: "cso_act_no",
+      },
+      {
+        text: "Description",
+        align: "start",
+        sortable: true,
+        value: "cso_description",
+      },
+      {
+        text: "Lead Organization",
+        align: "start",
+        sortable: true,
+        width: "15%",
+        value: "cso_lead_organization",
+      },
+      {
+        text: "Status",
+        value: "cso_status",
+        width: "10%",
+        sortable: true,
+      },
+      {
+        text: "Action",
+        value: "actions",
+        width: "10%",
+        align: "right",
+        sortable: false,
+      },{ text: "", value: "data-table-expand" }
+    ]
     },
     getFilteredIndicator() {
       axios
@@ -1382,8 +1678,13 @@ export default {
         });
     },
     editItem(item) {
+      this.isEditting = true;
+      this.isAddingNew = false;
+      console.log(this.isAddingNew, this.isEditting)
       this.editedIndex = this.indicators_list.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      this.file2_name = item.cso_indicator_mov;
+      this.file2_attached = item.cso_indicator_mov;
       this.dialog = true;
     },
 
@@ -1405,19 +1706,17 @@ export default {
     },
 
     detailsSubItem(item) {
+      this.isAddingNew = false;
       this.isEditting = false;
-      this.file_name = "";
+      this.file_name = '';
 
       this.formSubTitle = "Indicator Details";
       this.editedSubItem = Object.assign({}, item);
-      //console.log(this.editedSubItem.mov_file);
+      console.log('SUB HAS FILE',this.editedSubItem.mov_file);
+      if(this.editedSubItem.mov_file)
+        this.file_name = this.editedSubItem.mov_file;
       this.detailsReadonly = true;
       this.subdialog = true;
-
-      if (item.mov_file) {
-        this.file_name = item.mov_file;
-        this.isRemove = true;
-      }
     },
 
     editSubItem(item) {
@@ -1473,6 +1772,8 @@ export default {
     },
     newActivity() {
       this.dialog = true;
+      this.isAddingNew = true;
+      this.isEditting = false;
     },
     close() {
       this.detailsReadonly = false;
@@ -1482,7 +1783,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      this.file_name = "";
+      this.file_name = [];
       this.isEditting = false;
     },
 
@@ -1509,20 +1810,27 @@ export default {
     save() {
       this.btnLoader = true;
       let validate = true;
+      
       if (!this.editedItem.cso_category) {
         this.$noty.error("Category is empty!");
         validate = false;
       }
+
       if (!this.editedItem.cso_description) {
         this.$noty.error("Description is empty!");
         validate = false;
       }
+
       if (validate) {
+        var formData = new FormData();
+
+        formData.append("data", JSON.stringify(this.editedItem));
+        formData.append("form_mode", this.editedIndex);
+        formData.append("upload_file", this.file2_attached);
+        formData.append("file_name", this.file2_name);
+
         axios
-          .post("/save-cso-indicator", {
-            data: JSON.stringify(this.editedItem),
-            form_mode: this.editedIndex,
-          })
+          .post("/save-cso-indicator", formData)
           .then((response) => {
             if (response.data.success) {
               this.initialize();
@@ -1637,8 +1945,18 @@ export default {
     },
     removeFile: function (item) {
       this.file_name = [];
-      this.isRemove = false;
+      this.isRemove = true;
       this.file_attached = [];
+    },onFileChanged2: function (e) {
+      var files = e;
+      this.file2_attached = files;
+      this.file2_name = files.name;
+      this.isRemove = true;
+    },
+    removeFile2: function (item) {
+      this.file2_name = '';
+      this.file2_attached = '';
+      this.isRemove = true;
     },
 
     exportExcel: function (tableName, value) {
@@ -1663,6 +1981,9 @@ export default {
     // Generate Link for downloading MOV FileDesu
     getLink(file) {
       return `/downloadMov/?file_name=${file}`;
+    },
+    getLink2(file) {
+      return `/downloadCSOMov/?file_name=${file}`;
     },
   },
 };
