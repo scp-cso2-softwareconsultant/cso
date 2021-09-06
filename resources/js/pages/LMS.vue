@@ -10,9 +10,11 @@
                 <v-tab href="#Courses">
                     Courses
                 </v-tab>
+                <!--
                 <v-tab href="#TrainingAttendees">
                     Training Attendees
                 </v-tab>
+                -->
             </v-tabs>
 
             <v-tabs-items v-model="LMSTab">
@@ -22,9 +24,11 @@
                 <v-tab-item :key="2" value="Courses">
                     <Courses></Courses>
                 </v-tab-item>
+                <!-- 
                 <v-tab-item :key="3" value="TrainingAttendees">
                     <TrainingAttendees></TrainingAttendees>
                 </v-tab-item>
+                -->
             </v-tabs-items>
         </v-card>
     </v-app>
