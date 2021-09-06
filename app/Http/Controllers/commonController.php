@@ -169,30 +169,34 @@ class commonController extends Controller
         switch ($tableName){
             case "CSOIndicator":
                 $dataExport = DB::table("cso_indicator")->select(
-                        DB::raw("cso_indicator.cso_category AS Category"),
-                        DB::raw("cso_indicator.cso_act_no AS ActivityNo"),
-                        DB::raw("cso_indicator.cso_description AS Description"),
-                        DB::raw("cso_indicator.cso_status AS Status"),
-                        DB::raw("indicator.indicator_no AS 'Indicator No'"),
-                        DB::raw("indicator.indicator AS Indicator"),
-                        DB::raw("indicator.indicator_type AS Type"),
-                        DB::raw("indicator.data_source AS 'Data Source'"),
-                        DB::raw("indicator.frequency AS Frequency"),
-                        DB::raw("indicator.unit_measure AS 'Unit of Measure'"),
+                        DB::raw("cso_indicator.cso_category"),
+                        DB::raw("cso_indicator.cso_act_no"),
+                        DB::raw("cso_indicator.cso_description"),
+                        DB::raw("cso_indicator.cso_lead_organization"),
+                        DB::raw("cso_indicator.cso_status"),
+                        DB::raw("cso_indicator.cso_indicator_mov"),
+                        DB::raw("cso_indicator.cso_remarks"),
+                        DB::raw("indicator.indicator_no"),
+                        DB::raw("indicator.indicator"),
+                        DB::raw("indicator.indicator_type"),
+                        DB::raw("indicator.data_source"),
+                        DB::raw("indicator.frequency"),
+                        DB::raw("indicator.unit_measure"),
+                        DB::raw("indicator.indicator_status"),
+                        DB::raw("indicator.indicator_remarks"),
+                        DB::raw("indicator.mov_file"),
                         DB::raw("indicator.ppr AS PPR"),
-                        DB::raw("indicator.baseline_date AS 'Baseline Date'"),
-                        DB::raw("indicator.baseline_value AS 'Baseline Value'"),
-                        DB::raw("indicator.target_date AS 'Target Date'"),
-                        DB::raw("indicator.target_value AS 'Target Value'"),
-                        DB::raw("indicator.actual_date AS 'Actual Date'"),
-                        DB::raw("indicator.mov_file AS MOV")
+                        DB::raw("indicator.baseline_date"),
+                        DB::raw("indicator.baseline_value"),
+                        DB::raw("indicator.target_date"),
+                        DB::raw("indicator.target_value"),
+                        DB::raw("indicator.actual_date"),
                     )
                     ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
                     ->whereRaw("cso_indicator.deleted_at IS NULL")
                     ->whereRaw("indicator.deleted_at IS NULL")
                     ->where("cso_indicator.cso_category", $request['category'])
                     ->get();
-
                 break;
             case "CSOProfile":
                 $dataExport = DB::table("cso_profile")->select(
@@ -262,7 +266,7 @@ class commonController extends Controller
                     break;
             case "ProjectTrackingDocuments":
                 break;
-            case "Participants Profile":
+            case "ParticipantsProfile":
                 /*
                 "PARTICIPANT ID",
                 "PARTICIPANT NAME",
@@ -304,7 +308,7 @@ class commonController extends Controller
                     updated_by")
                 )->whereRaw("deleted_at IS NULL")->get();
             break; 
-            case "Training Attendees":
+            case "TrainingAttendees":
                 $dataExport = DB::table("training_attendees")
                 ->select(
                     DB::raw("

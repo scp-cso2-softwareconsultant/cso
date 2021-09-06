@@ -8,10 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Storage;
+
 
 //delete to later :: for loggin purpose only
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class CSOIndicatorController extends Controller
 {
@@ -24,7 +25,7 @@ class CSOIndicatorController extends Controller
     public function downloadMov(Request $request){
         Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
-        $path= Storage::disk('public')->path("cso_indicators_mov/Activity/$request->file_name");
+        $path= Storage::disk('public')->path("cso_indicators_mov/$request->category/$request->file_name");
         $content = file_get_contents($path);
         return response($content)->withHeaders([
             'Content-Type'=>mime_content_type($path),
@@ -140,7 +141,7 @@ class CSOIndicatorController extends Controller
             Log::info("UPDATE DATA");
         }
 
-        if($request->hasFile('upload_file')){
+        if($request->hasFile('upload_file') && $form_mode >= 0){
             Log::info('Theres File Woah!');
 
             // Get filename with the extension

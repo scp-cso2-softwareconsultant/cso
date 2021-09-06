@@ -9,7 +9,12 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class csoExport implements FromCollection, WithHeadings
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+
+//LOGING PURPOSE ONLY
+use Illuminate\Support\Facades\Log;
+
+class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
 {
     use Exportable;
     public $tableName = "";
@@ -23,15 +28,16 @@ class csoExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         $header = [];
+        Log::info($this->tableName);
         switch ($this->tableName){
-            case "CSO2 Indicator":
+            case "CSOIndicator":
                 $header = [
-                            'CATEGORY','ACTIVITY NO','DESCRIPTION', 'STATUS', 'INDICATOR NO', 'INDICATOR', 'TYPE', 'DATA SOURCE',
-                            'FREQUENCY', 'UNIT OF MEASURE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
-                            'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE', 'MOV'
+                            'CATEGORY','NO','DESCRIPTION','LEAD ORGANIZATION', 'INDICATOR STATUS', 'REMARKS', 'MOV FILE', 'SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
+                            'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
+                            'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
                         ];
                 break;
-            case "CSO Profile":
+            case "CSOProfile":
                 $header = [
                             'IS LRO', 'PROJECT AREA', 'FULL NAME OF THE CSO/CSO NETWORK', 'TYPE OF CSO/CSO NETWORK',
                             'ABBREVIATION', 'ADDRESS', 'TELEPHONE', 'MOBILE NUMBER', 'EMAIL ADDRESS',
@@ -39,7 +45,7 @@ class csoExport implements FromCollection, WithHeadings
                             'OTHER SOCIAL MEDIA ACCOUNT'
                         ];
                 break;
-            case "Finance Tracker":
+            case "FinanceTracker":
                 $header = [
                             'CODE', 'NAME', 'LOCATION', 'COST CENTER', 'PROJECT CODE', 'SOF', 'DEA', 'PARTNERS NAME',
                             'BUDGET', '1ST TRANCHE', '2ND TRANCHE', '3RD TRANCHE', '4TH TRANCHE', 'RETENTION', 'TOTAL',
@@ -53,9 +59,9 @@ class csoExport implements FromCollection, WithHeadings
                     "CREATED BY","UPDATED AT","UPDATED BY"
                 ];  
                 break;
-            case "Project Tracking Document":
+            case "ProjectTrackingDocument":
                 break;
-            case "Participant Profile":
+            case "ParticipantProfile":
                 $header = [
                     "PARTICIPANT ID",
                     "PARTICIPANT NAME",
@@ -77,7 +83,7 @@ class csoExport implements FromCollection, WithHeadings
                 "CREATED AT","CREATED BY","UPDATED AT","UPDATED BY"    
             ];
                 break;
-                case "Training Attendees":
+                case "TrainingAttendees":
                     $header = [
                         "TRAINING ID","PARTICIPANT ID","PARTICIPANT NAME","COURSE NAME",
                         "PROJECT AREA","DATE STARTED","DATE COMPLETED","MODE OF TRAINING","NO HOURS","CONDUCTED BY","VENUE",
@@ -85,7 +91,7 @@ class csoExport implements FromCollection, WithHeadings
                     ];
                 break;
         }
-
+        Log::info($this->tableName);
         return $header;
     }
 

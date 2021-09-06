@@ -2,7 +2,7 @@
     <v-app>
         <h3 class="subheading grey--text">
             CSO² Project Indicator
-            <button @click="debug">TEST</button>
+            <!-- <button @click="debug">TEST</button> -->
         </h3>
                                         <v-dialog v-model="dialog" max-width="500px">
                                             <!-- Hello World -->
@@ -1513,8 +1513,7 @@ export default {
   },
 
   methods: {
-      debug(){
-      },
+    // debug(){},
     initialize() {
       document.title = "CSO² | Project Indicator";
 			axios.get('/user-roles-permission').then( response => {
@@ -1622,6 +1621,8 @@ export default {
       } else if (categorySelected === "Activity") {
         // todor
         this.subHeaders[0].text = "Sub-Activity #";
+      }else{
+          this.subHeaders[0].text = "Indicator #";
       }
 
       console.log(this.indicators_list);
@@ -1683,6 +1684,8 @@ export default {
       console.log(this.isAddingNew, this.isEditting)
       this.editedIndex = this.indicators_list.indexOf(item);
       this.editedItem = Object.assign({}, item);
+
+      console.log(this.editedItem.cso_indicator_mov)
       this.file2_name = item.cso_indicator_mov;
       this.file2_attached = item.cso_indicator_mov;
       this.dialog = true;
@@ -1980,7 +1983,7 @@ export default {
     },
     // Generate Link for downloading MOV FileDesu
     getLink(file) {
-      return `/downloadMov/?file_name=${file}`;
+      return `/downloadMov/?file_name=${file}&category=${this.catSelectedTab}`;
     },
     getLink2(file) {
       return `/downloadCSOMov/?file_name=${file}`;
