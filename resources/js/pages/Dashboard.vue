@@ -189,7 +189,7 @@ export default {
                     const selectedCategory =  this.editedItem.CSO2Indicators? this.editedItem.CSO2Indicators : 'lead SCP'; 
                     for( let i = 0 ; i < data.length ; i ++)
                         if( data[i].cso_lead_organization === selectedCategory )
-                            this.CSOIndicatorSeries[this.CSOIndicatorChartOptions.labels.indexOf(data[i].cso_status) ]+=1;
+                            this.CSOIndicatorSeries[this.CSOIndicatorChartOptions.labels.indexOf(data[i].cso_status) ]+=1;                            
                 })
             });
         },
