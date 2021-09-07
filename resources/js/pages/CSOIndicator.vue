@@ -1304,6 +1304,7 @@ export default {
       { text: "Output", value: "Output" },
       { text: "Outcome", value: "Outcome" },
       { text: "Impact", value: "Impact" },
+      { text: "Intermediate Outcomes", value: "Intermediate Outcomes" }
     ],
     category_items: [],
     indicator_type_list: [],
@@ -1528,7 +1529,7 @@ export default {
           }
         }
       })
-      category_items: ["Impact", "Outcome", "Activity"],
+      category_items: ["Impact", "Outcome", "Activity","Intermediate Outcomes"],
         (this.loadCSOIndicator = true);
       // getLead organization list
       axios.get("/get-lead-organization").then((res)=>{

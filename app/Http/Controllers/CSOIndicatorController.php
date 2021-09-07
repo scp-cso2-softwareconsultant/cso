@@ -196,6 +196,7 @@ class CSOIndicatorController extends Controller
                 'created_by' => $user_name,
 
             ]);
+            $this->autoChangeStatus($cso_id);
             if($insertData) $success=true;
         }else{
             $updateData = DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update(array(
@@ -218,29 +219,7 @@ class CSOIndicatorController extends Controller
             ));
 
             $getCsoIndicatorId = DB::table('indicator')->select('cso_indicator_id')->where('indicator_id',$raw_data->indicator_id)->get();
-            
-            $indicators = DB::table('indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)->whereNull('deleted_at')
-            ->get();
-
-            $isCompleted = true;
-
-            foreach($indicators as $r){
-               if($r->indicator_status != 'Completed' && $r->indicator_status != 'Cancelled'){
-                   $isCompleted = false;
-                   break;
-               }
-           }
-
-           if($isCompleted){
-                $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)
-                ->update(array('cso_status' => 'Completed'));
-            }
-            else{
-                $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$getCsoIndicatorId->first()->cso_indicator_id)
-                ->update(array(
-                    'cso_status' => 'In Progress',
-                ));
-            }
+            $this->autoChangeStatus($getCsoIndicatorId->first()->cso_indicator_id);
         }
 
         if($request->hasFile('upload_file')){
@@ -265,8 +244,30 @@ class CSOIndicatorController extends Controller
         return response()->json($data_arr, 200);
     }
 
-    public function deleteCSOIndicator(Request $request){
+    public function autoChangeStatus($cso_indicator_id){
+        $indicators = DB::table('indicator')->where('cso_indicator_id',$cso_indicator_id)->whereNull('deleted_at')
+        ->get();
 
+        $isCompleted = true;
+
+        foreach($indicators as $r){
+           if($r->indicator_status != 'Completed' && $r->indicator_status != 'Cancelled'){
+               $isCompleted = false;
+               break;
+           }
+       }
+
+       if($isCompleted){
+            $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$cso_indicator_id)
+            ->update(array('cso_status' => 'Completed'));
+        }
+        else{
+            $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$cso_indicator_id)
+            ->update(array('cso_status' => 'In Progress'));
+        }
+    }
+
+    public function deleteCSOIndicator(Request $request){
         $ID = $request['delete_id'];
         $success = false;
         $user = Auth::user();
