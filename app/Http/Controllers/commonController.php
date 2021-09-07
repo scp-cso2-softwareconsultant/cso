@@ -21,7 +21,6 @@ class commonController extends Controller
                 $status_list[$key] = json_decode(json_encode($row), true);
             }
         }
-
         return $status_list;
     }
 

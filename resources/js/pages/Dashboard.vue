@@ -10,7 +10,7 @@
             </p>
             <p class="card-text text-center">
                 <small class="text-muted">
-                    <v-select v-on:change="CSO2IndicatorsChart()" v-model="editedItem.CSO2Indicators" :items="responsibleOrganization" class="p-3" label="Category *" dense ></v-select>                     
+                    <v-select chips v-on:change="CSO2IndicatorsChart()" v-model="editedItem.CSO2Indicators" :items="responsibleOrganization" class="p-3" label="Category *" dense ></v-select>                     
                 </small>
             </p>
         </div>
@@ -169,7 +169,11 @@ export default {
             this.assessment();
             this.financeTracker();
             this.ProjectTrackingDocument();
-            this.responsibleOrganization = ["lead SCP", "Ateneo CORD", "AHA BD", "PICPA"]
+
+            axios.get("/get-lead-organization").then((res)=>{
+                this.responsibleOrganization = res.data
+            })
+
             this.editedItem.CSO2Indicators =  this.responsibleOrganization[0];
         },
         
@@ -179,19 +183,15 @@ export default {
                 const data =  response.data;
                 for( let i = 0 ; i <  data.length ; i ++) labels.push( data[i].value );
                 this.CSOIndicatorChartOptions = { ...this.CSOIndicatorChartOptions ,  labels: labels };
-                axios.get('/dashboard-cso-indicator' ).then( response => {
-                    
-                    const series = new Array( this.CSOIndicatorChartOptions .labels.length ).fill(0);
+                axios.get('/dashboard-cso-indicator').then( response => {
+                    this.CSOIndicatorSeries = new Array( this.CSOIndicatorChartOptions .labels.length ).fill(0);
                     const data =  response.data;
-                    // console.log(  response.data )
-                    const selectedCategory =  this.editedItem.CSO2Indicators; 
+                    const selectedCategory =  this.editedItem.CSO2Indicators? this.editedItem.CSO2Indicators : 'lead SCP'; 
                     for( let i = 0 ; i < data.length ; i ++)
-                        if( data[i].cso_description.includes( selectedCategory  ))
-                            series[  this.CSOIndicatorChartOptions.labels.indexOf(data[i].cso_status) ]+=1;
-                    this.CSOIndicatorSeries =  series ;
+                        if( data[i].cso_lead_organization === selectedCategory )
+                            this.CSOIndicatorSeries[this.CSOIndicatorChartOptions.labels.indexOf(data[i].cso_status) ]+=1;
                 })
             });
-            
         },
         
         CSOProfile(){
@@ -258,8 +258,9 @@ export default {
             CSO2Indicators: 'lead SCP'
         },
         responsibleOrganization: [],
-        CSOIndicatorSeries: [44, 55, 13, 43],
+        CSOIndicatorSeries: [1,1,1,1,1],
         CSOIndicatorChartOptions: {
+            colors:['#ff9800', '#2196f3', '#4caf50','#f44336','#9e9e9e'],
             chart: {
                 width: 380,
                 type: 'pie',

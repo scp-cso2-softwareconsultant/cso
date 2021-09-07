@@ -103,6 +103,32 @@ class CSOIndicatorController extends Controller
         return $cso_indicator;
     }
 
+    public function getCSOIndicatorListDashboard(Request $request){
+        $get_indicator = DB::table("cso_indicator")
+            ->whereRaw(DB::raw("deleted_at IS NULL"))
+            ->get();
+        $cso_indicator = [];
+        if($get_indicator){
+            foreach ($get_indicator as $key => $row){
+                $cso_indicator[$key] = json_decode(json_encode($row), true);
+                $get_details = DB::table("indicator")
+                    ->where("cso_indicator_id", $row->cso_indicator_id)
+                    ->whereRaw("deleted_at IS NULL")
+                    ->orderBy("indicator_no")
+                    ->get();
+                $cso_details = [];
+                if($get_details){
+                    foreach ($get_details as $dKey => $dRow){
+                        $cso_details[$dKey] = json_decode(json_encode($dRow), true);
+                    }
+                    $cso_indicator[$key]['subItems'] = $cso_details;
+                }
+            }
+        }
+
+        return $cso_indicator;
+    }
+
     public function saveCSOIndicator(Request $request){
 
         $raw_data = json_decode($request['data']);

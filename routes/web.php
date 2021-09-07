@@ -33,7 +33,7 @@ Route::group(['middleware'=> ['auth']], function (){
 
 // Dashboard 
     Route::group(['middleware' => 'roles_permission:Dashboard,view' ], function() {
-        Route::get('/dashboard-cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicator'])->name('dashboard-cso-indicator')->middleware('roles_permission:Dashboard,view');
+        Route::get('/dashboard-cso-indicator', [App\Http\Controllers\CSOIndicatorController::class, 'getCSOIndicatorListDashboard'])->name('dashboard-cso-indicator')->middleware('roles_permission:Dashboard,view');
         Route::get('/dashboard-cso-profile', [App\Http\Controllers\CSOProfileController::class, 'getCSOProfile'])->name('dashboard-cso-profile')->middleware('roles_permission:Dashboard,view');
     });
     
