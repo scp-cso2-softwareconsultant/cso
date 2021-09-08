@@ -22,6 +22,14 @@ class CSOIndicatorController extends Controller
         return User::all();
     }
 
+    /**
+     * This returns & downloads requested (sub item)MOV File
+     *
+     * @param Request $request params/data file_name
+     * 
+     * @author Senpai Dev Team
+     * @return file Requested File
+     */ 
     public function downloadMov(Request $request){
         Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
@@ -34,6 +42,14 @@ class CSOIndicatorController extends Controller
         ]);
     }
 
+    /**
+     * This returns & downloads requested CSO MOV file
+     *
+     * @param Request $request params/data file_name
+     * 
+     * @author Senpai Dev Team
+     * @return file Requested File
+     */ 
     public function downloadCSOMov(Request $request){
         Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
@@ -46,6 +62,14 @@ class CSOIndicatorController extends Controller
         ]);
     }
 
+    /**
+     * This returns all data from cso_indicator table with a category of 'Activity' sub data from indicator table
+     *
+     * @param Request $request params/data
+     * 
+     * @author Senpai Dev Team
+     * @return cso_indicator db result
+     */ 
     public function getCSOIndicator(){
         $get_category = DB::table("categories")->where("seq",1)->first();
         $category = "Activity";
@@ -76,6 +100,14 @@ class CSOIndicatorController extends Controller
         return $cso_indicator;
     }
 
+    /**
+     * This returns all data from cso_indicator table with sub data from indicator table
+     *
+     * @param Request $request params/data
+     * 
+     * @author Senpai Dev Team
+     * @return cso_indicator db result
+     */ 
     public function getCSOIndicatorList(Request $request){
         $get_indicator = DB::table("cso_indicator")
             ->where("cso_category",$request['category'])
@@ -103,8 +135,49 @@ class CSOIndicatorController extends Controller
         return $cso_indicator;
     }
 
-    public function saveCSOIndicator(Request $request){
+    /**
+    *
+    * Uncomment The function below if client want all data not only activities to be return for dashboard
+    *
+    * @return      array 
+    *
+    */
+    // public function getCSOIndicatorListDashboard(Request $request){
+    //     $get_indicator = DB::table("cso_indicator")
+    //         ->whereRaw(DB::raw("deleted_at IS NULL"))
+    //         ->get();
+    //     $cso_indicator = [];
+    //     if($get_indicator){
+    //         foreach ($get_indicator as $key => $row){
+    //             $cso_indicator[$key] = json_decode(json_encode($row), true);
+    //             $get_details = DB::table("indicator")
+    //                 ->where("cso_indicator_id", $row->cso_indicator_id)
+    //                 ->whereRaw("deleted_at IS NULL")
+    //                 ->orderBy("indicator_no")
+    //                 ->get();
+    //             $cso_details = [];
+    //             if($get_details){
+    //                 foreach ($get_details as $dKey => $dRow){
+    //                     $cso_details[$dKey] = json_decode(json_encode($dRow), true);
+    //                 }
+    //                 $cso_indicator[$key]['subItems'] = $cso_details;
+    //             }
+    //         }
+    //     }
 
+    //     return $cso_indicator;
+    // }
+
+
+    /**
+     * This saves cso new or edited item
+     *
+     * @param Request $request params/data object
+     * 
+     * @author Senpai Dev Team
+     * @return Status return status code
+     */ 
+    public function saveCSOIndicator(Request $request){
         $raw_data = json_decode($request['data']);
         $form_mode = $request['form_mode'];
         $success = false;
@@ -164,6 +237,14 @@ class CSOIndicatorController extends Controller
         return response()->json($data_arr, 200);
     }
 
+     /**
+     * This saves cso new or edited sub item
+     *
+     * @param Request $request params/data object
+     * 
+     * @author Senpai Dev Team
+     * @return Status return status code
+     */ 
     public function saveCSOIndicatorDetails(Request $request){
         $_raw_data = json_decode($request['data'], true);
         $raw_data = json_decode($request['data']);
@@ -244,6 +325,14 @@ class CSOIndicatorController extends Controller
         return response()->json($data_arr, 200);
     }
 
+     /**
+     * This auto update cso indicator table cso status column based on sub item's statuses
+     *
+     * @param String $string which contains cso_indicator_id
+     * 
+     * @author Senpai Dev Team
+     * @return void return nothing
+     */ 
     public function autoChangeStatus($cso_indicator_id){
         $indicators = DB::table('indicator')->where('cso_indicator_id',$cso_indicator_id)->whereNull('deleted_at')
         ->get();
@@ -267,6 +356,14 @@ class CSOIndicatorController extends Controller
         }
     }
 
+    /**
+     * This marks a record from cso_indicator table as deleted
+     *
+     * @param Request $string which contains delete_id (cso_indicator_id)
+     * 
+     * @author Senpai Dev Team
+     * @return Status return status code
+     */ 
     public function deleteCSOIndicator(Request $request){
         $ID = $request['delete_id'];
         $success = false;
@@ -281,6 +378,14 @@ class CSOIndicatorController extends Controller
         return response()->json($data_arr, 200);
     }
 
+     /**
+     * This marks a record from indicator table as deleted
+     *
+     * @param Request $string which contains delete_id (indicator_id)
+     * 
+     * @author Senpai Dev Team
+     * @return Status return status code
+     */ 
     public function deleteCSOIndicatorDetails(Request $request){
 
         $ID = $request['delete_id'];
@@ -296,6 +401,13 @@ class CSOIndicatorController extends Controller
         return response()->json($data_arr, 200);
     }
 
+    /**
+     * This code is from the first dev of this project, i think it's the same 
+     * with the autoChangeStatus that we've made, we didn't use this anymore
+     * due to changes during client's meeting
+     * 
+     * @author UNKNOWN
+     */ 
     public function computeCompletion($cso_id,$current_status){
         // count total indicator
         $total_count = 0;
