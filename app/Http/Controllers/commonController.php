@@ -16,106 +16,81 @@ class commonController extends Controller
     public function getLROStatus(){
         $get_status = DB::table("lro_status")->select(DB::raw("status_name as text, status_name as value"))->get();
         $status_list = [];
-        if($get_status){
-            foreach ($get_status as $key => $row){
+        if($get_status)
+            foreach ($get_status as $key => $row)
                 $status_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
         return $status_list;
     }
 
     public function getDocumentType(){
         $get_type = DB::table("document_type")->select(DB::raw("document_type as text, document_type as value"))->get();
         $type_list = [];
-        if($get_type){
-            foreach ($get_type as $key => $row){
+        if($get_type)
+            foreach ($get_type as $key => $row)
                 $type_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $type_list;
     }
 
     public function getDocumentOwner(){
         $get_owner = DB::table("document_owner")->select(DB::raw("document_owner as text, document_owner as value"))->get();
         $owner_list = [];
-        if($get_owner){
-            foreach ($get_owner as $key => $row){
+        if($get_owner)
+            foreach ($get_owner as $key => $row)
                 $owner_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $owner_list;
     }
 
     public function getCategories(){
         $get_categories = DB::table("categories")->select(DB::raw("category as text, category as value"))->orderBy("seq")->get();
         $category_list = [];
-        if($get_categories){
-            foreach ($get_categories as $key => $row){
+        if($get_categories)
+            foreach ($get_categories as $key => $row)
                 $category_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $category_list;
     }
 
     public function getIndicatorStatus(){
         $get_status = DB::table("indicator_status")->select(DB::raw("indicator_status as text, indicator_status as value"))->get();
         $status_list = [];
-        if($get_status){
-            foreach ($get_status as $key => $row){
+        if($get_status)
+            foreach ($get_status as $key => $row)
                 $status_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $status_list;
     }
 
     public function getLeadOrgs(){
         $leadOrgs = DB::table("lead_organization")->select(DB::raw("organization_name as text, organization_name as value"))->get();
         $leadOrgs_list = [];
-        if($leadOrgs){
-            foreach ($leadOrgs as $key => $row){
+        if($leadOrgs)
+            foreach ($leadOrgs as $key => $row)
                 $leadOrgs_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $leadOrgs_list;
     }
 
     public function getFrequencies(){
         $get_frequencies = DB::table("frequencies")->select(DB::raw("frequency as text, frequency as value"))->get();
         $frequency_list = [];
-        if($get_frequencies){
-            foreach ($get_frequencies as $key => $row){
+        if($get_frequencies)
+            foreach ($get_frequencies as $key => $row)
                 $frequency_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $frequency_list;
     }
 
     public function getIndicatorType(){
         $get_type = DB::table("indicator_type")->select(DB::raw("indicator_type as text, indicator_type as value"))->get();
         $type_list = [];
-        if($get_type){
-            foreach ($get_type as $key => $row){
+        if($get_type)
+            foreach ($get_type as $key => $row)
                 $type_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $type_list;
     }
 
     public function getParticipants(){
         $get_participant = DB::table("participant_profile")->select(DB::raw("participant_name as text, participant_id as value"))->get();
         $participant_list = [];
-        if($get_participant){
-            foreach ($get_participant as $key => $row){
+        if($get_participant)
+            foreach ($get_participant as $key => $row)
                 $participant_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
 
         return $participant_list;
     }
@@ -123,12 +98,9 @@ class commonController extends Controller
     public function getCourses(){
         $get_course = DB::table("courses")->select(DB::raw("course_name as text, course_id as value"))->get();
         $course_list = [];
-        if($get_course){
-            foreach ($get_course as $key => $row){
+        if($get_course)
+            foreach ($get_course as $key => $row)
                 $course_list[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $course_list;
     }
 

@@ -198,6 +198,7 @@ export default {
             axios.get('/dashboard-cso-profile').then( response => {
                 const data = response.data; 
                 let legends = {}; 
+
                 for( let i = 0; i < data.length ; i++)
                     legends[data[i].cso_type] = isNaN(legends[data[i].cso_type] )? 1 :legends[data[i].cso_type]+1;  
                 
@@ -206,13 +207,25 @@ export default {
                 Object.entries(  legends  ).forEach( ([key, value]) =>{
                     labels.push( key );
                     series.push( value );
-                    
                 });
+
                 this.CSOProfileTypesOfOrganizationSeries = series ;
                 this.CSOProfileTypesOfOrganizationChartOptions = {
                     ...this.CSOProfileTypesOfOrganizationChartOptions,
                     labels: labels,
                 }
+
+                console.log(this.CSOProfilePrimaryStakeholderSeries[0].data)
+                this.CSOProfilePrimaryStakeholderSeries[0] = { data : new Array(6).fill(0) }
+
+        //         CSOProfilePrimaryStakeholderSeries: [{data: [21, 40, 60, 35, 12, 40]}]
+                console.log(this.CSOProfilePrimaryStakeholderSeries[0].data)
+                for( let i = 0; i < data.length ; i++){
+                        let insertIndex = this.CSOProfilePrimaryStakeholderChartOptions.xaxis.categories.indexOf(data[i].cso_stakeholders)
+                        this.CSOProfilePrimaryStakeholderSeries[0].data[insertIndex]+= 1;                        
+                }
+
+                console.log(this.CSOProfilePrimaryStakeholderSeries[0].data)
             })
 
             // CSOProfileAccreditationBodiesSeries:
@@ -252,6 +265,8 @@ export default {
     },
     created (){
         this.initialize()
+    },
+    mounted (){
     },
     data: ()=>({
         editedItem:{
@@ -317,7 +332,7 @@ export default {
             }]
         },
         CSOProfilePrimaryStakeholderSeries: [{
-            data: [21, 40, 60, 35, 12, 40]
+            data: [1,1,1,1,1,1]
         }],
         CSOProfilePrimaryStakeholderChartOptions: {
             chart: {
@@ -583,6 +598,5 @@ export default {
         },
         
     }),
-  
 }
 </script>
