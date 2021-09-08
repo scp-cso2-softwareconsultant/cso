@@ -885,13 +885,6 @@
                     value="100"
                     >{{ stats.value }}</v-progress-linear
                 >
-
-                <v-progress-linear
-                    indeterminate
-                    class="rounded-bottom text-white text-center"
-                    height="2"
-                    :color="getColor(stats.text)"
-                ></v-progress-linear>
             </v-col>
         </div>
         <br />
@@ -1301,11 +1294,11 @@ export default {
     btnLoader: false,
     detailsReadonly: false,
     category_tabs: [
-      { text: "Activity", value: "Activity" },
+      { text: "Activity", value : "Activity" },
       { text: "Output", value: "Output" },
       { text: "Outcome", value: "Outcome" },
       { text: "Impact", value: "Impact" },
-      { text: "Intermediate Outcomes", value: "Intermediate Outcomes" }
+      //{ text: "Intermediate Outcomes", value: "Intermediate Outcomes" }
     ],
     category_items: [],
     indicator_type_list: [],
@@ -1515,7 +1508,6 @@ export default {
   },
 
   methods: {
-    // debug(){},
     initialize() {
       document.title = "CSO² | Project Indicator";
 			axios.get('/user-roles-permission').then( response => {
@@ -1553,25 +1545,16 @@ export default {
       //     status_list: ['Entry', 'In Progress', 'Completed', 'Delayed'],
       this.loadCSOIndicator = true;
       axios.get("/get-indicator-status").then((response) => {
-        // console.log( response.data )
         this.status_list = response.data;
       });
 
       if (this.catSelectedTab === "Activity")
         axios.get("/cso-indicator").then((response) => {
-          
-          //console.log(this.indicators_list);
-          // this.indicators_list.map(function(item) {
-          //     delete item.cso_category;
-          //     return item;
-          // });
           this.indicators_list = this.filterData(response);
-
           this.loadCSOIndicator = false;
         });
       else this.getFilteredIndicator();
     },
-    //filter response before displaying to table
     filterData(response){
         var m_filter_value = this.selected_filter_item;
           var filter_value = '';
@@ -1604,7 +1587,6 @@ export default {
       this.catSelectedTab = categorySelected;
       this.headers = this.resetHeaders()
       if (categorySelected === "Output") {
-        // todo
         this.subHeaders[0].text = "Indicator #";
         this.headers.splice(3,0,{
             text: "MOV",
@@ -1621,13 +1603,11 @@ export default {
             value: "cso_remarks",
         })  
       } else if (categorySelected === "Activity") {
-        // todor
         this.subHeaders[0].text = "Sub-Activity #";
       }else{
           this.subHeaders[0].text = "Indicator #";
       }
 
-      console.log(this.indicators_list);
 
       this.headers[0].text = categorySelected + " #";
 
