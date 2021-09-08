@@ -71,6 +71,9 @@
                                                                     v-model="
                                                                         editedItem.cso_lead_organization
                                                                     "
+                                                                    :rules="[
+                                                                        rules.required
+                                                                    ]"
                                                                     label="Lead Organization *"
                                                                     dense
                                                                 ></v-select>
@@ -143,7 +146,7 @@
                                                                 sm="12"
                                                                 md="12"
                                                             >
-                                                                <p class="mt-4 font-weight-bold">Attatched File</p>
+                                                                <p class="mt-4 font-weight-bold">Attached File</p>
                                                                 <div v-if='isAddingNew'>
                                                                     <p>You can't add MOV on create, You can add it later on Edit</p>
                                                                 </div>
@@ -201,12 +204,10 @@
                                             v-model="dialogDelete"
                                             max-width="500px"
                                         >
-                                            <v-card>
-                                                <v-card-title class="text-h5"
-                                                    >Are you sure you want to
+                                            <v-card class="text-center">
+                                                    <h6 class="text-center text-xl pt-4">Are you sure you want to
                                                     delete this
-                                                    item?</v-card-title
-                                                >
+                                                    item?</h6>
                                                 <v-card-actions>
                                                     <v-spacer></v-spacer>
                                                     <v-btn
@@ -742,7 +743,7 @@
                                                                 cols="12"
                                                                 sm="12"
                                                                 md="12"
-                                                            ><p class="mt-4 font-weight-bold">Attatched File</p>
+                                                            ><p class="mt-4 font-weight-bold">Attached File</p>
                                                                 <!-- <div
                                                                     v-if="
                                                                         isEditting
@@ -750,7 +751,7 @@
                                                                 >   
                                                                     <div v-if="isAddingNew">
                                                                         <template>
-                                                                            <p>No Attatched MOV (You can only attatch file on Edit after saving this)</p>
+                                                                            <p>No Attached MOV (You can only attatch file on Edit after saving this)</p>
                                                                         </template>
                                                                     </div>
                                                                     <div
@@ -809,7 +810,7 @@
                                                                         </a>
                                                                     </template>
                                                                     <template v-else>
-                                                                        <p>No Attatched MOV </p>
+                                                                        <p>No Attached MOV </p>
                                                                     </template>
                                                                 </div> -->
                                                                 <div v-if='isAddingNew'>
@@ -1822,6 +1823,11 @@ export default {
 
       if (!this.editedItem.cso_description) {
         this.$noty.error("Description is empty!");
+        validate = false;
+      }
+
+      if (!this.editedItem.cso_lead_organization) {
+        this.$noty.error("Lead Organization is empty!");
         validate = false;
       }
 

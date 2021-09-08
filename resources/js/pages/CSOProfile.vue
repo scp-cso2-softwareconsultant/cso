@@ -51,14 +51,14 @@
                                             <v-select
                                                 :items="isLRO_list"
                                                 v-model="editedItem.is_lro"
-                                                label="Is LRO? *" dense
+                                                label="Is LRO Supported? *" dense
                                                 :rules="[rules.required]"
                                             ></v-select>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0" v-if="detailsReadonly">
                                         <v-col cols="12" sm="12" md="12" >
-                                            <v-text-field v-model="editedItem.is_lro" label="Is LRO? *" dense readonly></v-text-field>
+                                            <v-text-field v-model="editedItem.is_lro" label="Is LRO Supported? *" dense readonly></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0" v-if="!detailsReadonly">

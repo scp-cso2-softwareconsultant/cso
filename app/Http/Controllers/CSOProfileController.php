@@ -13,12 +13,9 @@ class CSOProfileController extends Controller
     public function getCSOProfile(){
         $get_profile = DB::table("cso_profile")->whereRaw(DB::raw("deleted_at IS NULL"))->get();;
         $cso_profile = [];
-        if($get_profile){
-            foreach ($get_profile as $key => $row){
+        if($get_profile)
+            foreach ($get_profile as $key => $row)
                 $cso_profile[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $cso_profile;
     }
 
@@ -27,12 +24,9 @@ class CSOProfileController extends Controller
                         ->select(DB::raw("cso_profile_id as value, cso_name as text"))
                         ->where("is_lro", "Yes")->get();
         $cso_profile = [];
-        if($get_profile){
-            foreach ($get_profile as $key => $row){
+        if($get_profile)
+            foreach ($get_profile as $key => $row)
                 $cso_profile[$key] = json_decode(json_encode($row), true);
-            }
-        }
-
         return $cso_profile;
     }
 
