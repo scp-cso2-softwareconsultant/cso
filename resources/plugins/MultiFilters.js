@@ -18,12 +18,28 @@ class MultiFilters {
 			return false;
 		return true;
 	}
+
+
 	string_cleaner = (item) => {
 		if (this.is_valid_value(item))
 			return item.toString().toLowerCase().replace(/\s+/g, ' ').trim();
 		return "";
 	}
 
+	logical_operators_comparison( {selection_value, filter_value_num ,value }){
+		if (selection_value == '==') {
+			if (!(filter_value_num == value)) return false;
+		} else if (selection_value == '>=') {
+			if (!(filter_value_num >= value)) return false;
+		} else if (selection_value == '<=') {
+			if (!(filter_value_num <= value)) return false;
+		} else if (selection_value == '>') {
+			if (!(filter_value_num > value)) return false;
+		} else if (selection_value == '<') {
+			if (!(filter_value_num < value)) return false;
+		}
+		return true;
+	}
 	// For numbers ================================================
 	custom_filter_numbers = ({
 		item,
@@ -53,16 +69,8 @@ class MultiFilters {
 			if (selection_value != 'range' && !isNaN(filter_value) && this.is_valid_value(filter_value)) {
 				const value = parseFloat(item_value);
 				const filter_value_num = parseFloat(filter_value);
-				if (selection_value == '==') {
-					if (!(filter_value_num == value)) return false;
-				} else if (selection_value == '>=') {
-					if (!(filter_value_num >= value)) return false;
-				} else if (selection_value == '<=') {
-					if (!(filter_value_num <= value)) return false;
-				} else if (selection_value == '>') {
-					if (!(filter_value_num > value)) return false;
-				} else if (selection_value == '<') {
-					if (!(filter_value_num < value)) return false;
+				if( ! this.logical_operators_comparison( {selection_value, filter_value_num ,value }) ){
+					return false;
 				}
 			}
 		}
@@ -93,13 +101,21 @@ class MultiFilters {
 		return true;
 	}
 	custom_filter_date = ({ item, all_filters, filter, item_value, filter_item, filter_value }) =>{
-		const value  = new Date(item_value).getTime();
-		const filter_value_num =  new Date(filter_value).getTime();
+		
 
 		const inherited = item.inherit_value;
-	
 		if ('inherit_value' in item && all_filters[inherited + "_selection"].value == 'range') {
-			
+			const min_value  = new Date( all_filters[inherited + "_min"].value ).getTime();
+			const max_value = new Date( all_filters[inherited + "_max"].value ).getTime();
+			const filter_value_num = new Date(filter[inherited]).getTime();
+			if (filter_value_num < min_value || filter_value_num > max_value) return false;
+		}else{
+			const selection_value = all_filters[filter_item + "_selection"].value;
+			const value  = new Date(item_value).getTime();
+			const filter_value_num =  new Date(filter_value).getTime();
+			if( ! this.logical_operators_comparison( {selection_value, filter_value_num ,value }) ){
+				return false;
+			}
 		}
 		return true;
 	}
@@ -108,7 +124,6 @@ class MultiFilters {
 		const items = this.items;
 		const search = this.search;
 		const filter = this.filter;
-		console.log("hello world")
 		for (const filter_item in all_filters) {
 			const item = all_filters[filter_item];
 			const item_value = item.value;
@@ -117,7 +132,6 @@ class MultiFilters {
 				const filter_value = filter[filter_item];
 
 				if (!this.is_valid_value(filter_value) && !('inherit_value' in item)) continue;
-
 				if ('date_range' in item && item.date_range){
 					if (!this.custom_filter_date({
 						item,
@@ -155,6 +169,7 @@ class MultiFilters {
 	}
 
 	static changeFilterActiveValue(key, filter, active_key, active_value) {
+		
 		if (this.is_valid_value(key) && !this.is_valid_value(active_value))
 			for (const item in filter)
 				if (this.is_valid_value(item) && item != key && 'value' in filter[item] && this.is_valid_value(filter[item].value))
