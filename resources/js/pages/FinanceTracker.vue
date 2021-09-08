@@ -6,19 +6,14 @@
             <v-data-table
                 :headers="headers"
                 :items="financeList"
-                :search="searchBy"
+                :search="filters.filter_items[filters.filter_items_active].value"
                 :loading="loadFinanceTracker"
+                :custom-filter="filterItems"
                 class="elevation-1"
             >
                 <template v-slot:top>
                     <v-toolbar flat>
-                        <v-text-field
-                            v-model="searchBy"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            single-line
-                            hide-details
-                        ></v-text-field>
+                        
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on, attrs }">
@@ -452,7 +447,236 @@
                             <v-icon color="green">mdi-microsoft-excel</v-icon>
                         </v-btn>
                     </v-toolbar>
+                    <v-row  no-gutters style="flex-wrap: nowrap;"  class='my-3'>
+                        <v-col cols="6" class="flex-grow-0 flex-shrink-0"  >
+                            <v-text-field 
+                                v-model="filters.filter_items['finance_name'].value"  
+                                :label="filters.filter_items['finance_name'].text"
+                                @input='changeFilterActiveValue("finance_name")'
+                                append-icon="mdi-magnify"  
+                                outlined
+                                hide-details
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
+                            <v-text-field 
+                                v-model="filters.filter_items['finance_location'].value"  
+                                :label="filters.filter_items['finance_location'].text"
+                                @input='changeFilterActiveValue("finance_location")'
+                                append-icon="mdi-magnify"  
+                                outlined
+                                hide-details
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
+                            <v-text-field 
+                                v-model="filters.filter_items['finance_cost_center'].value"  
+                                :label="filters.filter_items['finance_cost_center'].text"
+                                @input='changeFilterActiveValue("finance_cost_center")'
+                                append-icon="mdi-magnify"  
+                                outlined
+                                hide-details
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row  no-gutters style="flex-wrap: nowrap;" >
+                        <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
+                            <v-text-field 
+                                v-model="filters.filter_items['finance_sof'].value"  
+                                :label="filters.filter_items['finance_sof'].text"
+                                @input='changeFilterActiveValue("finance_sof")'
+                                append-icon="mdi-magnify"  
+                                outlined
+                                hide-details
+                            ></v-text-field>
+                        </v-col>
+                         <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
+                            <v-text-field 
+                                v-model="filters.filter_items['finance_dea'].value"  
+                                :label="filters.filter_items['finance_dea'].text"
+                                @input='changeFilterActiveValue("finance_dea")'
+                                append-icon="mdi-magnify"  
+                                outlined
+                                hide-details
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="4" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
+                            <div v-if='filters.filter_items["finance_budget_selection"].value !="range" '>
+                                <v-text-field
+                                    v-model="filters.filter_items['finance_budget'].value"
+                                    :label="filters.filter_items['finance_budget'].text"
+                                    @input='changeFilterActiveValue("finance_budget")'
+                                    :rules="[rules.number]"
+                                    outlined
+                                    hide-details
+                                    class='ml-3 '
+                                ></v-text-field>
+                            </div>
+                            <div v-else >
+                                <v-text-field
+                                    v-model="filters.filter_items['finance_budget_min'].value"
+                                    :label="filters.filter_items['finance_budget_min'].text"
+                                    @input='changeFilterActiveValue("finance_budget_min")'
+                                    :rules="[rules.number]"
+                                    outlined
+                                    hide-details
+                                    class='ml-3 '
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="filters.filter_items['finance_budget_max'].value"
+                                    :label="filters.filter_items['finance_budget_max'].text"
+                                    @input='changeFilterActiveValue("finance_budget_max")'
+                                    :rules="[rules.number]"
+                                    outlined
+                                    hide-details
+                                    class='ml-3 '
+                                ></v-text-field>
+                            </div>
+                        </v-col>
+                        <v-col cols="1" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                            <v-select
+                                v-model="filters.filter_items['finance_budget_selection'].value"
+                                :label="filters.filter_items['finance_budget_selection'].text"
+                                :items="filters.filter_items['finance_budget_selection'].multiple_selection"
+                                @input='changeFilterActiveValue("finance_budget_selection")'
+                                outlined
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row  no-gutters style="flex-wrap: nowrap;" >
+                        <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
+                        <div v-if='filters.filter_items["finance_actuals_selection"].value !="range" '>
+                            <v-text-field
+                                v-model="filters.filter_items['finance_actuals'].value"
+                                :label="filters.filter_items['finance_actuals'].text"
+                                @input='changeFilterActiveValue("finance_actuals")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                        <div v-else >
+                            <v-text-field
+                                v-model="filters.filter_items['finance_actuals_min'].value"
+                                :label="filters.filter_items['finance_actuals_min'].text"
+                                @input='changeFilterActiveValue("finance_actuals_min")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="filters.filter_items['finance_actuals_max'].value"
+                                :label="filters.filter_items['finance_actuals_max'].text"
+                                @input='changeFilterActiveValue("finance_actuals_max")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['finance_actuals_selection'].value"
+                            :label="filters.filter_items['finance_actuals_selection'].text"
+                            :items="filters.filter_items['finance_actuals_selection'].multiple_selection"
+                            @input='changeFilterActiveValue("finance_actuals_selection")'
+                            
+                            outlined
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
+                        <div v-if='filters.filter_items["finance_variance_selection"].value !="range" '>
+                            <v-text-field
+                                v-model="filters.filter_items['finance_variance'].value"
+                                :label="filters.filter_items['finance_variance'].text"
+                                @input='changeFilterActiveValue("finance_variance")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                        <div v-else >
+                            <v-text-field
+                                v-model="filters.filter_items['finance_variance_min'].value"
+                                :label="filters.filter_items['finance_variance_min'].text"
+                                @input='changeFilterActiveValue("finance_variance_min")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="filters.filter_items['finance_variance_max'].value"
+                                :label="filters.filter_items['finance_variance_max'].text"
+                                @input='changeFilterActiveValue("finance_variance_max")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['finance_variance_selection'].value"
+                            :label="filters.filter_items['finance_variance_selection'].text"
+                            :items="filters.filter_items['finance_variance_selection'].multiple_selection"
+                            @input='changeFilterActiveValue("finance_variance_selection")'
+                            
+                            outlined
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
+                        <div v-if='filters.filter_items["finance_burn_rate_selection"].value !="range" '>
+                            <v-text-field
+                                v-model="filters.filter_items['finance_burn_rate'].value"
+                                :label="filters.filter_items['finance_burn_rate'].text"
+                                @input='changeFilterActiveValue("finance_burn_rate")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                        <div v-else >
+                            <v-text-field
+                                v-model="filters.filter_items['finance_burn_rate_min'].value"
+                                :label="filters.filter_items['finance_burn_rate_min'].text"
+                                @input='changeFilterActiveValue("finance_burn_rate_min")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="filters.filter_items['finance_burn_rate_max'].value"
+                                :label="filters.filter_items['finance_burn_rate_max'].text"
+                                @input='changeFilterActiveValue("finance_burn_rate_max")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['finance_burn_rate_selection'].value"
+                            :label="filters.filter_items['finance_burn_rate_selection'].text"
+                            :items="filters.filter_items['finance_burn_rate_selection'].multiple_selection"
+                            @input='changeFilterActiveValue("finance_burn_rate_selection")'
+                            
+                            outlined
+                        ></v-select>
+                    </v-col>
+                </v-row>
+                    
                 </template>
+                
                 <template v-slot:item.finance_budget="{ item }">
                     {{ formatAsCurrency(item.finance_budget, 2) }}
                 </template>
@@ -526,6 +750,159 @@ export default {
             update: 0,
             upload: 0,
             view: 0,
+        },
+        filters:{
+            filter_items_active: 'finance_name',
+            filter_items:{
+                finance_name: { 
+                    value: '',
+                    text: 'Name' , 
+                    data_value: 'finance_name' ,
+                },
+                finance_location: { 
+                    value: '',
+                    text: 'Location' , 
+                    data_value: 'finance_location' ,
+                },
+                finance_cost_center: { 
+                    value: '',
+                    text: 'Cost Center' , 
+                    data_value: 'finance_cost_center' ,
+                },
+                finance_sof:{
+                    value: '',
+                    text: 'SOF' , 
+                    data_value: 'finance_sof' ,
+                },
+                finance_dea:{
+                    value: '',
+                    text: 'DEA' , 
+                    data_value: 'finance_dea' ,
+                },
+
+
+                // ================= Finance budget
+                finance_budget:{
+                    value: '',
+                    text: 'Budget',  
+                    data_value: 'finance_budget',
+                    number_range: true,                   // Enables min and max value (Prerequisits are below)
+                },
+                finance_budget_min:{ 
+                    value: '',
+                    text: 'Budget min',  
+                    data_value: 'finance_budget_min',
+                    inherit_value: 'finance_budget',     // <--------------------------- Needed for the key
+                    number_range: true,  
+                },
+                finance_budget_max:{ 
+                    value: '',
+                    text: 'Budget max',  
+                    data_value: 'finance_budget_max',
+                    inherit_value: 'finance_budget',    // <--------------------------- Needed for the key 
+                    number_range: true,
+                },
+                finance_budget_selection:{ 
+                    value: '==',
+                    text: 'Choose value',  
+                    data_value: 'finance_budget_selection',
+                    inherit_value: 'finance_budget',  // <--------------------------- Needed for the key 
+                    multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+                },
+                // ================= Finance budget
+
+
+                 // ================= Finance budget
+                finance_actuals:{
+                    value: '',
+                    text: 'Actuals',  
+                    data_value: 'finance_actuals',
+                    number_range: true,                   // Enables min and max value (Prerequisits are below)
+                },
+                finance_actuals_min:{ 
+                    value: '',
+                    text: 'Actuals min',  
+                    data_value: 'finance_actuals_min',
+                    inherit_value: 'finance_actuals',     // <--------------------------- Needed for the key
+                    number_range: true,  
+                },
+                finance_actuals_max:{ 
+                    value: '',
+                    text: 'Actuals max',  
+                    data_value: 'finance_actuals_max',
+                    inherit_value: 'finance_actuals',    // <--------------------------- Needed for the key 
+                    number_range: true,
+                },
+                finance_actuals_selection:{ 
+                    value: '==',
+                    text: 'Choose value',  
+                    data_value: 'finance_actuals_selection',
+                    inherit_value: 'finance_actuals',  // <--------------------------- Needed for the key 
+                    multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+                },
+                // ================= Finance budget
+
+                // ============================= Variance range 
+                finance_variance:{ 
+                    value: '',
+                    text: 'Variance',  
+                    data_value: 'finance_variance',
+                    number_range: true,                   // Enables min and max value (Prerequisits are below)
+                },
+                finance_variance_min:{ 
+                    value: '',
+                    text: 'Variance min',  
+                    data_value: 'finance_variance_min',
+                    inherit_value: 'finance_variance',     // <--------------------------- Needed for the key
+                    number_range: true,  
+                },
+                finance_variance_max:{ 
+                    value: '',
+                    text: 'Variance max',  
+                    data_value: 'finance_variance_max',
+                    inherit_value: 'finance_variance',    // <--------------------------- Needed for the key 
+                    number_range: true,
+                },
+                finance_variance_selection:{ 
+                    value: '==',
+                    text: 'Choose value',  
+                    data_value: 'finance_variance_selection',
+                    inherit_value: 'finance_variance',  // <--------------------------- Needed for the key 
+                    multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+                },
+                // ============================= Variance range
+
+                // ============================= Age range 
+                finance_burn_rate:{ 
+                    value: '',
+                    text: 'Burn rate',  
+                    data_value: 'finance_burn_rate',
+                    number_range: true,                   // Enables min and max value (Prerequisits are below)
+                },
+                finance_burn_rate_min:{ 
+                    value: '',
+                    text: 'BR min',  
+                    data_value: 'finance_burn_rate_min',
+                    inherit_value: 'finance_burn_rate',     // <--------------------------- Needed for the key
+                    number_range: true,  
+                },
+                finance_burn_rate_max:{ 
+                    value: '',
+                    text: 'BR max',  
+                    data_value: 'finance_burn_rate_max',
+                    inherit_value: 'finance_burn_rate',    // <--------------------------- Needed for the key 
+                    number_range: true,
+                },
+                finance_burn_rate_selection:{ 
+                    value: '==',
+                    text: 'Choose value',  
+                    data_value: 'finance_burn_rate_selection',
+                    inherit_value: 'finance_burn_rate',  // <--------------------------- Needed for the key 
+                    multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+                },
+                // ============================= Age range
+
+            },
         },
         headers: [
             {
@@ -689,6 +1066,15 @@ export default {
                 this.financeList = response.data;
                 this.loadFinanceTracker = false;
             });
+        },
+        filterItems(items, search, filter ) {
+            return new this.$MultiFilters(items, search, filter,  this.filters.filter_items ).custom_filter();
+        },
+        changeFilterActiveValue(key){
+            const filter = this.filters.filter_items;
+            const active_key = this.filters.filter_items_active;
+            const active_value = filter[active_key].value;
+            this.filters.filter_items_active =  this.$MultiFilters.changeFilterActiveValue(key,filter,active_key , active_value );
         },
         detailsItem(item) {
             this.detailsReadonly = true;

@@ -2,14 +2,17 @@
     <v-app>
         <h3 class="subheading grey--text">System Users</h3>
                 
-        <v-data-table :headers="headers" :items="usersList" :search="searchBy" class="elevation-1" >
+        <v-data-table 
+            :headers="headers"
+            :items="usersList"
+            :search="filters.filter_items[filters.filter_items_active].value"
+            :custom-filter="filterItems"
+            class="elevation-1"
+        >
             
             <template v-slot:top>
-
                 <v-toolbar flat >
-                    <v-text-field  v-model="searchBy" append-icon="mdi-magnify" label="Search" single-line hide-details ></v-text-field>
                     <v-spacer></v-spacer>
-                    
                     <v-dialog v-model="dialog" max-width="500px" >
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn  v-show="crud_guard.create" color="lightgray" class="mb-2" v-bind="attrs" v-on="on" >
@@ -83,6 +86,50 @@
                         </v-card>
                     </v-dialog>
                 </v-toolbar>
+                <v-row  no-gutters style="flex-wrap: nowrap;" >
+                    <v-col cols="8" class="flex-grow-0 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['firstname'].value"  
+                            :label="filters.filter_items['firstname'].text"
+                            @input='changeFilterActiveValue("firstname")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                     <v-col cols="4" class="flex-grow-0 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['lastname'].value"  
+                            :label="filters.filter_items['lastname'].text"
+                            @input='changeFilterActiveValue("lastname")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row  no-gutters style="flex-wrap: nowrap;" class='my-3'>
+                    <v-col cols="8">
+                        <v-text-field 
+                            v-model="filters.filter_items['email'].value"  
+                            :label="filters.filter_items['email'].text"
+                            @input='changeFilterActiveValue("email")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                     <v-col cols="4" class="flex-grow-0 flex-shrink-0"  >
+                        <v-select
+                            v-model="filters.filter_items['role'].value"
+                            :label="filters.filter_items['role'].text"
+                            :items="filters.filter_items['role'].multiple_selection"
+                            @input='changeFilterActiveValue("role")'
+                            outlined
+                            hide-details
+                        ></v-select>
+                    </v-col>
+                </v-row>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon v-show="crud_guard.update" @click="editItem(item)" small class="mr-2" color="blue darken-2" > mdi-pencil </v-icon>
@@ -113,9 +160,36 @@ export default {
             upload: 0,
             view: 0,
         },
+        
+        filters:{
+            filter_items_active: 'firstname',
+            filter_items:{
+                firstname:{ 
+                    value: '',
+                    text: 'First Name' , 
+                    data_value: 'firstname' ,
+                },
+                lastname:{ 
+                    value: '',
+                    text: 'Last Name' , 
+                    data_value: 'lastname' ,
+                },
+                email:{ 
+                    value: '',
+                    text: 'Email' , 
+                    data_value: 'email' ,
+                },
+                role:{ 
+                    value: '',
+                    text: 'Role' , 
+                    data_value: 'role' ,
+                    multiple_selection: [{text:'None', value:''}]
+                },
+            },
+        },
         headers: [
             { text: 'First Name', align: 'start', sortable: false, value: 'firstname', width: '15%' },
-            { text: 'Last Name', align: 'start', sortable: false, value: 'lastname' },
+            { text: 'Last Name', align: 'start', sortable: false, value: 'lastname', width: '15%' },
             { text: 'Email', value: 'email',width: '10%',sortable: false, },
             { text: 'Role', value: 'role',width: '10%',sortable: false, },
             { text: 'Actions', value: 'actions',width: '10%',sortable: false, },
@@ -177,6 +251,7 @@ export default {
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'Users';
                 const data = response.data; 
+                
                 for (const key in  data ){
                     if( data[key].name == moduleName ){
                         const crud_guard = data[key].crud_guard[0];
@@ -188,14 +263,39 @@ export default {
             })
 
 
-            axios.get('/user-roles').then( response => {
-                this.roles =  response.data ;
-            })
-            axios.get('/system-users').then( response => {
-                this.usersList = response.data;
+           
+            axios.get('/system-users').then( response_users => {
+                axios.get('/user-roles').then( response_roles => {
+                    const roles =  response_roles.data;
+                    const users = response_users.data;
+                    let userList = {};
+                    for(const keys in users ){
+                        userList[keys] = users[keys];
+                        let roles_name = '';
+                        for( const roles_key in roles)
+                            if (users[keys].roles_id == roles[roles_key].id )
+                                roles_name =  roles[roles_key].name;
+                        userList[keys]['role'] = roles_name;
+                    }
+                    // this.usersList= userList;
+                    this.roles =  roles ;
+                    this.usersList= Object.values (userList);
+                    for( const key in roles ){
+                        this.filters.filter_items.role.multiple_selection.push(  {text:  roles[key].name , value:  roles[key].name})
+                    }
+                })      
             })
         },
         
+        filterItems(items, search, filter ) {
+            return new this.$MultiFilters(items, search, filter,  this.filters.filter_items ).custom_filter();
+        },
+        changeFilterActiveValue(key){
+            const filter = this.filters.filter_items;
+            const active_key = this.filters.filter_items_active;
+            const active_value = filter[active_key].value;
+            this.filters.filter_items_active =  this.$MultiFilters.changeFilterActiveValue(key,filter,active_key , active_value );
+        },
         editItem(item) {
             this.editedIndex = this.usersList.indexOf(item)
             this.editedItem = Object.assign({}, item)

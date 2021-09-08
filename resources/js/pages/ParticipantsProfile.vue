@@ -3,21 +3,13 @@
         <v-data-table
             :headers="headers"
             :items="lmsList"
-            :search="searchBy"
+            :search="filters.filter_items[filters.filter_items_active].value"
             :loading="loadLMS"
+            :custom-filter="filterItems"
             class="elevation-1"
         >
             <template v-slot:top>
-                <v-toolbar
-                    flat
-                >
-                    <v-text-field
-                        v-model="searchBy"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
+                <v-toolbar  flat >
                     <v-spacer></v-spacer>
                     <v-dialog
                         v-model="dialog"
@@ -194,6 +186,123 @@
                             <v-icon color="green">mdi-microsoft-excel</v-icon>
                         </v-btn>
                 </v-toolbar>
+                <v-row  no-gutters style="flex-wrap: nowrap;" >
+                    <v-col cols="2" class="flex-grow-0 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['participant_id'].value"  
+                            :label="filters.filter_items['participant_id'].text"
+                            @input='changeFilterActiveValue("participant_id")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-text-field 
+                            v-model="filters.filter_items['participant_name'].value"  
+                            :label="filters.filter_items['participant_name'].text"
+                            @input='changeFilterActiveValue("participant_name")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="1" style="min-width: 100px; max-width: 70%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['participant_gender'].value"
+                            :label="filters.filter_items['participant_gender'].text"
+                            :items="filters.filter_items['participant_gender'].multiple_selection"
+                            @input='changeFilterActiveValue("participant_gender")'
+                            outlined
+                            hide-details
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
+                        <div v-if='filters.filter_items["participant_age_selection"].value !="range" '>
+                            <v-text-field
+                                v-model="filters.filter_items['participant_age'].value"
+                                :label="filters.filter_items['participant_age'].text"
+                                @input='changeFilterActiveValue("participant_age")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                        <div v-else >
+                            <v-text-field
+                                v-model="filters.filter_items['participant_age_min'].value"
+                                :label="filters.filter_items['participant_age_min'].text"
+                                @input='changeFilterActiveValue("participant_age_min")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="filters.filter_items['participant_age_max'].value"
+                                :label="filters.filter_items['participant_age_max'].text"
+                                @input='changeFilterActiveValue("participant_age_max")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['participant_age_selection'].value"
+                            :label="filters.filter_items['participant_age_selection'].text"
+                            :items="filters.filter_items['participant_age_selection'].multiple_selection"
+                            @input='changeFilterActiveValue("participant_age_selection")'
+                            
+                            outlined
+                        ></v-select>
+                    </v-col>
+                </v-row>
+                <v-row  no-gutters style="flex-wrap: nowrap;"  >
+                    <v-col cols="3" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['name_of_training'].value"  
+                            :label="filters.filter_items['name_of_training'].text"
+                            @input='changeFilterActiveValue("name_of_training")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-text-field 
+                            v-model="filters.filter_items['training_organizer'].value"  
+                            :label="filters.filter_items['training_organizer'].text"
+                            @input='changeFilterActiveValue("training_organizer")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-text-field 
+                            v-model="filters.filter_items['participant_location'].value"  
+                            :label="filters.filter_items['participant_location'].text"
+                            @input='changeFilterActiveValue("participant_location")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-text-field 
+                            v-model="filters.filter_items['participant_skills'].value"  
+                            :label="filters.filter_items['participant_skills'].text"
+                            @input='changeFilterActiveValue("participant_skills")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon
@@ -260,6 +369,92 @@ export default {
         cso_name_items: [],
         status_list: [],
         searchBy: "",
+        filters:{
+            filter_items_active: 'participant_name',
+            filter_items:{
+                all: { 
+                    value: '',
+                    text: 'All' , 
+                    data_value: 'all' ,
+                    
+                },
+                participant_id:{ 
+                    value: '',
+                    text: 'Participant ID' , 
+                    data_value: 'participant_id' ,
+                    specific: true,
+
+                },
+                participant_name:{ 
+                    value: '',
+                    text: 'Participant Name',  
+                    data_value: 'participant_name',
+                },
+                participant_gender:{ 
+                    value: '',
+                    text: 'Sex', 
+                    data_value: 'participant_gender',
+                    multiple_selection: [{text:'None', value:''},{value:'Male', text:'Male'}, {value:'Female', text:'Female'}]
+                },
+
+
+
+
+                // ============================= Age range 
+                participant_age:{ 
+                    value: '',
+                    text: 'Age',  
+                    data_value: 'participant_age',
+                    number_range: true,                   // Enables min and max value (Prerequisits are below)
+                },
+                participant_age_min:{ 
+                    value: '',
+                    text: 'Age min',  
+                    data_value: 'participant_age_min',
+                    inherit_value: 'participant_age',     // <--------------------------- Needed for the key
+                    number_range: true,  
+                },
+                participant_age_max:{ 
+                    value: '',
+                    text: 'Age max',  
+                    data_value: 'participant_age_max',
+                    inherit_value: 'participant_age',    // <--------------------------- Needed for the key 
+                    number_range: true,
+                },
+                participant_age_selection:{ 
+                    value: '==',
+                    text: 'Choose value',  
+                    data_value: 'participant_age',
+                    inherit_value: 'participant_age',  // <--------------------------- Needed for the key 
+                    multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+                },
+                // ============================= Age range
+
+                
+                participant_location:{ 
+                    value: '',
+                    text: 'Participant Location' , 
+                    data_value: 'participant_location',
+                },
+                participant_skills:{ 
+                    value: '',
+                    text: 'Participant Skills', 
+                    data_value: 'Participant Skills',
+                },
+
+
+                name_of_training:{ 
+                    value: '',
+                    text: 'Name of Training' , 
+                    data_value: 'name_of_training',
+                },
+                training_organizer:{ 
+                    value: '',
+                    text: 'Training Organizer', 
+                    data_value: 'training_organizer',
+                },
+            },
+        },
         headers: [
             { text: 'Participant ID', align: 'start', sortable: false, value: 'participant_id', width: '10%' },
             { text: 'Participant Name', align: 'start', sortable: false, value: 'participant_name', width: '25%' },
@@ -357,10 +552,18 @@ export default {
             })
 
             axios.get('/participants-profile').then( response => {
-                console.log(response.data ); 
                 this.lmsList = response.data;
                 this.loadLMS = false;
             })
+        },
+        filterItems(items, search, filter ) {
+            return new this.$MultiFilters(items, search, filter,  this.filters.filter_items ).custom_filter();
+        },
+        changeFilterActiveValue(key){
+            const filter = this.filters.filter_items;
+            const active_key = this.filters.filter_items_active;
+            const active_value = filter[active_key].value;
+            this.filters.filter_items_active =  this.$MultiFilters.changeFilterActiveValue(key,filter,active_key , active_value );
         },
         detailsItem(item){
             this.detailsReadonly = true;

@@ -3,21 +3,16 @@
         <v-data-table
             :headers="headers"
             :items="courseList"
-            :search="searchBy"
+            :search="filters.filter_items[filters.filter_items_active].value"
             :loading="loadCourse"
+            :custom-filter="filterItems"
             class="elevation-1"
         >
             <template v-slot:top>
                 <v-toolbar
                     flat
                 >
-                    <v-text-field
-                        v-model="searchBy"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
+                   
                     <v-spacer></v-spacer>
                     <v-dialog
                         v-model="dialog"
@@ -118,6 +113,84 @@
                             <v-icon color="green">mdi-microsoft-excel</v-icon>
                         </v-btn>
                 </v-toolbar>
+                <v-row  no-gutters style="flex-wrap: nowrap;" >
+                    <v-col cols="2" class="flex-grow-0 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['course_id'].value"  
+                            :label="filters.filter_items['course_id'].text"
+                            @input='changeFilterActiveValue("course_id")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="6" class="flex-grow-0 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['course_name'].value"  
+                            :label="filters.filter_items['course_name'].text"
+                            @input='changeFilterActiveValue("course_name")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
+                        <div v-if='filters.filter_items["number_of_modules_selection"].value !="range" '>
+                            <v-text-field
+                                v-model="filters.filter_items['number_of_modules'].value"
+                                :label="filters.filter_items['number_of_modules'].text"
+                                @input='changeFilterActiveValue("number_of_modules")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                        <div v-else >
+                            <v-text-field
+                                v-model="filters.filter_items['number_of_modules_min'].value"
+                                :label="filters.filter_items['number_of_modules_min'].text"
+                                @input='changeFilterActiveValue("number_of_modules_min")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="filters.filter_items['number_of_modules_max'].value"
+                                :label="filters.filter_items['number_of_modules_max'].text"
+                                @input='changeFilterActiveValue("number_of_modules_max")'
+                                :rules="[rules.number]"
+                                outlined
+                                hide-details
+                                class='ml-3 '
+                            ></v-text-field>
+                        </div>
+                    </v-col>
+                     <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['number_of_modules_selection'].value"
+                            :label="filters.filter_items['number_of_modules_selection'].text"
+                            :items="filters.filter_items['number_of_modules_selection'].multiple_selection"
+                            @input='changeFilterActiveValue("number_of_modules_selection")'
+                            
+                            outlined
+                        ></v-select>
+                    </v-col>
+                </v-row>
+                <v-row  no-gutters style="flex-wrap: nowrap;" >
+                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-text-field
+                            v-model="filters.filter_items['developed_by'].value"
+                            :label="filters.filter_items['developed_by'].text"
+                            @input='changeFilterActiveValue("developed_by")'
+                            :rules="[rules.number]"
+                            outlined
+                            hide-details
+                            class='ml-3 '
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -178,7 +251,68 @@ export default {
             upload: 0,
             view: 0,
         },
-        searchBy: "",
+        filters:{
+            filter_items_active: 'course_id',
+            filter_items:{
+                course_id:{ 
+                    value: '',
+                    text: 'Course ID' , 
+                    data_value: 'course_id' ,
+                    specific: true,
+                },
+                course_name:{ 
+                    value: '',
+                    text: 'Course Name' , 
+                    data_value: 'course_name' ,
+                    
+                },
+                project_area:{ 
+                    value: '',
+                    text: 'Project Area' , 
+                    data_value: 'project_area' ,
+                },
+
+
+                // ============================= Age range 
+                number_of_modules:{ 
+                    value: '',
+                    text: 'Node modules',  
+                    data_value: 'number_of_modules',
+                    number_range: true,                   // Enables min and max value (Prerequisits are below)
+                },
+
+                // ====================================================
+                number_of_modules_min:{ 
+                    value: '',
+                    text: 'Node modules Min',  
+                    data_value: 'number_of_modules_min',
+                    inherit_value: 'number_of_modules',     // <--------------------------- Needed for the key
+                    number_range: true,  
+                },
+                number_of_modules_max:{ 
+                    value: '',
+                    text: 'Node Modules Max',  
+                    data_value: 'number_of_modules_max',
+                    inherit_value: 'number_of_modules',    // <--------------------------- Needed for the key 
+                    number_range: true,
+                },
+                number_of_modules_selection:{ 
+                    value: '==',
+                    text: 'Choose value',  
+                    data_value: 'number_of_modules',
+                    inherit_value: 'number_of_modules',  // <--------------------------- Needed for the key 
+                    multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+                },  
+                //==============================================
+
+                developed_by:{ 
+                    value: '',
+                    text: 'Developed By' , 
+                    data_value: 'developed_by' ,
+                },
+            },
+            
+        },
         headers: [
             { text: 'ID', align: 'start', sortable: false, value: 'course_id', width: '10%' },
             { text: 'Course Name', align: 'start', sortable: false, value: 'course_name', width: '25%' },
@@ -255,6 +389,15 @@ export default {
                 this.courseList = response.data;
                 this.loadCourse = false;
             })
+        },
+        filterItems(items, search, filter ) {
+            return new this.$MultiFilters(items, search, filter,  this.filters.filter_items ).custom_filter();
+        },
+        changeFilterActiveValue(key){
+            const filter = this.filters.filter_items;
+            const active_key = this.filters.filter_items_active;
+            const active_value = filter[active_key].value;
+            this.filters.filter_items_active =  this.$MultiFilters.changeFilterActiveValue(key,filter,active_key , active_value );
         },
         detailsItem(item){
             this.detailsReadonly = true;
