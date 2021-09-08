@@ -93,14 +93,14 @@ class MultiFilters {
 		return true;
 	}
 	custom_filter_date = ({ item, all_filters, filter, item_value, filter_item, filter_value }) =>{
+		const value  = new Date(item_value).getTime();
+		const filter_value_num =  new Date(filter_value).getTime();
 
-		// const value  = new Date(item_value).getTime();
-		// const filter_value_num =  new Date(filter_value).getTime();
-
-		// const inherited = item.inherit_value;
-		// if ('inherit_value' in item && all_filters[inherited + "_selection"].value == 'range') {
-
-		// }
+		const inherited = item.inherit_value;
+	
+		if ('inherit_value' in item && all_filters[inherited + "_selection"].value == 'range') {
+			
+		}
 		return true;
 	}
 	custom_filter = () => {
@@ -108,7 +108,7 @@ class MultiFilters {
 		const items = this.items;
 		const search = this.search;
 		const filter = this.filter;
-		
+		console.log("hello world")
 		for (const filter_item in all_filters) {
 			const item = all_filters[filter_item];
 			const item_value = item.value;

@@ -314,6 +314,13 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
+            <v-text-field
+              v-model="searchBy"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
             <v-spacer></v-spacer>
             <v-btn
               v-if="crud_guard.create"
@@ -395,7 +402,6 @@
                 hide-details
               ></v-text-field>
             </v-col>
-						<!--
             <v-col cols="4" style="min-width: 50px" class="flex-grow-0 flex-shrink-1" >
               <div v-if='filters.filter_items["displayDate_selection"].value !="range" ' >
                 <v-menu
@@ -410,6 +416,7 @@
                     <v-text-field
                       readonly
                       v-on="on"
+                      v-model="filters.filter_items['displayDate'].value"
 											:value="filters.filter_items['displayDate'].value"
 											:label="filters.filter_items['displayDate'].text"
                   		@input='changeFilterActiveValue("displayDate")'
@@ -493,7 +500,6 @@
                 outlined
               ></v-select>
             </v-col>
-						-->
           </v-row>
         </template>
         <template v-slot:item.mov="{ item }">
