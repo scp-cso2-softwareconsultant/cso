@@ -1277,6 +1277,7 @@ export default {
     filter_items2:[],
     filter2_label:"",
     //
+    copyItem : {},
     crud_guard : {
       create: 0,
       delete: 0,
@@ -1555,6 +1556,66 @@ export default {
         });
       else this.getFilteredIndicator();
     },
+    /**
+     * Returns true/false if Number already exist
+     *
+     * @param {url} url Route backend
+     * @param {string} cso_activity_no 
+     * @param {string} cso_category
+     * @return {boolean} 
+     */
+    async verifyNoExist(url, id, cat){
+      try {
+        const response = await axios.get(`/${url}/?act_no=${id}&category=${cat}`)
+        const arr = [];
+
+        for(let x = 0; x < response.data.length; x++){
+            if(response.data[x].cso_act_no.replace(/[^\d.-]/g,'') == id)
+                arr[arr.length] = response.data[x].cso_act_no.replace(/[^\d.-]/g,'')
+        }
+       // console.log(arr);
+
+        if(arr.length !== 0){ 
+            //console.log(arr.length, "returning true")
+            return true;
+        }else{
+            //console.log(arr.length, "returning false")
+            return false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    /**
+     * Returns true/false if Sub Number already exist
+     *
+     * @param {url} url Route backend
+     * @param {string or number} cso_activity_no 
+     * @return {boolean} 
+     */
+    async verifySubNoExist(url, cso_indicator_id, indicator_no){
+      try {
+        const response = await axios.get(`/${url}/?cso_indicator_id=${cso_indicator_id}&indicator_no=${indicator_no}`)
+        const arr = [];
+
+        for(let x = 0; x < response.data.length; x++){
+            if(response.data[x].indicator_no.replace(/[^\d.-]/g,'') === indicator_no)
+                arr[arr.length] = response.data[x].indicator_no.replace(/[^\d.-]/g,'')
+        }
+        console.log(response.data)
+        console.log(arr);
+
+        if(arr.length !== 0){ 
+            console.log(arr.length, "returning true")
+            return true;
+        }else{
+            console.log(arr.length, "returning false")
+            return false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     filterData(response){
         var m_filter_value = this.selected_filter_item;
           var filter_value = '';
@@ -1661,13 +1722,15 @@ export default {
         });
     },
     editItem(item) {
+      this.copyItem = {};
+      this.copyItem = item;
       this.isEditting = true;
       this.isAddingNew = false;
-      console.log(this.isAddingNew, this.isEditting)
+    //   console.log(this.isAddingNew, this.isEditting)
       this.editedIndex = this.indicators_list.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
-      console.log(this.editedItem.cso_indicator_mov)
+    //   console.log(this.editedItem.cso_indicator_mov)
       this.file2_name = item.cso_indicator_mov;
       this.file2_attached = item.cso_indicator_mov;
       this.dialog = true;
@@ -1697,7 +1760,7 @@ export default {
 
       this.formSubTitle = "Indicator Details";
       this.editedSubItem = Object.assign({}, item);
-      console.log('SUB HAS FILE',this.editedSubItem.mov_file);
+    //   console.log('SUB HAS FILE',this.editedSubItem.mov_file);
       if(this.editedSubItem.mov_file)
         this.file_name = this.editedSubItem.mov_file;
       this.detailsReadonly = true;
@@ -1705,6 +1768,8 @@ export default {
     },
 
     editSubItem(item) {
+      this.copyItem = {};
+      this.copyItem = item;
       this.isEditting = true;
       this.isAddingNew = false;
       this.removeFile();
@@ -1792,7 +1857,7 @@ export default {
       });
     },
 
-    save() {
+    async save() {
       this.btnLoader = true;
       let validate = true;
       
@@ -1811,6 +1876,26 @@ export default {
         validate = false;
       }
 
+      if(!this.editedItem.cso_act_no && validate){
+          this.$noty.error("Activity # is empty!")
+          validate = false;
+      }else{
+        //   console.log(this.editedItem.cso_act_no,"EDITED")
+          let check = await this.verifyNoExist('checkNoExist',this.editedItem.cso_act_no,this.editedItem.cso_category)
+          if(check && !this.isEditting){
+              this.$noty.error(`${this.editedItem.cso_category} # ${this.editedItem.cso_act_no} already exist`)
+              validate = false; //TODO
+            //   console.log("Setting Validate to false" , check)
+          }else{
+            let check = await this.verifyNoExist('checkNoExist',this.editedItem.cso_act_no,this.editedItem.cso_category)
+            if(check && this.copyItem.cso_act_no != this.editedItem.cso_act_no){
+                this.$noty.error(`${this.editedItem.cso_category} # ${this.editedItem.cso_act_no} already exist`)
+                validate = false; //TODO
+                //   console.log("Setting Validate to false" , check)
+            }
+          }
+      }
+      
       if (validate) {
         var formData = new FormData();
 
@@ -1839,13 +1924,27 @@ export default {
       }
     },
 
-    saveSub() {
+    async saveSub() {
       this.btnLoader = true;
       let validate = true;
       if (!this.editedSubItem.indicator_no) {
         this.$noty.error("Indicator No is empty!");
         validate = false;
+      }else{
+          
+          let check = await this.verifySubNoExist('checkSuNoExist', this.editedSubItem.cso_indicator_id,this.editedSubItem.indicator_no)
+          if(check && !this.isEditting){
+              this.$noty.error(`${this.subHeaders[0].text.replace('#','')}${this.editedSubItem.indicator_no} already exist`);
+              validate = false;
+          }else{
+              if(check && this.copyItem.indicator_no != this.editedSubItem.indicator_no){
+                this.$noty.error(`${this.subHeaders[0].text.replace('#','')}${this.editedSubItem.indicator_no} already exist`);
+                validate = false;
+              }
+          }
+          
       }
+
       if (!this.editedSubItem.indicator) {
         this.$noty.error("Indicator is empty!");
         validate = false;
@@ -1870,6 +1969,8 @@ export default {
         this.$noty.error("PPR is empty!");
         validate = false;
       }
+
+      
       if (validate) {
         var formData = new FormData();
     
@@ -1892,7 +1993,7 @@ export default {
             this.closeSub();
             this.removeFile();
           } else {
-            console.log("NOT SUCCESSS",response.data.success)
+            // console.log("NOT SUCCESSS",response.data.success)
             this.removeFile();
             this.closeSub();
           }
