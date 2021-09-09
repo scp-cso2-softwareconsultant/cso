@@ -1570,7 +1570,7 @@ export default {
         const arr = [];
 
         for(let x = 0; x < response.data.length; x++){
-            console.log(id.replace(/[^\d.-]/g,''),response.data[x].cso_act_no.replace(/[^\d.-]/g,''))
+            //console.log(id.replace(/[^\d.-]/g,''),response.data[x].cso_act_no.replace(/[^\d.-]/g,''))
             if(response.data[x].cso_act_no.replace(/[^\d.-]/g,'') == id.replace(/[^\d.-]/g,''))
                 arr[arr.length] = response.data[x].cso_act_no.replace(/[^\d.-]/g,'')
         }
@@ -1584,7 +1584,7 @@ export default {
             return false;
         }
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     },
     /**
@@ -1614,7 +1614,7 @@ export default {
             return false;
         }
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     },
     filterData(response){

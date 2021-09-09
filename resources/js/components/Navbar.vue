@@ -41,7 +41,7 @@
                 </v-list-item-group>
                 <v-list-item class="px-1 my-3 nav-btn-desu" link @click="logoutUser">
                     <v-list-item-icon class='p-2 bg-white nav-list-icon'>
-                        <v-icon>mdi-logout</v-icon>
+                        <v-icon>mdi-location-exit</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title>Log Out</v-list-item-title>
@@ -61,17 +61,17 @@ export default {
             selectedItem: 0,
             items: [],
             item_list: [
-                { name: "Dashboard",text: 'Dashboard', icon: 'mdi-view-dashboard-outline', linkTo: '/dashboard', has_sub_items: false },
-                { name: "CSOIndicator", text: 'CSO² Project Indicator', icon: 'mdi-animation', linkTo: '/cso-indicator', has_sub_items: false },
-                { name: "CSOProfile", text: 'CSO Network Members Profile', icon: 'mdi-animation', linkTo: '/cso-profile', has_sub_items: false },
-                { name: "Assessment", text: 'Assessment', icon: 'mdi-animation', linkTo: '/assessment', has_sub_items: false },
-                { name: "FinanceTracker", text: 'Finance Tracker', icon: 'mdi-finance', linkTo: '/finance-tracker', has_sub_items: false },
-                { name: "ProjectTrackingDocuments", text: 'Project Tracking Document', icon: 'mdi-finance', linkTo: '/project-tracking-documents', has_sub_items: false },
-                { name: "LMS", text: 'LMS', icon: 'mdi-finance', linkTo: '/lms-data', has_sub_items: false },
-                { name: "Users", text: 'Users', icon: 'mdi-account', linkTo: '/system-users', has_sub_items: false },
-                { text: 'Acitiviy Feedbacking', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
+                { name: "Dashboard",text: 'Dashboard', icon: 'mdi-chart-bar-stacked', linkTo: '/dashboard', has_sub_items: false },
+                { name: "CSOIndicator", text: 'CSO² Project Indicator', icon: 'mdi-briefcase-edit', linkTo: '/cso-indicator', has_sub_items: false },
+                { name: "CSOProfile", text: 'CSO Network Members Profile', icon: 'mdi-account-network', linkTo: '/cso-profile', has_sub_items: false },
+                { name: "Assessment", text: 'Assessment', icon: 'mdi-format-list-text', linkTo: '/assessment', has_sub_items: false },
+                { name: "FinanceTracker", text: 'Finance Tracker', icon: 'mdi-credit-card', linkTo: '/finance-tracker', has_sub_items: false },
+                { name: "ProjectTrackingDocuments", text: 'Project Tracking Document', icon: 'mdi-clipboard-text-search-outline', linkTo: '/project-tracking-documents', has_sub_items: false },
+                { name: "LMS", text: 'LMS', icon: 'mdi-book-open-page-variant', linkTo: '/lms-data', has_sub_items: false },
+                { name: "Users", text: 'Users', icon: 'mdi-account-group', linkTo: '/system-users', has_sub_items: false },
+                { text: 'Acitiviy Feedback', icon: 'mdi-comment-quote', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
                 { text: 'CBLD Indicators', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/cbld.php', has_sub_items: false },
-                { text: 'DIS', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/dis.php', has_sub_items: false },
+                //{ text: 'DIS', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/dis.php', has_sub_items: false },
             ],
         }
     },

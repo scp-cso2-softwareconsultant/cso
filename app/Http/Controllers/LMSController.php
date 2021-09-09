@@ -42,7 +42,7 @@ class LMSController extends Controller
         $data_array['participant_address'] = $raw_data->participant_address;
         $data_array['participant_position'] = $raw_data->participant_position;
         if($raw_data->participant_age!='') {
-            $data_array['participant_age'] = $raw_data->participant_gender;
+            $data_array['participant_age'] = $raw_data->participant_age;
         }
         $data_array['lro_id'] = $raw_data->lro_id;
         $data_array['participant_gender'] = $raw_data->participant_gender;

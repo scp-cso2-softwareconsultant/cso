@@ -580,7 +580,7 @@ export default {
         },
 
         deleteItem (item) {
-            this.delete_lms = item.lro_assessment_id
+            this.delete_lms = item.participant_id
             this.editedIndex = this.lmsList.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
@@ -589,6 +589,7 @@ export default {
         deleteItemConfirm () {
             this.btnLoader = true;
             this.lmsList.splice(this.editedIndex, 1)
+            console.log(this.delete_lms)
             axios.post('/delete-participants-profile', {
                 delete_id: this.delete_lms
             }).then(response => {
