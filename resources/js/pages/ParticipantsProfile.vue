@@ -32,7 +32,7 @@
                                 <span class="text-h5" v-if="!detailsReadonly">{{ formTitle }}</span>
                                 <span class="text-h5" v-else>LMS Details</span>
                             </v-card-title>
-
+                        
                             <v-card-text>
                                 <v-container dense >
                                     <v-row class="mt-0">

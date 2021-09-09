@@ -336,7 +336,8 @@
               <v-icon color="green">mdi-microsoft-excel</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-row no-gutters style="flex-wrap: nowrap">
+          
+        <v-row no-gutters style="flex-wrap: nowrap">
             <v-col
               cols="1"
               style="min-width: 100px; max-width: 70%"
@@ -382,6 +383,55 @@
           </v-row>
           <v-row no-gutters style="flex-wrap: nowrap" class="my-3">
             <v-col
+              cols="3"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div v-if='filters.filter_items["final_score_selection"].value !="range" ' >
+                <v-text-field
+                  v-model="filters.filter_items['final_score'].value"
+                  :label="filters.filter_items['final_score'].text"
+                  @input='changeFilterActiveValue("final_score")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                ></v-text-field>
+              </div>
+              <div v-else>
+                <v-text-field
+                  v-model="filters.filter_items['final_score_min'].value"
+                  :label="filters.filter_items['final_score_min'].text"
+                  @input='changeFilterActiveValue("final_score_min")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                ></v-text-field>
+                <v-text-field
+                  v-model="filters.filter_items['final_score_max'].value"
+                  :label="filters.filter_items['final_score_max'].text"
+                  @input='changeFilterActiveValue("final_score_max")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                ></v-text-field>
+              </div>
+            </v-col>
+            <v-col
+              cols="2"
+              class="flex-grow-1 flex-shrink-0"
+            >
+              <v-select
+                v-model="filters.filter_items['final_score_selection'].value"
+                :label="filters.filter_items['final_score_selection'].text"
+                :items="filters.filter_items['final_score_selection'].multiple_selection"
+                @input='changeFilterActiveValue("final_score_selection")'
+                outlined
+                hide-details
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row no-gutters style="flex-wrap: nowrap" >
+            <v-col
               cols="4"
               style="min-width: 100px; max-width: 50%"
               class="flex-grow-1 flex-shrink-0"
@@ -395,9 +445,14 @@
                 hide-details
               ></v-text-field>
             </v-col>
-						<!--
-            <v-col cols="4" style="min-width: 50px" class="flex-grow-0 flex-shrink-1" >
-              <div v-if='filters.filter_items["displayDate_selection"].value !="range" ' >
+            <v-col
+              cols="4"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div
+                v-if='filters.filter_items["displayDate_selection"].value !="range" '
+              >
                 <v-menu
                   v-model="filters.filter_items['displayDate'].fromDateMenu"
                   :close-on-content-click="false"
@@ -405,24 +460,25 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  hide-details
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       readonly
                       v-on="on"
-											:value="filters.filter_items['displayDate'].value"
-											:label="filters.filter_items['displayDate'].text"
-                  		@input='changeFilterActiveValue("displayDate")'
-											append-icon="mdi-magnify"
-											outlined
-											hide-details
+                      :value="filters.filter_items['displayDate'].value"
+                      :label="filters.filter_items['displayDate'].text"
+                      @input='changeFilterActiveValue("displayDate")'
+                      append-icon="mdi-magnify"
+                      outlined
+                      hide-details
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     locale="en-in"
+                    hide-details
                     v-model="filters.filter_items['displayDate'].value"
-                    no-title
-                    @input="filters.filter_items['displayDate'].fromDateMenu = false; changeFilterActiveValue('displayDate_min')"
+                    @input="filters.filter_items['displayDate'].fromDateMenu = false; changeFilterActiveValue('displayDate')"
                   ></v-date-picker>
                 </v-menu>
               </div>
@@ -434,51 +490,49 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  hide-details
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       readonly
                       v-on="on"
-											:value="filters.filter_items['displayDate_min'].value"
-											:label="filters.filter_items['displayDate_min'].text"
-                  		
-											append-icon="mdi-magnify"
-											outlined
-											hide-details
+                      :value="filters.filter_items['displayDate_min'].value"
+                      :label="filters.filter_items['displayDate_min'].text"
+                      append-icon="mdi-magnify"
+                      outlined
+                      hide-details
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     locale="en-in"
                     v-model="filters.filter_items['displayDate_min'].value"
-                    no-title
                     @input="filters.filter_items['displayDate_min'].fromDateMenu = false;changeFilterActiveValue('displayDate_min')"
                   ></v-date-picker>
                 </v-menu>
 
-								<v-menu
+                <v-menu
                   v-model="filters.filter_items['displayDate_max'].fromDateMenu"
                   :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  hide-details
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       readonly
                       v-on="on"
-											:value="filters.filter_items['displayDate_max'].value"
-											:label="filters.filter_items['displayDate_max'].text"
-                  		@input='changeFilterActiveValue("displayDate_max")'
-											append-icon="mdi-magnify"
-											outlined
-											hide-details
+                      :value="filters.filter_items['displayDate_max'].value"
+                      :label="filters.filter_items['displayDate_max'].text"
+                      @input='changeFilterActiveValue("displayDate_max")'
+                      append-icon="mdi-magnify"
+                      outlined
+                      hide-details
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    locale="en-in"
                     v-model="filters.filter_items['displayDate_max'].value"
-                    no-title
                     @input="filters.filter_items['displayDate_max'].fromDateMenu = false"
                   ></v-date-picker>
                 </v-menu>
@@ -490,12 +544,14 @@
                 :label="filters.filter_items['displayDate_selection'].text"
                 :items="filters.filter_items['displayDate_selection'].multiple_selection"
                 @input='changeFilterActiveValue("displayDate_selection")'
+                v-on:change='if( filters.filter_items["displayDate_selection"].value == "") filters.filter_items["displayDate"].value = "" '
                 outlined
               ></v-select>
             </v-col>
-						-->
           </v-row>
         </template>
+
+        
         <template v-slot:item.mov="{ item }">
           <div v-if="item.mov">
             <!-- <v-btn text color="primary"
@@ -653,7 +709,7 @@ export default {
           data_value: 'tool_used',
           multiple_selection: [{text:'None', value:''},{value:'Male', text:'Male'}, {value:'Female', text:'Female'}]
         },
-				// ============================= Date range 
+				// ============================= Date range
 				displayDate: {
 						value: '',
 						text: 'Date of Assessment',
@@ -682,9 +738,39 @@ export default {
 						text: 'Choose value',
 						data_value: 'displayDate_selection',
 						inherit_value: 'displayDate', // <--------------------------- Needed for the key
-						multiple_selection: [{ text: 'Range', value: 'range'}, {text: 'Equal to', value: '=='	}, { text: 'Greater than or equal to', value: '>=' }, { text: 'Less than or equal to',	value: '<=' }, {	text: 'Greater than',value: '>'	}, {	text: 'Less than',	value: '<'	}]
+						multiple_selection: [{text:'None' , value:'' },{ text: 'Range', value: 'range'}, {text: 'Equal to', value: '=='	}, { text: 'Greater than or equal to', value: '>=' }, { text: 'Less than or equal to',	value: '<=' }, {	text: 'Greater than',value: '>'	}, {	text: 'Less than',	value: '<'	}]
 					},
-				// =============================  Date range
+				  // =============================  Date range
+
+         // ============================= Age range
+          final_score:{
+            value: '',
+            text: 'Final Score',
+            data_value: 'final_score',
+            number_range: true,                   // Enables min and max value (Prerequisits are below)
+            },
+          final_score_min:{
+            value: '',
+            text: 'Age min',
+            data_value: 'Final Score min',
+            inherit_value: 'final_score',     // <--------------------------- Needed for the key
+            number_range: true,
+          },
+          final_score_max:{
+            value: '',
+            text: 'Age max',
+            data_value: 'Final Score max',
+            inherit_value: 'final_score',    // <--------------------------- Needed for the key
+            number_range: true,
+          },
+          final_score_selection:{
+            value: '==',
+            text: 'Choose value',
+            data_value: 'final_score',
+            inherit_value: 'final_score',  // <--------------------------- Needed for the key
+            multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
+          },
+          // ============================= Age range
 			},
 		},
 		headers: [{
@@ -888,6 +974,7 @@ export default {
 			const filter = this.filters.filter_items;
 			const active_key = this.filters.filter_items_active;
 			const active_value = filter[active_key].value;
+
 			this.filters.filter_items_active = this.$MultiFilters.changeFilterActiveValue(key, filter, active_key, active_value);
 		},
 		formatDate(date) {
