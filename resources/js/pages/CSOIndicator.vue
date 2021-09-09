@@ -1566,11 +1566,12 @@ export default {
      */
     async verifyNoExist(url, id, cat){
       try {
-        const response = await axios.get(`/${url}/?act_no=${id}&category=${cat}`)
+        const response = await axios.get(`/${url}/?act_no=${id.replace(/[^\d.-]/g,'')}&category=${cat}`)
         const arr = [];
 
         for(let x = 0; x < response.data.length; x++){
-            if(response.data[x].cso_act_no.replace(/[^\d.-]/g,'') == id)
+            console.log(id.replace(/[^\d.-]/g,''),response.data[x].cso_act_no.replace(/[^\d.-]/g,''))
+            if(response.data[x].cso_act_no.replace(/[^\d.-]/g,'') == id.replace(/[^\d.-]/g,''))
                 arr[arr.length] = response.data[x].cso_act_no.replace(/[^\d.-]/g,'')
         }
        // console.log(arr);
@@ -1599,17 +1600,17 @@ export default {
         const arr = [];
 
         for(let x = 0; x < response.data.length; x++){
-            if(response.data[x].indicator_no.replace(/[^\d.-]/g,'') === indicator_no)
+            if(response.data[x].indicator_no.replace(/[^\d.-]/g,'') === indicator_no.replace(/[^\d.-]/g,''))
                 arr[arr.length] = response.data[x].indicator_no.replace(/[^\d.-]/g,'')
         }
-        console.log(response.data)
-        console.log(arr);
+        // console.log(response.data)
+        // console.log(arr);
 
         if(arr.length !== 0){ 
-            console.log(arr.length, "returning true")
+            //console.log(arr.length, "returning true")
             return true;
         }else{
-            console.log(arr.length, "returning false")
+            //console.log(arr.length, "returning false")
             return false;
         }
       } catch (error) {
@@ -1888,7 +1889,7 @@ export default {
             //   console.log("Setting Validate to false" , check)
           }else{
             let check = await this.verifyNoExist('checkNoExist',this.editedItem.cso_act_no,this.editedItem.cso_category)
-            if(check && this.copyItem.cso_act_no != this.editedItem.cso_act_no){
+            if(check && this.copyItem.cso_act_no.replace(/[^\d.-]/g,'') != this.editedItem.cso_act_no.replace(/[^\d.-]/g,'')){
                 this.$noty.error(`${this.editedItem.cso_category} # ${this.editedItem.cso_act_no} already exist`)
                 validate = false; //TODO
                 //   console.log("Setting Validate to false" , check)
@@ -1937,7 +1938,7 @@ export default {
               this.$noty.error(`${this.subHeaders[0].text.replace('#','')}${this.editedSubItem.indicator_no} already exist`);
               validate = false;
           }else{
-              if(check && this.copyItem.indicator_no != this.editedSubItem.indicator_no){
+              if(check && this.copyItem.indicator_no.replace(/[^\d.-]/g,'') != this.editedSubItem.indicator_no.replace(/[^\d.-]/g,'')){
                 this.$noty.error(`${this.subHeaders[0].text.replace('#','')}${this.editedSubItem.indicator_no} already exist`);
                 validate = false;
               }
