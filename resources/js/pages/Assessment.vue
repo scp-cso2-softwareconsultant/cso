@@ -314,13 +314,6 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-text-field
-              v-model="searchBy"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
             <v-spacer></v-spacer>
             <v-btn
               v-if="crud_guard.create"
@@ -343,7 +336,8 @@
               <v-icon color="green">mdi-microsoft-excel</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-row no-gutters style="flex-wrap: nowrap">
+          
+        <v-row no-gutters style="flex-wrap: nowrap">
             <v-col
               cols="1"
               style="min-width: 100px; max-width: 70%"
@@ -387,134 +381,13 @@
               ></v-select>
             </v-col>
           </v-row>
-          <v-row no-gutters style="flex-wrap: nowrap" >
-            <v-col
-              cols="4"
-              style="min-width: 100px; max-width: 50%"
-              class="flex-grow-1 flex-shrink-0"
-            >
-              <v-text-field
-                v-model="filters.filter_items['conducted_by'].value"
-                :label="filters.filter_items['conducted_by'].text"
-                @input='changeFilterActiveValue("conducted_by")'
-                append-icon="mdi-magnify"
-                outlined
-                hide-details
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="4"
-              style="min-width: 50px"
-              class="flex-grow-0 flex-shrink-1"
-            >
-              <div
-                v-if='filters.filter_items["displayDate_selection"].value !="range" '
-              >
-                <v-menu
-                  v-model="filters.filter_items['displayDate'].fromDateMenu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      readonly
-                      v-on="on"
-                      :value="filters.filter_items['displayDate'].value"
-                      :label="filters.filter_items['displayDate'].text"
-                      @input='changeFilterActiveValue("displayDate")'
-                      append-icon="mdi-magnify"
-                      outlined
-                      hide-details
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    locale="en-in"
-                    v-model="filters.filter_items['displayDate'].value"
-                    no-title
-                    @input="filters.filter_items['displayDate'].fromDateMenu = false; changeFilterActiveValue('displayDate')"
-                  ></v-date-picker>
-                </v-menu>
-              </div>
-              <div v-else>
-                <v-menu
-                  v-model="filters.filter_items['displayDate_min'].fromDateMenu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      readonly
-                      v-on="on"
-                      :value="filters.filter_items['displayDate_min'].value"
-                      :label="filters.filter_items['displayDate_min'].text"
-                      append-icon="mdi-magnify"
-                      outlined
-                      hide-details
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    locale="en-in"
-                    v-model="filters.filter_items['displayDate_min'].value"
-                    no-title
-                    @input="filters.filter_items['displayDate_min'].fromDateMenu = false;changeFilterActiveValue('displayDate_min')"
-                  ></v-date-picker>
-                </v-menu>
-
-                <v-menu
-                  v-model="filters.filter_items['displayDate_max'].fromDateMenu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      readonly
-                      v-on="on"
-                      :value="filters.filter_items['displayDate_max'].value"
-                      :label="filters.filter_items['displayDate_max'].text"
-                      @input='changeFilterActiveValue("displayDate_max")'
-                      append-icon="mdi-magnify"
-                      outlined
-                      hide-details
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    locale="en-in"
-                    v-model="filters.filter_items['displayDate_max'].value"
-                    no-title
-                    @input="filters.filter_items['displayDate_max'].fromDateMenu = false"
-                  ></v-date-picker>
-                </v-menu>
-              </div>
-            </v-col>
-            <v-col cols="2" class="flex-grow-1 flex-shrink-0">
-              <v-select
-                v-model="filters.filter_items['displayDate_selection'].value"
-                :label="filters.filter_items['displayDate_selection'].text"
-                :items="filters.filter_items['displayDate_selection'].multiple_selection"
-                @input='changeFilterActiveValue("displayDate_selection")'
-                v-on:change='if( filters.filter_items["displayDate_selection"].value == "") filters.filter_items["displayDate"].value = "" '
-                outlined
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row no-gutters style="flex-wrap: nowrap">
+          <v-row no-gutters style="flex-wrap: nowrap" class="my-3">
             <v-col
               cols="3"
               style="min-width: 50px"
               class="flex-grow-0 flex-shrink-1"
             >
-              <div
-                v-if='filters.filter_items["final_score_selection"].value !="range" '
-              >
+              <div v-if='filters.filter_items["final_score_selection"].value !="range" ' >
                 <v-text-field
                   v-model="filters.filter_items['final_score'].value"
                   :label="filters.filter_items['final_score'].text"
@@ -553,10 +426,132 @@
                 :items="filters.filter_items['final_score_selection'].multiple_selection"
                 @input='changeFilterActiveValue("final_score_selection")'
                 outlined
+                hide-details
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row no-gutters style="flex-wrap: nowrap" >
+            <v-col
+              cols="4"
+              style="min-width: 100px; max-width: 50%"
+              class="flex-grow-1 flex-shrink-0"
+            >
+              <v-text-field
+                v-model="filters.filter_items['conducted_by'].value"
+                :label="filters.filter_items['conducted_by'].text"
+                @input='changeFilterActiveValue("conducted_by")'
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col
+              cols="4"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div
+                v-if='filters.filter_items["displayDate_selection"].value !="range" '
+              >
+                <v-menu
+                  v-model="filters.filter_items['displayDate'].fromDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                  hide-details
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      readonly
+                      v-on="on"
+                      :value="filters.filter_items['displayDate'].value"
+                      :label="filters.filter_items['displayDate'].text"
+                      @input='changeFilterActiveValue("displayDate")'
+                      append-icon="mdi-magnify"
+                      outlined
+                      hide-details
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    locale="en-in"
+                    hide-details
+                    v-model="filters.filter_items['displayDate'].value"
+                    @input="filters.filter_items['displayDate'].fromDateMenu = false; changeFilterActiveValue('displayDate')"
+                  ></v-date-picker>
+                </v-menu>
+              </div>
+              <div v-else>
+                <v-menu
+                  v-model="filters.filter_items['displayDate_min'].fromDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                  hide-details
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      readonly
+                      v-on="on"
+                      :value="filters.filter_items['displayDate_min'].value"
+                      :label="filters.filter_items['displayDate_min'].text"
+                      append-icon="mdi-magnify"
+                      outlined
+                      hide-details
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    locale="en-in"
+                    v-model="filters.filter_items['displayDate_min'].value"
+                    @input="filters.filter_items['displayDate_min'].fromDateMenu = false;changeFilterActiveValue('displayDate_min')"
+                  ></v-date-picker>
+                </v-menu>
+
+                <v-menu
+                  v-model="filters.filter_items['displayDate_max'].fromDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                  hide-details
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      readonly
+                      v-on="on"
+                      :value="filters.filter_items['displayDate_max'].value"
+                      :label="filters.filter_items['displayDate_max'].text"
+                      @input='changeFilterActiveValue("displayDate_max")'
+                      append-icon="mdi-magnify"
+                      outlined
+                      hide-details
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="filters.filter_items['displayDate_max'].value"
+                    @input="filters.filter_items['displayDate_max'].fromDateMenu = false"
+                  ></v-date-picker>
+                </v-menu>
+              </div>
+            </v-col>
+            <v-col cols="2" class="flex-grow-1 flex-shrink-0">
+              <v-select
+                v-model="filters.filter_items['displayDate_selection'].value"
+                :label="filters.filter_items['displayDate_selection'].text"
+                :items="filters.filter_items['displayDate_selection'].multiple_selection"
+                @input='changeFilterActiveValue("displayDate_selection")'
+                v-on:change='if( filters.filter_items["displayDate_selection"].value == "") filters.filter_items["displayDate"].value = "" '
+                outlined
               ></v-select>
             </v-col>
           </v-row>
         </template>
+
+        
         <template v-slot:item.mov="{ item }">
           <div v-if="item.mov">
             <!-- <v-btn text color="primary"
