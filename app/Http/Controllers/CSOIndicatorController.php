@@ -62,6 +62,34 @@ class CSOIndicatorController extends Controller
         ]);
     }
 
+    public function checkNoExist(Request $request){
+        $get_indicator = DB::table("cso_indicator")
+            ->select('cso_act_no')
+            ->where('cso_act_no','LIKE','%'.$request['act_no'].'%')
+            ->where('cso_category',$request['category'])
+            ->whereRaw(DB::raw("deleted_at IS NULL"))
+            ->get();
+        Log::info("CHECK MATCH ACT #");
+        Log::info($request['act_no']);
+        Log::info($request['category']);
+        Log::info("-----------------");
+
+        return $get_indicator;
+    }
+
+    public function checkSuNoExist(Request $request){
+        $get_indicator =  DB::table('indicator')->where('cso_indicator_id',$request['cso_indicator_id'])
+            ->where('indicator_no','LIKE','%'.$request['indicator_no'].'%')
+            ->whereRaw(DB::raw("deleted_at IS NULL"))
+            ->get();
+        Log::info("CHECK MATCH Sub #");
+        Log::info($request['indicator_no']);
+        Log::info($request['cso_indicator_id']);
+        Log::info("-----------------");
+
+        return $get_indicator;
+    }
+
     /**
      * This returns all data from cso_indicator table with a category of 'Activity' sub data from indicator table
      *
@@ -195,7 +223,6 @@ class CSOIndicatorController extends Controller
                 'created_by' => $user_name
             ]);
             if($insertData) $success=true;
-            Log::info("NEW DATA");
         }else{
             Log::info($request->all());
             $updateData = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)
@@ -228,8 +255,7 @@ class CSOIndicatorController extends Controller
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/output_mov',$fileNameToStore);
             DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)->update(array("cso_indicator_mov" => $fileNameToStore));
-        }else
-            Log::info('No File');
+        }
 
         $data_arr = [
             "success" => $success

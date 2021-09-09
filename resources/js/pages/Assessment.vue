@@ -956,23 +956,13 @@ export default {
 				}
 			})
 
+			axios.get('/cso-name-list').then(response => { this.cso_name_items = response.data; })
 
-
-
-			axios.get('/cso-name-list').then(response => {
-				this.cso_name_items = response.data;
-			})
-
-			axios.get('/lro-status').then(response => {
-				this.status_list = response.data;
-			})
+			axios.get('/lro-status').then(response => { this.status_list = response.data; })
 
 			axios.get('/lro-assessment').then(response => {
 				this.lroList = response.data;
-				this.lroList.forEach((item) => {
-					item.displayDate = this.formatDate(item.assessment_date)
-				})
-				//console.log("LROLOST:",this.lroList)
+				this.lroList.forEach((item) => { item.displayDate = this.formatDate(item.assessment_date) })
 				this.loadLROAssessment = false;
 			})
 
