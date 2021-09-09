@@ -85,7 +85,7 @@
                                                                 sm="12"
                                                                 md="12"
                                                             >
-                                                                <v-text-field
+                                                                <v-textarea
                                                                     v-model="
                                                                         editedItem.cso_act_no
                                                                     "
@@ -98,7 +98,7 @@
                                                                     auto-grow
                                                                     rows="1"
                                                                     dense
-                                                                ></v-text-field>
+                                                                ></v-textarea>
                                                             </v-col>
                                                         </v-row>
                                                         <v-row>
@@ -135,6 +135,24 @@
                                                                         editedItem.cso_remarks
                                                                     "
                                                                     label="Remarks"
+                                                                    dense
+                                                                >
+                                                                </v-textarea>
+                                                            </v-col>
+                                                        </v-row>
+                                                        <v-row v-if="catSelectedTab === 'Outcome'" class="mt-0">
+                                                            <v-col
+                                                                cols="12"
+                                                                sm="12"
+                                                                md="12"
+                                                            >
+                                                                <v-textarea
+                                                                    auto-grow
+                                                                    rows="1"
+                                                                    v-model="
+                                                                        editedItem.cso_intermediate_outcome
+                                                                    "
+                                                                    label="Intermediate Outcome"
                                                                     dense
                                                                 >
                                                                 </v-textarea>
@@ -1419,6 +1437,7 @@ export default {
       cso_act_no: "",
       cso_lead_organization: "",
       cso_indicator_mov : "",
+      cso_intermediate_outcome: "",
       cso_remarks : "",
       cso_status: "",
     },
@@ -1428,6 +1447,7 @@ export default {
       cso_act_no: "",
       cso_lead_organization: "",
       cso_indicator_mov : "",
+      cso_intermediate_outcome: "",
       cso_remarks : "",
       cso_status: "",
     },
@@ -1656,16 +1676,24 @@ export default {
             align: "start",
             sortable: true,
             value: "cso_indicator_mov",
-        }),
+        })
         this.headers.splice(5,0,{
             text: "Remarks",
             width: "10%",
             align: "start",
             sortable: true,
             value: "cso_remarks",
-        })  
+        })
       } else if (categorySelected === "Activity") {
         this.subHeaders[0].text = "Sub-Activity #";
+      }else if(categorySelected === "Outcome"){
+          this.headers.splice(3,0,{
+              text: "Intermediate Outcome",
+              width: "10%",
+              align: "start",
+              sortable: false,
+              value: "cso_intermediate_outcome"
+          })
       }else{
           this.subHeaders[0].text = "Indicator #";
       }
