@@ -1038,6 +1038,21 @@ class DatabaseSeeder extends Seeder
                 'project_tracking_document_id'=>$project_tracking_document_id
             ]);
         }
+        $typeOfSupport =  array(
+            1=>'LRO',
+            2=>'LRO-supported',
+            3=>'Private Sector',
+            4=>'LGU',
+            5=>'academe',
+            6=>'other CSO/CSO network',
+            7=>'donor'
+        );
+        foreach ($typeOfSupport  as $key => $support ){
+        
+            DB::table('type_of_support')->insert([
+                'name'=> $support 
+            ]);
+        }
       
     }
 }

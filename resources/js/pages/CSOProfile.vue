@@ -51,6 +51,21 @@
                                             <v-select
                                                 :items="isLRO_list"
                                                 v-model="editedItem.is_lro"
+                                                label="Is LRO? *" dense
+                                                :rules="[rules.required]"
+                                            ></v-select>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0" v-if="detailsReadonly">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field v-model="editedItem.is_lro" label="Is LRO? *" dense readonly></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0" v-if="!detailsReadonly">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-select
+                                                :items="isLROSupported_list"
+                                                v-model="editedItem.is_lro_supported"
                                                 label="Is LRO Supported? *" dense
                                                 :rules="[rules.required]"
                                             ></v-select>
@@ -58,9 +73,26 @@
                                     </v-row>
                                     <v-row class="mt-0" v-if="detailsReadonly">
                                         <v-col cols="12" sm="12" md="12" >
-                                            <v-text-field v-model="editedItem.is_lro" label="Is LRO Supported? *" dense readonly></v-text-field>
+                                            <v-text-field v-model="editedItem.is_lro_supported" label="Is LRO Supported? *" dense readonly></v-text-field>
                                         </v-col>
                                     </v-row>
+
+                                    <v-row class="mt-0" v-if="!detailsReadonly">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-select
+                                                :items="type_of_support_list"
+                                                v-model="editedItem.type_of_support"
+                                                label="Types Of Support" dense
+                                                :rules="[rules.required]"
+                                            ></v-select>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0" v-if="detailsReadonly">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field v-model="editedItem.type_of_support" label="Types of support " dense readonly></v-text-field>
+                                        </v-col>
+                                    </v-row>
+
                                     <v-row class="mt-0" v-if="!detailsReadonly">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-select
@@ -74,6 +106,23 @@
                                     <v-row class="mt-0" v-if="detailsReadonly">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field v-model="editedItem.proj_area" label="Project Area *" dense readonly></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                       
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field :readonly="detailsReadonly"
+                                                          v-model="editedItem.longitude"
+                                                          :rules="[rules.required]"
+                                                          label="Longitude *" dense></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field :readonly="detailsReadonly"
+                                                          v-model="editedItem.latitude"
+                                                          :rules="[rules.required]"
+                                                          label="Longitude *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
 <!--                                    cso_name : '',-->
@@ -566,6 +615,7 @@
 <script>
 export default {
     data: () => ({
+
         btnLoader: false,
         dialog: false,
         detailsReadonly: false,
@@ -586,6 +636,13 @@ export default {
         isLRO_list: [
             { value: "Yes", text: "Yes"},
             { value: "No", text: "No"}
+        ],
+        isLROSupported_list:[
+            { value: "Yes", text: "Yes"},
+            { value: "No", text: "No"}
+         ],
+        type_of_support_list:[
+            
         ],
         proj_area_list: [
             { value: "Iloilo City", text: "Iloilo City"},
@@ -609,12 +666,17 @@ export default {
             { text: 'Project Area', value: 'proj_area',width: '15%',sortable: false, },
             { text: 'Type of CSO', value: 'cso_type',width: '10%',sortable: false, },
             { text: 'Is LRO?', value: 'is_lro',width: '10%',sortable: false, },
+            { text: 'Is LRO Supported?', value: 'is_lro_supported',width: '10%',sortable: false, },
             { text: 'Actions', value: 'actions',width: '10%',sortable: false, },
         ],
         cso_profile_list: [],
         editedIndex: -1,
         editedItem: {
             is_lro : '',
+            is_lro_supported:'',
+            type_of_support:'',
+            longitude:'',
+            latitude:'',
             proj_area : '',
             cso_name : '',
             cso_type : '',
@@ -656,6 +718,10 @@ export default {
         },
         defaultItem: {
             is_lro : '',
+            is_lro_supported:'',
+            type_of_support:'',
+            longitude:'',
+            latitude:'',
             proj_area : '',
             cso_name : '',
             cso_type : '',
@@ -747,6 +813,12 @@ export default {
                 this.cso_profile_list = response.data;
                 this.loadCSOProfile = false;
             })
+            axios.get('/types-of-support').then( response => {
+                const data = response.data;
+                var category = [];
+                for(const value in data) category.push({text: data[value].name, value: data[value].name}); 
+                this.type_of_support_list = category;
+            })
         },
 
         editItem (item) {
@@ -809,7 +881,23 @@ export default {
                 this.$noty.error('Is LRO is empty!');
                 validate = false;
             }
-
+            if(!this.editedItem.is_lro_supported){
+                this.$noty.error('Is LRO Supported is empty!');
+                validate = false;
+            }
+            if(!this.editedItem.type_of_support){
+                this.$noty.error('type of support is empty!');
+                validate = false;
+            }
+            if(!this.editedItem.longitude){
+                this.$noty.error('Longitude is empty!');
+                validate = false;
+            }
+            if(!this.editedItem.latitude){
+                this.$noty.error('Longitude is empty!');
+                validate = false;
+            }
+          
 
             if(!this.editedItem.proj_area){
                 this.$noty.error('Project Area is empty!');

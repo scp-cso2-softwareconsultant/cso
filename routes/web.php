@@ -58,6 +58,8 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::get('/cso-name-list', [App\Http\Controllers\CSOProfileController::class, 'getCSONameList'])->name('cso-name-list')->middleware('roles_permission:CSOProfile,view');
         Route::post('/save-cso-profile', [App\Http\Controllers\CSOProfileController::class,'saveCSOProfile'])->name('save-cso-profile')->middleware('roles_permission:CSOProfile,create');
         Route::post('/delete-cso-profile', [App\Http\Controllers\CSOProfileController::class,'deleteCSOProfile'])->name('delete-cso-profile')->middleware('roles_permission:CSOProfile,delete');
+        
+        Route::get('/types-of-support', [App\Http\Controllers\CSOProfileController::class, 'getTypesOfSupport'])->name('get-types-of-suppot')->middleware('roles_permission:CSOProfile,view');
     }); 
 // LRO ASSESSMENT
     Route::group(['middleware' => 'roles_permission:Assessment,view' ], function() {

@@ -39,6 +39,9 @@ class CSOProfileController extends Controller
         if($form_mode < 0) {
             $insertData = DB::table('cso_profile')->insert([
                 'is_lro' => $raw_data->is_lro,
+                'is_lro_supported' => $raw_data->is_lro_supported,
+                'longitude'=> $raw_data->longitude,
+                'latitude'=> $raw_data->latitude,
                 'proj_area' => $raw_data->proj_area,
                 'cso_name' => $raw_data->cso_name,
                 'cso_type' => $raw_data->cso_type,
@@ -84,6 +87,10 @@ class CSOProfileController extends Controller
             $updateData = DB::table('cso_profile')->where('cso_profile_id',$raw_data->cso_profile_id)
                 ->update(array(
                     'is_lro' => $raw_data->is_lro,
+                    'is_lro_supported' => $raw_data->is_lro_supported,
+                    'type_of_support'=> $raw_data->type_of_support,
+                    'longitude'=> $raw_data->longitude,
+                    'latitude'=> $raw_data->latitude,
                     'proj_area' => $raw_data->proj_area,
                     'cso_name' => $raw_data->cso_name,
                     'cso_type' => $raw_data->cso_type,
@@ -145,6 +152,10 @@ class CSOProfileController extends Controller
         $data_arr = [
             "success" => $success
         ];
+        return response()->json($data_arr, 200);
+    }
+    public function getTypesOfSupport(Request $request){
+        $data_arr = DB::table("type_of_support")->get();
         return response()->json($data_arr, 200);
     }
 }
