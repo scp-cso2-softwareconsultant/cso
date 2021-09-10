@@ -538,12 +538,13 @@
                       @input='changeFilterActiveValue("displayDate_max")'
                       append-icon="mdi-magnify"
                       outlined
-                      hide-details
+                     
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     v-model="filters.filter_items['displayDate_max'].value"
                     @input="filters.filter_items['displayDate_max'].fromDateMenu = false"
+                     hide-details
                   ></v-date-picker>
                 </v-menu>
               </div>
@@ -694,14 +695,16 @@ export default {
 			upload: 0,
 			view: 0,
 		},
+    
 		filters: {
 			filter_items_active: 'cso_name',
+      
 			filter_items: {
 				cso_name: {
 					value: '',
 					text: 'Name',
 					data_value: 'cso_name',
-					multiple_selection: [{ 	text: 'None',	value: ''	}, {	value: 'Male',	text: 'Male'	}, {	value: 'Female',	text: 'Female' }]
+					multiple_selection: [{ 	text: 'None',	value: ''	},  ]
 				},
 				domain:{
           value: '',
@@ -717,9 +720,9 @@ export default {
           value: '',
           text: 'Tool used',
           data_value: 'tool_used',
-          multiple_selection: [{text:'None', value:''},{value:'Male', text:'Male'}, {value:'Female', text:'Female'}]
+          multiple_selection: [{text:'None', value:''},{value:'OCAT', text:'OCAT'}, {value:'OPI', text:'OPI'}]
         },
-				// ============================= Date range
+				// ============================= Date range['OCAT', 'OPI']
 				displayDate: {
 						value: '',
 						text: 'Date of Assessment',
@@ -768,7 +771,7 @@ export default {
           },
           final_score_max:{
             value: '',
-            text: 'Age max',
+            text: 'Final score max',
             data_value: 'Final Score max',
             inherit_value: 'final_score',    // <--------------------------- Needed for the key
             number_range: true,
@@ -781,11 +784,12 @@ export default {
             multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
           },
           // =============================Final score range
+          
           status:{ 
             value: '',
-            text: 'Sex', 
+            text: 'Status', 
             data_value: 'status',
-            multiple_selection: [{text:'None', value:''},{value:'Male', text:'Male'}, {value:'Female', text:'Female'}]
+            multiple_selection: [{text:'None', value:''} ]
           }
 			},
 		},
@@ -972,9 +976,26 @@ export default {
 				}
 			})
 
-			axios.get('/cso-name-list').then(response => { this.cso_name_items = response.data; })
+			axios.get('/cso-name-list').then(response => { 
+        const data = response.data; 
+        this.cso_name_items = data; 
+        var multiple_selection = [{text: 'None', value: ''}]
 
-			axios.get('/lro-status').then(response => { this.status_list = response.data; })
+        for( const value in data ){
+          const select_text_value = data[value].text;
+          multiple_selection .push({ text:  select_text_value , value: select_text_value  })
+        }
+        this.filters.filter_items.cso_name.multiple_selection = multiple_selection;
+
+        console.log( multiple_selection  )
+      })
+
+			axios.get('/lro-status').then(response => { 
+        const data = response.data.concat( [{text: 'None', value: ''}] );
+        this.status_list = data;
+        this.filters.filter_items.status.multiple_selection = data ;
+      })
+
 
 			axios.get('/lro-assessment').then(response => {
 				this.lroList = response.data;
