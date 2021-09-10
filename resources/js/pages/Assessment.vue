@@ -429,6 +429,16 @@
                 hide-details
               ></v-select>
             </v-col>
+            <v-col cols="1" style="min-width: 100px; max-width: 70%;" class="flex-grow-1 flex-shrink-0" >
+              <v-select
+                v-model="filters.filter_items['status'].value"
+                :label="filters.filter_items['status'].text"
+                :items="filters.filter_items['status'].multiple_selection"
+                @input='changeFilterActiveValue("status")'
+                outlined
+                hide-details
+              ></v-select>
+            </v-col>
           </v-row>
           <v-row no-gutters style="flex-wrap: nowrap" >
             <v-col
@@ -742,7 +752,7 @@ export default {
 					},
 				  // =============================  Date range
 
-         // ============================= Age range
+         // ============================= Final score range
           final_score:{
             value: '',
             text: 'Final Score',
@@ -751,7 +761,7 @@ export default {
             },
           final_score_min:{
             value: '',
-            text: 'Age min',
+            text: 'Final score min',
             data_value: 'Final Score min',
             inherit_value: 'final_score',     // <--------------------------- Needed for the key
             number_range: true,
@@ -770,7 +780,13 @@ export default {
             inherit_value: 'final_score',  // <--------------------------- Needed for the key
             multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
           },
-          // ============================= Age range
+          // =============================Final score range
+          status:{ 
+            value: '',
+            text: 'Sex', 
+            data_value: 'status',
+            multiple_selection: [{text:'None', value:''},{value:'Male', text:'Male'}, {value:'Female', text:'Female'}]
+          }
 			},
 		},
 		headers: [{
