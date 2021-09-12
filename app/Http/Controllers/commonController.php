@@ -131,11 +131,7 @@ class commonController extends Controller
                     return  response()->json(  "User not allowed", 401);
                 break; 
             }
-
-            
         }
-
-        
 
         switch ($tableName){
             case "CSOIndicator":
@@ -145,8 +141,6 @@ class commonController extends Controller
                         DB::raw("cso_indicator.cso_description"),
                         DB::raw("cso_indicator.cso_lead_organization"),
                         DB::raw("cso_indicator.cso_status"),
-                        DB::raw("cso_indicator.cso_indicator_mov"),
-                        DB::raw("cso_indicator.cso_remarks"),
                         DB::raw("indicator.indicator_no"),
                         DB::raw("indicator.indicator"),
                         DB::raw("indicator.indicator_type"),
@@ -168,6 +162,49 @@ class commonController extends Controller
                     ->whereRaw("indicator.deleted_at IS NULL")
                     ->where("cso_indicator.cso_category", $request['category'])
                     ->get();
+                break;
+            case "CSOIndicator-Outcome":
+                $dataExport = DB::table("cso_indicator")->select(
+                        DB::raw("cso_indicator.cso_category"),
+                        DB::raw("cso_indicator.cso_act_no"),
+                        DB::raw("cso_indicator.cso_description"),
+                        DB::raw("cso_indicator.cso_lead_organization"),
+                        DB::raw("cso_indicator.cso_intermediate_outcome"),
+                        DB::raw("cso_indicator.cso_status"),
+                        DB::raw("indicator.indicator_no"),
+                        DB::raw("indicator.indicator"),
+                        DB::raw("indicator.indicator_type"),
+                        DB::raw("indicator.data_source"),
+                        DB::raw("indicator.frequency"),
+                        DB::raw("indicator.unit_measure"),
+                        DB::raw("indicator.indicator_status"),
+                        DB::raw("indicator.indicator_remarks"),
+                        DB::raw("indicator.mov_file"),
+                        DB::raw("indicator.ppr AS PPR"),
+                        DB::raw("indicator.baseline_date"),
+                        DB::raw("indicator.baseline_value"),
+                        DB::raw("indicator.target_date"),
+                        DB::raw("indicator.target_value"),
+                        DB::raw("indicator.actual_date"),
+                    )
+                    ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
+                    ->whereRaw("cso_indicator.deleted_at IS NULL")
+                    ->whereRaw("indicator.deleted_at IS NULL")
+                    ->where("cso_indicator.cso_category", $request['category'])
+                    ->get();
+                break;
+            case "CSOIndicator-Output":
+                $dataExport = DB::table("cso_indicator")->select(
+                    DB::raw("cso_indicator.cso_category"),
+                    DB::raw("cso_indicator.cso_act_no"),
+                    DB::raw("cso_indicator.cso_description"),
+                    DB::raw("cso_indicator.cso_lead_organization"),
+                    DB::raw("cso_indicator.cso_status"),
+                    DB::raw("cso_indicator.cso_indicator_mov"),
+                    DB::raw("cso_indicator.cso_remarks"),
+                )
+                ->where("cso_indicator.cso_category", 'Output')
+                ->get();
                 break;
             case "CSOProfile":
                 $dataExport = DB::table("cso_profile")->select(

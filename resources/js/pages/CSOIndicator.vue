@@ -2084,7 +2084,9 @@ export default {
       this.btnLoader = true;
       let filename = tableName + ".xlsx";
       var formData = new FormData();
-      formData.append("tableName", tableName);
+      var tablename = this.catSelectedTab==='Output'? 'CSOIndicator-Output' : tableName;
+      tablename = this.catSelectedTab === 'Outcome'? 'CSOIndicator-Outcome' : tablename;
+      formData.append("tableName", tablename);
       formData.append("category", value);
       axios
         .post("/export-excel", formData, { responseType: "blob" })

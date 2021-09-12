@@ -31,7 +31,7 @@ class CSOIndicatorController extends Controller
      * @return file Requested File
      */ 
     public function downloadMov(Request $request){
-        Log::info("CALLED DOWNLOAD FILE");
+        //Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
         $path= Storage::disk('public')->path("cso_indicators_mov/$request->category/$request->file_name");
         $content = file_get_contents($path);
@@ -51,7 +51,7 @@ class CSOIndicatorController extends Controller
      * @return file Requested File
      */ 
     public function downloadCSOMov(Request $request){
-        Log::info("CALLED DOWNLOAD FILE");
+        //Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
         $path= Storage::disk('public')->path("cso_indicators_mov/output_mov/$request->file_name");
         $content = file_get_contents($path);
@@ -62,6 +62,14 @@ class CSOIndicatorController extends Controller
         ]);
     }
 
+    /**
+     * This returns all data from cso_indicator table that has the same cso_indicator_no
+     *
+     * @param Request $request params/data
+     * 
+     * @author Senpai Dev Team
+     * @return resultset
+     */ 
     public function checkNoExist(Request $request){
         $get_indicator = DB::table("cso_indicator")
             ->select('cso_act_no')
@@ -69,23 +77,31 @@ class CSOIndicatorController extends Controller
             ->where('cso_category',$request['category'])
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
-        Log::info("CHECK MATCH ACT #");
-        Log::info($request['act_no']);
-        Log::info($request['category']);
-        Log::info("-----------------");
+        //Log::info("CHECK MATCH ACT #");
+        //Log::info($request['act_no']);
+        //Log::info($request['category']);
+        //Log::info("-----------------");
 
         return $get_indicator;
     }
 
+    /**
+     * This returns all data from indicator table that has the same indicator_no
+     *
+     * @param Request $request params/data
+     * 
+     * @author Senpai Dev Team
+     * @return resultset
+     */ 
     public function checkSuNoExist(Request $request){
         $get_indicator =  DB::table('indicator')->where('cso_indicator_id',$request['cso_indicator_id'])
             ->where('indicator_no','LIKE','%'.$request['indicator_no'].'%')
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
-        Log::info("CHECK MATCH Sub #");
-        Log::info($request['indicator_no']);
-        Log::info($request['cso_indicator_id']);
-        Log::info("-----------------");
+        //Log::info("CHECK MATCH Sub #");
+        //Log::info($request['indicator_no']);
+        //Log::info($request['cso_indicator_id']);
+        //Log::info("-----------------");
 
         return $get_indicator;
     }
@@ -225,7 +241,7 @@ class CSOIndicatorController extends Controller
             ]);
             if($insertData) $success=true;
         }else{
-            Log::info($request->all());
+            //Log::info($request->all());
             $updateData = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)
                 ->update(array(
                     'cso_category' => $raw_data->cso_category,
@@ -240,11 +256,11 @@ class CSOIndicatorController extends Controller
                     'updated_by' => $user_name
                 ));
             if($updateData) $success=true;
-            Log::info("UPDATE DATA");
+            //Log::info("UPDATE DATA");
         }
 
         if($request->hasFile('upload_file') && $form_mode >= 0){
-            Log::info('Theres File Woah!');
+            //Log::info('Theres File Woah!');
 
             // Get filename with the extension
             $filenameWithExt = $request->file('upload_file')->getClientOriginalName();

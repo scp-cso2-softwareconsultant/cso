@@ -194,8 +194,8 @@ export default {
             });
         },
         
-        CSOProfile(){
-            axios.get('/dashboard-cso-profile').then( response => {
+        async CSOProfile(){
+            var response = await axios.get('/dashboard-cso-profile')
                 const data = response.data; 
                 let legends = {}; 
 
@@ -226,7 +226,6 @@ export default {
                 }
 
                 console.log(this.CSOProfilePrimaryStakeholderSeries[0].data)
-            })
 
             // CSOProfileAccreditationBodiesSeries:
             // CSOProfileAccreditationBodiesChartOptions: 
