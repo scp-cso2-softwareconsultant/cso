@@ -171,7 +171,12 @@ class commonController extends Controller
                 break;
             case "CSOProfile":
                 $dataExport = DB::table("cso_profile")->select(
+                    
                     DB::raw("is_lro AS 'Is LRO'"),
+                    DB::raw("is_lro_supported AS 'Is LRO Supported'"),
+                    DB::raw("type_of_support AS 'Type Of Suppport'"),
+                    DB::raw("longitude AS 'Longitude'"),
+                    DB::raw("latitude AS 'Latitude'"),
                     DB::raw("proj_area AS 'Project Area'"),
                     DB::raw("cso_name AS 'Full name of the CSO/CSO Network'"),
                     DB::raw("cso_type AS 'Type of CSO/CSO Network'"),
@@ -185,7 +190,32 @@ class commonController extends Controller
                     DB::raw("cso_twitter AS 'Twitter Account'"),
                     DB::raw("cso_instagram AS 'Instagram Account'"),
                     DB::raw("cso_youtube AS 'Youtube Account'"),
-                    DB::raw("cso_socmed AS 'Other Social Media Account'")
+                    DB::raw("cso_socmed AS 'Other Social Media Account'"),
+                    DB::raw("cso_head_name AS 'Name of Head of CSO/CSO Network' "),
+                    DB::raw("cso_head_email AS 'Email Address of the head' "),
+                    DB::raw("cso_head_number AS 'Contact Number of the head' "),
+                    DB::raw("cso_year AS 'Year Established' "),
+                    DB::raw("cso_registration AS 'Registration with/Accreditation' "),
+                    DB::raw("cso_description AS 'Brief CSO/CSO Network description (Vision/Mission)' "),
+                    DB::raw("cso_beneficiaries AS 'Beneficiaries' "),
+                    DB::raw("cso_stakeholders AS 'Stakeholders' "),
+                    DB::raw("cso_cause AS 'Cause' "),
+                    DB::raw("cso_membership_local AS 'Membership Local' "),
+                    DB::raw("cso_membership_govt AS 'Membership Govt' "),
+                    DB::raw("cso_areas_covid AS 'Covid Areas' "),
+                    DB::raw("cso_areas_precovid AS 'Pre-covid Areas' "),
+                    DB::raw("cso_support AS 'Support' "),
+                    DB::raw("cso_rsupport_type AS 'Relatioship support type' "),
+                    DB::raw("cso_rsupport_level AS 'Relatioship support level' "),
+                    DB::raw("cso_rsupport_changed AS 'Relatioship support changed' "),
+                    DB::raw("cso_rsupport_changed_why AS 'Relatioship support changed Why' "),
+                    DB::raw("cso_psupport AS 'Private Sector Support' "),
+                    DB::raw("cso_psupport_type AS 'Private Sector Support type' "),
+                    DB::raw("cso_psupport_level AS 'Private Sector Support Level' "),
+                    DB::raw("cso_psupport_private AS 'Private Sector Support Private' "),
+                    DB::raw("cso_psupport_private_type AS 'Private Sector Support Private Type' "),
+                    DB::raw("cso_psupport_private_level AS 'Private Sector Support Private Level' ")
+                    
                 )
                 ->whereRaw("deleted_at IS NULL")
                 ->get();

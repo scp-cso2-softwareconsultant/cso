@@ -39,10 +39,35 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 break;
             case "CSOProfile":
                 $header = [
-                            'IS LRO', 'PROJECT AREA', 'FULL NAME OF THE CSO/CSO NETWORK', 'TYPE OF CSO/CSO NETWORK',
+                            'IS LRO', 'IS LRO SUPPORTED', 'TYPE OF SUPPORT', 'LONGITUDE', 'LATITUDE',
+                            'PROJECT AREA', 'FULL NAME OF THE CSO/CSO NETWORK', 'TYPE OF CSO/CSO NETWORK',
                             'ABBREVIATION', 'ADDRESS', 'TELEPHONE', 'MOBILE NUMBER', 'EMAIL ADDRESS',
                             'WEBSITE/URL', 'FACEBOOK ACCOUNT', 'INSTAGRAM ACCOUNT', 'YOUTUBE ACCOUNT',
-                            'OTHER SOCIAL MEDIA ACCOUNT'
+                            'OTHER SOCIAL MEDIA ACCOUNT',
+                            "NAME OF HEAD OF CSO/CSO NETWORK",
+                            "EMAIL ADDRESS OF THE HEAD",
+                            "CONTACT NUMBER OF THE HEAD",
+                            "YEAR ESTABLISHED",
+                            "REGISTRATION WITH/ACCREDITATION",
+                            "BRIEF CSO/CSO NETWORK DESCRIPTION (VISION/MISSION)",
+                            "BENEFICIARIES",
+                            "STAKEHOLDERS",
+                            "CAUSE",
+                            "MEMBERSHIP LOCAL",
+                            "MEMBERSHIP GOVT",
+                            "COVID AREAS",
+                            "PRE-COVID AREA",
+                            "SUPPORT",
+                            "RELATIOSHIP SUPPORT TYPE",
+                            "RELATIOSHIP SUPPORT LEVEL",
+                            "RELATIOSHIP SUPPORT CHANGED",
+                            "RELATIOSHIP SUPPORT CHANGED WHY",
+                            "PRIVATE SECTOR SUPPORT TYPE",
+                            "PRIVATE SECTOR SUPPORT LEVEL",
+                            "PRIVATE SECTOR SUPPORT PRIVATE",
+                            "PRIVATE SECTOR SUPPORT PRIVATE TYPE",
+                            "PRIVATE SECTOR SUPPORT PRIVATE LEVEL",
+
                         ];
                 break;
             case "FinanceTracker":

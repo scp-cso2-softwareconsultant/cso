@@ -6,20 +6,16 @@
             <v-data-table
             :headers="headers"
             :items="cso_profile_list"
-            :search="searchBy"
             :loading="loadCSOProfile"
+            :search="filters.filter_items[filters.filter_items_active].value"
+            :custom-filter="filterItems"
+            class="elevation-1"
         >
             <template v-slot:top>
                 <v-toolbar
                     flat
                 >
-                    <v-text-field
-                        v-model="searchBy"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
+                    
                     <v-spacer></v-spacer>
                     <v-dialog
                         v-model="dialog"
@@ -122,7 +118,7 @@
                                             <v-text-field :readonly="detailsReadonly"
                                                           v-model="editedItem.latitude"
                                                           :rules="[rules.required]"
-                                                          label="Longitude *" dense></v-text-field>
+                                                          label="Latitude *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
 <!--                                    cso_name : '',-->
@@ -570,6 +566,70 @@
                         <v-icon color="green">mdi-microsoft-excel</v-icon>
                     </v-btn>
                 </v-toolbar>
+                <v-row  no-gutters style="flex-wrap: nowrap;" >
+                    <v-col cols="2" class="flex-grow-0 flex-shrink-0"  >
+                        <v-text-field 
+                            v-model="filters.filter_items['cso_profile_id'].value"  
+                            :label="filters.filter_items['cso_profile_id'].text"
+                            @input='changeFilterActiveValue("cso_profile_id")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-text-field 
+                            v-model="filters.filter_items['cso_name'].value"  
+                            :label="filters.filter_items['cso_name'].text"
+                            @input='changeFilterActiveValue("cso_name")'
+                            append-icon="mdi-magnify"  
+                            outlined
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="1" style="min-width: 100px; max-width: 70%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['proj_area'].value"
+                            :label="filters.filter_items['proj_area'].text"
+                            :items="filters.filter_items['proj_area'].multiple_selection"
+                            @input='changeFilterActiveValue("proj_area")'
+                            outlined
+                            hide-details
+                        ></v-select>
+                    </v-col>
+                </v-row>
+                <v-row  no-gutters style="flex-wrap: nowrap;" class='my-3' >
+                    <v-col cols="1" style="min-width: 100px; max-width: 70%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['cso_type'].value"
+                            :label="filters.filter_items['cso_type'].text"
+                            :items="filters.filter_items['cso_type'].multiple_selection"
+                            @input='changeFilterActiveValue("cso_type")'
+                            outlined
+                            hide-details
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="1" style="min-width: 100px; max-width: 70%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['is_lro'].value"
+                            :label="filters.filter_items['is_lro'].text"
+                            :items="filters.filter_items['is_lro'].multiple_selection"
+                            @input='changeFilterActiveValue("is_lro")'
+                            outlined
+                            hide-details
+                        ></v-select>
+                    </v-col>
+                    <v-col cols="2" style="min-width: 100px;max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
+                        <v-select
+                            v-model="filters.filter_items['is_lro_supported'].value"
+                            :label="filters.filter_items['is_lro_supported'].text"
+                            :items="filters.filter_items['is_lro_supported'].multiple_selection"
+                            @input='changeFilterActiveValue("is_lro_supported")'
+                            outlined
+                            hide-details
+                        ></v-select>
+                    </v-col>
+                </v-row>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -660,6 +720,53 @@ export default {
             { value: "4", text: "4"},
             { value: "5", text: "5"}
         ],
+        filters:{
+            filter_items_active: 'cso_profile_id',
+            filter_items:{
+                cso_profile_id:{ 
+                    value: '',
+                    text: 'Id' , 
+                    data_value: 'cso_profile_id' ,
+                    specific: true,
+                },
+                cso_name:{ 
+                    value: '',
+                    text: 'Name',  
+                    data_value: 'cso_name',
+                },
+                proj_area:{ 
+                    value: '',
+                    text: 'Project Area', 
+                    data_value: 'proj_area',
+                    multiple_selection: [{text:'None', value:''}, 
+                    { value: "Iloilo City", text: "Iloilo City"},
+                    { value: "Cagayan De Oro City", text: "Cagayan De Oro City"}
+                ]},
+                cso_type:{ 
+                    value: '',
+                    text: 'CSO Type', 
+                    data_value: 'cso_type',
+                    multiple_selection: [
+                        { text:'None',  value:''},
+                        { value: "Stand alone", text: "Stand alone"},
+                        { value: "Member-based (Individuals)", text: "Member-based (Individuals)"},
+                        { value: "Member-based (Organization)", text: "Member-based (Organization)"}
+                    ],
+                },
+                is_lro:{ 
+                    value: '',
+                    text: 'Is LRO', 
+                    data_value: 'is_lro',
+                    multiple_selection:  [{text:'None', value:''},{ value: "Yes", text: "Yes"},{ value: "No", text: "No"}]
+                },
+                is_lro_supported:{ 
+                    value: '',
+                    text: 'Is LRO supported', 
+                    data_value: 'is_lro_supported',
+                    multiple_selection: [{text:'None', value:''},{ value: "Yes", text: "Yes"},{ value: "No", text: "No"}]
+                },
+            },
+        },
         headers: [
             { text: 'CSO ID', align: 'start', sortable: false, value: 'cso_profile_id', width: '10%' },
             { text: 'Name', align: 'start', sortable: false, value: 'cso_name', width: '25%' },
@@ -820,7 +927,15 @@ export default {
                 this.type_of_support_list = category;
             })
         },
-
+        filterItems(items, search, filter ) {
+            return new this.$MultiFilters(items, search, filter,  this.filters.filter_items ).custom_filter();
+        },
+        changeFilterActiveValue(key){
+            const filter = this.filters.filter_items;
+            const active_key = this.filters.filter_items_active;
+            const active_value = filter[active_key].value;
+            this.filters.filter_items_active =  this.$MultiFilters.changeFilterActiveValue(key,filter,active_key , active_value );
+        },
         editItem (item) {
             this.editedIndex = this.cso_profile_list.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -945,6 +1060,7 @@ export default {
             formData.append('tableName', tableName);
             axios.post('/export-excel', formData, {responseType: 'blob'}).then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
+                console.log( response.dat )
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', filename);
