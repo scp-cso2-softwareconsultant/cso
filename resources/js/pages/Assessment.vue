@@ -307,10 +307,12 @@
         :expanded.sync="expanded"
         :search="filters.filter_items[filters.filter_items_active].value"
         :custom-filter="filterItems"
-        item-key="lro_assessment_id"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
         :loading="loadLROAssessment"
-        show-expand
+        item-key="lro_assessment_id"
         class="elevation-1"
+        show-expand
       >
         <template v-slot:top>
           <v-toolbar flat>
@@ -508,6 +510,7 @@
                       v-on="on"
                       :value="filters.filter_items['displayDate_min'].value"
                       :label="filters.filter_items['displayDate_min'].text"
+                      @input='changeFilterActiveValue("displayDate_min")'
                       append-icon="mdi-magnify"
                       outlined
                       hide-details
@@ -543,7 +546,7 @@
                   </template>
                   <v-date-picker
                     v-model="filters.filter_items['displayDate_max'].value"
-                    @input="filters.filter_items['displayDate_max'].fromDateMenu = false"
+                    @input="filters.filter_items['displayDate_max'].fromDateMenu = false;changeFilterActiveValue('displayDate_max')"
                      hide-details
                   ></v-date-picker>
                 </v-menu>
@@ -696,9 +699,10 @@ export default {
 			view: 0,
 		},
     
+    sortBy: 'fat',
+    sortDesc: false,
 		filters: {
 			filter_items_active: 'cso_name',
-      
 			filter_items: {
 				cso_name: {
 					value: '',
@@ -727,32 +731,32 @@ export default {
 						value: '',
 						text: 'Date of Assessment',
 						data_value: 'displayDate',
-						fromDateMenu: false,
+						fromDateMenu: false, // For the calendar modal (true to show calendar)
 						date_range: true, // Enables min and max value (Prerequisits are below)
 				},
 				displayDate_min: {
-						value: '',
-						text: 'Assesment from',
-						data_value: 'displayDate_min',
-						inherit_value: 'displayDate', // <--------------------------- Needed for the key
-						fromDateMenu: false,
-						date_range: true,
-					},
-					displayDate_max: {
-						value: '',
-						text: 'Assesment to',
-						data_value: 'displayDate_max',
-						inherit_value: 'displayDate', // <--------------------------- Needed for the key
-						fromDateMenu: false,
-						date_range: true,
-					},
-					displayDate_selection: {
-						value: '==',
-						text: 'Choose value',
-						data_value: 'displayDate_selection',
-						inherit_value: 'displayDate', // <--------------------------- Needed for the key
-						multiple_selection: [{text:'None' , value:'' },{ text: 'Range', value: 'range'}, {text: 'Equal to', value: '=='	}, { text: 'Greater than or equal to', value: '>=' }, { text: 'Less than or equal to',	value: '<=' }, {	text: 'Greater than',value: '>'	}, {	text: 'Less than',	value: '<'	}]
-					},
+					value: '',
+					text: 'Assesment from',
+					data_value: 'displayDate_min',
+					inherit_value: 'displayDate', // <--------------------------- Needed for the key
+					fromDateMenu: false,
+					date_range: true,
+				},
+				displayDate_max: {
+					value: '',
+					text: 'Assesment to',
+					data_value: 'displayDate_max',
+					inherit_value: 'displayDate', // <--------------------------- Needed for the key
+					fromDateMenu: false,
+					date_range: true,
+				},
+				displayDate_selection: {
+					value: '==',
+					text: 'Choose value',
+					data_value: 'displayDate_selection',
+					inherit_value: 'displayDate', // <--------------------------- Needed for the key
+					multiple_selection: [{text:'None' , value:'' },{ text: 'Range', value: 'range'}, {text: 'Equal to', value: '=='	}, { text: 'Greater than or equal to', value: '>=' }, { text: 'Less than or equal to',	value: '<=' }, {	text: 'Greater than',value: '>'	}, {	text: 'Less than',	value: '<'	}]
+				},
 				  // =============================  Date range
 
          // ============================= Final score range
@@ -796,7 +800,7 @@ export default {
 		headers: [{
 				text: 'Name of LRO',
 				align: 'start',
-				sortable: false,
+				sortable: true,
 				value: 'cso_name',
 				width: '15%'
 			},
@@ -804,25 +808,25 @@ export default {
 				text: 'Domain',
 				value: 'domain',
 				width: '15%',
-				sortable: false
+				sortable: true
 			},
 			{
 				text: 'Tool Used',
 				value: 'tool_used',
 				width: '10%',
-				sortable: false,
+				sortable: true,
 			},
 			{
 				text: 'Conducted By',
 				value: 'conducted_by',
 				width: '15%',
-				sortable: false,
+				sortable: true,
 			},
 			{
 				text: 'Date of Assessment',
 				value: 'displayDate',
 				width: '12%',
-				sortable: false,
+				sortable: true,
 			},
 			{
 				text: 'Final Score',
@@ -1009,9 +1013,18 @@ export default {
 			const filter = this.filters.filter_items;
 			const active_key = this.filters.filter_items_active;
 			const active_value = filter[active_key].value;
-
-			this.filters.filter_items_active = this.$MultiFilters.changeFilterActiveValue(key, filter, active_key, active_value);
+      const active = this.$MultiFilters.changeFilterActiveValue(key, filter, active_key, active_value);
+      console.log( this.filters.filter_items[active].value )
+			this.filters.filter_items_active = active;
 		},
+    toggleOrder () {
+       this.sortDesc = !this.sortDesc
+    },
+    nextSort () {
+      let index = this.headers.findIndex(h => h.value === this.sortBy)
+      index = (index + 1) % this.headers.length
+      this.sortBy = this.headers[index].value
+    },
 		formatDate(date) {
 			var today = new Date();
 			var dd = String(today.getDate()).padStart(2, '0');
