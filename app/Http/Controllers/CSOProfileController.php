@@ -22,7 +22,8 @@ class CSOProfileController extends Controller
     public function getCSONameList(){
         $get_profile = DB::table("cso_profile")
                         ->select(DB::raw("cso_profile_id as value, cso_name as text"))
-                        ->where("is_lro", "Yes")->get();
+                        ->where("is_lro", "Yes")
+                        ->whereRaw(DB::raw("deleted_at IS NULL"))->get();
         $cso_profile = [];
         if($get_profile)
             foreach ($get_profile as $key => $row)
