@@ -986,8 +986,6 @@ export default {
           multiple_selection .push({ text:  select_text_value , value: select_text_value  })
         }
         this.filters.filter_items.cso_name.multiple_selection = multiple_selection;
-
-        console.log( multiple_selection  )
       })
 
 			axios.get('/lro-status').then(response => { 

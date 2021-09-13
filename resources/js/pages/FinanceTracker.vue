@@ -168,8 +168,12 @@
                                                     "
                                                     label="1st Tranche"
                                                     v-on:keyup="computeBurnRate"
+                                                    @input='tranch_date(1)'
                                                     dense
                                                 ></v-text-field>
+                                                <p class="text-lowercase mb-5">
+                                                    {{ editedItem.finance_tranche1_date }}
+                                                </p>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
@@ -185,6 +189,7 @@
                                                     v-model="
                                                         editedItem.finance_tranche2
                                                     "
+                                                    @input='tranch_date(2)'
                                                     label="2nd Tranche"
                                                     dense
                                                 ></v-text-field>
@@ -196,9 +201,13 @@
                                                     v-model="
                                                         editedItem.finance_tranche2
                                                     "
+                                                    @input='tranch_date(2)'
                                                     label="2nd Tranche"
                                                     dense
                                                 ></v-text-field>
+                                                <p class="text-lowercase mb-5">
+                                                    {{ editedItem.finance_tranche2_date }}
+                                                </p>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
@@ -215,6 +224,7 @@
                                                         editedItem.finance_tranche3
                                                     "
                                                     label="3rd Tranche"
+                                                    @input='tranch_date(3)'
                                                     dense
                                                 ></v-text-field>
                                                 <v-text-field
@@ -226,8 +236,12 @@
                                                         editedItem.finance_tranche3
                                                     "
                                                     label="3rd Tranche"
+                                                    @input='tranch_date(3)'
                                                     dense
                                                 ></v-text-field>
+                                                <p class="text-lowercase mb-5">
+                                                    {{ editedItem.finance_tranche3_date }}
+                                                </p>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
@@ -243,9 +257,11 @@
                                                     v-model="
                                                         editedItem.finance_tranche4
                                                     "
+                                                    @input='tranch_date(4)'
                                                     label="4th Tranche"
                                                     dense
                                                 ></v-text-field>
+                                                
                                                 <v-text-field
                                                 v-else
                                                 disabled
@@ -256,7 +272,11 @@
                                                     "
                                                     label="4th Tranche"
                                                     dense
+                                                    @input='tranch_date(4)'
                                                 ></v-text-field>
+                                                <p class="text-lowercase mb-5">
+                                                    {{ editedItem.finance_tranche4_date }}
+                                                </p>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
@@ -1006,6 +1026,10 @@ export default {
             finance_tranche2: "",
             finance_tranche3: "",
             finance_tranche4: "",
+            finance_tranche1_date: "",
+            finance_tranche2_date: "",
+            finance_tranche3_date: "",
+            finance_tranche4_date: "",
             finance_retention: "",
             finance_total: "",
             finance_actuals: "",
@@ -1070,6 +1094,15 @@ export default {
                 this.financeList = response.data;
                 this.loadFinanceTracker = false;
             });
+        },
+        tranch_date( tranch_num ){
+            const t = new Date();
+            const dd = ('0' + t.getDate()).slice(-2);
+            const mm = ('0' + (t.getMonth() + 1)).slice(-2);
+            const yyyy = t.getFullYear();
+
+            const time = `${mm}/${dd}/${yyyy}`;
+            this.editedItem[`finance_tranche${tranch_num}_date`] = time;
         },
         filterItems(items, search, filter ) {
             return new this.$MultiFilters(items, search, filter,  this.filters.filter_items ).custom_filter();
@@ -1175,23 +1208,39 @@ export default {
             return ((tran / budg) * 100).toFixed(2);
         },
         computeBurnRate: function() {
-            var CpyItm = this.editedItem;
-            this.editedItem.finance_burn1 = this.getBurn(
-                parseFloat(CpyItm.finance_tranche1),
-                CpyItm.finance_budget
-            );
-            this.editedItem.finance_burn2 = this.getBurn(
-                (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2)),
-                CpyItm.finance_budget
-            );
-            this.editedItem.finance_burn3 = this.getBurn(
-                (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3)),
-                CpyItm.finance_budget
-            );
-            this.editedItem.finance_burn4 = this.getBurn(
-                (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3) + parseFloat(CpyItm.finance_tranche4)),
-                CpyItm.finance_budget
-            );
+
+            if( this.editedItem.finance_budget != '')
+            {
+                var CpyItm = this.editedItem;
+
+                const burn_1 = this.getBurn(
+                    parseFloat(CpyItm.finance_tranche1),
+                    CpyItm.finance_budget
+                );
+                if( !isNaN(burn_1)) this.editedItem.finance_burn1 = burn_1;
+                
+
+                
+                const burn_2 = this.getBurn(
+                    (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2)),
+                    CpyItm.finance_budget
+                );
+                if( !isNaN(burn_2)) this.editedItem.finance_burn2 = burn_2;
+
+            
+                const burn_3 = this.getBurn(
+                    (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3)),
+                    CpyItm.finance_budget
+                );;
+                if( !isNaN(burn_3)) this.editedItem.finance_burn3 =  burn_3;
+
+                const burn_4 = this.getBurn(
+                    (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3) + parseFloat(CpyItm.finance_tranche4)),
+                    CpyItm.finance_budget
+                );
+
+                if( !isNaN(burn_4)) this.editedItem.finance_burn4 = burn_4 ;
+            }
         },
         formatAsCurrency: function(amt, dec) {
             amt = parseFloat(amt);

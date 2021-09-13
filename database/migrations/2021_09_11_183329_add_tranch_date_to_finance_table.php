@@ -16,10 +16,10 @@ class AddTranchDateToFinanceTable extends Migration
         Schema::table('finance', function (Blueprint $table) {
             //
             
-            // $table->date('finance_tranche1_date');
-            // $table->date('finance_tranche2_date');
-            // $table->date('finance_tranche3_date');
-            // $table->date('finance_tranche4_date');
+            $table->date('finance_tranche1_date');
+            $table->date('finance_tranche2_date');
+            $table->date('finance_tranche3_date');
+            $table->date('finance_tranche4_date');
 
         });
     }
