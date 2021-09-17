@@ -119,8 +119,10 @@
             <div class="align-middle bg-light">
 
                 <div class="card-header border-0 mt-3 bg-transparent">
-                    <img src="img/usaid_logo.png" class="w-50 p-3">
-                    <img src="img/save_the_children_logo.jpg" class="w-25 p-3">
+                    <!-- <img src="img/usaid_logo.png" class="w-50 p-3">
+                    <img src="img/save_the_children_logo.jpg" class="w-25 p-3"> -->
+                    <h1 class="text-center font-weight-bold m-3">Save The Children Philippines</h1>
+                    <p class="text-center m-4">Capacitating Strategic Organizations to Strengthen the Civil Society Organization Sector</p>
                 </div>
 
                 <div class="card-body">
