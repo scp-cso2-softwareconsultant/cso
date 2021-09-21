@@ -246,7 +246,7 @@ export default {
 
     methods: {
         initialize () {
-            document.title = "CSO | System User";
+            document.title = "SCP: CSO² Project | User Management";
 
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'Users';

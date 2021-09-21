@@ -966,7 +966,7 @@ export default {
 	methods: {
 		initialize() {
 			this.loadLROAssessment = true;
-			document.title = "CSO | Assessment"
+			document.title = "SCP: CSO² Project | Assessment"
 			axios.get('/user-roles-permission').then(response => {
 				const moduleName = 'Assessment';
 				const data = response.data;

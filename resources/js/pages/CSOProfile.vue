@@ -902,7 +902,7 @@ export default {
 
     methods: {
         initialize () {
-            document.title = "CSO | CSO Network Members Profile"
+            document.title = "SCP: CSO² Project | CSO Network Members Profile"
             this.loadCSOProfile = true;
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'CSOProfile';

@@ -372,7 +372,7 @@ export default {
     methods: {
         initialize () {
             this.loadCourse = true;
-            document.title = "CSO | Courses"
+            document.title = "SCP: CSO² Project | LMS"
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'LMS';
                 const data = response.data; 

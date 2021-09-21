@@ -49,6 +49,9 @@ export default {
         LMSTab: null,
     }),
     methods:{
+        initialize () {
+            
+        },
         exportExcel: function(tableName,value){
             this.btnLoader = true;
             let filename = tableName + '.xlsx';

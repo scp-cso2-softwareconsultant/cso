@@ -387,7 +387,7 @@ export default {
     },
     methods: {
         initialize() {
-            document.title = "CSO | Project Tracking Document";
+            document.title = "SCP: CSO² Project | Project Tracking Document";
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'ProjectTrackingDocuments';
                 const data = response.data; 

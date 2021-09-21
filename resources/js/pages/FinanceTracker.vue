@@ -1075,7 +1075,7 @@ export default {
     methods: {
 
         initialize () {
-            document.title = "CSO | Finance Tracker"
+            document.title = "SCP: CSO² Project | Finance Tracker"
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'FinanceTracker';
                 const data = response.data; 

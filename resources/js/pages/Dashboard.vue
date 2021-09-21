@@ -4,7 +4,7 @@
     <div class="card p-md-5">
         <h4 class="subheading card-text ">CSO² Indicator</h4>
         <div class="card-body ">
-            <h5 class="card-title"> Responsible Organization </h5>
+            <!-- <h5 class="card-title"> Responsible Organization </h5> -->
             <p class="card-text row justify-content-md-center">
                 <apexchart type="pie" width="380" :options="CSOIndicatorChartOptions" :series="CSOIndicatorSeries"></apexchart>
             </p>
@@ -163,7 +163,7 @@ export default {
     },
     methods:{
         initialize () {
-            document.title = "CSO | Dashboard"
+            document.title = "SCP: CSO² Project | Dashboard"
             this.CSO2IndicatorsChart();
             this.CSOProfile();
             this.assessment();

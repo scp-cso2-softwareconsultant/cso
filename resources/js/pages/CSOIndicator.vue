@@ -1530,7 +1530,7 @@ export default {
 
   methods: {
     initialize() {
-      document.title = "CSO² | Project Indicator";
+      document.title = "SCP: CSO² Project | Project Indicator";
 			axios.get('/user-roles-permission').then( response => {
         const moduleName = 'CSOIndicator';
         const data = response.data; 
