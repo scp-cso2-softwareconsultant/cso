@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('APP_NAME', "SAVE THE CHILDREN PHILIPPINES: Capacitating Strategic Organizations to Strengthen the Civil Society Organization Sector") }}</title>
 
     <!-- Scripts -->
     <script src="{{ secure_asset('js/app.js') }}"></script>

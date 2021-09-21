@@ -513,7 +513,7 @@ export default {
 
     computed: {
         formTitle () {
-            return this.editedIndex === -1 ? 'New LMS' : 'Edit LMS'
+            return this.editedIndex === -1 ? 'New Participant' : 'Edit LMS'
         },
     },
 
