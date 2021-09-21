@@ -991,12 +991,12 @@
                                         value="100"
                                         :color="getColor(item.cso_status)"
                                     ></v-progress-linear>
-                                    <v-progress-linear
+                                    <!-- <v-progress-linear
                                         indeterminate
                                         class="rounded-bottom text-white text-center"
                                         height="2"
                                         :color="getColor(item.cso_status)"
-                                    ></v-progress-linear>
+                                    ></v-progress-linear> -->
                                 </template>
                                 <template v-slot:item.actions="{ item }">
                                     <v-icon
@@ -1041,12 +1041,12 @@
                                                     value="100"
                                                     :color="getColor(item.indicator_status)"
                                                 ></v-progress-linear>
-                                                <v-progress-linear
+                                                <!-- <v-progress-linear
                                                     indeterminate
                                                     class="rounded-bottom text-white text-center"
                                                     height="2"
                                                     :color="getColor(item.indicator_status)"
-                                                ></v-progress-linear>
+                                                ></v-progress-linear> -->
                                             </template>
                                             <template
                                                 v-slot:item.actions="{ item }"
@@ -1158,12 +1158,12 @@
                                         value="100"
                                         :color="getColor(item.cso_status)"
                                     ></v-progress-linear>
-                                    <v-progress-linear
+                                    <!-- <v-progress-linear
                                         indeterminate
                                         class="rounded-bottom text-white text-center"
                                         height="2"
                                         :color="getColor(item.cso_status)"
-                                    ></v-progress-linear>
+                                    ></v-progress-linear> -->
                                 </template>
                                 <template v-slot:item.actions="{ item }">
                                     <v-icon
@@ -1220,12 +1220,12 @@
                                                     value="100"
                                                     :color="getColor(item.indicator_status)"
                                                 ></v-progress-linear>
-                                                <v-progress-linear
+                                                <!-- <v-progress-linear
                                                     indeterminate
                                                     class="rounded-bottom text-white text-center"
                                                     height="2"
                                                     :color="getColor(item.indicator_status)"
-                                                ></v-progress-linear>
+                                                ></v-progress-linear> -->
                                             </template>
                                             <template
                                                 v-slot:item.actions="{ item }"
