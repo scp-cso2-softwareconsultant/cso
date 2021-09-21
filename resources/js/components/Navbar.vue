@@ -69,7 +69,7 @@ export default {
                 { name: "ProjectTrackingDocuments", text: 'Project Tracking Document', icon: 'mdi-clipboard-text-search-outline', linkTo: '/project-tracking-documents', has_sub_items: false },
                 { name: "LMS", text: 'LMS', icon: 'mdi-book-open-page-variant', linkTo: '/lms-data', has_sub_items: false },
                 { name: "Users", text: 'Users', icon: 'mdi-account-group', linkTo: '/system-users', has_sub_items: false },
-                { text: 'Acitiviy Feedback', icon: 'mdi-comment-quote', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
+                { text: 'Activity Feedback', icon: 'mdi-comment-quote', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
                 { text: 'CBLD Indicators', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/cbld.php', has_sub_items: false },
                 //{ text: 'DIS', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/dis.php', has_sub_items: false },
             ],
