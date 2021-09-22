@@ -140,7 +140,7 @@
                                                                 </v-textarea>
                                                             </v-col>
                                                         </v-row>
-                                                        <v-row v-if="catSelectedTab === 'Outcome'" class="mt-0">
+                                                        <!-- <v-row v-if="catSelectedTab === 'Outcome'" class="mt-0">
                                                             <v-col
                                                                 cols="12"
                                                                 sm="12"
@@ -157,7 +157,7 @@
                                                                 >
                                                                 </v-textarea>
                                                             </v-col>
-                                                        </v-row>
+                                                        </v-row> -->
                                                         <v-row v-if="catSelectedTab ==='Output'" class="mt-0">
                                                             <v-col
                                                                 cols="12"
@@ -1437,7 +1437,7 @@ export default {
       cso_act_no: "",
       cso_lead_organization: "",
       cso_indicator_mov : "",
-      cso_intermediate_outcome: "",
+      //cso_intermediate_outcome: "",
       cso_remarks : "",
       cso_status: "",
     },
@@ -1447,7 +1447,7 @@ export default {
       cso_act_no: "",
       cso_lead_organization: "",
       cso_indicator_mov : "",
-      cso_intermediate_outcome: "",
+      //cso_intermediate_outcome: "",
       cso_remarks : "",
       cso_status: "",
     },
@@ -1543,7 +1543,7 @@ export default {
           }
         }
       })
-      category_items: ["Impact", "Outcome", "Activity","Intermediate Outcomes"],
+      category_items: ["Impact", "Outcome", "Activity"],
         (this.loadCSOIndicator = true);
       // getLead organization list
       axios.get("/get-lead-organization").then((res)=>{
@@ -1668,6 +1668,16 @@ export default {
     getIndicator: function (categorySelected) {
       this.catSelectedTab = categorySelected;
       this.headers = this.resetHeaders()
+
+      if(this.catSelectedTab === 'Activity')
+        this.headers.splice(2,0,{
+        text: "Lead Organization",
+        align: "start",
+        sortable: true,
+        width: "15%",
+        value: "cso_lead_organization",
+      })
+
       if (categorySelected === "Output") {
         this.subHeaders[0].text = "Indicator #";
         this.headers.splice(3,0,{
@@ -1719,13 +1729,6 @@ export default {
         align: "start",
         sortable: true,
         value: "cso_description",
-      },
-      {
-        text: "Lead Organization",
-        align: "start",
-        sortable: true,
-        width: "15%",
-        value: "cso_lead_organization",
       },
       {
         text: "Status",
@@ -2086,6 +2089,7 @@ export default {
       var formData = new FormData();
       var tablename = this.catSelectedTab==='Output'? 'CSOIndicator-Output' : tableName;
       tablename = this.catSelectedTab === 'Outcome'? 'CSOIndicator-Outcome' : tablename;
+      tablename = this.catSelectedTab === 'Impact'? 'CSOIndicator-Impact' : tablename;
       formData.append("tableName", tablename);
       formData.append("category", value);
       axios

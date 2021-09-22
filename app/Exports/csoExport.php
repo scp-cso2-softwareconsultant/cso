@@ -32,14 +32,21 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
         switch ($this->tableName){
             case "CSOIndicator-Output":
                 $header = [
-                    'CATEGORY','NO','DESCRIPTION','LEAD ORGANIZATION','INDICATOR STATUS','MOV','REMARKS'
+                    'CATEGORY','NO','DESCRIPTION','INDICATOR STATUS','MOV','REMARKS'
                 ];
                 break;
             case "CSOIndicator-Outcome":
                 $header = [
-                    'CATEGORY','NO','DESCRIPTION','LEAD ORGANIZATION','INTERMEDIATE OUTCOME','INDICATOR STATUS','SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
+                    'CATEGORY','NO','DESCRIPTION',/*'INTERMEDIATE OUTCOME',*/'INDICATOR STATUS','SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
                     'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE','TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
                 ];
+                break;
+            case "CSOIndicator-Impact":
+                $header = [
+                            'CATEGORY','NO','DESCRIPTION', 'INDICATOR STATUS', 'SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
+                            'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
+                            'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
+                        ];
                 break;
             case "CSOIndicator":
                 $header = [
