@@ -39,7 +39,7 @@ class CSOProfileController extends Controller
 
         $get_profile_ids = DB::table("cso_profile")
             ->select('cso_id')
-            ->where('cso_id','LIKE','%'.$request['cso_id'].'%')
+            ->where('cso_id',$request['cso_id'])
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
         //Log::info("CHECK MATCH ACT #");
