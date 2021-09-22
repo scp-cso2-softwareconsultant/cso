@@ -891,7 +891,7 @@
                 <strong class="text-primary">Status Legends</strong>
             </p>
             <v-col
-                class="mx-3"
+                class="mx-3 btn"
                 cols="2"
                 v-for="(stats, idx) in status_list"
                 :key="idx"
@@ -900,6 +900,7 @@
                     class="rounded-top rounded-bottom text-white text-center"
                     height="35"
                     :color="getColor(stats.text)"
+                    @click="setFilterByStatus(stats.text)"
                     value="100"
                     >{{ stats.value }}</v-progress-linear
                 >
@@ -1637,10 +1638,16 @@ export default {
         //console.log(error);
       }
     },
+    setFilterByStatus(status){
+        //TODO
+        this.selected_filter_item = 'Status'
+        this.selected_filter_item2 = {text:status, value: status}
+        this.filter_items2 = this.status_list
+        this.initialize();
+    },
     filterData(response){
         var m_filter_value = this.selected_filter_item;
           var filter_value = '';
-
           if(this.selected_filter_item2.text) filter_value = this.selected_filter_item2.text
           else filter_value = this.selected_filter_item2
 
@@ -1662,7 +1669,6 @@ export default {
             this.selected_filter_item = 'All'
             this.selected_filter_item2 = ''
         }
-
         this.initialize()
     },
     getIndicator: function (categorySelected) {
