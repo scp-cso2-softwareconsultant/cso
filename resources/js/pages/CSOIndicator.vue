@@ -1687,13 +1687,13 @@ export default {
       } else if (categorySelected === "Activity") {
         this.subHeaders[0].text = "Sub-Activity #";
       }else if(categorySelected === "Outcome"){
-          this.headers.splice(3,0,{
-              text: "Intermediate Outcome",
-              width: "10%",
-              align: "start",
-              sortable: false,
-              value: "cso_intermediate_outcome"
-          })
+        //   this.headers.splice(3,0,{
+        //       text: "Intermediate Outcome",
+        //       width: "10%",
+        //       align: "start",
+        //       sortable: false,
+        //       value: "cso_intermediate_outcome"
+        //   })
       }else{
           this.subHeaders[0].text = "Indicator #";
       }
