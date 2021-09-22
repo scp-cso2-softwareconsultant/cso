@@ -42,6 +42,15 @@
                             <v-card-text>
                                 <v-container>
                                     <h5 class="subheading font-weight-black">CSO/CSO Network Identity</h5>
+                                    <v-row class="mt-0" v-if="!detailsReadonly && isEditting">
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field
+                                                v-model="editedItem.cso_id"
+                                                label="CSO ID" dense
+                                                :rules="[rules.required]"
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
                                     <v-row class="mt-0" v-if="!detailsReadonly">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-select
@@ -569,9 +578,9 @@
                 <v-row  no-gutters style="flex-wrap: nowrap;" >
                     <v-col cols="2" class="flex-grow-0 flex-shrink-0"  >
                         <v-text-field 
-                            v-model="filters.filter_items['cso_profile_id'].value"  
-                            :label="filters.filter_items['cso_profile_id'].text"
-                            @input='changeFilterActiveValue("cso_profile_id")'
+                            v-model="filters.filter_items['cso_id'].value"  
+                            :label="filters.filter_items['cso_id'].text"
+                            @input='changeFilterActiveValue("cso_id")'
                             append-icon="mdi-magnify"  
                             outlined
                             hide-details
@@ -675,13 +684,15 @@
 <script>
 export default {
     data: () => ({
-
         btnLoader: false,
         dialog: false,
         detailsReadonly: false,
         dialogDelete: false,
         loadCSOProfile: false,
         searchBy: "",
+        isEditting : false,
+        isAddingNew : false,
+        editedItemCopy : {},
         crud_guard : {
             create: 0,
             delete: 0,
@@ -721,12 +732,12 @@ export default {
             { value: "5", text: "5"}
         ],
         filters:{
-            filter_items_active: 'cso_profile_id',
+            filter_items_active: 'cso_id',
             filter_items:{
-                cso_profile_id:{ 
+                cso_id:{ 
                     value: '',
                     text: 'Id' , 
-                    data_value: 'cso_profile_id' ,
+                    data_value: 'cso_id' ,
                     specific: true,
                 },
                 cso_name:{ 
@@ -768,7 +779,7 @@ export default {
             },
         },
         headers: [
-            { text: 'CSO ID', align: 'start', sortable: false, value: 'cso_profile_id', width: '10%' },
+            { text: 'CSO ID', align: 'start', sortable: false, value: 'cso_id', width: '10%' },
             { text: 'Name', align: 'start', sortable: false, value: 'cso_name', width: '25%' },
             { text: 'Project Area', value: 'proj_area',width: '15%',sortable: false, },
             { text: 'Type of CSO', value: 'cso_type',width: '10%',sortable: false, },
@@ -779,6 +790,7 @@ export default {
         cso_profile_list: [],
         editedIndex: -1,
         editedItem: {
+            cso_id : '',
             is_lro : '',
             is_lro_supported:'',
             type_of_support:'',
@@ -937,9 +949,11 @@ export default {
             this.filters.filter_items_active =  this.$MultiFilters.changeFilterActiveValue(key,filter,active_key , active_value );
         },
         editItem (item) {
+            this.editedItemCopy = item
             this.editedIndex = this.cso_profile_list.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
+            this.isEditting = true
         },
 
         detailsItem(item){
@@ -974,8 +988,11 @@ export default {
         close () {
             this.dialog = false
             this.detailsReadonly = false;
+            this.isEditting = false;
+            this.btnLoader = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedItemCopy = {}
                 this.editedIndex = -1
             })
         },
@@ -988,10 +1005,44 @@ export default {
                 this.editedIndex = -1
             })
         },
+        async checkNoExistCSOProfileID(url, id){
+            try {
+                //console.log(`/${url}/?cso_id=${id}`)
+                const response = await axios.get(`/${url}/?cso_id=${id}`)
+                //console.log(response)
+                const arr = [];
 
-        save () {
+                for(let x = 0; x < response.data.length; x++){
+                    //console.log(id.replace(/[^\d.-]/g,''),response.data[x].cso_act_no.replace(/[^\d.-]/g,''))
+                    if(response.data[x].cso_id)
+                        arr[arr.length] = response.data[x].cso_id
+                }
+                //console.log(arr);
+
+                if(arr.length !== 0){ 
+                    //console.log(arr.length, "returning true")
+                    return true;
+                }else{
+                    //console.log(arr.length, "returning false")
+                    return false;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async save () {
             this.btnLoader = true;
             let validate = true;
+
+            if(this.isEditting){
+                console.log("REQ ")
+                let check = await this.checkNoExistCSOProfileID('checkNoExistCSOProfileID',this.editedItem.cso_id)
+                if(check && this.editedItemCopy.cso_id != this.editedItem.cso_id){
+                    validate = false;
+                    this.$noty.error('CSO ID already exist')
+                }
+            }
+
             if(!this.editedItem.is_lro){
                 this.$noty.error('Is LRO is empty!');
                 validate = false;
@@ -1060,7 +1111,7 @@ export default {
             formData.append('tableName', tableName);
             axios.post('/export-excel', formData, {responseType: 'blob'}).then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
-                console.log( response.dat )
+                //console.log( response.data )
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', filename);

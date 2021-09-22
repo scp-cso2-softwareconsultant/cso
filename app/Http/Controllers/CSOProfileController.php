@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Log;
+
 class CSOProfileController extends Controller
 {
     public function getCSOProfile(){
@@ -21,7 +23,7 @@ class CSOProfileController extends Controller
 
     public function getCSONameList(){
         $get_profile = DB::table("cso_profile")
-                        ->select(DB::raw("cso_profile_id as value, cso_name as text"))
+                        ->select(DB::raw("cso_id as value, cso_name as text"))
                         ->where("is_lro", "Yes")
                         ->whereRaw(DB::raw("deleted_at IS NULL"))->get();
         $cso_profile = [];
@@ -31,7 +33,37 @@ class CSOProfileController extends Controller
         return $cso_profile;
     }
 
+    public function checkNoExistCSOProfileID(Request $request){
+
+        Log::Info('REQ');
+
+        $get_profile_ids = DB::table("cso_profile")
+            ->select('cso_id')
+            ->where('cso_id','LIKE','%'.$request['cso_id'].'%')
+            ->whereRaw(DB::raw("deleted_at IS NULL"))
+            ->get();
+        //Log::info("CHECK MATCH ACT #");
+        Log::info($request['cso_id']);
+        //Log::info($request['category']);
+        //Log::info("-----------------");
+
+        return $get_profile_ids;
+    }
+
+    public function getAvailableCSOID(){
+        $available_id = DB::table("cso_profile")->select('cso_id')->whereRaw(DB::raw("deleted_at IS NULL"))->get();
+        $counter = 0;
+
+        foreach($available_id as $r){
+            $counter = $r->cso_id;
+        }
+
+        if($counter == 0) return 1;
+        return $counter+1;
+    }
+
     public function saveCSOProfile(Request $request){
+        $cso_ID = $this->getAvailableCSOID();
         $raw_data = json_decode($request['data']);
         $form_mode = $request['form_mode'];
         $success = false;
@@ -39,6 +71,7 @@ class CSOProfileController extends Controller
         $user_name = $user->firstname . ' '. $user->lastname;
         if($form_mode < 0) {
             $insertData = DB::table('cso_profile')->insert([
+                'cso_id' => $cso_ID,
                 'is_lro' => $raw_data->is_lro,
                 'is_lro_supported' => $raw_data->is_lro_supported,
                 'longitude'=> $raw_data->longitude,
@@ -85,8 +118,11 @@ class CSOProfileController extends Controller
             ]);
             if($insertData) $success=true;
         }else{
+            Log::info('SAVING UPDATE');
+            Log::info($raw_data -> cso_id);
             $updateData = DB::table('cso_profile')->where('cso_profile_id',$raw_data->cso_profile_id)
                 ->update(array(
+                    'cso_id' => $raw_data -> cso_id,
                     'is_lro' => $raw_data->is_lro,
                     'is_lro_supported' => $raw_data->is_lro_supported,
                     'type_of_support'=> $raw_data->type_of_support,
@@ -144,6 +180,8 @@ class CSOProfileController extends Controller
 
     public function deleteCSOProfile(Request $request){
         $ID = $request['delete_id'];
+        // Log::info("DELETE REQ");
+        // LOG::info($request['delete_id']);
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;

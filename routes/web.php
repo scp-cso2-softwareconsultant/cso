@@ -48,8 +48,8 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::post('/delete-cso-indicator-details', [App\Http\Controllers\CSOIndicatorController::class, 'deleteCSOIndicatorDetails'])->name('delete-cso-indicator-details')->middleware('roles_permission:CSOIndicator,delete');
         Route::get('/downloadMov', [App\Http\Controllers\CSOIndicatorController::class, 'downloadMov'])->name('downloadMov')->middleware('roles_permission:CSOIndicator,download');
         Route::get('/downloadCSOMov', [App\Http\Controllers\CSOIndicatorController::class, 'downloadCSOMov'])->name('downloadCSOMov')->middleware('roles_permission:CSOIndicator,download');
-        Route::get('/checkNoExist', [App\Http\Controllers\CSOIndicatorController::class, 'checkNoExist'])->name('checkNoExist')->middleware('roles_permission:CSOIndicator,download');
-        Route::get('/checkSuNoExist', [App\Http\Controllers\CSOIndicatorController::class, 'checkSuNoExist'])->name('checkSuNoExist')->middleware('roles_permission:CSOIndicator,download');
+        Route::get('/checkNoExist', [App\Http\Controllers\CSOIndicatorController::class, 'checkNoExist'])->name('checkNoExist')->middleware('roles_permission:CSOIndicator,view');
+        Route::get('/checkSuNoExist', [App\Http\Controllers\CSOIndicatorController::class, 'checkSuNoExist'])->name('checkSuNoExist')->middleware('roles_permission:CSOIndicator,view');
     });
 
 // CSO PROFILE
@@ -60,6 +60,7 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::post('/delete-cso-profile', [App\Http\Controllers\CSOProfileController::class,'deleteCSOProfile'])->name('delete-cso-profile')->middleware('roles_permission:CSOProfile,delete');
         
         Route::get('/types-of-support', [App\Http\Controllers\CSOProfileController::class, 'getTypesOfSupport'])->name('get-types-of-suppot')->middleware('roles_permission:CSOProfile,view');
+        Route::get('/checkNoExistCSOProfileID', [App\Http\Controllers\CSOProfileController::class, 'checkNoExistCSOProfileID']) -> name('checkNoExistCSOProfileID') -> middleware('roles_permission:CSOProfile,view');
     }); 
 // LRO ASSESSMENT
     Route::group(['middleware' => 'roles_permission:Assessment,view' ], function() {
