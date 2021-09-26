@@ -73,6 +73,7 @@ class CSOProfileController extends Controller
             $insertData = DB::table('cso_profile')->insert([
                 'cso_id' => $cso_ID,
                 'is_lro' => $raw_data->is_lro,
+                'type_of_support'=> $raw_data->type_of_support,
                 'is_lro_supported' => $raw_data->is_lro_supported,
                 'longitude'=> $raw_data->longitude,
                 'latitude'=> $raw_data->latitude,

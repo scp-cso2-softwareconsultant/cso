@@ -46,10 +46,17 @@
           <h5 class="card-title">Top 3 Accreditation Bodies</h5>
           <div class="row">
             <div class="col-lg-4 col-sm-2">
-              <div class="card-box bg-red">
+              <div class="card-box shadow rounded bg-red">
                 <div class="inner">
-                  <h3>82%</h3>
-                  <h5>CSO</h5>
+                  <h3>
+                    {{
+                      CSOProfileAccreditation.accreditedMapping[0].percentage
+                    }}
+                    %
+                  </h3>
+                  <h5>
+                    {{ CSOProfileAccreditation.accreditedMapping[0].tos }}
+                  </h5>
                 </div>
                 <div class="icon">
                   <i class="fa fa-users"></i>
@@ -60,10 +67,17 @@
               </div>
             </div>
             <div class="col-lg-4 col-sm-6">
-              <div class="card-box bg-orange">
+              <div class="card-box shadow rounded bg-orange">
                 <div class="inner">
-                  <h3>16%</h3>
-                  <h5>Social Enterprise</h5>
+                  <h3>
+                    {{
+                      CSOProfileAccreditation.accreditedMapping[1].percentage
+                    }}
+                    %
+                  </h3>
+                  <h5>
+                    {{ CSOProfileAccreditation.accreditedMapping[1].tos }}
+                  </h5>
                 </div>
                 <div class="icon">
                   <i class="fa fa-user-plus" aria-hidden="true"> </i>
@@ -75,10 +89,17 @@
             </div>
 
             <div class="col-lg-4 col-sm-6">
-              <div class="card-box bg-green">
+              <div class="card-box shadow rounded bg-green">
                 <div class="inner">
-                  <h3>2%</h3>
-                  <h5>Academe</h5>
+                  <h3>
+                    {{
+                      CSOProfileAccreditation.accreditedMapping[2].percentage
+                    }}
+                    %
+                  </h3>
+                  <h5>
+                    {{ CSOProfileAccreditation.accreditedMapping[2].tos }}
+                  </h5>
                 </div>
                 <div class="icon">
                   <i class="fa fa-money" aria-hidden="true"></i>
@@ -89,10 +110,25 @@
               </div>
             </div>
           </div>
-          <p class="card-text">Securities and Exchange Commission (SEC) 58%</p>
-          <p class="card-text">LGU Development Council 21%</p>
-          <p class="card-text">
-            Department of Social Welfare and Development 16%
+          <!-- <p
+            v-for="(
+              item, index
+            ) in CSOProfileAccreditation.accreditedMapping.slice(3)"
+            :key="index"
+            class="card-text font-weight-bold text-uppercase"
+          >
+            {{ item.tos }} :
+            <span class="font-weight-normal">{{ item.percentage }} %</span>
+          </p> -->
+          <p
+            v-for="(
+              item, index
+            ) in CSOProfileAccreditation.accreditationMapping.slice(0,3)"
+            :key="index"
+            class="card-text font-weight-bold text-uppercase"
+          >
+            {{ item.tos }} :
+            <span class="font-weight-normal">{{ item.percentage }} %</span>
           </p>
         </div>
       </div>
@@ -102,12 +138,13 @@
             <v-list-item-content>
               <h5 class="card-title">Primary Stakeholders</h5>
               <div class="text-center">
-                <apexchart
+                <!-- <apexchart
                   type="bar"
                   height="350"
                   :options="CSOProfilePrimaryStakeholderChartOptions"
                   :series="CSOProfilePrimaryStakeholderSeries"
-                ></apexchart>
+                ></apexchart> -->
+                <BarChart :D="barData" />
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -187,14 +224,18 @@
 // @ is an alias to /src
 import VueApexCharts from "vue-apexcharts";
 
+import * as echarts from "echarts";
+
 import PieChart from "../components/dashboard_charts/pie_chart.vue";
 import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
+import BarChart from "../components/dashboard_charts/barchart.vue";
 
 export default {
   components: {
     apexchart: VueApexCharts,
     PieChart,
     DoughnutChart,
+    BarChart,
   },
   data: () => ({
     responsibleOrganization: [], // Lead Organizations
@@ -277,7 +318,7 @@ export default {
         orient: "horizontal",
         right: "15%",
         bottom: 1,
-        left: 'center'
+        left: "center",
       },
       aria: {
         enabled: true,
@@ -346,50 +387,87 @@ export default {
               fontWeight: "bold",
             },
           },
-          data: [ ],
+          data: [],
         },
       ],
     },
-
-    CSOProfileAccreditationBodiesSeries: [44, 55, 13, 43, 22],
-    CSOProfileAccreditationBodiesChartOptions: {
-      chart: {
-        width: 380,
-        type: "pie",
-      },
-      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            legend: {
-              position: "bottom",
-            },
-          },
-        },
+    //Top Accreditation
+    CSOProfileAccreditation: {
+      AccreditedBodies: [],
+      data: [],
+      total: 0,
+      accreditedMapping: [
+        { count: 0, tos: "local policy makers" },
+        { count: 0, tos: "private sector support organizations and CSRs" },
+        { count: 0, tos: "peer CSOs or related networks" },
+        { count: 0, tos: "larger CSOs/CSO Network in Manila, Cebu or Davao" },
+        { count: 0, tos: "local researchers and scholars" },
+        { count: 0, tos: "potential donors" },
       ],
+      accreditationMapping: []
     },
-    CSOProfileTypesOfOrganizationSeries: [44, 55, 13, 43],
-    CSOProfileTypesOfOrganizationChartOptions: {
-      chart: {
-        width: 480,
-        type: "donut",
+    //BARCHART
+    barData: {
+      tooltip: {
+        trigger: "axis",
+        formatter: "{b}",
+        axisPointer: {
+          // Use axis to trigger tooltip
+          type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+        },
       },
-      labels: ["lead SCP", "Ateneo CORD", "AHA BD", "PICPA"],
-      responsive: [
+      legend: { show: false },
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
+      },
+      xAxis: {
+        type: "value",
+        max: 100,
+      },
+      yAxis: {
+        type: "category",
+        data: [
+          "Local Policy Makers",
+          "private sector support organizations and CSRs",
+          "peer CSOs or related networks",
+          "larger CSOs/CSO Network in Manila, Cebu or Davao",
+          "local researchers and scholars",
+          "potential donors",
+          "tite",
+        ],
+      },
+      series: [
         {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            legend: {
-              position: "bottom",
-            },
+          name: "Direct",
+          type: "bar",
+          stack: "total",
+          label: {
+            formatter: "{c}%",
+            show: true,
           },
+          itemStyle: {
+            borderRadius: 6,
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+              { offset: 0.5, color: "#824f7e" },
+              { offset: 1, color: "#824f7e" },
+              { offset: 0, color: "#5c3759" },
+            ]),
+          },
+          emphasis: {
+            focus: "series",
+          },
+          data: [
+            { value: 8, name: "Local Policy Makers : 21" },
+            { value: 15, name: "22" },
+            { value: 50, name: "23" },
+            { value: 7, name: "24" },
+            { value: 7, name: "25" },
+            { value: 5, name: "26" },
+            { value: 3, name: "27" },
+          ],
         },
       ],
     },
@@ -690,7 +768,7 @@ export default {
     initialize() {
       document.title = "SCP: CSO² Project | Dashboard";
       this.updateCSOIndicatorsChart();
-      this.updateCSOProfileChart()
+      this.updateCSOProfileChart();
       this.assessment();
       this.financeTracker();
       this.ProjectTrackingDocument();
@@ -737,62 +815,142 @@ export default {
             DATA[idx] = { value: DATA[idx].value + 1, name: i.cso_status };
           }
         });
-        //console.log(DATA,this.pieData.series[0].data = DATA)
+        /*
+        TODO LATER
+
+        Correct Color via 
+        https://echarts.apache.org/en/option.html#legend.data.itemStyle.decal.color
+
+        var len = DATA.length
+        for(var x = 0; x < len; x++){
+            console.log(DATA[x].value)
+            if(DATA[x].value === 0){
+                DATA.splice(x,1)
+                x--
+                len = DATA.length
+            }
+        }
+
+        */
+
         this.pieData.series[0].data = DATA;
       });
     },
 
     //FOR CSO NETWORK PROFILE DOUGHNUT CHART
     updateCSOProfileChart() {
-      axios.get("/dashboard-cso-profile").then((res)=>{
+      axios.get("/dashboard-cso-profile").then((res) => {
         const data = res.data;
         let legends = {};
 
-        var DATA = [{ value: 0, name: "Member-Based (Organization)" },
-                { value: 0, name: "Member-based (Individuals)" },
-                { value: 0, name: "Stand alone" }]
+        var DATA = [
+          { value: 0, name: "Member-based (Organization)" },
+          { value: 0, name: "Member-based (Individuals)" },
+          { value: 0, name: "Stand alone" },
+        ];
 
-        console.log(DATA)
-        data.forEach((i)=>{
-            var obj = DATA.find((ob) => ob.name === i.cso_type);
-            var idx = DATA.indexOf(obj);
-            DATA[idx] = { value: DATA[idx].value + 1, name: obj.name};
-        })
-
-        this.doughData.series[0].data = DATA
-        
-        //DATA.forEach(i=>console.log(i.name,i.value))
-
-    //   for (let i = 0; i < data.length; i++)
-    //     legends[data[i].cso_type] = isNaN(legends[data[i].cso_type])
-    //       ? 1
-    //       : legends[data[i].cso_type] + 1;
-
-    //   let labels = [];
-    //   let series = [];
-    //   Object.entries(legends).forEach(([key, value]) => {
-    //     labels.push(key);
-    //     series.push(value);
-    //   });
-
-    //   this.CSOProfileTypesOfOrganizationSeries = series;
-    //   this.CSOProfileTypesOfOrganizationChartOptions = {
-    //     ...this.CSOProfileTypesOfOrganizationChartOptions,
-    //     labels: labels,
-    //   };
-
-    //   this.CSOProfilePrimaryStakeholderSeries[0] = {
-    //     data: new Array(6).fill(0),
-    //   };
-
-    //   for (let i = 0; i < data.length; i++) {
-    //     let insertIndex =
-    //       this.CSOProfilePrimaryStakeholderChartOptions.xaxis.categories.indexOf(
-    //         data[i].cso_stakeholders
-    //       );
-    //     this.CSOProfilePrimaryStakeholderSeries[0].data[insertIndex] += 1;
-    //   }
+        data.forEach((i) => {
+          var obj = DATA.find((ob) => ob.name === i.cso_type);
+          var idx = DATA.indexOf(obj);
+          DATA[idx] = { value: DATA[idx].value + 1, name: obj.name };
         });
+
+        this.doughData.series[0].data = DATA;
+      });
+
+      // COMPUTING TOP 3 ACCREDIT..
+      var constructedObjectMapping = [];
+      var constructedObjectMapping2 = [];
+      /* structure
+      CSOProfileAccreditation
+        .AccreditedBodies:[],
+        .data: [],
+        .total : 0,
+        .accreditedMapping:[] 
+        */
+      // REMOVE DUE TO CHANGES REQUEST BY CLIENT
+      axios.get("/types-of-support").then((response) => {
+        const data = response.data;
+        data.forEach((i) => {
+          constructedObjectMapping.push({ count: 0, tos: i.name });
+        });
+      });
+      axios.get("/getAccreditations").then((response) => {
+        const data = response.data;
+        data.forEach((i) => {
+          constructedObjectMapping2.push({
+            count: 0,
+            accr: i.text,
+          });
+        });
+      });
+
+      // axios.get('/getStakeHolders').then((response)=>{
+      //         response.data.forEach((i)=>{
+      //             constructedObjectMapping.push({count: 0, tos : i.text})
+      //         });
+      //     })
+
+      axios.get("/cso-profile").then((response) => {
+        this.CSOProfileAccreditation.total = response.data.length;
+        this.CSOProfileAccreditation.data = response.data;
+        this.CSOProfileAccreditation.data.forEach((item) => {
+          var parsed = item.cso_stakeholders.split("^^");
+          var parsed2 = item.cso_registration.split("^^");
+
+          var constructed = [];
+          var constructed2 = [];
+
+          parsed.forEach((it) => {
+            if (it.length === 0) return;
+            constructed.push({ value: it, tos: it });
+          });
+
+          parsed2.forEach((it) => {
+            if (it.length === 0) return;
+            constructed2.push({ value: it, accr: it });
+          });
+
+          item.cso_stakeholders = constructed;
+          item.cso_registration = constructed2;
+
+          var found = constructedObjectMapping.find(
+            (obj) => obj.tos === item.type_of_support
+          );
+
+          if (found === undefined) {
+            // console.log(
+            //   "One of Data has unknown cso_stakeholders - will not be counted in Top 3 Accreditation",
+            //   item.type_of_support
+            // );
+          } else {
+            var idx = constructedObjectMapping.indexOf(found);
+            constructedObjectMapping[idx] = {
+              count: found.count + 1,
+              tos: found.tos,
+            };
+          }
+
+          constructedObjectMapping2.forEach((i)=>{
+               //var hasAccr = item.registration.find(reg => reg.accr )
+               console.log(item)
+            //    if(hasAccr !== -1)
+            //        i.count += 1
+          })
+        });
+        constructedObjectMapping.sort((i1, i2) =>
+          i1.count < i2.count ? 1 : -1
+        );
+        constructedObjectMapping.forEach(
+          (i) =>
+            (i.percentage = (
+              (i.count / this.CSOProfileAccreditation.total) *
+              100
+            ).toFixed(2))
+        );
+        this.CSOProfileAccreditation.accreditedMapping =
+          constructedObjectMapping;
+      });
     },
     assessment() {
       // assessmentSubDomainPerYearSeries

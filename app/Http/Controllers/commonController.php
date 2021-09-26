@@ -85,6 +85,24 @@ class commonController extends Controller
         return $type_list;
     }
 
+    public function getAccreditations(){
+        $get_type = DB::table("accreditation")->select(DB::raw("accreditation_name as text, accreditation_name as value"))->get();
+        $type_list = [];
+        if($get_type)
+            foreach ($get_type as $key => $row)
+                $type_list[$key] = json_decode(json_encode($row), true);
+        return $type_list;
+    }
+
+    public function getStakeHolders(){
+        $get_type = DB::table("stakeholders")->select(DB::raw("stakeholder_name as text, stakeholder_name as value"))->get();
+        $type_list = [];
+        if($get_type)
+            foreach ($get_type as $key => $row)
+                $type_list[$key] = json_decode(json_encode($row), true);
+        return $type_list;
+    }
+
     public function getParticipants(){
         $get_participant = DB::table("participant_profile")->select(DB::raw("participant_name as text, participant_id as value"))->get();
         $participant_list = [];

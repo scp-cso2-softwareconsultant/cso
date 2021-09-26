@@ -114,7 +114,9 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::get('/get-courses', [App\Http\Controllers\commonController::class,'getCourses'])->name('get-courses');
     Route::post('/export-excel', [App\Http\Controllers\commonController::class,'exportExcel'])->name('export-excel');
     Route::get('/get-lead-organization', [App\Http\Controllers\commonController::class,'getLeadOrgs'])->name('get-lead-organization');
-
+    Route::get('/getStakeHolders',[App\Http\Controllers\commonController::class,'getStakeHolders'])->name('get-stakeholders');
+    Route::get('/getAccreditations',[App\Http\Controllers\commonController::class,'getAccreditations'])->name('getAccreditations');
+    
 });
 
 Route::get('/download/{file}', function ($file='') {

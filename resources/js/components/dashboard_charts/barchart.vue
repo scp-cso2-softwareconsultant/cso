@@ -1,23 +1,23 @@
 <template>
-    <div id='chartdesu'>
-
+    <div>
+        <div id="bardesu"></div>
     </div>
 </template>
 <script>
 import * as echarts from "echarts";
 
 export default {
-    name:"doughnut",
+    name : "chart",
+    props:['D'],
     data(){
         return {
             chartDom : ''
-        }
+        };
     },
-    props: ['D'],
     methods:{
         initChart(){
             this.chartDom = null
-            this.chartDom = document.getElementById('chartdesu')
+            this.chartDom = document.getElementById('bardesu')
             this.chartDom = echarts.init(this.chartDom)
             this.chartDom.setOption(this.D);
         },
@@ -25,16 +25,12 @@ export default {
     mounted(){ this.initChart(); },
     watch:{
         D:{
-            handler: function(n,o){ 
-                this.chartDom.setOption(this.D); 
-                //console.log("CHANGED")
-            },
+            handler: function(n,o){ this.chartDom.setOption(this.D); },
             deep: true
         }
     }
 }
 </script>
-
 <style scoped>
-    #chartdesu{  height: 50vh; }
+    #bardesu{  height: 60vh; }
 </style>
