@@ -1053,16 +1053,8 @@ export default {
       })
     },
     ProjectTrackingDocument() {
-      // projectTrackingDocumentSeries: [
-      //   {
-      //   data: [10, 2, 30, 0, 0, 0],
-      //   },
-      // ]
-      // projectTrackingDocumentSeries
-
-
-      // projectTrackingDocumentChartOptions
-      axios.get("/cso-indicator").then((response)=>{
+      
+      axios.get("/dashboard-cso-indicator").then((response)=>{
         const data = response.data;
         var objective_1 = 0;
         var objective_2 = 0;
@@ -1079,18 +1071,37 @@ export default {
           total_activities += 1;
 
         }
-        this.projectTrackingDocumentSeries = [
-          {
-            data:[  
-                90.5,
-                23.5,
-                objective_1 / total_activities * 100,  
-                objective_2 / total_activities * 100,
-                objective_3 / total_activities * 100,
-                objective_4 / total_activities * 100
-              ]
+        axios.get('/dashboard-finance-tracker').then(response=>{
+          const data =  response.data;
+          var total_budget = 0;
+          for( const index in data ){
+            const finance = data[index];
+            total_budget += parseFloat(finance.finance_budget );
           }
-        ]
+          axios.get('/get-project-tracking-document').then(response =>{
+            const data = response.data[0];
+            const burnRate = ((Number.parseFloat(data[0].spent_to_date) / total_budget) *100 ).toFixed(2);
+            //  this.percentComplete = `${(
+            //     (this.daysCompleted / (this.daysLeft + this.daysCompleted)) *
+            //     100
+            // ).toFixed(2)} %`;
+            this.projectTrackingDocumentSeries = [
+              {
+                data:[  
+                    21.5,
+                    burnRate,
+                    objective_1 / total_activities * 100,  
+                    objective_2 / total_activities * 100,
+                    objective_3 / total_activities * 100,
+                    objective_4 / total_activities * 100
+                  ]
+              }
+            ]
+          })
+          
+              
+        })
+        
        
         
       })

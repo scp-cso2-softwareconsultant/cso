@@ -5,44 +5,9 @@
             CAPACITATING STRATEGIC ORGANIZATIONS TO STRENGTHEN THE CIVIL SOCIETY
             ORGANIZATION SECTOR (CSO2)
         </div>
-        <v-spacer> </v-spacer>
-        <v-container dense>
+        <v-container >
             <v-row>
                 <v-col cols="12" sm="6" md="6">
-                    <v-card class="ma-1 border-top">
-                        <v-list-item>
-                            <v-list-item-content>
-                                <div class="overline text-left">
-                                    SOF number:
-                                </div>
-                                <v-list-item-title class="headline  text-left"
-                                    >60900090</v-list-item-title
-                                >
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-card>
-                    <v-card class="ma-1 mt-6">
-                        <v-list-item>
-                            <v-list-item-content>
-                                <div class="overline text-left">
-                                    Project Holder :
-                                    <strong> Magdalena Lopez </strong>
-                                </div>
-                                <div class="overline text-left">
-                                    Supervisor: <strong> </strong>
-                                </div>
-                                <div class="overline text-left">
-                                    Sector/Thematic Area: <strong> </strong>
-                                </div>
-                                <div class="overline text-left">
-                                    Program Office:
-                                    <strong>
-                                        CSO2 Program/Quezon City Program Office
-                                    </strong>
-                                </div>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-card>
                     <v-card class="ma-1 mt-6">
                         <v-list-item>
                             <v-list-item-content>
@@ -66,10 +31,6 @@
                                 </div>
                                 <div class="overline text-left">
                                     End Date: <strong> {{ endDate }} </strong>
-                                </div>
-                                <div class="overline text-left">
-                                    Percent Complete :
-                                    <strong> {{ percentComplete }} </strong>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
@@ -105,194 +66,26 @@
                                     Burn rate: <strong>{{ burnRate }}</strong>
                                 </div>
                                 <div class="overline text-left">
-                                    <strong
-                                        ><v-text-field
-                                            type="email"
-                                            label="Next donor report due to Awards : "
-                                            v-model="editedItem.donor_report"
-                                        ></v-text-field
-                                    ></strong>
+                                    Percent Complete : <strong>{{ percentComplete }}</strong>
                                 </div>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-card>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" ma="1">
-                    <v-card class="ma-1 mt-6 p-6">
-                        <v-list-item>
-                            <v-list-item-content>
-                                <v-list-item-title
-                                    class="headline  text-left ma-1 mb-5"
-                                    >Project Summary:
-                                </v-list-item-title>
-                                <p class="overline text-justify">
-                                    The project will have the following learning
-                                    priorities: Systems-and-Networks-Based
-                                    Analytical Approach to better understand the
-                                    complex environments in which CSOs and CSO
-                                    networks operate and thereby help inform the
-                                    design for Strengthening Local Networks to
-                                    be fit for purpose in the context of their
-                                    role in the network. More importantly, this
-                                    project will provide valuable learnings on
-                                    Supporting Strategic Transitions since this
-                                    activity will engage CSOs and CSO networks
-                                    to collaboratively design plans and
-                                    interventions that would enable them to
-                                    become strong and sustainable LROs.
-                                </p>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-card>
-                    <v-card class="ma-1 mt-6">
-                        <v-list-item>
-                            <v-list-item-content>
-                                <v-card-text>
-                                    <v-container dense>
-                                        <div class="overline text-left">
-                                            Location :
-                                            <strong> Quezon City </strong>
-                                        </div>
-                                        <div class="overline text-left">
-                                            Awards source:
-                                            <strong> USAID </strong>
-                                        </div>
-                                        <div class="overline text-left">
-                                            Member:
-                                            <strong>
-                                                Philippines Member Domestic
-                                                Program</strong
-                                            >
-                                        </div>
-                                    </v-container>
-                                </v-card-text>
                             </v-list-item-content>
                         </v-list-item>
                     </v-card>
                 </v-col>
             </v-row>
-            <v-card class="my-6 ">
-                <table class="table tablex table-striped">
-                    <thead>
-                        <tr
-                            class="text-center shadow-sm p-3 mb-5 bg-white rounded"
-                        >
-                            <th scope="col" style="width: 15%;"></th>
-                            <th scope="col" class="p-4">
-                                (Include specfiic indicators where possible)
-                            </th>
-                            <th scope="col" class="p-4">
-                                Implementation versus target progress
-                            </th>
-                            <th scope="col" class="p-4">
-                                Recent issues or challenges (logs, Finance,
-                                Admin, Program and awards, partnership,
-                                security)
-                            </th>
-                            <th scope="col" class="p-4">Next month planning</th>
-                            <th scope="col" class="p-4">
-                                Estimated progress to date in (%)
-                            </th>
-                        </tr>
-                    </thead>
-                    <v-spacer class="mt-5"></v-spacer>
-                    <tbody>
-                        <tr>
-                            <th scope="row" class="p-4">Objective 1:</th>
-                            <td class="p-3">
-                                1. LROs with enhanced organizational capacity to
-                                support CSOs in their network.
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label=""  v-model="editedItem.objective[0].Implementation_vs_target"> </v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[0].challanges"></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[0].next_month_planning"></v-textarea>
-                            </td>
-                            <td class="text-center">
-                                <v-textarea class="text-center" auto-grow rows="2" label="" v-model="editedItem.objective[0].estimated_progress" type="number" @keypress="onlyNumber" dense ></v-textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="p-4">Objective 2:</th>
-                            <td class="p-3">
-                                2. LROs demonstrate good financial housekeeping
-                                towards their constituents to include other
-                                CSOs/CSO networks and donors
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[1].Implementation_vs_target" ></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[1].challanges"  ></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[1].next_month_planning"></v-textarea>
-                            </td>
-                            <td class="text-center">
-                                <v-textarea class="text-center" auto-grow rows="2" label=""  v-model="editedItem.objective[1].estimated_progress" dense type="number"  @keypress="onlyNumber" ></v-textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="p-4">Objective 3:</th>
-                            <td class="p-3">
-                                3. LROs with the capacity to ensure financial
-                                sustainability to function as support to CSOs in
-                                their network.
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[2].Implementation_vs_target" ></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[2].challanges"></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow  rows="2" label="" dense v-model="editedItem.objective[2].next_month_planning"></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea class="text-center" auto-grow rows="2" label=""  v-model="editedItem.objective[2].estimated_progress" type="number" @keypress="onlyNumber" dense></v-textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="p-4">Objective 4:</th>
-                            <td class="p-3">
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[3].indicators"></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" v-model="editedItem.objective[3].Implementation_vs_target" append-outer-icon=""dense> </v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[3].challanges"></v-textarea>
-                            </td>
-                            <td>
-                                <v-textarea auto-grow rows="2" label="" dense v-model="editedItem.objective[3].next_month_planning"></v-textarea>
-                            </td>
-                            <td class="text-center">
-                                <v-textarea auto-grow rows="2" label=""  v-model="editedItem.objective[3].estimated_progress" type="number" @keypress="onlyNumber" dense></v-textarea>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </v-card>
-            <v-card class="ma-1">
-                <v-list-item>
-                    <v-list-item-content>
-                        <v-card-text>
-                            <v-container dense>
-                                <div class="overline text-left">
-                                    Actions or support needed (include person
-                                    responsible): <strong> (PDQ TA) </strong>
-                                </div>
-                                <v-textarea auto-grow  rows="3" label="Description *" dense v-model="editedItem.actions_or_support">
-                                </v-textarea>
-                            </v-container>
-                        </v-card-text>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-card>
+            <div class="card p-md-5">
+                <h4 class="subheading card-text">Project Tracking Document</h4>
+                <div class="card-body">
+                    <p class="card-text">
+                    <apexchart
+                        type="bar"
+                        height="380"
+                        :options="projectTrackingDocumentChartOptions"
+                        :series="projectTrackingDocumentSeries"
+                    ></apexchart>
+                    </p>
+                </div>
+            </div>
             <v-btn
                 v-show="crud_guard.update"
                 class="ma-2"
@@ -309,6 +102,7 @@
 <script>
 import VueNumeric from "vue-numeric";
 const days360 = require("days360");
+import VueApexCharts from "vue-apexcharts";
 
 export default {
     components: {
@@ -317,6 +111,7 @@ export default {
     data() {
         return {
             canBeSaved: false,
+            percent_complete:0,
             crud_guard : {
                 create: 0,
                 delete: 0,
@@ -332,40 +127,6 @@ export default {
                 donor_report:"",
                 spent_to_date:0,
                 actions_or_support:"",
-                objective:[
-                    {
-                        Implementation_vs_target:"",
-                        Objective:"",
-                        challanges:"",
-                        estimated_progress:0,
-                        indicators:"",
-                        next_month_planning:""
-                    },
-                    {
-                        Implementation_vs_target:"",
-                        Objective:"",
-                        challanges:"",
-                        estimated_progress:0,
-                        indicators:"",
-                        next_month_planning:""
-                    },
-                    {
-                        Implementation_vs_target:"",
-                        Objective:"",
-                        challanges:"",
-                        estimated_progress:0,
-                        indicators:"",
-                        next_month_planning:""
-                    },
-                    {
-                        Implementation_vs_target:"",
-                        Objective:"",
-                        challanges:"",
-                        estimated_progress:0,
-                        indicators:"",
-                        next_month_planning:""
-                    }
-                ],
             },
             totalBudget: 1999998.57,
         
@@ -382,7 +143,87 @@ export default {
             daysLeft: 0,
             percentComplete: 0,
             remaining: 0,
-            donor_report:""
+            donor_report:"",
+    projectTrackingDocumentSeries: [{
+        data: [10, 2, 30, 0, 0, 0]
+    }],
+    projectTrackingDocumentChartOptions: {
+        chart: {
+            type: "bar",
+            height: 380,
+        },
+        plotOptions: {
+            bar: {
+            barHeight: "100%",
+            distributed: true,
+            horizontal: true,
+            dataLabels: {
+                position: "bottom",
+            },
+            },
+        },
+        
+        colors: [
+            "#33b2df",
+            "#546E7A",
+            "#d4526e",
+            "#13d8aa",
+            "#A5978B",
+            "#2b908f",
+            "#f9a3a4",
+            "#90ee7e",
+            "#f48024",
+            "#69d2e7",
+        ],
+        dataLabels: {
+            enabled: true,
+            textAnchor: "start",
+            style: {
+            colors: ["#000"],
+            },
+            formatter: function (val, opt) {
+            return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+            },
+            offsetX: 0,
+            dropShadow: {
+            enabled: true,
+            },
+        },
+        stroke: {
+            width: 1,
+            colors: ["#fff"],
+        },
+        xaxis: {
+            min: 0,
+            max: 100,
+            categories: [
+                "Progress bar of days completed",
+                "Progress bar of burn rate",
+                "Progress bar for Objective 1",
+                "Progress bar for Objective 2",
+                "Progress bar for Objective 3",
+                "Progress bar for Objective 4",
+            ],
+        },
+        yaxis: {
+            labels: {
+            show: false,
+            },
+        },
+        tooltip: {
+            theme: "dark",
+            x: {
+            show: false,
+            },
+            y: {
+            title: {
+                formatter: function () {
+                return "";
+                },
+            },
+            },
+        },
+        }
         };
     },
     methods: {
@@ -400,6 +241,7 @@ export default {
                     }
                 }
             })
+            
             this.getData();  
         },
       
@@ -414,7 +256,6 @@ export default {
             if(this.canBeSaved && this.crud_guard.update ){
                 this.btnLoader = true;
                 axios.post("/save-project-tracking-document", { data: JSON.stringify(this.editedItem) }).then(response => {
-                    
                     this.btnLoader = false;
                 })
                 
@@ -424,7 +265,7 @@ export default {
         },
         getData(){
             
-             axios.get('/get-project-tracking-document').then(response =>{
+            axios.get('/get-project-tracking-document').then(response =>{
                 const data = response.data[0];
                 this.editedItem =  data[0]
                 this.editedItem['objective'] = data[1]
@@ -432,6 +273,47 @@ export default {
                 this.setBurnRate();
                 this.canBeSaved = true;
             })
+
+            axios.get('/dashboard-finance-tracker').then(response=>{
+                const data =  response.data;
+                var total_budget = 0;
+                for( const index in data ){
+                    const finance = data[index];
+                    total_budget += parseFloat(finance.finance_budget );
+                }
+                this.totalBudget = total_budget;
+                this.init();
+            })
+
+            axios.get("/dashboard-cso-indicator").then((response)=>{
+                const data = response.data;
+                var objective_1 = 0;
+                var objective_2 = 0;
+                var objective_3 = 0;
+                var objective_4 = 0;
+                var total_activities = 0;
+                for( const name in data ){
+                if( data[name].cso_category == 'Activity' && data[name].cso_status == "Completed" ){
+                    objective_1 += data[name].objective_1;
+                    objective_2 += data[name].objective_2;
+                    objective_3 += data[name].objective_3;
+                    objective_4 += data[name].objective_4;
+                }
+                total_activities += 1;
+                }
+                this.setBurnRate();
+                this.projectTrackingDocumentSeries = [{
+                    data:[  
+                        this.percentComplete,
+                        this.burnRate,
+                        objective_1 / total_activities * 100,  
+                        objective_2 / total_activities * 100,
+                        objective_3 / total_activities * 100,
+                        objective_4 / total_activities * 100
+                    ]
+                }]
+            })
+
             
         },
         setBurnRate() {
@@ -444,6 +326,7 @@ export default {
                         100
                     ).toFixed(2) + "%";
                 this.computeRemaining();
+                
                 return;
             }
             this.burnRate = "-.-%";
@@ -463,6 +346,7 @@ export default {
             this.setBurnRate();
             this.curDate = this.getParsedDate(new Date());
             this.endDate = this.getParsedDate(new Date(this.rawDate.endDate));
+            
             this.startDate = this.getParsedDate(
                 new Date(this.rawDate.startDate)
             );
@@ -480,9 +364,10 @@ export default {
             ).toFixed(2)} %`;
             this.computeRemaining();
         },
+
        
     },
-
+    
     created() {
         this.initialize();
         this.init();
