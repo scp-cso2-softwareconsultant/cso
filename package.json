@@ -30,6 +30,7 @@
         "@mdi/font": "^5.9.55",
         "apexcharts": "^3.27.1",
         "days360": "^2.0.0",
+        "echarts": "^5.2.1",
         "sass-migrator": "^1.5.1",
         "vue-apexcharts": "^1.6.1",
         "vue-numeric": "^2.4.3",
