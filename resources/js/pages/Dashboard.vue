@@ -215,6 +215,7 @@
           ></apexchart>
         </p>
       </div>
+      
     </div>
   </v-app>
 </template>
@@ -225,7 +226,6 @@
 import VueApexCharts from "vue-apexcharts";
 
 import * as echarts from "echarts";
-
 import PieChart from "../components/dashboard_charts/pie_chart.vue";
 import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
 import BarChart from "../components/dashboard_charts/barchart.vue";
@@ -700,10 +700,7 @@ export default {
           },
         },
       },
-      xaxis: {
-        min: 0,
-        max: 100,
-      },
+      
       colors: [
         "#33b2df",
         "#546E7A",
@@ -720,7 +717,7 @@ export default {
         enabled: true,
         textAnchor: "start",
         style: {
-          colors: ["#fff"],
+          colors: ["#000"],
         },
         formatter: function (val, opt) {
           return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
@@ -735,6 +732,8 @@ export default {
         colors: ["#fff"],
       },
       xaxis: {
+        min: 0,
+        max: 100,
         categories: [
           "Progress bar of days completed",
           "Progress bar of burn rate",
@@ -875,15 +874,15 @@ export default {
           constructedObjectMapping.push({ count: 0, tos: i.name });
         });
       });
-      axios.get("/getAccreditations").then((response) => {
-        const data = response.data;
-        data.forEach((i) => {
-          constructedObjectMapping2.push({
-            count: 0,
-            accr: i.text,
-          });
-        });
-      });
+      // axios.get("/getAccreditations").then((response) => {
+      //   const data = response.data;
+      //   data.forEach((i) => {
+      //     constructedObjectMapping2.push({
+      //       count: 0,
+      //       accr: i.text,
+      //     });
+      //   });
+      // });
 
       // axios.get('/getStakeHolders').then((response)=>{
       //         response.data.forEach((i)=>{
@@ -1054,8 +1053,47 @@ export default {
       })
     },
     ProjectTrackingDocument() {
+      // projectTrackingDocumentSeries: [
+      //   {
+      //   data: [10, 2, 30, 0, 0, 0],
+      //   },
+      // ]
       // projectTrackingDocumentSeries
+
+
       // projectTrackingDocumentChartOptions
+      axios.get("/cso-indicator").then((response)=>{
+        const data = response.data;
+        var objective_1 = 0;
+        var objective_2 = 0;
+        var objective_3 = 0;
+        var objective_4 = 0;
+        var total_activities = 0;
+        for( const name in data ){
+          if( data[name].cso_category == 'Activity' && data[name].cso_status == "Completed" ){
+            objective_1 += data[name].objective_1;
+            objective_2 += data[name].objective_2;
+            objective_3 += data[name].objective_3;
+            objective_4 += data[name].objective_4;
+          }
+          total_activities += 1;
+
+        }
+        this.projectTrackingDocumentSeries = [
+          {
+            data:[  
+                90.5,
+                23.5,
+                objective_1 / total_activities * 100,  
+                objective_2 / total_activities * 100,
+                objective_3 / total_activities * 100,
+                objective_4 / total_activities * 100
+              ]
+          }
+        ]
+       
+        
+      })
     },
     generateDayWiseTimeSeries: function (baseval, count, yrange) {
       var i = 0;
