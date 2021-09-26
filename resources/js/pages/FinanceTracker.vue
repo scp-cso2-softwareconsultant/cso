@@ -1,65 +1,60 @@
 <template>
-    <v-app>
-        <h3 class="subheading grey--text">Finance Tracker</h3>
-        <br />
-        <v-card>
-            <v-data-table
-                :headers="headers"
-                :items="financeList"
-                :search="filters.filter_items[filters.filter_items_active].value"
-                :loading="loadFinanceTracker"
-                :custom-filter="filterItems"
-                class="elevation-1"
-            >
-                <template v-slot:top>
-                    <v-toolbar flat>
-                        
-                        <v-spacer></v-spacer>
-                        <v-dialog v-model="dialog" max-width="500px">
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                    color="lightgray"
-                                    class="mb-2"
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    v-show="crud_guard.create"
-                                >
-                                    New
-                                    <v-icon color="green"
-                                        >mdi-plus-thick</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <v-card>
-                                <v-card-title>
-                                    <span
-                                        class="text-h5"
-                                        v-if="!detailsReadonly"
-                                        >{{ formTitle }}</span
-                                    >
-                                    <span class="text-h5" v-else
-                                        >Finance Tracker Details</span
-                                    >
-                                </v-card-title>
+  <v-app>
+    <h3 class="subheading grey--text">Finance Tracker</h3>
+    <br />
+    <v-card>
+      <v-data-table
+        :headers="headers"
+        :items="financeList"
+        :search="filters.filter_items[filters.filter_items_active].value"
+        :loading="loadFinanceTracker"
+        :custom-filter="filterItems"
+        class="elevation-1"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-spacer></v-spacer>
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="lightgray"
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  v-show="crud_guard.create"
+                >
+                  New
+                  <v-icon color="green">mdi-plus-thick</v-icon>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span
+                    class="text-h5"
+                    v-if="!detailsReadonly"
+                    >{{ formTitle }}</span
+                  >
+                  <span class="text-h5" v-else>Finance Tracker Details</span>
+                </v-card-title>
 
-                                <v-card-text>
-                                    <v-container dense>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.required]"
-                                                    v-model="
+                <v-card-text>
+                  <v-container dense>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          :rules="[rules.required]"
+                          v-model="
                                                         editedItem.finance_code
                                                     "
-                                                    label="Code *"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
+                          label="Code *"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <!-- <v-text-field
                                                     :readonly="detailsReadonly"
                                                     :rules="[rules.required]"
                                                     v-model="
@@ -68,685 +63,714 @@
                                                     label="Name *"
                                                     dense
                                                 ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    v-model="
+                                                -->
+                        <v-select
+                          :readonly="detailsReadonly"
+                          :items="responsibleOrganization"
+                          v-model="editedItem.finance_name"
+                          label="Name  *"
+                          dense
+                          :rules="[rules.required]"
+                        ></v-select>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="
                                                         editedItem.finance_location
                                                     "
-                                                    label="Location"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    v-model="
+                          label="Location"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="
                                                         editedItem.finance_cost_center
                                                     "
-                                                    label="Cost Center"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    v-model="
+                          label="Cost Center"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="
                                                         editedItem.finance_project_code
                                                     "
-                                                    label="Project Code"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    v-model="
+                          label="Project Code"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="
                                                         editedItem.finance_sof
                                                     "
-                                                    label="SOF"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    v-model="
+                          label="SOF"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="
                                                         editedItem.finance_dea
                                                     "
-                                                    label="DEA"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    v-model="
+                          label="DEA"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="
                                                         editedItem.finance_partner
                                                     "
-                                                    label="Partners Name"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    ref="refBudget"
-                                                    v-on:keyup="computeBurnRate"
-                                                    v-model="
+                          label="Partners Name"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          ref="refBudget"
+                          v-on:keyup="computeBurnRate"
+                          v-model="
                                                         editedItem.finance_budget
                                                     "
-                                                    label="Budget"
-                                                    dense
-                                                >
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="Budget"
+                          dense
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche1
                                                     "
-                                                    label="1st Tranche"
-                                                    v-on:keyup="computeBurnRate"
-                                                    @input='tranch_date(1)'
-                                                    dense
-                                                ></v-text-field>
-                                                <p class="text-lowercase mb-5">
-                                                    {{ editedItem.finance_tranche1_date }}
-                                                </p>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    v-if="
+                          label="1st Tranche"
+                          v-on:keyup="computeBurnRate"
+                          @input="tranch_date(1)"
+                          dense
+                        ></v-text-field>
+                        <p class="text-lowercase mb-5">
+                          {{ editedItem.finance_tranche1_date }}
+                        </p>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          v-if="
                                                         editedItem.finance_tranche1 !=
                                                             0.00
                                                     "
-                                                    v-on:keyup="computeBurnRate"
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          v-on:keyup="computeBurnRate"
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche2
                                                     "
-                                                    @input='tranch_date(2)'
-                                                    label="2nd Tranche"
-                                                    dense
-                                                ></v-text-field>
-                                                <v-text-field
-                                                    v-else
-                                                    disabled
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          @input="tranch_date(2)"
+                          label="2nd Tranche"
+                          dense
+                        ></v-text-field>
+                        <v-text-field
+                          v-else
+                          disabled
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche2
                                                     "
-                                                    @input='tranch_date(2)'
-                                                    label="2nd Tranche"
-                                                    dense
-                                                ></v-text-field>
-                                                <p class="text-lowercase mb-5">
-                                                    {{ editedItem.finance_tranche2_date }}
-                                                </p>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    v-if="
+                          @input="tranch_date(2)"
+                          label="2nd Tranche"
+                          dense
+                        ></v-text-field>
+                        <p class="text-lowercase mb-5">
+                          {{ editedItem.finance_tranche2_date }}
+                        </p>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          v-if="
                                                         editedItem.finance_tranche2 !=
                                                             0.00
                                                     "
-                                                    v-on:keyup="computeBurnRate"
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          v-on:keyup="computeBurnRate"
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche3
                                                     "
-                                                    label="3rd Tranche"
-                                                    @input='tranch_date(3)'
-                                                    dense
-                                                ></v-text-field>
-                                                <v-text-field
-                                                    v-else
-                                                    disabled
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="3rd Tranche"
+                          @input="tranch_date(3)"
+                          dense
+                        ></v-text-field>
+                        <v-text-field
+                          v-else
+                          disabled
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche3
                                                     "
-                                                    label="3rd Tranche"
-                                                    @input='tranch_date(3)'
-                                                    dense
-                                                ></v-text-field>
-                                                <p class="text-lowercase mb-5">
-                                                    {{ editedItem.finance_tranche3_date }}
-                                                </p>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                v-if="
+                          label="3rd Tranche"
+                          @input="tranch_date(3)"
+                          dense
+                        ></v-text-field>
+                        <p class="text-lowercase mb-5">
+                          {{ editedItem.finance_tranche3_date }}
+                        </p>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          v-if="
                                                         editedItem.finance_tranche3 !=
                                                             0.00
                                                     "
-                                                    v-on:keyup="computeBurnRate"
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          v-on:keyup="computeBurnRate"
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche4
                                                     "
-                                                    @input='tranch_date(4)'
-                                                    label="4th Tranche"
-                                                    dense
-                                                ></v-text-field>
-                                                
-                                                <v-text-field
-                                                v-else
-                                                disabled
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          @input="tranch_date(4)"
+                          label="4th Tranche"
+                          dense
+                        ></v-text-field>
+
+                        <v-text-field
+                          v-else
+                          disabled
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_tranche4
                                                     "
-                                                    label="4th Tranche"
-                                                    dense
-                                                    @input='tranch_date(4)'
-                                                ></v-text-field>
-                                                <p class="text-lowercase mb-5">
-                                                    {{ editedItem.finance_tranche4_date }}
-                                                </p>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="4th Tranche"
+                          dense
+                          @input="tranch_date(4)"
+                        ></v-text-field>
+                        <p class="text-lowercase mb-5">
+                          {{ editedItem.finance_tranche4_date }}
+                        </p>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_retention
                                                     "
-                                                    label="Retention"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row
-                                            class="mt-0"
-                                            v-if="detailsReadonly"
-                                        >
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    v-model="
+                          label="Retention"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0" v-if="detailsReadonly">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          v-model="
                                                         editedItem.finance_total
                                                     "
-                                                    label="Total"
-                                                    dense
-                                                    filled
-                                                    disabled
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="Total"
+                          dense
+                          filled
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_actuals
                                                     "
-                                                    label="Actuals"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row
-                                            class="mt-0"
-                                            v-if="detailsReadonly"
-                                        >
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    v-model="
+                          label="Actuals"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0" v-if="detailsReadonly">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          v-model="
                                                         editedItem.finance_variance
                                                     "
-                                                    label="Variance"
-                                                    dense
-                                                    filled
-                                                    disabled
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="Variance"
+                          dense
+                          filled
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="true"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_burn1
                                                     "
-                                                    label="Burn Rate (1st Liq)"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="Burn Rate (1st Liq)"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="true"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_burn2
                                                     "
-                                                    label="Burn Rate (2nd Liq)"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="Burn Rate (2nd Liq)"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="true"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_burn3
                                                     "
-                                                    label="Burn Rate (3rd Liq)"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.number]"
-                                                    v-model="
+                          label="Burn Rate (3rd Liq)"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="true"
+                          :rules="[rules.number]"
+                          v-model="
                                                         editedItem.finance_burn4
                                                     "
-                                                    label="Burn Rate (4th Liq)"
-                                                    dense
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row
-                                            class="mt-0"
-                                            v-if="detailsReadonly"
-                                        >
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field
-                                                    v-model="
+                          label="Burn Rate (4th Liq)"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row class="mt-0" v-if="detailsReadonly">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          v-model="
                                                         editedItem.finance_burn_rate
                                                     "
-                                                    label="Burn Rate (Total)"
-                                                    dense
-                                                    filled
-                                                    disabled
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
+                          label="Burn Rate (Total)"
+                          dense
+                          filled
+                          disabled
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
 
-                                <v-card-actions v-if="!detailsReadonly">
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="close"
-                                        dense
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="save"
-                                        dense
-                                        :loading="btnLoader"
-                                    >
-                                        Save
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                        <v-dialog v-model="dialogDelete" max-width="500px">
-                            <v-card>
-                                <v-card-title class="text-h5"
-                                    >Are you sure you want to delete this
-                                    item?</v-card-title
-                                >
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="closeDelete"
-                                        >Cancel</v-btn
-                                    >
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="deleteItemConfirm"
-                                        :loading="btnLoader"
-                                        >OK</v-btn
-                                    >
-                                    <v-spacer></v-spacer>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                        &nbsp;&nbsp;
-                        <v-btn
-                            color="lightgray"
-                            class="mb-2"
-                            :loading="btnLoader"
-                            @click="exportExcel('FinanceTracker', '')"
-                            v-show="crud_guard.export"
-                        >
-                            Export
-                            <v-icon color="green">mdi-microsoft-excel</v-icon>
-                        </v-btn>
-                    </v-toolbar>
-                    <v-row  no-gutters style="flex-wrap: nowrap;"  class='my-3'>
-                        <v-col cols="6" class="flex-grow-0 flex-shrink-0"  >
-                            <v-text-field 
-                                v-model="filters.filter_items['finance_name'].value"  
-                                :label="filters.filter_items['finance_name'].text"
-                                @input='changeFilterActiveValue("finance_name")'
-                                append-icon="mdi-magnify"  
-                                outlined
-                                hide-details
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
-                            <v-text-field 
-                                v-model="filters.filter_items['finance_location'].value"  
-                                :label="filters.filter_items['finance_location'].text"
-                                @input='changeFilterActiveValue("finance_location")'
-                                append-icon="mdi-magnify"  
-                                outlined
-                                hide-details
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
-                            <v-text-field 
-                                v-model="filters.filter_items['finance_cost_center'].value"  
-                                :label="filters.filter_items['finance_cost_center'].text"
-                                @input='changeFilterActiveValue("finance_cost_center")'
-                                append-icon="mdi-magnify"  
-                                outlined
-                                hide-details
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row  no-gutters style="flex-wrap: nowrap;" >
-                        <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
-                            <v-text-field 
-                                v-model="filters.filter_items['finance_sof'].value"  
-                                :label="filters.filter_items['finance_sof'].text"
-                                @input='changeFilterActiveValue("finance_sof")'
-                                append-icon="mdi-magnify"  
-                                outlined
-                                hide-details
-                            ></v-text-field>
-                        </v-col>
-                         <v-col cols="3" class="flex-grow-0 flex-shrink-0"  >
-                            <v-text-field 
-                                v-model="filters.filter_items['finance_dea'].value"  
-                                :label="filters.filter_items['finance_dea'].text"
-                                @input='changeFilterActiveValue("finance_dea")'
-                                append-icon="mdi-magnify"  
-                                outlined
-                                hide-details
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
-                            <div v-if='filters.filter_items["finance_budget_selection"].value !="range" '>
-                                <v-text-field
-                                    v-model="filters.filter_items['finance_budget'].value"
-                                    :label="filters.filter_items['finance_budget'].text"
-                                    @input='changeFilterActiveValue("finance_budget")'
-                                    :rules="[rules.number]"
-                                    outlined
-                                    hide-details
-                                    class='ml-3 '
-                                ></v-text-field>
-                            </div>
-                            <div v-else >
-                                <v-text-field
-                                    v-model="filters.filter_items['finance_budget_min'].value"
-                                    :label="filters.filter_items['finance_budget_min'].text"
-                                    @input='changeFilterActiveValue("finance_budget_min")'
-                                    :rules="[rules.number]"
-                                    outlined
-                                    hide-details
-                                    class='ml-3 '
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="filters.filter_items['finance_budget_max'].value"
-                                    :label="filters.filter_items['finance_budget_max'].text"
-                                    @input='changeFilterActiveValue("finance_budget_max")'
-                                    :rules="[rules.number]"
-                                    outlined
-                                    hide-details
-                                    class='ml-3 '
-                                ></v-text-field>
-                            </div>
-                        </v-col>
-                        <v-col cols="1" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
-                            <v-select
-                                v-model="filters.filter_items['finance_budget_selection'].value"
-                                :label="filters.filter_items['finance_budget_selection'].text"
-                                :items="filters.filter_items['finance_budget_selection'].multiple_selection"
-                                @input='changeFilterActiveValue("finance_budget_selection")'
-                                outlined
-                            ></v-select>
-                        </v-col>
-                    </v-row>
-                    <v-row  no-gutters style="flex-wrap: nowrap;" >
-                        <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
-                        <div v-if='filters.filter_items["finance_actuals_selection"].value !="range" '>
-                            <v-text-field
-                                v-model="filters.filter_items['finance_actuals'].value"
-                                :label="filters.filter_items['finance_actuals'].text"
-                                @input='changeFilterActiveValue("finance_actuals")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                        </div>
-                        <div v-else >
-                            <v-text-field
-                                v-model="filters.filter_items['finance_actuals_min'].value"
-                                :label="filters.filter_items['finance_actuals_min'].text"
-                                @input='changeFilterActiveValue("finance_actuals_min")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                            <v-text-field
-                                v-model="filters.filter_items['finance_actuals_max'].value"
-                                :label="filters.filter_items['finance_actuals_max'].text"
-                                @input='changeFilterActiveValue("finance_actuals_max")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                        </div>
-                    </v-col>
-                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
-                        <v-select
-                            v-model="filters.filter_items['finance_actuals_selection'].value"
-                            :label="filters.filter_items['finance_actuals_selection'].text"
-                            :items="filters.filter_items['finance_actuals_selection'].multiple_selection"
-                            @input='changeFilterActiveValue("finance_actuals_selection")'
-                            
-                            outlined
-                        ></v-select>
-                    </v-col>
-                    <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
-                        <div v-if='filters.filter_items["finance_variance_selection"].value !="range" '>
-                            <v-text-field
-                                v-model="filters.filter_items['finance_variance'].value"
-                                :label="filters.filter_items['finance_variance'].text"
-                                @input='changeFilterActiveValue("finance_variance")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                        </div>
-                        <div v-else >
-                            <v-text-field
-                                v-model="filters.filter_items['finance_variance_min'].value"
-                                :label="filters.filter_items['finance_variance_min'].text"
-                                @input='changeFilterActiveValue("finance_variance_min")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                            <v-text-field
-                                v-model="filters.filter_items['finance_variance_max'].value"
-                                :label="filters.filter_items['finance_variance_max'].text"
-                                @input='changeFilterActiveValue("finance_variance_max")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                        </div>
-                    </v-col>
-                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
-                        <v-select
-                            v-model="filters.filter_items['finance_variance_selection'].value"
-                            :label="filters.filter_items['finance_variance_selection'].text"
-                            :items="filters.filter_items['finance_variance_selection'].multiple_selection"
-                            @input='changeFilterActiveValue("finance_variance_selection")'
-                            
-                            outlined
-                        ></v-select>
-                    </v-col>
-                    <v-col cols="2" style="min-width: 50px;" class="flex-grow-0 flex-shrink-1" >
-                        <div v-if='filters.filter_items["finance_burn_rate_selection"].value !="range" '>
-                            <v-text-field
-                                v-model="filters.filter_items['finance_burn_rate'].value"
-                                :label="filters.filter_items['finance_burn_rate'].text"
-                                @input='changeFilterActiveValue("finance_burn_rate")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                        </div>
-                        <div v-else >
-                            <v-text-field
-                                v-model="filters.filter_items['finance_burn_rate_min'].value"
-                                :label="filters.filter_items['finance_burn_rate_min'].text"
-                                @input='changeFilterActiveValue("finance_burn_rate_min")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                            <v-text-field
-                                v-model="filters.filter_items['finance_burn_rate_max'].value"
-                                :label="filters.filter_items['finance_burn_rate_max'].text"
-                                @input='changeFilterActiveValue("finance_burn_rate_max")'
-                                :rules="[rules.number]"
-                                outlined
-                                hide-details
-                                class='ml-3 '
-                            ></v-text-field>
-                        </div>
-                    </v-col>
-                    <v-col cols="2" style="min-width: 100px; max-width: 50%;" class="flex-grow-1 flex-shrink-0" >
-                        <v-select
-                            v-model="filters.filter_items['finance_burn_rate_selection'].value"
-                            :label="filters.filter_items['finance_burn_rate_selection'].text"
-                            :items="filters.filter_items['finance_burn_rate_selection'].multiple_selection"
-                            @input='changeFilterActiveValue("finance_burn_rate_selection")'
-                            
-                            outlined
-                        ></v-select>
-                    </v-col>
-                </v-row>
-                    
-                </template>
-                
-                <template v-slot:item.finance_budget="{ item }">
-                    {{ formatAsCurrency(item.finance_budget, 2) }}
-                </template>
-                <template v-slot:item.finance_actuals="{ item }">
-                    {{ formatAsCurrency(item.finance_actuals, 2) }}
-                </template>
-                <template v-slot:item.finance_variance="{ item }">
-                    {{ formatAsCurrency(item.finance_variance, 2) }}
-                </template>
-                <template v-slot:item.finance_burn_rate="{ item }">
-                    {{ formatAsCurrency(item.finance_burn_rate, 2) }}
-                </template>
-                <template v-slot:item.actions="{ item }">
-                    <v-icon
-                        v-show="crud_guard.view"
-                        small
-                        class="mr-2"
-                        @click="detailsItem(item)"
-                        color="blue"
-                        data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Finance Tracker Details"
-                    >
-                        mdi-information-outline
-                    </v-icon>
-                    <v-icon
-                        v-show="crud_guard.update"
-                        small
-                        class="mr-2"
-                        @click="editItem(item)"
-                        color="blue darken-2"
-                        data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit Finance Tracker"
-                        
-                    >
-                        mdi-pencil
-                    </v-icon>
-                    <v-icon small @click="deleteItem(item)" color="red" data-toggle="tooltip"
-                    data-placement="top"
-                    title="Delete This Item"
-                    v-show="crud_guard.delete"
-                    >
-                        mdi-delete
-                        
-                    </v-icon>
-                </template>
-            </v-data-table>
-        </v-card>
-    </v-app>
+                <v-card-actions v-if="!detailsReadonly">
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close" dense>
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="save"
+                    dense
+                    :loading="btnLoader"
+                  >
+                    Save
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+              <v-card>
+                <v-card-title class="text-h5"
+                  >Are you sure you want to delete this item?</v-card-title
+                >
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="closeDelete"
+                    >Cancel</v-btn
+                  >
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="deleteItemConfirm"
+                    :loading="btnLoader"
+                    >OK</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            &nbsp;&nbsp;
+            <v-btn
+              color="lightgray"
+              class="mb-2"
+              :loading="btnLoader"
+              @click="exportExcel('FinanceTracker', '')"
+              v-show="crud_guard.export"
+            >
+              Export
+              <v-icon color="green">mdi-microsoft-excel</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-row no-gutters style="flex-wrap: nowrap" class="my-3">
+            <v-col cols="6" class="flex-grow-0 flex-shrink-0">
+              <v-text-field
+                v-model="filters.filter_items['finance_name'].value"
+                :label="filters.filter_items['finance_name'].text"
+                @input='changeFilterActiveValue("finance_name")'
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="3" class="flex-grow-0 flex-shrink-0">
+              <v-text-field
+                v-model="filters.filter_items['finance_location'].value"
+                :label="filters.filter_items['finance_location'].text"
+                @input='changeFilterActiveValue("finance_location")'
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="3" class="flex-grow-0 flex-shrink-0">
+              <v-text-field
+                v-model="filters.filter_items['finance_cost_center'].value"
+                :label="filters.filter_items['finance_cost_center'].text"
+                @input='changeFilterActiveValue("finance_cost_center")'
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row no-gutters style="flex-wrap: nowrap">
+            <v-col cols="3" class="flex-grow-0 flex-shrink-0">
+              <v-text-field
+                v-model="filters.filter_items['finance_sof'].value"
+                :label="filters.filter_items['finance_sof'].text"
+                @input='changeFilterActiveValue("finance_sof")'
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col cols="3" class="flex-grow-0 flex-shrink-0">
+              <v-text-field
+                v-model="filters.filter_items['finance_dea'].value"
+                :label="filters.filter_items['finance_dea'].text"
+                @input='changeFilterActiveValue("finance_dea")'
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col
+              cols="4"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div
+                v-if='filters.filter_items["finance_budget_selection"].value !="range" '
+              >
+                <v-text-field
+                  v-model="filters.filter_items['finance_budget'].value"
+                  :label="filters.filter_items['finance_budget'].text"
+                  @input='changeFilterActiveValue("finance_budget")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+              <div v-else>
+                <v-text-field
+                  v-model="filters.filter_items['finance_budget_min'].value"
+                  :label="filters.filter_items['finance_budget_min'].text"
+                  @input='changeFilterActiveValue("finance_budget_min")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+                <v-text-field
+                  v-model="filters.filter_items['finance_budget_max'].value"
+                  :label="filters.filter_items['finance_budget_max'].text"
+                  @input='changeFilterActiveValue("finance_budget_max")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+            </v-col>
+            <v-col
+              cols="1"
+              style="min-width: 100px; max-width: 50%"
+              class="flex-grow-1 flex-shrink-0"
+            >
+              <v-select
+                v-model="filters.filter_items['finance_budget_selection'].value"
+                :label="filters.filter_items['finance_budget_selection'].text"
+                :items="filters.filter_items['finance_budget_selection'].multiple_selection"
+                @input='changeFilterActiveValue("finance_budget_selection")'
+                outlined
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row no-gutters style="flex-wrap: nowrap">
+            <v-col
+              cols="2"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div
+                v-if='filters.filter_items["finance_actuals_selection"].value !="range" '
+              >
+                <v-text-field
+                  v-model="filters.filter_items['finance_actuals'].value"
+                  :label="filters.filter_items['finance_actuals'].text"
+                  @input='changeFilterActiveValue("finance_actuals")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+              <div v-else>
+                <v-text-field
+                  v-model="filters.filter_items['finance_actuals_min'].value"
+                  :label="filters.filter_items['finance_actuals_min'].text"
+                  @input='changeFilterActiveValue("finance_actuals_min")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+                <v-text-field
+                  v-model="filters.filter_items['finance_actuals_max'].value"
+                  :label="filters.filter_items['finance_actuals_max'].text"
+                  @input='changeFilterActiveValue("finance_actuals_max")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+            </v-col>
+            <v-col
+              cols="2"
+              style="min-width: 100px; max-width: 50%"
+              class="flex-grow-1 flex-shrink-0"
+            >
+              <v-select
+                v-model="filters.filter_items['finance_actuals_selection'].value"
+                :label="filters.filter_items['finance_actuals_selection'].text"
+                :items="filters.filter_items['finance_actuals_selection'].multiple_selection"
+                @input='changeFilterActiveValue("finance_actuals_selection")'
+                outlined
+              ></v-select>
+            </v-col>
+            <v-col
+              cols="2"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div
+                v-if='filters.filter_items["finance_variance_selection"].value !="range" '
+              >
+                <v-text-field
+                  v-model="filters.filter_items['finance_variance'].value"
+                  :label="filters.filter_items['finance_variance'].text"
+                  @input='changeFilterActiveValue("finance_variance")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+              <div v-else>
+                <v-text-field
+                  v-model="filters.filter_items['finance_variance_min'].value"
+                  :label="filters.filter_items['finance_variance_min'].text"
+                  @input='changeFilterActiveValue("finance_variance_min")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+                <v-text-field
+                  v-model="filters.filter_items['finance_variance_max'].value"
+                  :label="filters.filter_items['finance_variance_max'].text"
+                  @input='changeFilterActiveValue("finance_variance_max")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+            </v-col>
+            <v-col
+              cols="2"
+              style="min-width: 100px; max-width: 50%"
+              class="flex-grow-1 flex-shrink-0"
+            >
+              <v-select
+                v-model="filters.filter_items['finance_variance_selection'].value"
+                :label="filters.filter_items['finance_variance_selection'].text"
+                :items="filters.filter_items['finance_variance_selection'].multiple_selection"
+                @input='changeFilterActiveValue("finance_variance_selection")'
+                outlined
+              ></v-select>
+            </v-col>
+            <v-col
+              cols="2"
+              style="min-width: 50px"
+              class="flex-grow-0 flex-shrink-1"
+            >
+              <div
+                v-if='filters.filter_items["finance_burn_rate_selection"].value !="range" '
+              >
+                <v-text-field
+                  v-model="filters.filter_items['finance_burn_rate'].value"
+                  :label="filters.filter_items['finance_burn_rate'].text"
+                  @input='changeFilterActiveValue("finance_burn_rate")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+              <div v-else>
+                <v-text-field
+                  v-model="filters.filter_items['finance_burn_rate_min'].value"
+                  :label="filters.filter_items['finance_burn_rate_min'].text"
+                  @input='changeFilterActiveValue("finance_burn_rate_min")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+                <v-text-field
+                  v-model="filters.filter_items['finance_burn_rate_max'].value"
+                  :label="filters.filter_items['finance_burn_rate_max'].text"
+                  @input='changeFilterActiveValue("finance_burn_rate_max")'
+                  :rules="[rules.number]"
+                  outlined
+                  hide-details
+                  class="ml-3"
+                ></v-text-field>
+              </div>
+            </v-col>
+            <v-col
+              cols="2"
+              style="min-width: 100px; max-width: 50%"
+              class="flex-grow-1 flex-shrink-0"
+            >
+              <v-select
+                v-model="filters.filter_items['finance_burn_rate_selection'].value"
+                :label="filters.filter_items['finance_burn_rate_selection'].text"
+                :items="filters.filter_items['finance_burn_rate_selection'].multiple_selection"
+                @input='changeFilterActiveValue("finance_burn_rate_selection")'
+                outlined
+              ></v-select>
+            </v-col>
+          </v-row>
+        </template>
+
+        <template v-slot:item.finance_budget="{ item }">
+          {{ formatAsCurrency(item.finance_budget, 2) }}
+        </template>
+        <template v-slot:item.finance_actuals="{ item }">
+          {{ formatAsCurrency(item.finance_actuals, 2) }}
+        </template>
+        <template v-slot:item.finance_variance="{ item }">
+          {{ formatAsCurrency(item.finance_variance, 2) }}
+        </template>
+        <template v-slot:item.finance_burn_rate="{ item }">
+          {{ formatAsCurrency(item.finance_burn_rate, 2) }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            v-show="crud_guard.view"
+            small
+            class="mr-2"
+            @click="detailsItem(item)"
+            color="blue"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Finance Tracker Details"
+          >
+            mdi-information-outline
+          </v-icon>
+          <v-icon
+            v-show="crud_guard.update"
+            small
+            class="mr-2"
+            @click="editItem(item)"
+            color="blue darken-2"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Edit Finance Tracker"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="deleteItem(item)"
+            color="red"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Delete This Item"
+            v-show="crud_guard.delete"
+          >
+            mdi-delete
+          </v-icon>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-app>
 </template>
 <script>
 export default {
@@ -771,32 +795,33 @@ export default {
             upload: 0,
             view: 0,
         },
+        responsibleOrganization:[],
         filters:{
             filter_items_active: 'finance_name',
             filter_items:{
-                finance_name: { 
+                finance_name: {
                     value: '',
-                    text: 'Name' , 
+                    text: 'Name' ,
                     data_value: 'finance_name' ,
                 },
-                finance_location: { 
+                finance_location: {
                     value: '',
-                    text: 'Location' , 
+                    text: 'Location' ,
                     data_value: 'finance_location' ,
                 },
-                finance_cost_center: { 
+                finance_cost_center: {
                     value: '',
-                    text: 'Cost Center' , 
+                    text: 'Cost Center' ,
                     data_value: 'finance_cost_center' ,
                 },
                 finance_sof:{
                     value: '',
-                    text: 'SOF' , 
+                    text: 'SOF' ,
                     data_value: 'finance_sof' ,
                 },
                 finance_dea:{
                     value: '',
-                    text: 'DEA' , 
+                    text: 'DEA' ,
                     data_value: 'finance_dea' ,
                 },
 
@@ -804,29 +829,29 @@ export default {
                 // ================= Finance budget
                 finance_budget:{
                     value: '',
-                    text: 'Budget',  
+                    text: 'Budget',
                     data_value: 'finance_budget',
                     number_range: true,                   // Enables min and max value (Prerequisits are below)
                 },
-                finance_budget_min:{ 
+                finance_budget_min:{
                     value: '',
-                    text: 'Budget min',  
+                    text: 'Budget min',
                     data_value: 'finance_budget_min',
                     inherit_value: 'finance_budget',     // <--------------------------- Needed for the key
-                    number_range: true,  
-                },
-                finance_budget_max:{ 
-                    value: '',
-                    text: 'Budget max',  
-                    data_value: 'finance_budget_max',
-                    inherit_value: 'finance_budget',    // <--------------------------- Needed for the key 
                     number_range: true,
                 },
-                finance_budget_selection:{ 
+                finance_budget_max:{
+                    value: '',
+                    text: 'Budget max',
+                    data_value: 'finance_budget_max',
+                    inherit_value: 'finance_budget',    // <--------------------------- Needed for the key
+                    number_range: true,
+                },
+                finance_budget_selection:{
                     value: '==',
-                    text: 'Choose value',  
+                    text: 'Choose value',
                     data_value: 'finance_budget_selection',
-                    inherit_value: 'finance_budget',  // <--------------------------- Needed for the key 
+                    inherit_value: 'finance_budget',  // <--------------------------- Needed for the key
                     multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
                 },
                 // ================= Finance budget
@@ -835,89 +860,89 @@ export default {
                  // ================= Finance budget
                 finance_actuals:{
                     value: '',
-                    text: 'Actuals',  
+                    text: 'Actuals',
                     data_value: 'finance_actuals',
                     number_range: true,                   // Enables min and max value (Prerequisits are below)
                 },
-                finance_actuals_min:{ 
+                finance_actuals_min:{
                     value: '',
-                    text: 'Actuals min',  
+                    text: 'Actuals min',
                     data_value: 'finance_actuals_min',
                     inherit_value: 'finance_actuals',     // <--------------------------- Needed for the key
-                    number_range: true,  
-                },
-                finance_actuals_max:{ 
-                    value: '',
-                    text: 'Actuals max',  
-                    data_value: 'finance_actuals_max',
-                    inherit_value: 'finance_actuals',    // <--------------------------- Needed for the key 
                     number_range: true,
                 },
-                finance_actuals_selection:{ 
+                finance_actuals_max:{
+                    value: '',
+                    text: 'Actuals max',
+                    data_value: 'finance_actuals_max',
+                    inherit_value: 'finance_actuals',    // <--------------------------- Needed for the key
+                    number_range: true,
+                },
+                finance_actuals_selection:{
                     value: '==',
-                    text: 'Choose value',  
+                    text: 'Choose value',
                     data_value: 'finance_actuals_selection',
-                    inherit_value: 'finance_actuals',  // <--------------------------- Needed for the key 
+                    inherit_value: 'finance_actuals',  // <--------------------------- Needed for the key
                     multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
                 },
                 // ================= Finance budget
 
-                // ============================= Variance range 
-                finance_variance:{ 
+                // ============================= Variance range
+                finance_variance:{
                     value: '',
-                    text: 'Variance',  
+                    text: 'Variance',
                     data_value: 'finance_variance',
                     number_range: true,                   // Enables min and max value (Prerequisits are below)
                 },
-                finance_variance_min:{ 
+                finance_variance_min:{
                     value: '',
-                    text: 'Variance min',  
+                    text: 'Variance min',
                     data_value: 'finance_variance_min',
                     inherit_value: 'finance_variance',     // <--------------------------- Needed for the key
-                    number_range: true,  
-                },
-                finance_variance_max:{ 
-                    value: '',
-                    text: 'Variance max',  
-                    data_value: 'finance_variance_max',
-                    inherit_value: 'finance_variance',    // <--------------------------- Needed for the key 
                     number_range: true,
                 },
-                finance_variance_selection:{ 
+                finance_variance_max:{
+                    value: '',
+                    text: 'Variance max',
+                    data_value: 'finance_variance_max',
+                    inherit_value: 'finance_variance',    // <--------------------------- Needed for the key
+                    number_range: true,
+                },
+                finance_variance_selection:{
                     value: '==',
-                    text: 'Choose value',  
+                    text: 'Choose value',
                     data_value: 'finance_variance_selection',
-                    inherit_value: 'finance_variance',  // <--------------------------- Needed for the key 
+                    inherit_value: 'finance_variance',  // <--------------------------- Needed for the key
                     multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
                 },
                 // ============================= Variance range
 
-                // ============================= Age range 
-                finance_burn_rate:{ 
+                // ============================= Age range
+                finance_burn_rate:{
                     value: '',
-                    text: 'Burn rate',  
+                    text: 'Burn rate',
                     data_value: 'finance_burn_rate',
                     number_range: true,                   // Enables min and max value (Prerequisits are below)
                 },
-                finance_burn_rate_min:{ 
+                finance_burn_rate_min:{
                     value: '',
-                    text: 'BR min',  
+                    text: 'BR min',
                     data_value: 'finance_burn_rate_min',
                     inherit_value: 'finance_burn_rate',     // <--------------------------- Needed for the key
-                    number_range: true,  
-                },
-                finance_burn_rate_max:{ 
-                    value: '',
-                    text: 'BR max',  
-                    data_value: 'finance_burn_rate_max',
-                    inherit_value: 'finance_burn_rate',    // <--------------------------- Needed for the key 
                     number_range: true,
                 },
-                finance_burn_rate_selection:{ 
+                finance_burn_rate_max:{
+                    value: '',
+                    text: 'BR max',
+                    data_value: 'finance_burn_rate_max',
+                    inherit_value: 'finance_burn_rate',    // <--------------------------- Needed for the key
+                    number_range: true,
+                },
+                finance_burn_rate_selection:{
                     value: '==',
-                    text: 'Choose value',  
+                    text: 'Choose value',
                     data_value: 'finance_burn_rate_selection',
-                    inherit_value: 'finance_burn_rate',  // <--------------------------- Needed for the key 
+                    inherit_value: 'finance_burn_rate',  // <--------------------------- Needed for the key
                     multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
                 },
                 // ============================= Age range
@@ -1078,7 +1103,7 @@ export default {
             document.title = "SCP: CSO² Project | Finance Tracker"
             axios.get('/user-roles-permission').then( response => {
                 const moduleName = 'FinanceTracker';
-                const data = response.data; 
+                const data = response.data;
                 for (const key in  data ){
                     if( data[key].name == moduleName ){
                         const crud_guard = data[key].crud_guard[0];
@@ -1093,6 +1118,9 @@ export default {
             axios.get("/finance-tracker").then(response => {
                 this.financeList = response.data;
                 this.loadFinanceTracker = false;
+            });
+            axios.get("/get-lead-organization").then((res) => {
+                this.responsibleOrganization = res.data;
             });
         },
         tranch_date( tranch_num ){
@@ -1217,22 +1245,47 @@ export default {
                     parseFloat(CpyItm.finance_tranche1),
                     CpyItm.finance_budget
                 );
-                if( !isNaN(burn_1)) this.editedItem.finance_burn1 = burn_1;
-                
 
-                
+                if( !isNaN(burn_1)) this.editedItem.finance_burn1 = burn_1;
+                else {
+                    this.editedItem.finance_tranche1 = "";
+                    this.editedItem.finance_tranche2 = "";
+                    this.editedItem.finance_tranche3 = "";
+                    this.editedItem.finance_tranche4 = "";
+                    this.editedItem.finance_burn4 = "";
+                    this.editedItem.finance_burn3 = "";
+                    this.editedItem.finance_burn2 = "";
+                    this.editedItem.finance_burn1 = "";
+
+                }
+
+
                 const burn_2 = this.getBurn(
                     (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2)),
                     CpyItm.finance_budget
                 );
                 if( !isNaN(burn_2)) this.editedItem.finance_burn2 = burn_2;
+                else {
+                    this.editedItem.finance_tranche2 = "";
+                    this.editedItem.finance_tranche3 = "";
+                    this.editedItem.finance_tranche4 = "";
+                    this.editedItem.finance_burn4 = "";
+                    this.editedItem.finance_burn3 = "";
+                    this.editedItem.finance_burn2 = "";
+                }
 
-            
+
                 const burn_3 = this.getBurn(
                     (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3)),
                     CpyItm.finance_budget
                 );;
                 if( !isNaN(burn_3)) this.editedItem.finance_burn3 =  burn_3;
+                else {
+                    this.editedItem.finance_tranche3 = "";
+                    this.editedItem.finance_tranche4 = "";
+                    this.editedItem.finance_burn4 = "";
+                    this.editedItem.finance_burn3 = "";
+                }
 
                 const burn_4 = this.getBurn(
                     (parseFloat(CpyItm.finance_tranche1) + parseFloat(CpyItm.finance_tranche2) + parseFloat(CpyItm.finance_tranche3) + parseFloat(CpyItm.finance_tranche4)),
@@ -1240,6 +1293,19 @@ export default {
                 );
 
                 if( !isNaN(burn_4)) this.editedItem.finance_burn4 = burn_4 ;
+                else {
+                    this.editedItem.finance_tranche4 = "";
+                    this.editedItem.finance_burn4 = "";
+                }
+            }else{
+                this.editedItem.finance_burn4 = "";
+                this.editedItem.finance_burn3 = "";
+                this.editedItem.finance_burn2 = "";
+                this.editedItem.finance_burn1 = "";
+                this.editedItem.finance_tranche1= "";
+                this.editedItem.finance_tranche2="";
+                this.editedItem.finance_tranche3= "";
+                this.editedItem.finance_tranche4= "";
             }
         },
         formatAsCurrency: function(amt, dec) {

@@ -36,7 +36,18 @@
                                                                     dense
                                                                 ></v-select>
                                                             </v-col>
+                                                            <v-col cols="12" v-show="catSelectedTab === 'Activity'">
+                                                                <v-combobox
+                                                                    :readonly="detailsReadonly"
+                                                                    v-model="cso_objective"
+                                                                    :items="cso_objectives"
+                                                                    label="Objectives"
+                                                                    dense
+                                                                    multiple
+                                                                ></v-combobox>
+                                                            </v-col>
                                                         </v-row>
+                                                        
                                                         <v-row class="mt-0">
                                                             <v-col
                                                                 cols="12"
@@ -1432,25 +1443,40 @@ export default {
     ],
     indicators_list: [],
     editedIndex: -1,
+    cso_objectives:[
+        { value: "objective_1" , text:"Objective 1" },
+        { value: "objective_2" , text:"Objective 2" },
+        { value: "objective_3" , text:"Objective 3" },
+        { value: "objective_4" , text:"Objective 4" }
+    ],
+    cso_objective: "",
     editedItem: {
-      cso_category: "",
-      cso_description: "",
-      cso_act_no: "",
-      cso_lead_organization: "",
-      cso_indicator_mov : "",
-      //cso_intermediate_outcome: "",
-      cso_remarks : "",
-      cso_status: "",
+        cso_category: "",
+        cso_description: "",
+        cso_act_no: "",
+        cso_lead_organization: "",
+        cso_indicator_mov : "",
+        //cso_intermediate_outcome: "",
+        cso_remarks : "",
+        cso_status: "",
+        objective_1:false,
+        objective_2:false,
+        objective_3:false,
+        objective_4:false,
     },
     defaultItem: {
-      cso_category: "",
-      cso_description: "",
-      cso_act_no: "",
-      cso_lead_organization: "",
-      cso_indicator_mov : "",
-      //cso_intermediate_outcome: "",
-      cso_remarks : "",
-      cso_status: "",
+        cso_category: "",
+        cso_description: "",
+        cso_act_no: "",
+        cso_lead_organization: "",
+        cso_indicator_mov : "",
+        //cso_intermediate_outcome: "",
+        cso_remarks : "",
+        cso_status: "",
+        objective_1:false,
+        objective_2:false,
+        objective_3:false,
+        objective_4:false,
     },
     cso_id: "",
     formSubTitle: "",
@@ -1767,7 +1793,13 @@ export default {
     //   console.log(this.isAddingNew, this.isEditting)
       this.editedIndex = this.indicators_list.indexOf(item);
       this.editedItem = Object.assign({}, item);
-
+        let objectives = []
+        for( const obj in item)
+            if( obj.includes("objective") && item[obj])
+                objectives.push({
+                    value: obj , text:"Objective "+obj.replace(/[^0-9]/g,'')
+                });
+        this.cso_objective = objectives;
     //   console.log(this.editedItem.cso_indicator_mov)
       this.file2_name = item.cso_indicator_mov;
       this.file2_attached = item.cso_indicator_mov;
@@ -1871,6 +1903,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.cso_objective=[]
       this.file_name = [];
       this.isEditting = false;
     },
@@ -1898,7 +1931,15 @@ export default {
     async save() {
       this.btnLoader = true;
       let validate = true;
-      
+      this.btnLoader = true;
+        const objective = this.cso_objective;
+        const objectives = this.cso_objectives;
+        for( const ob in objectives ){
+            this.editedItem[objectives[ob].value] = false;
+        }
+        for( const ob in objective ){
+            this.editedItem[objective[ob].value] = true;
+        }
       if (!this.editedItem.cso_category) {
         this.$noty.error("Category is empty!");
         validate = false;

@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 class FinanceTrackerController extends Controller
 {
     public function getFinanceTracker(){
-        $get_ft = DB::table('finance')
-                    ->whereRaw(DB::raw("deleted_at IS NULL"))->get();
+        $get_ft = DB::table('finance') ->whereRaw(DB::raw("deleted_at IS NULL"))->orderBy('created_by', 'DESC')->get();
         $ft_list = [];
         if($get_ft){
             foreach ($get_ft as $key => $row){

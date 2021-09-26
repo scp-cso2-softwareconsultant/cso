@@ -665,7 +665,7 @@ export default {
       },
       yaxis: {
         title: {
-          text: "$ (thousands)",
+          text: "Burn Rates ",
         },
       },
       fill: {
@@ -957,10 +957,101 @@ export default {
       // assessmentSubDomainPerYearChartOptions
     },
     financeTracker() {
-      // financeTrackerBudgetSeries
-      // financeTrackerBudgetChartOptions
-      // burnRateSeries
-      // burnRateChartOptions
+      const finance_tracker = axios.get('/dashboard-finance-tracker',);
+      const lead_organization = axios.get('/get-lead-organization');
+      axios.all([finance_tracker, lead_organization ]).then(axios.spread((...responses) => {
+
+        var finance_tracker_data = responses[0].data;
+        const lead_organization_data = responses[1].data;
+
+        var approved_budget = [];
+        var actual_expenditure = [];
+        var budget_remaining = [];
+        var burn_rate = [];
+        var burnRateSeries = []
+
+        var burnRate1 = []
+        var burnRate2 = []
+        var burnRate3 = []
+        var burnRate4 = []
+        var burnRateNames = []
+        var used = {};
+        
+        for( const index in finance_tracker_data ){
+          const finance = finance_tracker_data[index];
+          const budget =  this.roundUp(parseFloat(finance['finance_budget']) );
+          const actuals = this.roundUp(parseFloat(finance['finance_actuals']));
+          const burnRate1Value = this.roundUp(parseFloat(finance['finance_burn1']));
+          const burnRate2Value = this.roundUp(parseFloat(finance['finance_burn2']));
+          const burnRate3Value = this.roundUp(parseFloat(finance['finance_burn3']));
+          const burnRate4Value = this.roundUp(parseFloat(finance['finance_burn4']));
+
+          let name =  finance_tracker_data[index]['finance_name']; 
+          let newName = name;
+          while (used[newName])  newName = `${name}(${used[name]++})`;
+          used[newName] = 1;
+          
+          approved_budget.push( budget )
+          actual_expenditure.push( actuals )
+          budget_remaining.push(  this.roundUp(budget-actuals)  )
+          burn_rate.push(   this.roundUp(actuals/budget) )
+        
+          burnRate1.push( burnRate1Value );
+          burnRate2.push( burnRate2Value );
+          burnRate3.push( burnRate3Value );
+          burnRate4.push( burnRate4Value );
+          burnRateNames.push(newName);
+          
+        }
+        this.burnRateChartOptions = {
+          ...this.burnRateChartOptions,
+          xaxis:{
+            categories : burnRateNames
+          }
+        }
+        this.burnRateChartOptions.xaxis.categories = burnRateNames;
+        this.burnRateSeries = [
+          {
+            name: "Burn Rate (1st Liq)",
+            data: burnRate1,
+          },
+           {
+            name: "Burn Rate (2st Liq)",
+            data: burnRate2,
+          }, {
+            name: "Burn Rate (3st Liq)",
+            data: burnRate3,
+          }, {
+            name: "Burn Rate (4st Liq)",
+            data: burnRate4,
+          }
+        ]
+
+        this.financeTrackerBudgetSeries =[
+          {
+            name: "Approved Budget",
+            type: "column",
+            data:  approved_budget ,
+          },
+          {
+            name: "Actual Expenditure",
+            type: "column",
+            data: actual_expenditure,
+          },
+          {
+            name: "Budget Remaining",
+            type: "column",
+            data:  budget_remaining,
+          },
+          {
+            name: "Burn rate",
+            type: "line",
+            data: burn_rate,
+          },
+        ]
+      })).catch(errors => {
+        console.log("errors")
+      })
     },
     ProjectTrackingDocument() {
       // projectTrackingDocumentSeries
@@ -979,6 +1070,9 @@ export default {
         i++;
       }
       return series;
+    },
+    roundUp(num){
+      return Math.round((num + Number.EPSILON) * 100) / 100
     },
   },
   created() {
