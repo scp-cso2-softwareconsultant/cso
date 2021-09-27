@@ -950,8 +950,6 @@ export default {
         }
       );
 
-      console.log(constructedObjectMapping2, total2, csoProfile.length)
-
       this.CSOProfileAccreditation.accreditedMapping = constructedObjectMapping;
       this.CSOProfileAccreditation.accreditationMapping = constructedObjectMapping2;
     },
