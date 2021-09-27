@@ -430,7 +430,7 @@ export default {
       accreditationMapping: [],
       SELECTED : [0,1,2]
     },
-    //BARCHART
+    //BARCHART For Primary StakeHolders
     barData: {
       tooltip: {
         trigger: "axis",
@@ -459,8 +459,7 @@ export default {
           "peer CSOs or related networks",
           "larger CSOs/CSO Network in Manila, Cebu or Davao",
           "local researchers and scholars",
-          "potential donors",
-          "tite",
+          "potential donors"
         ],
       },
       series: [
@@ -469,8 +468,13 @@ export default {
           type: "bar",
           stack: "total",
           label: {
-            formatter: "{c}%",
+            formatter: "{label_white|{c}}%",
             show: true,
+            rich:{
+              label_white:{
+                color:"#fff"
+              }
+            }
           },
           itemStyle: {
             borderRadius: 6,
@@ -489,8 +493,7 @@ export default {
             { value: 50, name: "23" },
             { value: 7, name: "24" },
             { value: 7, name: "25" },
-            { value: 5, name: "26" },
-            { value: 3, name: "27" },
+            { value: 5, name: "26" }
           ],
         },
       ],
@@ -791,12 +794,13 @@ export default {
   methods: {
     async initialize() {
       document.title = "SCP: CSO² Project | Dashboard";
-      this.updateCSOIndicatorsChart();
-      this.updateCSOProfileChart();
-      await this.initTop3();
-      this.assessment();
-      this.financeTracker();
-      this.ProjectTrackingDocument();
+      this.updateCSOIndicatorsChart()
+      this.updateCSOProfileChart()
+      await this.initTop3()
+      await this.initPrimaryBar()
+      this.assessment()
+      this.financeTracker()
+      this.ProjectTrackingDocument()
 
       axios.get("/get-lead-organization").then((res) => {
         this.responsibleOrganization = res.data;
@@ -953,6 +957,41 @@ export default {
       this.CSOProfileAccreditation.accreditedMapping = constructedObjectMapping;
       this.CSOProfileAccreditation.accreditationMapping = constructedObjectMapping2;
     },
+    //FOR PRIMARY STAKEHOLDER BARCHART
+    async initPrimaryBar(){
+      const Stakeholders = await this.req('/getStakeHolders')
+      const csoProfile = await this.req("/cso-profile");
+
+      var yAxis = []; //yAxis lodi 
+      var data = [];
+
+      Stakeholders.forEach((item)=>{ yAxis.push(item.text) })
+
+      var xAxis = Array(yAxis.length).fill(0)
+      var totalStakeHolders = 0;
+
+      csoProfile.forEach((item)=>{
+        var itemStakeholders = item.cso_stakeholders.split("^^")
+        itemStakeholders.forEach((stakeholder)=>{ 
+          var idx = yAxis.indexOf(stakeholder)
+          xAxis[idx] += 1;
+        })
+        totalStakeHolders += itemStakeholders.length
+      })
+      
+      xAxis.forEach((item,idx)=>{
+        let name = yAxis[idx]+" : "+item
+        data[idx] = {value: (item / totalStakeHolders * 100).toFixed(2), name: name}
+        xAxis[idx] = data[idx].value
+      })
+      
+      console.log(totalStakeHolders)
+      this.barData.yAxis.data = yAxis;
+      this.barData.xAxis.data = xAxis;
+      this.barData.series[0].data = data;
+    },
+
+    //ASYNC REQ
     async req(url) {
       try {
         const response = await axios.get(url);
