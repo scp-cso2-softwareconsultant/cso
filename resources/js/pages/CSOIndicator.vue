@@ -1577,44 +1577,25 @@ export default {
         });
       else this.getFilteredIndicator();
     },
-    /**
-     * Returns true/false if Number already exist
-     *
-     * @param {url} url Route backend
-     * @param {string} cso_activity_no 
-     * @param {string} cso_category
-     * @return {boolean} 
-     */
     async verifyNoExist(url, id, cat){
       try {
         const response = await axios.get(`/${url}/?act_no=${id.replace(/[^\d.-]/g,'')}&category=${cat}`)
         const arr = [];
 
         for(let x = 0; x < response.data.length; x++){
-            //console.log(id.replace(/[^\d.-]/g,''),response.data[x].cso_act_no.replace(/[^\d.-]/g,''))
             if(response.data[x].cso_act_no.replace(/[^\d.-]/g,'') == id.replace(/[^\d.-]/g,''))
                 arr[arr.length] = response.data[x].cso_act_no.replace(/[^\d.-]/g,'')
         }
-       // console.log(arr);
 
         if(arr.length !== 0){ 
-            //console.log(arr.length, "returning true")
             return true;
         }else{
-            //console.log(arr.length, "returning false")
             return false;
         }
       } catch (error) {
-        //console.log(error);
       }
     },
-    /**
-     * Returns true/false if Sub Number already exist
-     *
-     * @param {url} url Route backend
-     * @param {string or number} cso_activity_no 
-     * @return {boolean} 
-     */
+
     async verifySubNoExist(url, cso_indicator_id, indicator_no){
       try {
         const response = await axios.get(`/${url}/?cso_indicator_id=${cso_indicator_id}&indicator_no=${indicator_no}`)

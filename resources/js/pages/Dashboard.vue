@@ -44,7 +44,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Top 3 Accreditation Bodies</h5>
-          <div class="row">
+          <div class="row mb-5">
             <div class="col-lg-4 col-sm-2">
               <div class="card-box shadow rounded bg-red">
                 <div class="inner">
@@ -120,16 +120,41 @@
             {{ item.tos }} :
             <span class="font-weight-normal">{{ item.percentage }} %</span>
           </p> -->
-          <p
-            v-for="(
-              item, index
-            ) in CSOProfileAccreditation.accreditationMapping.slice(0,3)"
-            :key="index"
-            class="card-text font-weight-bold text-uppercase"
-          >
-            {{ item.tos }} :
-            <span class="font-weight-normal">{{ item.percentage }} %</span>
-          </p>
+            <!-- <v-chip
+              class="chip teal lighten-3 px-3 m-3 p-3"
+              outlined
+              v-for="(
+                item, index
+              ) in CSOProfileAccreditation.accreditationMapping.slice(0, 3)"
+              :key="index"
+            >
+              {{ item.accr }} : {{ item.percentage }} %
+            </v-chip> -->
+            <template>
+              <v-card
+                tile
+              >
+                <v-list rounded>
+                  <v-list-item-group  
+                    v-model="CSOProfileAccreditation.SELECTED"
+                    active-class="pink--text"
+                    multiple
+                  >
+                    <v-list-item
+                      v-for="(item, index ) in CSOProfileAccreditation.accreditationMapping.slice(0, 3)"
+                    :key="index"
+                    >
+                      <v-list-item-content>
+                        <v-list-item-title v-text="item.accr"></v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-content>
+                        <v-list-item-title >{{item.percentage}} %</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-card>
+            </template>
         </div>
       </div>
       <v-flex>
@@ -394,8 +419,6 @@ export default {
     //Top Accreditation
     CSOProfileAccreditation: {
       AccreditedBodies: [],
-      data: [],
-      total: 0,
       accreditedMapping: [
         { count: 0, tos: "local policy makers" },
         { count: 0, tos: "private sector support organizations and CSRs" },
@@ -404,7 +427,8 @@ export default {
         { count: 0, tos: "local researchers and scholars" },
         { count: 0, tos: "potential donors" },
       ],
-      accreditationMapping: []
+      accreditationMapping: [],
+      SELECTED : [0,1,2]
     },
     //BARCHART
     barData: {
@@ -765,10 +789,11 @@ export default {
     },
   }),
   methods: {
-    initialize() {
+    async initialize() {
       document.title = "SCP: CSO² Project | Dashboard";
       this.updateCSOIndicatorsChart();
       this.updateCSOProfileChart();
+      await this.initTop3();
       this.assessment();
       this.financeTracker();
       this.ProjectTrackingDocument();
@@ -816,7 +841,7 @@ export default {
           }
         });
         /*
-        TODO LATER
+        TODO LATER IF POSSIBLE Sep 27
 
         Correct Color via 
         https://echarts.apache.org/en/option.html#legend.data.itemStyle.decal.color
@@ -830,7 +855,6 @@ export default {
                 len = DATA.length
             }
         }
-
         */
 
         this.pieData.series[0].data = DATA;
@@ -857,100 +881,85 @@ export default {
 
         this.doughData.series[0].data = DATA;
       });
-
-      // COMPUTING TOP 3 ACCREDIT..
+    },
+    async initTop3() {
       var constructedObjectMapping = [];
       var constructedObjectMapping2 = [];
-      /* structure
-      CSOProfileAccreditation
-        .AccreditedBodies:[],
-        .data: [],
-        .total : 0,
-        .accreditedMapping:[] 
-        */
-      // REMOVE DUE TO CHANGES REQUEST BY CLIENT
-      axios.get("/types-of-support").then((response) => {
-        const data = response.data;
-        data.forEach((i) => {
-          constructedObjectMapping.push({ count: 0, tos: i.name });
-        });
+
+      const typeOfSupport = await this.req("/types-of-support");
+      const csoProfile = await this.req("/cso-profile");
+      const accreditation = await this.req("/getAccreditations");
+
+      typeOfSupport.forEach((i) => {
+        constructedObjectMapping.push({ count: 0, tos: i.name });
       });
-      axios.get("/getAccreditations").then((response) => {
-        const data = response.data;
-        data.forEach((i) => {
-          constructedObjectMapping2.push({
-            count: 0,
-            accr: i.text,
-          });
+      accreditation.forEach((i) => {
+        constructedObjectMapping2.push({
+          count: 0,
+          accr: i.text,
         });
       });
 
-      // axios.get('/getStakeHolders').then((response)=>{
-      //         response.data.forEach((i)=>{
-      //             constructedObjectMapping.push({count: 0, tos : i.text})
-      //         });
-      //     })
+      csoProfile.forEach((item) => {
+        var found = constructedObjectMapping.find(
+          (obj) => obj.tos === item.type_of_support
+        );
 
-      axios.get("/cso-profile").then((response) => {
-        this.CSOProfileAccreditation.total = response.data.length;
-        this.CSOProfileAccreditation.data = response.data;
-        this.CSOProfileAccreditation.data.forEach((item) => {
-          var parsed = item.cso_stakeholders.split("^^");
-          var parsed2 = item.cso_registration.split("^^");
-
-          var constructed = [];
-          var constructed2 = [];
-
-          parsed.forEach((it) => {
-            if (it.length === 0) return;
-            constructed.push({ value: it, tos: it });
-          });
-
-          parsed2.forEach((it) => {
-            if (it.length === 0) return;
-            constructed2.push({ value: it, accr: it });
-          });
-
-          item.cso_stakeholders = constructed;
-          item.cso_registration = constructed2;
-
-          var found = constructedObjectMapping.find(
-            (obj) => obj.tos === item.type_of_support
-          );
-
-          if (found === undefined) {
-            // console.log(
-            //   "One of Data has unknown cso_stakeholders - will not be counted in Top 3 Accreditation",
-            //   item.type_of_support
-            // );
-          } else {
-            var idx = constructedObjectMapping.indexOf(found);
-            constructedObjectMapping[idx] = {
-              count: found.count + 1,
-              tos: found.tos,
+        if (found === undefined) {
+        } else {
+          var idx = constructedObjectMapping.indexOf(found);
+          constructedObjectMapping[idx] = {
+            count: found.count + 1,
+            tos: found.tos,
+          };
+        }
+      });
+      csoProfile.forEach((item) => {
+        var idx = 0;
+        constructedObjectMapping2.forEach((mp) => {
+          var res = item.cso_registration.indexOf(mp.accr);
+          if (res !== -1) {
+            constructedObjectMapping2[idx] = {
+              count: constructedObjectMapping2[idx].count + 1,
+              accr: constructedObjectMapping2[idx].accr,
             };
           }
-
-          constructedObjectMapping2.forEach((i)=>{
-               //var hasAccr = item.registration.find(reg => reg.accr )
-               console.log(item)
-            //    if(hasAccr !== -1)
-            //        i.count += 1
-          })
+          idx++;
         });
-        constructedObjectMapping.sort((i1, i2) =>
-          i1.count < i2.count ? 1 : -1
-        );
-        constructedObjectMapping.forEach(
-          (i) =>
-            (i.percentage = (
-              (i.count / this.CSOProfileAccreditation.total) *
-              100
-            ).toFixed(2))
-        );
-        this.CSOProfileAccreditation.accreditedMapping =
-          constructedObjectMapping;
       });
+
+      let total1 = csoProfile.length;
+      let total2 = 0;
+
+      constructedObjectMapping2.forEach((item) => {
+        total2 += item.count;
+      });
+
+      constructedObjectMapping.sort((i1, i2) => (i1.count < i2.count ? 1 : -1));
+      constructedObjectMapping2.sort((i1, i2) =>
+        i1.count < i2.count ? 1 : -1
+      );
+
+      constructedObjectMapping.forEach(
+        (i) => (i.percentage = ((i.count / total1) * 100).toFixed(2))
+      );
+
+      constructedObjectMapping2.forEach(
+        (i) => {
+          i.percentage = ((i.count / total2) * 100).toFixed(2)
+        }
+      );
+
+      console.log(constructedObjectMapping2, total2, csoProfile.length)
+
+      this.CSOProfileAccreditation.accreditedMapping = constructedObjectMapping;
+      this.CSOProfileAccreditation.accreditationMapping = constructedObjectMapping2;
+    },
+    async req(url) {
+      try {
+        const response = await axios.get(url);
+        return response.data;
+      } catch (err) {}
     },
     assessment() {
       // assessmentSubDomainPerYearSeries
@@ -987,3 +996,5 @@ export default {
   mounted() {},
 };
 </script>
+<style scoped>
+</style>

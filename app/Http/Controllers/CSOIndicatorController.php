@@ -234,7 +234,6 @@ class CSOIndicatorController extends Controller
                 'cso_act_no' => $raw_data->cso_act_no,
                 'cso_indicator_mov' => $raw_data->cso_indicator_mov,
                 'cso_remarks' => $raw_data->cso_remarks,
-                'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
                 'cso_lead_organization' => $raw_data->cso_lead_organization,
                 'cso_status' => 'Not Yet Started',
                 'created_by' => $user_name
@@ -248,7 +247,6 @@ class CSOIndicatorController extends Controller
                     'cso_act_no' => $raw_data->cso_act_no,
                     'cso_status' => $raw_data->cso_status,
                     'cso_indicator_mov'=> $raw_data->cso_indicator_mov,
-                    'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
                     'cso_remarks'=>$raw_data -> cso_remarks,
                     'cso_lead_organization' => $raw_data-> cso_lead_organization,
                     'cso_description' => $raw_data->cso_description,
