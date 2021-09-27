@@ -336,6 +336,21 @@ export default {
     },
     //DOUGHNUT
     doughData: {
+      title: {
+        text: "Types Of Organization",
+        left: "center",
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          //restore: { show: true },
+          saveAsImage: {
+            show: true,
+          },
+        },
+      },
       tooltip: {
         trigger: "item",
       },
@@ -432,6 +447,21 @@ export default {
     },
     //BARCHART For Primary StakeHolders
     barData: {
+      title: {
+        text: "Primary Stakeholders",
+        left: "center",
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          //restore: { show: true },
+          saveAsImage: {
+            show: true,
+          },
+        },
+      },
       tooltip: {
         trigger: "axis",
         formatter: "{b}",
@@ -488,12 +518,6 @@ export default {
             focus: "series",
           },
           data: [
-            { value: 8, name: "Local Policy Makers : 21" },
-            { value: 15, name: "22" },
-            { value: 50, name: "23" },
-            { value: 7, name: "24" },
-            { value: 7, name: "25" },
-            { value: 5, name: "26" }
           ],
         },
       ],
@@ -984,11 +1008,10 @@ export default {
         data[idx] = {value: (item / totalStakeHolders * 100).toFixed(2), name: name}
         xAxis[idx] = data[idx].value
       })
-      
-      console.log(totalStakeHolders)
-      this.barData.yAxis.data = yAxis;
-      this.barData.xAxis.data = xAxis;
-      this.barData.series[0].data = data;
+
+      this.barData.xAxis.data = xAxis
+      this.barData.yAxis.data = yAxis
+      this.barData.series[0].data = data
     },
 
     //ASYNC REQ
