@@ -27,10 +27,7 @@ export default {
   },
   watch: {
     D: {
-      handler: function (n, o) {
-        this.chartDom.setOption(this.D);
-        console.log("CHANGED")
-      },
+      handler: function (n, o) { this.chartDom.setOption(this.D); },
       deep: true,
     },
   },

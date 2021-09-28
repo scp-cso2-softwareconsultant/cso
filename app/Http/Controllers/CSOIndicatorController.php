@@ -179,6 +179,24 @@ class CSOIndicatorController extends Controller
         return $cso_indicator;
     }
 
+    public function deleteIndicatorMov(Request $request){
+        Log::info("DELETING CSO SUB INDICATOR MOV");
+        $raw_data = json_decode($request['data']);
+        $deletion = DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update(["mov_file" => '']);
+        // if($deletion){
+        //     Log::info("SUCCESS DELETION");
+        // }
+    }
+
+    public function deleteCSO_IndicatorMov($request){
+        Log::info("DELETING INDICATOR MOV");
+        $raw_data = json_decode($request['data']);
+        $deletion = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)->update(["cso_indicator_mov" => '']);
+        if($deletion){
+            Log::info("SUCCESS DELETION");
+        }
+    }
+
     /**
     *
     * Uncomment The function below if client want all data not only activities to be return for dashboard
@@ -232,7 +250,7 @@ class CSOIndicatorController extends Controller
                 'cso_category' => $raw_data->cso_category,
                 'cso_description' => $raw_data->cso_description,
                 'cso_act_no' => $raw_data->cso_act_no,
-                'cso_indicator_mov' => $raw_data->cso_indicator_mov,
+                //'cso_indicator_mov' => $raw_data->cso_indicator_mov,
                 'cso_remarks' => $raw_data->cso_remarks,
                 // 'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
                 'objective_1'=>  $raw_data->objective_1,
@@ -251,7 +269,7 @@ class CSOIndicatorController extends Controller
                     'cso_category' => $raw_data->cso_category,
                     'cso_act_no' => $raw_data->cso_act_no,
                     'cso_status' => $raw_data->cso_status,
-                    'cso_indicator_mov'=> $raw_data->cso_indicator_mov,
+                    //'cso_indicator_mov'=> $raw_data->cso_indicator_mov,
                     // 'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
                     'objective_1'=>  $raw_data->objective_1,
                     'objective_2'=>  $raw_data->objective_2,
@@ -264,12 +282,13 @@ class CSOIndicatorController extends Controller
                     'updated_by' => $user_name
                 ));
             if($updateData) $success=true;
-            //Log::info("UPDATE DATA");
+            
+            if($raw_data->fileRemoveOnSave)
+                $this->deleteCSO_IndicatorMov($request);
         }
 
         if($request->hasFile('upload_file') && $form_mode >= 0){
-            //Log::info('Theres File Woah!');
-
+            Log::info('Theres File Woah!');
             // Get filename with the extension
             $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
             //Get just filename
@@ -327,7 +346,6 @@ class CSOIndicatorController extends Controller
                 'actual_date' => (key_exists('actual_date', $_raw_data) ? $raw_data->actual_date : NULL),
                 'indicator_status_id' => 1,
                 'created_by' => $user_name,
-
             ]);
             $this->autoChangeStatus($cso_id);
             if($insertData) $success=true;
@@ -350,6 +368,9 @@ class CSOIndicatorController extends Controller
                 'updated_at' => date("Y-m-d h:i:s"),
                 'updated_by' => $user_name,
             ));
+
+            if($raw_data->fileRemoveOnSave)
+                $this->deleteIndicatorMov($request);
 
             $getCsoIndicatorId = DB::table('indicator')->select('cso_indicator_id')->where('indicator_id',$raw_data->indicator_id)->get();
             $this->autoChangeStatus($getCsoIndicatorId->first()->cso_indicator_id);

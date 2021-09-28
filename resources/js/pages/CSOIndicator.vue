@@ -193,9 +193,21 @@
                                                                     <div v-else>
                                                                         <!--Editing True-->
                                                                         <div v-if="file2_name.length != 0">
-                                                                            <v-btn background depressed @click="removeFile2">
+                                                                            <!-- <v-btn background depressed @click="removeFile2">
                                                                                 {{ file2_name }}
-                                                                            </v-btn>
+                                                                            </v-btn> -->
+                                                                            <v-chip
+                                                                            class="ma-2"
+                                                                            close
+                                                                            color="indigo darken-3"
+                                                                            outlined
+                                                                            @click:close="deleteCSOMov()"
+                                                                            >
+                                                                                <v-icon left>
+                                                                                    mdi-file
+                                                                                </v-icon>
+                                                                                {{file2_name}}
+                                                                            </v-chip>
                                                                         </div>
                                                                         <div v-else>
                                                                             <v-file-input v-model="file2_attached" @change="onFileChanged2">
@@ -851,17 +863,31 @@
                                                                             No MOV File
                                                                         </div>
                                                                         <div v-else>
-                                                                            <a :href="getLink(file_name)">
+                                                                            <!-- <a :href="getLink(file_name)">
                                                                                 {{file_name}}
-                                                                            </a>
+                                                                            </a> -->
+                                                                            <v-chip class="ma-2" color="blue darken-1" text-color="white" @click:close="deleteIndicatorMov">
+                                                                                <v-avatar left>
+                                                                                    <v-icon>mdi-file-document-outline</v-icon>
+                                                                                </v-avatar>
+                                                                                <a class="text-decoration-none text-light" text-color="white" :href="getLink(file_name)">
+                                                                                    {{file_name}}
+                                                                                </a>
+                                                                            </v-chip>
                                                                         </div>
                                                                     </div>
                                                                     <div v-else>
                                                                         <!--Editing True-->
                                                                         <div v-if="file_name.length != 0">
-                                                                            <v-btn background depressed readonly @click="removeFile">
+                                                                            <!-- <v-btn background depressed readonly @click="removeFile">
                                                                                 {{ file_name }}
-                                                                            </v-btn>
+                                                                            </v-btn> -->
+                                                                            <v-chip class="ma-2" close color="blue darken-1" text-color="white" @click:close="deleteIndicatorMov">
+                                                                                <v-avatar left>
+                                                                                    <v-icon>mdi-file-document-outline</v-icon>
+                                                                                </v-avatar>
+                                                                                {{file_name}}
+                                                                            </v-chip>
                                                                         </div>
                                                                         <div v-else>
                                                                             <v-file-input v-model="file_attached" @change="onFileChanged">
@@ -1531,6 +1557,7 @@ export default {
     file2_name: [],
     file2_attached: [],
     isRemove: false,
+    fileRemoveOnSave: false,
     isAddingNew: true,
   }),
 
@@ -1602,6 +1629,9 @@ export default {
           this.loadCSOIndicator = false;
         });
       else this.getFilteredIndicator();
+
+      this.file2_name = ""
+      this.file2_attached = []
     },
     async verifyNoExist(url, id, cat){
       try {
@@ -1780,10 +1810,11 @@ export default {
                 objectives.push({
                     value: obj , text:"Objective "+obj.replace(/[^0-9]/g,'')
                 });
-        this.cso_objective = objectives;
-    //   console.log(this.editedItem.cso_indicator_mov)
-      this.file2_name = item.cso_indicator_mov;
-      this.file2_attached = item.cso_indicator_mov;
+
+      this.cso_objective = objectives;
+      let len = this.editedItem.cso_indicator_mov.length
+      this.file2_name = len >= 1 ? item.cso_indicator_mov: [];
+      this.file2_attached = len >= 1? item.cso_indicator_mov: [];
       this.dialog = true;
     },
 
@@ -1958,11 +1989,12 @@ export default {
       
       if (validate) {
         var formData = new FormData();
-
+        this.editedItem.fileRemoveOnSave = this.fileRemoveOnSave
         formData.append("data", JSON.stringify(this.editedItem));
         formData.append("form_mode", this.editedIndex);
         formData.append("upload_file", this.file2_attached);
         formData.append("file_name", this.file2_name);
+        formData.append("fileRemoveOnSave", this.fileRemoveOnSave);
 
         axios
           .post("/save-cso-indicator", formData)
@@ -1973,6 +2005,7 @@ export default {
                 this.$noty.success("Successfully Added.");
               } else {
                 this.$noty.success("Successfully Updated.");
+                this.fileRemoveOnSave = false;
               }
               this.close();
             } else {
@@ -2036,12 +2069,15 @@ export default {
     
         if(!this.editedSubItem.indicator_remarks)
             this.editedSubItem.indicator_remarks = '';
+        
+        this.editedSubItem.fileRemoveOnSave = this.fileRemoveOnSave
 
         formData.append("data", JSON.stringify(this.editedSubItem));
         formData.append("form_mode", this.editedIndex);
         formData.append("cso_id", this.cso_id);
         formData.append("upload_file", this.file_attached);
         formData.append("file_name", this.file_name);
+        formData.append("fileRemoveOnSave", this.fileRemoveOnSave)
         axios.post("/save-cso-indicator-details", formData).then((response) => {
           if (response.data.success) {
             this.initialize();
@@ -2105,11 +2141,50 @@ export default {
       this.isRemove = true;
     },
     removeFile2: function (item) {
-      this.file2_name = '';
-      this.file2_attached = '';
+      this.file2_name = [];
+      this.file2_attached = [];
       this.isRemove = true;
     },
+    deleteIndicatorMov(){
+        /*  DELETE FILE WITHOUT SAVING
+            console.log("DELETE INDICATOR MOV")
+            var formData = new FormData();
+            formData.append("data", JSON.stringify(this.editedSubItem));
+            formData.append("form_mode", this.editedIndex);
+            formData.append("cso_id", this.cso_id);
 
+            axios.post('/deleteIndicatorMov', formData).then((res)=>{
+                this.removeFile();
+                this.initialize();
+            });
+        */
+
+        /* DELETE FILE ON SAVE */
+        this.removeFile();
+        this.fileRemoveOnSave = true
+    },
+    deleteCSOMov(){
+
+        /*  Delete File without Saving
+        deleteCSO_IndicatorMov
+        var formData = new FormData();
+        this.editedItem.cso_indicator_mov = []
+        var copy = Object.assign({}, this.editedItem)
+        copy.cso_indicator_mov = ''
+        formData.append("data", JSON.stringify(copy));
+        formData.append("form_mode", this.editedIndex);
+        formData.append("cso_id", this.cso_id);
+
+        axios.post('/deleteCSO_IndicatorMov', formData).then((res)=>{
+            //this.removeFile2();
+            this.initialize();
+        });
+        */
+
+        // Delete File On Save
+        this.removeFile2();
+        this.fileRemoveOnSave = true
+    },
     exportExcel: function (tableName, value) {
       // console.log(tableName, value);
       this.btnLoader = true;

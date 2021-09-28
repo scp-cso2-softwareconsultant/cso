@@ -104,7 +104,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 break;
             case "ProjectTrackingDocument":
                 break;
-            case "ParticipantProfile":
+            case "Participants Profile":
                 $header = [
                     "PARTICIPANT ID",
                     "PARTICIPANT NAME",

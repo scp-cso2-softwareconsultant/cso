@@ -348,7 +348,7 @@ class commonController extends Controller
                     break;
             case "ProjectTrackingDocuments":
                 break;
-            case "ParticipantsProfile":
+            case "Participants Profile":
                 /*
                 "PARTICIPANT ID",
                 "PARTICIPANT NAME",

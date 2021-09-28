@@ -1414,6 +1414,7 @@ export default {
       }
     },
     exportExcel: function (tableName, value) {
+      console.log(tableName)
       this.btnLoader = true;
       let filename = tableName + ".xlsx";
       var formData = new FormData();
@@ -1422,7 +1423,6 @@ export default {
         .post("/export-excel", formData, { responseType: "blob" })
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
-          //console.log( response.data )
           const link = document.createElement("a");
           link.href = url;
           link.setAttribute("download", filename);

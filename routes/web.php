@@ -52,6 +52,9 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::get('/downloadCSOMov', [App\Http\Controllers\CSOIndicatorController::class, 'downloadCSOMov'])->name('downloadCSOMov')->middleware('roles_permission:CSOIndicator,download');
         Route::get('/checkNoExist', [App\Http\Controllers\CSOIndicatorController::class, 'checkNoExist'])->name('checkNoExist')->middleware('roles_permission:CSOIndicator,view');
         Route::get('/checkSuNoExist', [App\Http\Controllers\CSOIndicatorController::class, 'checkSuNoExist'])->name('checkSuNoExist')->middleware('roles_permission:CSOIndicator,view');
+        Route::post('/deleteIndicatorMov', [App\Http\Controllers\CSOIndicatorController::class, 'deleteIndicatorMov'])->name('deleteIndicatorMov')->middleware('roles_permission:CSOIndicator,delete');
+        Route::post('/deleteCSO_IndicatorMov', [App\Http\Controllers\CSOIndicatorController::class, 'deleteCSO_IndicatorMov'])->name('deleteCSO_IndicatorMov')->middleware('roles_permission:CSOIndicator,delete');
+
     });
 
 // CSO PROFILE

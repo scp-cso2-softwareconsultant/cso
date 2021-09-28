@@ -455,7 +455,7 @@ export default {
         show: true,
         feature: {
           mark: { show: true },
-          dataView: { show: true, readOnly: false },
+          //dataView: { show: true, readOnly: false },
           //restore: { show: true },
           saveAsImage: {
             show: true,
@@ -861,7 +861,7 @@ export default {
       axios.get("/dashboard-cso-indicator").then((response) => {
         const data = response.data;
         data.forEach((i) => {
-          console.log(lead_org);
+          //console.log(lead_org);
           if (i.cso_lead_organization === lead_org) {
             var obj = DATA.find((obj) => obj.name === i.cso_status);
             var idx = DATA.indexOf(obj);
@@ -1004,8 +1004,9 @@ export default {
       })
       
       xAxis.forEach((item,idx)=>{
-        let name = yAxis[idx]+" : "+item
-        data[idx] = {value: (item / totalStakeHolders * 100).toFixed(2), name: name}
+        let computed = (item / totalStakeHolders * 100).toFixed(2);
+        let name = `${yAxis[idx]} : ${item} ( ${computed}% )`
+        data[idx] = {value: computed, name: name}
         xAxis[idx] = data[idx].value
       })
 
