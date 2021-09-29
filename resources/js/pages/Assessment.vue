@@ -61,7 +61,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row class="mt-0">
+            <!-- <v-row class="mt-0">
               <v-col cols="12" sm="12" md="12">
                 <v-text-field
                   v-model="editedItem.domain"
@@ -71,7 +71,7 @@
                   dense
                 ></v-text-field>
               </v-col>
-            </v-row>
+            </v-row> -->
 
             <v-row class="mt-0" v-if="!detailsReadonly">
               <v-col cols="12" sm="12" md="12">
@@ -240,7 +240,7 @@
                   v-model="editedSubItem.sub_domain"
                   :rules="[rules.required]"
                   :readonly="detailsReadonly"
-                  label="Sub Domain *"
+                  label="Domain *"
                   dense
                 ></v-text-field>
               </v-col>
@@ -248,13 +248,20 @@
 
             <v-row class="mt-0" v-if="!detailsReadonly">
               <v-col cols="12" sm="12" md="12">
-                <v-select
+                <!-- <v-select
                   :items="rating_list"
                   v-model="editedSubItem.rating"
                   label="Rating *"
                   dense
                   :rules="[rules.required]"
-                ></v-select>
+                ></v-select> -->
+                <v-text-field
+                  v-model="editedSubItem.rating"
+                  :rules="[rules.required]"
+                  :readonly="detailsReadonly"
+                  label="Rating *"
+                  dense
+                ></v-text-field>
               </v-col>
             </v-row>
             <v-row class="mt-0" v-if="detailsReadonly">
@@ -591,7 +598,7 @@
             color="green"
             data-toggle="tooltip"
             data-placement="top"
-            title="New Sub Domain"
+            title="New Domain"
           >
             mdi-sticker-plus-outline
           </v-icon>
@@ -801,19 +808,20 @@ export default {
 			{
 				text: '',
 				value: 'data-table-expand'
-			},{
+			},
+      {
 				text: 'Name of LRO',
 				align: 'start',
 				sortable: true,
 				value: 'cso_name',
 				width: '15%'
 			},
-			{
-				text: 'Domain',
-				value: 'domain',
-				width: '15%',
-				sortable: true
-			},
+			// {
+			// 	text: 'Domain',
+			// 	value: 'domain',
+			// 	width: '15%',
+			// 	sortable: true
+			// },
 			{
 				text: 'Tool Used',
 				value: 'tool_used',
@@ -860,7 +868,7 @@ export default {
 			}
 		],
 		subHeaders: [{
-				text: 'Sub Domain',
+				text: 'Domain',
 				align: 'start',
 				sortable: false,
 				value: 'sub_domain',
@@ -904,7 +912,7 @@ export default {
 			domain: '',
 			tool_used: '',
 			conducted_by: '',
-			assessment_date: new Date(),
+			assessment_date: '' ,
 			final_score: '',
 			mov: '',
 			status: '',
@@ -1029,7 +1037,7 @@ export default {
       this.sortBy = this.headers[index].value
     },
 		formatDate(date) {
-			var today = new Date();
+			var today = new Date(date);
 			var dd = String(today.getDate()).padStart(2, '0');
 			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 			var yyyy = today.getFullYear();
@@ -1060,13 +1068,13 @@ export default {
 		addSubItem(item) {
 			this.rating_list = item.rating_tool;
 			this.assessment_id = item.lro_assessment_id;
-			this.formSubTitle = 'New Sub Domain';
+			this.formSubTitle = 'New Domain';
 			this.editedSubItem = Object.assign({}, item)
 			this.subdialog = true
 		},
 
 		detailsSubItem(item) {
-			this.formSubTitle = 'Sub Domain Details';
+			this.formSubTitle = 'Domain Details';
 			this.editedSubItem = Object.assign({}, item)
 			this.detailsReadonly = true;
 			this.subdialog = true
@@ -1074,7 +1082,7 @@ export default {
 
 		editSubItem(item) {
 			this.editedIndex = 1;
-			this.formSubTitle = 'Edit Sub Domain';
+			this.formSubTitle = 'Edit Domain';
 			this.editedSubItem = Object.assign({}, item)
 			this.subdialog = true
 		},
@@ -1148,10 +1156,10 @@ export default {
 				this.$noty.error('Name of LRO is empty!');
 				validate = false;
 			}
-			if (!this.editedItem.domain) {
-				this.$noty.error('Domain is empty!');
-				validate = false;
-			}
+			// if (!this.editedItem.domain) {
+			// 	this.$noty.error('Domain is empty!');
+			// 	validate = false;
+			// }
 			if (!this.editedItem.tool_used) {
 				this.$noty.error('Tool Used is empty!');
 				validate = false;
@@ -1193,7 +1201,11 @@ export default {
 				this.$noty.error('Rating is empty!');
 				validate = false;
 			}
-
+      if(isNaN(this.editedSubItem.rating)){
+        this.$noty.error('Rating is Not a valid Number!')
+        validate = false
+      }
+      
 			if (validate) {
 				var formData = new FormData();
 				formData.append('data', JSON.stringify(this.editedSubItem));

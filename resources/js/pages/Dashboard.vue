@@ -120,7 +120,7 @@
             {{ item.tos }} :
             <span class="font-weight-normal">{{ item.percentage }} %</span>
           </p> -->
-            <!-- <v-chip
+          <!-- <v-chip
               class="chip teal lighten-3 px-3 m-3 p-3"
               outlined
               v-for="(
@@ -130,31 +130,36 @@
             >
               {{ item.accr }} : {{ item.percentage }} %
             </v-chip> -->
-            <template>
-              <v-card
-                tile
-              >
-                <v-list rounded>
-                  <v-list-item-group  
-                    v-model="CSOProfileAccreditation.SELECTED"
-                    active-class="pink--text"
-                    multiple
-                  >
-                    <v-list-item
-                      v-for="(item, index ) in CSOProfileAccreditation.accreditationMapping.slice(0, 3)"
+          <template>
+            <v-card tile>
+              <v-list rounded>
+                <v-list-item-group
+                  v-model="CSOProfileAccreditation.SELECTED"
+                  active-class="pink--text"
+                  multiple
+                >
+                  <v-list-item
+                    v-for="(
+                      item, index
+                    ) in CSOProfileAccreditation.accreditationMapping.slice(
+                      0,
+                      3
+                    )"
                     :key="index"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title v-text="item.accr"></v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-content>
-                        <v-list-item-title >{{item.percentage}} %</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
-            </template>
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item.accr"></v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        >{{ item.percentage }} %</v-list-item-title
+                      >
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </template>
         </div>
       </div>
       <v-flex>
@@ -180,14 +185,15 @@
     <div class="card p-md-5">
       <h4 class="subheading card-text">Assessment</h4>
       <div class="card-body">
-        <p class="card-text row justify-content-md-center">
+        <!-- <p class="card-text row justify-content-md-center">
           <apexchart
             type="radar"
             height="350"
             :options="assessmentSubDomainPerYearChartOptions"
             :series="assessmentSubDomainPerYearSeries"
           ></apexchart>
-        </p>
+        </p> -->
+        <RadarChart :D="radarData" />
       </div>
     </div>
 
@@ -254,6 +260,7 @@ import * as echarts from "echarts";
 import PieChart from "../components/dashboard_charts/pie_chart.vue";
 import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
 import BarChart from "../components/dashboard_charts/barchart.vue";
+import RadarChart from "../components/dashboard_charts/radarchart.vue";
 
 export default {
   components: {
@@ -261,6 +268,7 @@ export default {
     PieChart,
     DoughnutChart,
     BarChart,
+    RadarChart,
   },
   data: () => ({
     responsibleOrganization: [], // Lead Organizations
@@ -443,7 +451,7 @@ export default {
         { count: 0, tos: "potential donors" },
       ],
       accreditationMapping: [],
-      SELECTED : [0,1,2]
+      SELECTED: [0, 1, 2],
     },
     //BARCHART For Primary StakeHolders
     barData: {
@@ -489,7 +497,7 @@ export default {
           "peer CSOs or related networks",
           "larger CSOs/CSO Network in Manila, Cebu or Davao",
           "local researchers and scholars",
-          "potential donors"
+          "potential donors",
         ],
       },
       series: [
@@ -500,11 +508,11 @@ export default {
           label: {
             formatter: "{label_white|{c}}%",
             show: true,
-            rich:{
-              label_white:{
-                color:"#fff"
-              }
-            }
+            rich: {
+              label_white: {
+                color: "#fff",
+              },
+            },
           },
           itemStyle: {
             borderRadius: 6,
@@ -517,12 +525,53 @@ export default {
           emphasis: {
             focus: "series",
           },
-          data: [
-          ],
+          data: [],
         },
       ],
     },
 
+    //radar/spyder chart
+    radarData: {
+      title: {
+        text: "Domain",
+        left: "center",
+      },toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          //restore: { show: true },
+          saveAsImage: {
+            show: true,
+          },
+        },
+      },
+      legend: {
+        data: [],
+        bottom: 1,
+      },
+      radar: {
+        // shape: 'circle',
+        indicator: [],
+      },
+      tooltip: {
+        trigger: "item",
+        backgroundColor: "#e0465f",
+        borderColor: "#8C8D8E",
+        borderRadius: 10,
+        padding: 15,
+        textStyle: {
+          color: "#fff",
+        },
+      },
+      series: [
+        {
+          name: "Budget vs spending",
+          type: "radar",
+          data: [],
+        },
+      ],
+    },
     CSOProfilePrimaryStakeholderSeries: [
       {
         data: [1, 1, 1, 1, 1, 1],
@@ -818,13 +867,13 @@ export default {
   methods: {
     async initialize() {
       document.title = "SCP: CSO² Project | Dashboard";
-      this.updateCSOIndicatorsChart()
-      this.updateCSOProfileChart()
-      await this.initTop3()
-      await this.initPrimaryBar()
-      this.assessment()
-      this.financeTracker()
-      this.ProjectTrackingDocument()
+      this.updateCSOIndicatorsChart();
+      this.updateCSOProfileChart();
+      await this.initTop3();
+      await this.initPrimaryBar();
+      this.assessment();
+      this.financeTracker();
+      this.ProjectTrackingDocument();
 
       axios.get("/get-lead-organization").then((res) => {
         this.responsibleOrganization = res.data;
@@ -970,47 +1019,48 @@ export default {
         (i) => (i.percentage = ((i.count / total1) * 100).toFixed(2))
       );
 
-      constructedObjectMapping2.forEach(
-        (i) => {
-          i.percentage = ((i.count / total2) * 100).toFixed(2)
-        }
-      );
+      constructedObjectMapping2.forEach((i) => {
+        i.percentage = ((i.count / total2) * 100).toFixed(2);
+      });
 
       this.CSOProfileAccreditation.accreditedMapping = constructedObjectMapping;
-      this.CSOProfileAccreditation.accreditationMapping = constructedObjectMapping2;
+      this.CSOProfileAccreditation.accreditationMapping =
+        constructedObjectMapping2;
     },
     //FOR PRIMARY STAKEHOLDER BARCHART
-    async initPrimaryBar(){
-      const Stakeholders = await this.req('/getStakeHolders')
+    async initPrimaryBar() {
+      const Stakeholders = await this.req("/getStakeHolders");
       const csoProfile = await this.req("/cso-profile");
 
-      var yAxis = []; //yAxis lodi 
+      var yAxis = []; //yAxis lodi
       var data = [];
 
-      Stakeholders.forEach((item)=>{ yAxis.push(item.text) })
+      Stakeholders.forEach((item) => {
+        yAxis.push(item.text);
+      });
 
-      var xAxis = Array(yAxis.length).fill(0)
+      var xAxis = Array(yAxis.length).fill(0);
       var totalStakeHolders = 0;
 
-      csoProfile.forEach((item)=>{
-        var itemStakeholders = item.cso_stakeholders.split("^^")
-        itemStakeholders.forEach((stakeholder)=>{ 
-          var idx = yAxis.indexOf(stakeholder)
+      csoProfile.forEach((item) => {
+        var itemStakeholders = item.cso_stakeholders.split("^^");
+        itemStakeholders.forEach((stakeholder) => {
+          var idx = yAxis.indexOf(stakeholder);
           xAxis[idx] += 1;
-        })
-        totalStakeHolders += itemStakeholders.length
-      })
-      
-      xAxis.forEach((item,idx)=>{
-        let computed = (item / totalStakeHolders * 100).toFixed(2);
-        let name = `${yAxis[idx]} : ${item} ( ${computed}% )`
-        data[idx] = {value: computed, name: name}
-        xAxis[idx] = data[idx].value
-      })
+        });
+        totalStakeHolders += itemStakeholders.length;
+      });
 
-      this.barData.xAxis.data = xAxis
-      this.barData.yAxis.data = yAxis
-      this.barData.series[0].data = data
+      xAxis.forEach((item, idx) => {
+        let computed = ((item / totalStakeHolders) * 100).toFixed(2);
+        let name = `${yAxis[idx]} : ${item} ( ${computed}% )`;
+        data[idx] = { value: computed, name: name };
+        xAxis[idx] = data[idx].value;
+      });
+
+      this.barData.xAxis.data = xAxis;
+      this.barData.yAxis.data = yAxis;
+      this.barData.series[0].data = data;
     },
 
     //ASYNC REQ
@@ -1020,7 +1070,61 @@ export default {
         return response.data;
       } catch (err) {}
     },
-    assessment() {
+
+    //FOR ASSESSMENT RADAR CHART
+    async assessment() {
+      const DATES = await this.req("/getDistinctAssessmentDate");
+      const SUBDOMAIN = await this.req("/getDistinctSubDomain");
+
+      let constructedDate = [];
+      let legends = [];
+      let indicators = [];
+
+      let maxScore = 0;
+
+      SUBDOMAIN.forEach((i) => { maxScore = Math.max(maxScore, i.rating); });
+
+      SUBDOMAIN.forEach((i) => {
+        let search = indicators.find((obj) => obj.name.toLowerCase() === i.sub_domain.toLowerCase());
+        let idx = indicators.indexOf(search)
+        if(idx === -1)
+          indicators.push({ name: i.sub_domain, max: maxScore });
+      });
+      console.log("INIT",SUBDOMAIN)
+
+      DATES.forEach((date) => { //date.year
+        let D = Array(indicators.length).fill(0);
+        let Div = Array(indicators.length).fill(0);
+
+        SUBDOMAIN.forEach((dom)=>{
+             if(dom.year === date.year){
+             let findObj = indicators.find((obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase());
+             let idx = indicators.indexOf(findObj);
+             if(idx !== -1){
+               //console.log("PLACING To ", idx, "which contain "+D[idx], "Value of "+dom.rating)
+               D[idx] += dom.rating
+               Div[idx] += 1
+             }
+           }
+        })
+
+        constructedDate.push({ name: date.year.toString(), value: D , Div : Div});
+        legends.push(date.year.toString());
+      });
+
+      console.log(maxScore)
+
+      constructedDate.forEach((i)=>{
+        i.value.forEach((ix,idx)=>{
+          i.value[idx] /= i.Div[idx]
+        })
+      })
+
+    console.log(constructedDate)
+      this.radarData.series[0].data = constructedDate;
+      this.radarData.legend.data = legends;
+      this.radarData.radar.indicator = indicators;
+
       // assessmentSubDomainPerYearSeries
       // assessmentSubDomainPerYearChartOptions
     },

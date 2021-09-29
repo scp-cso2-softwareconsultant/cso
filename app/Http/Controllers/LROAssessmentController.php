@@ -37,7 +37,7 @@ class LROAssessmentController extends Controller
         if($get_lro){
             foreach ($get_lro as $key => $row){
                 $lro_list[$key] = json_decode(json_encode($row), true);
-                $get_sub = DB::table("lro_assessment_sub")->where("lro_assessment_id", $row->lro_assessment_id)->get();
+                $get_sub = DB::table("lro_assessment_sub")->where("lro_assessment_id", $row->lro_assessment_id)->whereRaw(DB::raw("deleted_at IS NULL"))->get();
                 $lro_sub = [];
                 if($get_sub){
                     foreach ($get_sub as $dKey => $dRow){
@@ -74,7 +74,7 @@ class LROAssessmentController extends Controller
         $user_name = $user->firstname . ' '. $user->lastname;
         $data_array = array();
         $data_array['lro_id'] = $raw_data->lro_id;
-        $data_array['domain'] = $raw_data->domain;
+        //$data_array['domain'] = $raw_data->domain;
         if($raw_data->final_score >= 0) {$data_array['final_score'] = $raw_data->final_score;}
         $data_array['conducted_by'] = $raw_data->conducted_by;
         $data_array['tool_used'] = $raw_data->tool_used;
@@ -180,9 +180,12 @@ class LROAssessmentController extends Controller
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
+        Log::info($ID);
         $deleteData = DB::table('lro_assessment_sub')->where('lro_sub_id',$ID)
             ->update(array("deleted_at"=> date("Y-m-d h:i:s"), "deleted_by" => $user_name));
         if($deleteData) $success=true;
+        else
+            Log::info("FAILED");
         $data_arr = [
             "success" => $success
         ];

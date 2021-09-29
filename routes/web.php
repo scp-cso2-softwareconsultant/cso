@@ -121,6 +121,10 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::get('/get-lead-organization', [App\Http\Controllers\commonController::class,'getLeadOrgs'])->name('get-lead-organization');
     Route::get('/getStakeHolders',[App\Http\Controllers\commonController::class,'getStakeHolders'])->name('get-stakeholders');
     Route::get('/getAccreditations',[App\Http\Controllers\commonController::class,'getAccreditations'])->name('getAccreditations');
+    Route::get('/getDistinctAssessmentDate',[App\Http\Controllers\commonController::class,'getDistinctAssessmentDate'])->name('get-Distinct-Assessment- Date');
+    Route::get('/getDistinctSubDomain',[App\Http\Controllers\commonController::class,'getDistinctSubDomain'])->name('getDistinctSubDomain');
+    
+    
     
 });
 

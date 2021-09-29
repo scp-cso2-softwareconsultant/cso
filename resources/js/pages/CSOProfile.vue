@@ -38,7 +38,7 @@
                 <v-card-text>
                   <v-container>
                     <h5 class="subheading font-weight-black">
-                      CSO/CSO Network Identity
+                      CSO/CSO Network Basic Information
                     </h5>
                     <v-row class="mt-0" v-if="!detailsReadonly && isEditting">
                       <v-col cols="12" sm="12" md="12">

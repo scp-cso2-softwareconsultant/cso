@@ -411,8 +411,14 @@ class CSOIndicatorController extends Controller
         ->get();
 
         $isCompleted = true;
+        $isDelayed = false;
 
         foreach($indicators as $r){
+           if($r->indicator_status == 'Delayed'){
+               $isCompleted = false;
+               $isDelayed = true;
+               break;
+           }
            if($r->indicator_status != 'Completed' && $r->indicator_status != 'Cancelled'){
                $isCompleted = false;
                break;
@@ -422,6 +428,10 @@ class CSOIndicatorController extends Controller
        if($isCompleted){
             $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$cso_indicator_id)
             ->update(array('cso_status' => 'Completed'));
+        }
+        else if($isDelayed){
+            $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$cso_indicator_id)
+            ->update(array('cso_status' => 'Delayed'));
         }
         else{
             $updateCSO = DB::table('cso_indicator')->where('cso_indicator_id',$cso_indicator_id)

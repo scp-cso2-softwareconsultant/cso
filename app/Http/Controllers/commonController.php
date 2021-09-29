@@ -13,6 +13,39 @@ use App\Models\User;
 
 class commonController extends Controller
 {
+
+    public function getDistinctAssessmentDate(){
+        $get_Dates = DB::table("lro_assessment")->selectRaw(DB::raw('Year(assessment_date) as year'))->whereRaw(DB::raw("deleted_at IS NULL"))->orderBy('year','asc')->distinct()->get(['year']);
+        $ass_dates = [];
+        Log::info(json_encode($get_Dates));
+        if($get_Dates)
+            foreach ($get_Dates as $key => $row){
+                $ass_dates[$key] = json_decode(json_encode($row));
+            }
+        return $ass_dates;
+    }
+/*
+        select Year(la.assessment_date) as year, las.sub_domain, las.rating from lro_assessment la
+        join lro_assessment_sub las on la.lro_assessment_id = las.lro_assessment_id
+        right join lro_assessment_sub l on las.lro_assessment_id = l.lro_assessment_id
+        where la.deleted_at is null and las.deleted_at is null
+        order by year asc, las.sub_domain asc
+*/
+    public function getDistinctSubDomain(){
+        $get_result = DB::table("lro_assessment as la")
+        ->join("lro_assessment_sub as las","la.lro_assessment_id","=","las.lro_assessment_id")
+        ->select(DB::raw('Year(la.assessment_date) as year, las.sub_domain, las.rating'))
+        ->whereRaw(DB::raw("la.deleted_at IS NULL"))
+        ->whereRaw(DB::raw("las.deleted_at IS NULL"))
+        ->orderBy('year','asc')
+        ->orderBy('las.sub_domain','asc')
+        ->get();
+        
+        Log::info(json_encode($get_result));
+
+        return $get_result;
+    }
+
     public function getLROStatus(){
         $get_status = DB::table("lro_status")->select(DB::raw("status_name as text, status_name as value"))->get();
         $status_list = [];
