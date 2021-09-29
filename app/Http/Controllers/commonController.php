@@ -22,6 +22,9 @@ class commonController extends Controller
             foreach ($get_Dates as $key => $row){
                 $ass_dates[$key] = json_decode(json_encode($row));
             }
+
+        Log::info("GETTING ASSESSMENT DATE");
+        Log::info($get_Dates);
         return $ass_dates;
     }
 /*
@@ -40,9 +43,6 @@ class commonController extends Controller
         ->orderBy('year','asc')
         ->orderBy('las.sub_domain','asc')
         ->get();
-        
-        Log::info(json_encode($get_result));
-
         return $get_result;
     }
 

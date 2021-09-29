@@ -1116,6 +1116,7 @@ export default {
 
       constructedDate.forEach((i)=>{
         i.value.forEach((ix,idx)=>{
+          if(i.Div[idx] === 0 || i.Div[idx] === 0) return;
           i.value[idx] /= i.Div[idx]
         })
       })

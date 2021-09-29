@@ -32,7 +32,6 @@ class LROAssessmentController extends Controller
             ->leftJoin('cso_profile','cso_profile.cso_profile_id','lro_assessment.lro_id')
             ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))
             ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();
-
         $lro_list = [];
         if($get_lro){
             foreach ($get_lro as $key => $row){
@@ -50,6 +49,8 @@ class LROAssessmentController extends Controller
             }
         }
 
+        Log::info("GETTING SUBDOMAIN");
+        Log::info(json_encode($lro_list));
         return $lro_list;
     }
 
