@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Storage; 
-
+use Illuminate\Support\Facades\Log;
 class LROAssessmentController extends Controller
 {
 
@@ -27,11 +27,12 @@ class LROAssessmentController extends Controller
         $get_lro = DB::table("lro_assessment")
             ->select(
                 DB::raw("lro_assessment.*"),
-                DB::raw("cso_profile.cso_name, cso_profile.proj_area")
+                DB::raw("cso_profile.cso_name as cso_name, cso_profile.proj_area")
             )
-            ->leftJoin('cso_profile','cso_profile_id','lro_id')
+            ->leftJoin('cso_profile','cso_profile.cso_profile_id','lro_assessment.lro_id')
             ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))
             ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();
+
         $lro_list = [];
         if($get_lro){
             foreach ($get_lro as $key => $row){
@@ -78,6 +79,9 @@ class LROAssessmentController extends Controller
         $data_array['conducted_by'] = $raw_data->conducted_by;
         $data_array['tool_used'] = $raw_data->tool_used;
         $data_array['assessment_date'] = ($raw_data->assessment_date != '') ? $raw_data->assessment_date : NULL;
+        
+        //$lro_ID = DB::table('users')->where('id',$userId )->value('roles_id')
+
         if($form_mode < 0) {
             if($request->hasFile('upload_file')){
                 $file_size = filesize($request->file('upload_file'));

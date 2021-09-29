@@ -28,7 +28,8 @@ export default {
         'app-footer': Footer
     },
     created(){
-        // Router.push('/dashboard').catch(err => {})
+        // Router.push('/dashboard').catch(err => {}) -> this has problem with vue iterat..
+        // document.location = '/app#/dashboard'
     }
 }
 </script>

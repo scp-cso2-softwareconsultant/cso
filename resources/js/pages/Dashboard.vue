@@ -870,7 +870,6 @@ export default {
         });
         /*
         TODO LATER IF POSSIBLE Sep 27
-
         Correct Color via 
         https://echarts.apache.org/en/option.html#legend.data.itemStyle.decal.color
 
@@ -884,7 +883,6 @@ export default {
             }
         }
         */
-
         this.pieData.series[0].data = DATA;
       });
     },

@@ -1,15 +1,22 @@
 <template>
     <v-card class="mx-auto" width="256" tile>
-        <v-navigation-drawer class="app-side-bar" v-model="drawer" app>
+        <v-navigation-drawer class="app-side-bar" v-model="drawer"  app>
             <v-list>
-                <v-list-item link>
-                    <v-list-item-content>
-                        <v-list-item-title class="text-h6">
-                            Administrator
-                        </v-list-item-title>
-                        <v-list-item-subtitle>System Administrator</v-list-item-subtitle>
+               <div >
+                    <v-list-item-content class="p-1 m-1">
+                        <v-list-item two-line>
+                            <v-list-item-avatar>
+                                <v-avatar class="blue darken-2 white--text" size="42" left>
+                                    {{currentUser.user_name.slice(0, 1).toUpperCase()}}
+                                </v-avatar>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>{{currentUser.user_name +" "+currentUser.user_lastname.slice(0,1).toUpperCase()}}</v-list-item-title>
+                                <v-list-item-subtitle>{{currentUser.user_role}}</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
                     </v-list-item-content>
-                </v-list-item>
+               </div>
             </v-list>
             <v-divider></v-divider>
             <v-list class="mt-1" nav dense >
@@ -57,6 +64,12 @@
 export default {
     data() {
         return {
+            currentUser : {
+                user_name: '',
+                user_lastname: '',
+                user_role: '',
+                abbrName: ''
+            },
             drawer: true,
             selectedItem: 0,
             items: [],
@@ -69,7 +82,7 @@ export default {
                 { name: "ProjectTrackingDocuments", text: 'Project Tracking Document', icon: 'mdi-clipboard-text-search-outline', linkTo: '/project-tracking-documents', has_sub_items: false },
                 { name: "LMS", text: 'LMS', icon: 'mdi-book-open-page-variant', linkTo: '/lms-data', has_sub_items: false },
                 { name: "Users", text: 'Users', icon: 'mdi-account-group', linkTo: '/system-users', has_sub_items: false },
-                { text: 'Activity Feedback', icon: 'mdi-comment-quote', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
+                //{ text: 'Activity Feedback', icon: 'mdi-comment-quote', linkTo: 'https://cso2projectdatabase.000webhostapp.com/activity_feedback.php', has_sub_items: false },
                 { text: 'CBLD Indicators', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/cbld.php', has_sub_items: false },
                 //{ text: 'DIS', icon: 'mdi-archive-arrow-up-outline', linkTo: 'https://cso2projectdatabase.000webhostapp.com/dis.php', has_sub_items: false },
             ],
@@ -82,6 +95,11 @@ export default {
         initialize(){
             axios.get('/user-roles-permission').then( response => {
                 const data = response.data;
+                for(var key in data){
+                    this.currentUser = data[key]
+                    break
+                }
+                this.currentUser.user_name = this.currentUser.user_name.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
                 for( var i = 0 ; i < this.item_list.length ; i++){
                     const name = this.item_list[i].name;
                     if(  typeof name == "undefined" )

@@ -1432,6 +1432,7 @@ export default {
       },
     ],
     headers: [
+      { text: "", value: "data-table-expand" },
       {
         text: "Activity #",
         width: "8%",
@@ -1464,8 +1465,7 @@ export default {
         width: "10%",
         align: "right",
         sortable: false,
-      },
-      { text: "", value: "data-table-expand" },
+      }
     ],
     indicators_list: [],
     editedIndex: -1,
@@ -1722,7 +1722,7 @@ export default {
       })
 
       if (categorySelected === "Output") {
-        this.subHeaders[0].text = "Indicator #";
+        this.subHeaders[1].text = "Indicator #";
         this.headers.splice(3,0,{
             text: "MOV",
             width: "8%",
@@ -1752,7 +1752,7 @@ export default {
       }
 
 
-      this.headers[0].text = categorySelected + " #";
+      this.headers[1].text = categorySelected + " #";
 
       this.indicators_list = [];
       this.loadCSOIndicator = true;
@@ -1760,6 +1760,8 @@ export default {
     },
     resetHeaders(){
         return [
+
+      { text: "", value: "data-table-expand" },
       {
         text: "Activity #",
         width: "10%",
@@ -1785,7 +1787,7 @@ export default {
         width: "10%",
         align: "right",
         sortable: false,
-      },{ text: "", value: "data-table-expand" }
+      }
     ]
     },
     getFilteredIndicator() {

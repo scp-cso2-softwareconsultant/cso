@@ -797,7 +797,11 @@ export default {
           }
 			},
 		},
-		headers: [{
+		headers: [
+			{
+				text: '',
+				value: 'data-table-expand'
+			},{
 				text: 'Name of LRO',
 				align: 'start',
 				sortable: true,
@@ -853,11 +857,7 @@ export default {
 				value: 'actions',
 				width: '10%',
 				sortable: false,
-			},
-			{
-				text: '',
-				value: 'data-table-expand'
-			},
+			}
 		],
 		subHeaders: [{
 				text: 'Sub Domain',
@@ -983,6 +983,7 @@ export default {
 			axios.get('/cso-name-list').then(response => { 
         const data = response.data; 
         this.cso_name_items = data; 
+
         var multiple_selection = [{text: 'None', value: ''}]
 
         for( const value in data ){
@@ -1003,6 +1004,8 @@ export default {
 				this.lroList = response.data;
 				this.lroList.forEach((item) => { item.displayDate = this.formatDate(item.assessment_date) })
 				this.loadLROAssessment = false;
+
+        console.log("ASSESSMENT",this.lroList)
 			})
 
 		},
@@ -1155,6 +1158,7 @@ export default {
 			}
 			if (validate) {
 				var formData = new FormData();
+        console.log(this.editedItem)
 				formData.append('data', JSON.stringify(this.editedItem));
 				formData.append('form_mode', this.editedIndex);
 				formData.append("upload_file", this.file_attached);
