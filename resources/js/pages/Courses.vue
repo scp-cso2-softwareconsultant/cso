@@ -9,10 +9,7 @@
             class="elevation-1"
         >
             <template v-slot:top>
-                <v-toolbar
-                    flat
-                >
-                   
+                <v-toolbar flat>
                     <v-spacer></v-spacer>
                     <v-dialog
                         v-model="dialog"
