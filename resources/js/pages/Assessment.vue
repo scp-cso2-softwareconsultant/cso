@@ -160,30 +160,46 @@
             </v-row>
             <v-row class="mt-0">
               <v-col cols="12" sm="12" md="12">
-                <div v-if="isRemove">
-                  <v-btn text small color="blue darken-1">
-                    {{ file_name }}
-                  </v-btn>
-                  <v-btn background depressed @click="removeFile" dense small>
-                    <v-icon color="red darken-1">mdi-close-thick</v-icon>
-                  </v-btn>
+                <p class="mt-4 font-weight-bold">Attached File</p>
+                <div v-if="isEditting">
+                  <div v-if="file_name == null || file_name.length !== 0">
+                    <v-chip
+                      class="ma-2"
+                      close
+                      color="indigo darken-3"
+                      outlined
+                      @click:close="removeFile"
+                    >
+                      <v-icon left> mdi-file </v-icon>
+                      {{ file_name }}
+                    </v-chip>
+                  </div>
+                  <div v-else>
+                    <v-file-input v-model="file_name" @change="onFileChanged">
+                    </v-file-input>
+                  </div>
                 </div>
                 <div v-else>
-                  <v-btn
-                    text
-                    small
-                    :loading="isSelecting"
-                    color="blue darken-1"
-                    @click="onButtonClick"
-                  >
-                    Upload MOV
-                  </v-btn>
-                  <input
-                    ref="uploader"
-                    class="d-none"
-                    type="file"
-                    @change="onFileChanged"
-                  />
+                  <div v-if="file_name == null || file_name.length !== 0">
+                    <v-chip class="ma-2" color="indigo darken-3" outlined>
+                      <v-icon left> mdi-file </v-icon>
+                      {{ file_name }}
+                    </v-chip>
+                  </div>
+                  <div v-else-if="isCreatingNew">
+                    <v-file-input v-model="file_name" @change="onFileChanged">
+                    </v-file-input>
+                  </div>
+                  <div v-else>
+                    <a
+                      :href="`/downloadAssessSubAttach/?file_name=${detailsItem.file_attachment}`"
+                      target="blank"
+                    >
+                      <v-icon center color="primary">
+                        mdi-file-download-outline
+                      </v-icon>
+                    </a>
+                  </div>
                 </div>
               </v-col>
             </v-row>
@@ -274,7 +290,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-
             <v-row class="mt-0">
               <v-col cols="12" sm="12" md="12">
                 <v-textarea
@@ -285,6 +300,27 @@
                   label="Remarks"
                   dense
                 ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row class="mt-0">
+              <v-col cols="12" sm="12" md="12">
+                <p class="mt-4 font-weight-bold">Attached File</p>
+                <div v-if="file_name.length !== 0">
+                  <v-chip
+                    class="ma-2"
+                    close
+                    color="indigo darken-3"
+                    outlined
+                    @click:close="removeFile"
+                  >
+                    <v-icon left> mdi-file </v-icon>
+                    {{ file_name }}
+                  </v-chip>
+                </div>
+                <div v-else>
+                  <v-file-input v-model="file_name" @change="onFileChanged">
+                  </v-file-input>
+                </div>
               </v-col>
             </v-row>
           </v-container>
@@ -339,14 +375,14 @@
               v-if="crud_guard.export"
               class="mb-2"
               :loading="btnLoader"
-              @click="exportExcel('Assessment','')"
+              @click="exportExcel('Assessment', '')"
             >
               Export
               <v-icon color="green">mdi-microsoft-excel</v-icon>
             </v-btn>
           </v-toolbar>
-          
-        <v-row no-gutters style="flex-wrap: nowrap">
+
+          <v-row no-gutters style="flex-wrap: nowrap">
             <v-col
               cols="1"
               style="min-width: 100px; max-width: 70%"
@@ -356,7 +392,7 @@
                 v-model="filters.filter_items['cso_name'].value"
                 :label="filters.filter_items['cso_name'].text"
                 :items="filters.filter_items['cso_name'].multiple_selection"
-                @input='changeFilterActiveValue("cso_name")'
+                @input="changeFilterActiveValue('cso_name')"
                 outlined
                 hide-details
               ></v-select>
@@ -369,7 +405,7 @@
               <v-text-field
                 v-model="filters.filter_items['domain'].value"
                 :label="filters.filter_items['domain'].text"
-                @input='changeFilterActiveValue("domain")'
+                @input="changeFilterActiveValue('domain')"
                 append-icon="mdi-magnify"
                 outlined
                 hide-details
@@ -384,7 +420,7 @@
                 v-model="filters.filter_items['tool_used'].value"
                 :label="filters.filter_items['tool_used'].text"
                 :items="filters.filter_items['tool_used'].multiple_selection"
-                @input='changeFilterActiveValue("tool_used")'
+                @input="changeFilterActiveValue('tool_used')"
                 outlined
                 hide-details
               ></v-select>
@@ -396,11 +432,15 @@
               style="min-width: 50px"
               class="flex-grow-0 flex-shrink-1"
             >
-              <div v-if='filters.filter_items["final_score_selection"].value !="range" ' >
+              <div
+                v-if="
+                  filters.filter_items['final_score_selection'].value != 'range'
+                "
+              >
                 <v-text-field
                   v-model="filters.filter_items['final_score'].value"
                   :label="filters.filter_items['final_score'].text"
-                  @input='changeFilterActiveValue("final_score")'
+                  @input="changeFilterActiveValue('final_score')"
                   :rules="[rules.number]"
                   outlined
                   hide-details
@@ -410,7 +450,7 @@
                 <v-text-field
                   v-model="filters.filter_items['final_score_min'].value"
                   :label="filters.filter_items['final_score_min'].text"
-                  @input='changeFilterActiveValue("final_score_min")'
+                  @input="changeFilterActiveValue('final_score_min')"
                   :rules="[rules.number]"
                   outlined
                   hide-details
@@ -418,38 +458,42 @@
                 <v-text-field
                   v-model="filters.filter_items['final_score_max'].value"
                   :label="filters.filter_items['final_score_max'].text"
-                  @input='changeFilterActiveValue("final_score_max")'
+                  @input="changeFilterActiveValue('final_score_max')"
                   :rules="[rules.number]"
                   outlined
                   hide-details
                 ></v-text-field>
               </div>
             </v-col>
-            <v-col
-              cols="2"
-              class="flex-grow-1 flex-shrink-0"
-            >
+            <v-col cols="2" class="flex-grow-1 flex-shrink-0">
               <v-select
                 v-model="filters.filter_items['final_score_selection'].value"
                 :label="filters.filter_items['final_score_selection'].text"
-                :items="filters.filter_items['final_score_selection'].multiple_selection"
-                @input='changeFilterActiveValue("final_score_selection")'
+                :items="
+                  filters.filter_items['final_score_selection']
+                    .multiple_selection
+                "
+                @input="changeFilterActiveValue('final_score_selection')"
                 outlined
                 hide-details
               ></v-select>
             </v-col>
-            <v-col cols="1" style="min-width: 100px; max-width: 70%;" class="flex-grow-1 flex-shrink-0" >
+            <v-col
+              cols="1"
+              style="min-width: 100px; max-width: 70%"
+              class="flex-grow-1 flex-shrink-0"
+            >
               <v-select
                 v-model="filters.filter_items['status'].value"
                 :label="filters.filter_items['status'].text"
                 :items="filters.filter_items['status'].multiple_selection"
-                @input='changeFilterActiveValue("status")'
+                @input="changeFilterActiveValue('status')"
                 outlined
                 hide-details
               ></v-select>
             </v-col>
           </v-row>
-          <v-row no-gutters style="flex-wrap: nowrap" >
+          <v-row no-gutters style="flex-wrap: nowrap">
             <v-col
               cols="4"
               style="min-width: 100px; max-width: 50%"
@@ -458,7 +502,7 @@
               <v-text-field
                 v-model="filters.filter_items['conducted_by'].value"
                 :label="filters.filter_items['conducted_by'].text"
-                @input='changeFilterActiveValue("conducted_by")'
+                @input="changeFilterActiveValue('conducted_by')"
                 append-icon="mdi-magnify"
                 outlined
                 hide-details
@@ -470,7 +514,9 @@
               class="flex-grow-0 flex-shrink-1"
             >
               <div
-                v-if='filters.filter_items["displayDate_selection"].value !="range" '
+                v-if="
+                  filters.filter_items['displayDate_selection'].value != 'range'
+                "
               >
                 <v-menu
                   v-model="filters.filter_items['displayDate'].fromDateMenu"
@@ -487,7 +533,7 @@
                       v-on="on"
                       :value="filters.filter_items['displayDate'].value"
                       :label="filters.filter_items['displayDate'].text"
-                      @input='changeFilterActiveValue("displayDate")'
+                      @input="changeFilterActiveValue('displayDate')"
                       append-icon="mdi-magnify"
                       outlined
                       hide-details
@@ -497,7 +543,10 @@
                     locale="en-in"
                     hide-details
                     v-model="filters.filter_items['displayDate'].value"
-                    @input="filters.filter_items['displayDate'].fromDateMenu = false; changeFilterActiveValue('displayDate')"
+                    @input="
+                      filters.filter_items['displayDate'].fromDateMenu = false;
+                      changeFilterActiveValue('displayDate');
+                    "
                   ></v-date-picker>
                 </v-menu>
               </div>
@@ -517,7 +566,7 @@
                       v-on="on"
                       :value="filters.filter_items['displayDate_min'].value"
                       :label="filters.filter_items['displayDate_min'].text"
-                      @input='changeFilterActiveValue("displayDate_min")'
+                      @input="changeFilterActiveValue('displayDate_min')"
                       append-icon="mdi-magnify"
                       outlined
                       hide-details
@@ -526,7 +575,12 @@
                   <v-date-picker
                     locale="en-in"
                     v-model="filters.filter_items['displayDate_min'].value"
-                    @input="filters.filter_items['displayDate_min'].fromDateMenu = false;changeFilterActiveValue('displayDate_min')"
+                    @input="
+                      filters.filter_items[
+                        'displayDate_min'
+                      ].fromDateMenu = false;
+                      changeFilterActiveValue('displayDate_min');
+                    "
                   ></v-date-picker>
                 </v-menu>
 
@@ -545,16 +599,20 @@
                       v-on="on"
                       :value="filters.filter_items['displayDate_max'].value"
                       :label="filters.filter_items['displayDate_max'].text"
-                      @input='changeFilterActiveValue("displayDate_max")'
+                      @input="changeFilterActiveValue('displayDate_max')"
                       append-icon="mdi-magnify"
                       outlined
-                     
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     v-model="filters.filter_items['displayDate_max'].value"
-                    @input="filters.filter_items['displayDate_max'].fromDateMenu = false;changeFilterActiveValue('displayDate_max')"
-                     hide-details
+                    @input="
+                      filters.filter_items[
+                        'displayDate_max'
+                      ].fromDateMenu = false;
+                      changeFilterActiveValue('displayDate_max');
+                    "
+                    hide-details
                   ></v-date-picker>
                 </v-menu>
               </div>
@@ -563,16 +621,20 @@
               <v-select
                 v-model="filters.filter_items['displayDate_selection'].value"
                 :label="filters.filter_items['displayDate_selection'].text"
-                :items="filters.filter_items['displayDate_selection'].multiple_selection"
-                @input='changeFilterActiveValue("displayDate_selection")'
-                v-on:change='if( filters.filter_items["displayDate_selection"].value == "") filters.filter_items["displayDate"].value = "" '
+                :items="
+                  filters.filter_items['displayDate_selection']
+                    .multiple_selection
+                "
+                @input="changeFilterActiveValue('displayDate_selection')"
+                v-on:change="
+                  if (filters.filter_items['displayDate_selection'].value == '')
+                    filters.filter_items['displayDate'].value = '';
+                "
                 outlined
               ></v-select>
             </v-col>
           </v-row>
         </template>
-
-        
         <template v-slot:item.mov="{ item }">
           <div v-if="item.mov">
             <!-- <v-btn text color="primary"
@@ -582,7 +644,10 @@
                                 mdi-file-download-outline
                             </v-icon>
                         </v-btn> -->
-            <a :href="getLink(item.mov)" target="blank">
+            <a
+              :href="`/downloadAssessMov/?file_name=${item.mov}`"
+              target="blank"
+            >
               <v-icon center color="primary">
                 mdi-file-download-outline
               </v-icon>
@@ -645,6 +710,18 @@
               :items="item.subItems"
               class="elevation-1"
             >
+              <template v-slot:item.file_attachment="{ item }">
+                <div v-if="item.file_attachment">
+                  <a
+                    :href="`/downloadAssessSubAttach/?file_name=${item.file_attachment}`"
+                    target="blank"
+                  >
+                    <v-icon center color="primary">
+                      mdi-file-download-outline
+                    </v-icon>
+                  </a>
+                </div>
+              </template>
               <template v-slot:item.actions="{ item }">
                 <v-icon
                   v-if="crud_guard.update"
@@ -680,612 +757,664 @@
 
 <script>
 export default {
-	data: vm => ({
-		dialog: false,
-		btnLoader: false,
-		dialogDelete: false,
-		loadLROAssessment: false,
-		detailsReadonly: false,
-		modelAssessmentDate: false,
-		// hideProjArea: true,
-		cso_name_items: [],
-		status_list: [],
-		expanded: [],
-		tool_list: ['OCAT', 'OPI'],
-		singleExpand: false,
-		searchBy: "",
-		crud_guard: {
-			create: 0,
-			delete: 0,
-			download: 0,
-			export: 0,
-			print: 0,
-			read: 0,
-			update: 0,
-			upload: 0,
-			view: 0,
-		},
-    
-    sortBy: 'fat',
+  data: (vm) => ({
+    dialog: false,
+    btnLoader: false,
+    dialogDelete: false,
+    loadLROAssessment: false,
+    detailsReadonly: false,
+    modelAssessmentDate: false,
+    // hideProjArea: true,
+    cso_name_items: [],
+    status_list: [],
+    expanded: [],
+    tool_list: ["OCAT", "OPI"],
+    singleExpand: false,
+    searchBy: "",
+    crud_guard: {
+      create: 0,
+      delete: 0,
+      download: 0,
+      export: 0,
+      print: 0,
+      read: 0,
+      update: 0,
+      upload: 0,
+      view: 0,
+    },
+
+    sortBy: "fat",
     sortDesc: false,
-		filters: {
-			filter_items_active: 'cso_name',
-			filter_items: {
-				cso_name: {
-					value: '',
-					text: 'Name',
-					data_value: 'cso_name',
-					multiple_selection: [{ 	text: 'None',	value: ''	},  ]
-				},
-				domain:{
-          value: '',
-          text: 'Domain',
-          data_value: 'domain',
+    filters: {
+      filter_items_active: "cso_name",
+      filter_items: {
+        cso_name: {
+          value: "",
+          text: "Name",
+          data_value: "cso_name",
+          multiple_selection: [{ text: "None", value: "" }],
         },
-				conducted_by:{
-          value: '',
-          text: 'Conducted by',
-       		data_value: 'conducted_by',
+        domain: {
+          value: "",
+          text: "Domain",
+          data_value: "domain",
         },
-				tool_used:{
-          value: '',
-          text: 'Tool used',
-          data_value: 'tool_used',
-          multiple_selection: [{text:'None', value:''},{value:'OCAT', text:'OCAT'}, {value:'OPI', text:'OPI'}]
+        conducted_by: {
+          value: "",
+          text: "Conducted by",
+          data_value: "conducted_by",
         },
-				// ============================= Date range['OCAT', 'OPI']
-				displayDate: {
-						value: '',
-						text: 'Date of Assessment',
-						data_value: 'displayDate',
-						fromDateMenu: false, // For the calendar modal (true to show calendar)
-						date_range: true, // Enables min and max value (Prerequisits are below)
-				},
-				displayDate_min: {
-					value: '',
-					text: 'Assesment from',
-					data_value: 'displayDate_min',
-					inherit_value: 'displayDate', // <--------------------------- Needed for the key
-					fromDateMenu: false,
-					date_range: true,
-				},
-				displayDate_max: {
-					value: '',
-					text: 'Assesment to',
-					data_value: 'displayDate_max',
-					inherit_value: 'displayDate', // <--------------------------- Needed for the key
-					fromDateMenu: false,
-					date_range: true,
-				},
-				displayDate_selection: {
-					value: '==',
-					text: 'Choose value',
-					data_value: 'displayDate_selection',
-					inherit_value: 'displayDate', // <--------------------------- Needed for the key
-					multiple_selection: [{text:'None' , value:'' },{ text: 'Range', value: 'range'}, {text: 'Equal to', value: '=='	}, { text: 'Greater than or equal to', value: '>=' }, { text: 'Less than or equal to',	value: '<=' }, {	text: 'Greater than',value: '>'	}, {	text: 'Less than',	value: '<'	}]
-				},
-				  // =============================  Date range
+        tool_used: {
+          value: "",
+          text: "Tool used",
+          data_value: "tool_used",
+          multiple_selection: [
+            { text: "None", value: "" },
+            { value: "OCAT", text: "OCAT" },
+            { value: "OPI", text: "OPI" },
+          ],
+        },
+        // ============================= Date range['OCAT', 'OPI']
+        displayDate: {
+          value: "",
+          text: "Date of Assessment",
+          data_value: "displayDate",
+          fromDateMenu: false, // For the calendar modal (true to show calendar)
+          date_range: true, // Enables min and max value (Prerequisits are below)
+        },
+        displayDate_min: {
+          value: "",
+          text: "Assesment from",
+          data_value: "displayDate_min",
+          inherit_value: "displayDate", // <--------------------------- Needed for the key
+          fromDateMenu: false,
+          date_range: true,
+        },
+        displayDate_max: {
+          value: "",
+          text: "Assesment to",
+          data_value: "displayDate_max",
+          inherit_value: "displayDate", // <--------------------------- Needed for the key
+          fromDateMenu: false,
+          date_range: true,
+        },
+        displayDate_selection: {
+          value: "==",
+          text: "Choose value",
+          data_value: "displayDate_selection",
+          inherit_value: "displayDate", // <--------------------------- Needed for the key
+          multiple_selection: [
+            { text: "None", value: "" },
+            { text: "Range", value: "range" },
+            { text: "Equal to", value: "==" },
+            { text: "Greater than or equal to", value: ">=" },
+            { text: "Less than or equal to", value: "<=" },
+            { text: "Greater than", value: ">" },
+            { text: "Less than", value: "<" },
+          ],
+        },
+        // =============================  Date range
 
-         // ============================= Final score range
-          final_score:{
-            value: '',
-            text: 'Final Score',
-            data_value: 'final_score',
-            number_range: true,                   // Enables min and max value (Prerequisits are below)
-            },
-          final_score_min:{
-            value: '',
-            text: 'Final score min',
-            data_value: 'Final Score min',
-            inherit_value: 'final_score',     // <--------------------------- Needed for the key
-            number_range: true,
-          },
-          final_score_max:{
-            value: '',
-            text: 'Final score max',
-            data_value: 'Final Score max',
-            inherit_value: 'final_score',    // <--------------------------- Needed for the key
-            number_range: true,
-          },
-          final_score_selection:{
-            value: '==',
-            text: 'Choose value',
-            data_value: 'final_score',
-            inherit_value: 'final_score',  // <--------------------------- Needed for the key
-            multiple_selection: [{text:'Range', value:'range'}, {text:'Equal to', value:'=='}, {text:'Greater than or equal to', value:'>='},{text:'Less than or equal to', value:'<='}, {text:'Greater than', value:'>'}, {text:'Less than', value:'<'}]
-          },
-          // =============================Final score range
-          
-          status:{ 
-            value: '',
-            text: 'Status', 
-            data_value: 'status',
-            multiple_selection: [{text:'None', value:''} ]
-          }
-			},
-		},
-		headers: [
-			{
-				text: '',
-				value: 'data-table-expand'
-			},
+        // ============================= Final score range
+        final_score: {
+          value: "",
+          text: "Final Score",
+          data_value: "final_score",
+          number_range: true, // Enables min and max value (Prerequisits are below)
+        },
+        final_score_min: {
+          value: "",
+          text: "Final score min",
+          data_value: "Final Score min",
+          inherit_value: "final_score", // <--------------------------- Needed for the key
+          number_range: true,
+        },
+        final_score_max: {
+          value: "",
+          text: "Final score max",
+          data_value: "Final Score max",
+          inherit_value: "final_score", // <--------------------------- Needed for the key
+          number_range: true,
+        },
+        final_score_selection: {
+          value: "==",
+          text: "Choose value",
+          data_value: "final_score",
+          inherit_value: "final_score", // <--------------------------- Needed for the key
+          multiple_selection: [
+            { text: "Range", value: "range" },
+            { text: "Equal to", value: "==" },
+            { text: "Greater than or equal to", value: ">=" },
+            { text: "Less than or equal to", value: "<=" },
+            { text: "Greater than", value: ">" },
+            { text: "Less than", value: "<" },
+          ],
+        },
+        // =============================Final score range
+
+        status: {
+          value: "",
+          text: "Status",
+          data_value: "status",
+          multiple_selection: [{ text: "None", value: "" }],
+        },
+      },
+    },
+    headers: [
       {
-				text: 'Name of LRO',
-				align: 'start',
-				sortable: true,
-				value: 'cso_name',
-				width: '15%'
-			},
-			// {
-			// 	text: 'Domain',
-			// 	value: 'domain',
-			// 	width: '15%',
-			// 	sortable: true
-			// },
-			{
-				text: 'Tool Used',
-				value: 'tool_used',
-				width: '10%',
-				sortable: true,
-			},
-			{
-				text: 'Conducted By',
-				value: 'conducted_by',
-				width: '15%',
-				sortable: true,
-			},
-			{
-				text: 'Date of Assessment',
-				value: 'displayDate',
-				width: '12%',
-				sortable: true,
-			},
-			{
-				text: 'Final Score',
-				value: 'final_score',
-				width: '10%',
-				sortable: false,
-				align: 'right'
-			},
-			{
-				text: 'MOV',
-				value: 'mov',
-				width: '3%',
-				sortable: false,
-				align: 'center'
-			},
-			{
-				text: 'Status',
-				value: 'status',
-				width: '10%',
-				sortable: false,
-			},
-			{
-				text: 'Actions',
-				value: 'actions',
-				width: '10%',
-				sortable: false,
-			}
-		],
-		subHeaders: [{
-				text: 'Domain',
-				align: 'start',
-				sortable: false,
-				value: 'sub_domain',
-				width: '25%'
-			},
-			{
-				text: 'Rating',
-				value: 'rating',
-				width: '15%',
-				sortable: false
-			},
-			{
-				text: 'Remarks',
-				value: 'remarks',
-				sortable: false,
-			},
-			{
-				text: 'Actions',
-				value: 'actions',
-				width: '10%',
-				sortable: false,
-			},
-		],
-		lroList: [],
-		editedIndex: -1,
-		editedItem: {
-			lro_id: '',
-			proj_area: '',
-			domain: '',
-			tool_used: '',
-			conducted_by: '',
-			assessment_date: '',
-			final_score: '',
-			mov: '',
-			status: '',
+        text: "",
+        value: "data-table-expand",
+      },
+      {
+        text: "Name of LRO",
+        align: "start",
+        sortable: true,
+        value: "cso_name",
+        width: "15%",
+      },
+      // {
+      // 	text: 'Domain',
+      // 	value: 'domain',
+      // 	width: '15%',
+      // 	sortable: true
+      // },
+      {
+        text: "Tool Used",
+        value: "tool_used",
+        width: "10%",
+        sortable: true,
+      },
+      {
+        text: "Conducted By",
+        value: "conducted_by",
+        width: "15%",
+        sortable: true,
+      },
+      {
+        text: "Date of Assessment",
+        value: "displayDate",
+        width: "12%",
+        sortable: true,
+      },
+      {
+        text: "Final Score",
+        value: "final_score",
+        width: "10%",
+        sortable: false,
+        align: "right",
+      },
+      {
+        text: "MOV",
+        value: "mov",
+        width: "3%",
+        sortable: false,
+        align: "center",
+      },
+      {
+        text: "Status",
+        value: "status",
+        width: "10%",
+        sortable: false,
+      },
+      {
+        text: "Actions",
+        value: "actions",
+        width: "10%",
+        sortable: false,
+      },
+    ],
+    subHeaders: [
+      {
+        text: "Domain",
+        align: "start",
+        sortable: false,
+        value: "sub_domain",
+        width: "25%",
+      },
+      {
+        text: "Rating",
+        value: "rating",
+        width: "15%",
+        sortable: false,
+      },
+      {
+        text: "Remarks",
+        value: "remarks",
+        sortable: false,
+      },
+      {
+        text: "Attachment",
+        value: "file_attachment",
+        sortable: false,
+      },
+      {
+        text: "Actions",
+        value: "actions",
+        width: "10%",
+        sortable: false,
+      },
+    ],
+    lroList: [],
+    editedIndex: -1,
+    editedItem: {
+      lro_id: "",
+      proj_area: "",
+      domain: "",
+      tool_used: "",
+      conducted_by: "",
+      assessment_date: "",
+      final_score: "",
+      mov: "",
+      status: "",
+    },
+    defaultItem: {
+      lro_id: "",
+      proj_area: "",
+      domain: "",
+      tool_used: "",
+      conducted_by: "",
+      assessment_date: "",
+      final_score: "",
+      mov: "",
+      status: "",
+    },
+    editedSubItem: {
+      lro_assessment_id: "",
+      sub_domain: "",
+      rating: "",
+      file_attachment: "",
+      remarks: "",
+    },
+    defaultSubItem: {
+      lro_assessment_id: "",
+      sub_domain: "",
+      file_attachment: "",
+      rating: "",
+      remarks: "",
+    },
+    delete_lro: "",
+    rules: {
+      required: (v) => !!v || "This field is required",
+      number: (v) => {
+        if (!isNaN(v)) return true;
+        if (!isNaN(v) && v.toString().indexOf(".") != -1)
+          return "The value entered was not valid.";
+        if (!isNaN(parseFloat(v)) && v >= 0) return true;
+        return "The value entered was not valid.";
+      },
+    },
+    isRemove: false,
+    isSelecting: false,
+    isCreatingNew: false,
+    file_name: [],
+    file_attached: "",
+    assessment_id: "",
+    formSubTitle: "",
+    subdialog: false,
+    delete_lro_sub: "",
+    rating_list: [],
+    isEditting: false,
+  }),
 
-		},
-		defaultItem: {
-			lro_id: '',
-			proj_area: '',
-			domain: '',
-			tool_used: '',
-			conducted_by: '',
-			assessment_date: '' ,
-			final_score: '',
-			mov: '',
-			status: '',
-		},
-		editedSubItem: {
-			lro_assessment_id: '',
-			sub_domain: '',
-			rating: '',
-			remarks: '',
-		},
-		defaultSubItem: {
-			lro_assessment_id: '',
-			sub_domain: '',
-			rating: '',
-			remarks: '',
-		},
-		delete_lro: '',
-		rules: {
-			required: v => !!v || 'This field is required',
-			number: v => {
-				if (!isNaN(v)) return true;
-				if (!isNaN(v) && v.toString().indexOf('.') != -1) return 'The value entered was not valid.';
-				if (!isNaN(parseFloat(v)) && v >= 0) return true;
-				return 'The value entered was not valid.';
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Assessment" : "Edit Assessment";
+    },
+  },
 
-			},
-		},
-		isRemove: false,
-		isSelecting: false,
-		file_name: "",
-		file_attached: "",
-		assessment_id: "",
-		formSubTitle: '',
-		subdialog: false,
-		delete_lro_sub: '',
-		rating_list: [],
-	}),
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
 
-	computed: {
-		formTitle() {
-			return this.editedIndex === -1 ? 'New Assessment' : 'Edit Assessment'
-		},
-	},
+  created() {
+    this.initialize();
+  },
 
-	watch: {
-		dialog(val) {
-			val || this.close()
-		},
-		dialogDelete(val) {
-			val || this.closeDelete()
-		},
-
-	},
-
-	created() {
-		this.initialize()
-	},
-
-	methods: {
-		initialize() {
-			this.loadLROAssessment = true;
-			document.title = "SCP: CSO² Project | Assessment"
-			axios.get('/user-roles-permission').then(response => {
-				const moduleName = 'Assessment';
-				const data = response.data;
-				for (const key in data) {
-					if (data[key].name == moduleName) {
-						const crud_guard = data[key].crud_guard[0];
-						if (crud_guard.view == 0) this.$router.push("dashboard");
-						else this.crud_guard = crud_guard;
-						break;
-					}
-				}
-			})
-
-			axios.get('/cso-name-list').then(response => { 
-        const data = response.data; 
-        this.cso_name_items = data; 
-
-        var multiple_selection = [{text: 'None', value: ''}]
-
-        for( const value in data ){
-          const select_text_value = data[value].text;
-          multiple_selection .push({ text:  select_text_value , value: select_text_value  })
+  methods: {
+    initialize() {
+      this.loadLROAssessment = true;
+      document.title = "SCP: CSO² Project | Assessment";
+      axios.get("/user-roles-permission").then((response) => {
+        const moduleName = "Assessment";
+        const data = response.data;
+        for (const key in data) {
+          if (data[key].name == moduleName) {
+            const crud_guard = data[key].crud_guard[0];
+            if (crud_guard.view == 0) this.$router.push("dashboard");
+            else this.crud_guard = crud_guard;
+            break;
+          }
         }
-        this.filters.filter_items.cso_name.multiple_selection = multiple_selection;
-      })
+      });
 
-			axios.get('/lro-status').then(response => { 
-        const data = response.data.concat( [{text: 'None', value: ''}] );
+      axios.get("/cso-name-list").then((response) => {
+        const data = response.data;
+        this.cso_name_items = data;
+
+        var multiple_selection = [{ text: "None", value: "" }];
+
+        for (const value in data) {
+          const select_text_value = data[value].text;
+          multiple_selection.push({
+            text: select_text_value,
+            value: select_text_value,
+          });
+        }
+        this.filters.filter_items.cso_name.multiple_selection =
+          multiple_selection;
+      });
+
+      axios.get("/lro-status").then((response) => {
+        const data = response.data.concat([{ text: "None", value: "" }]);
         this.status_list = data;
-        this.filters.filter_items.status.multiple_selection = data ;
-      })
+        this.filters.filter_items.status.multiple_selection = data;
+      });
 
+      axios.get("/lro-assessment").then((response) => {
+        this.lroList = response.data;
+        this.lroList.forEach((item) => {
+          item.displayDate = this.formatDate(item.assessment_date);
+        });
+        this.loadLROAssessment = false;
 
-			axios.get('/lro-assessment').then(response => {
-				this.lroList = response.data;
-				this.lroList.forEach((item) => { item.displayDate = this.formatDate(item.assessment_date) })
-				this.loadLROAssessment = false;
-
-        console.log("ASSESSMENT",this.lroList)
-			})
-
-		},
-		filterItems(items, search, filter) {
-			return new this.$MultiFilters(items, search, filter, this.filters.filter_items).custom_filter();
-		},
-		changeFilterActiveValue(key) {
-			const filter = this.filters.filter_items;
-			const active_key = this.filters.filter_items_active;
-			const active_value = filter[active_key].value;
-      const active = this.$MultiFilters.changeFilterActiveValue(key, filter, active_key, active_value);
-      console.log( this.filters.filter_items[active].value )
-			this.filters.filter_items_active = active;
-		},
-    toggleOrder () {
-       this.sortDesc = !this.sortDesc
+        console.log("ASSESSMENT", this.lroList);
+      });
     },
-    nextSort () {
-      let index = this.headers.findIndex(h => h.value === this.sortBy)
-      index = (index + 1) % this.headers.length
-      this.sortBy = this.headers[index].value
+    filterItems(items, search, filter) {
+      return new this.$MultiFilters(
+        items,
+        search,
+        filter,
+        this.filters.filter_items
+      ).custom_filter();
     },
-		formatDate(date) {
-			var today = new Date(date);
-			var dd = String(today.getDate()).padStart(2, '0');
-			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-			var yyyy = today.getFullYear();
-			return `${mm}/${dd}/${yyyy}`;
-		},
-		detailsItem(item) {
-			this.detailsReadonly = true;
-			this.editedIndex = this.lroList.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			// this.hideProjArea = false;
-			this.dialog = true;
-		},
-		editItem(item) {
-			this.editedIndex = this.lroList.indexOf(item)
-			this.editedItem = Object.assign({}, item)
-			// this.hideProjArea = true;
-			this.dialog = true
-		},
+    changeFilterActiveValue(key) {
+      const filter = this.filters.filter_items;
+      const active_key = this.filters.filter_items_active;
+      const active_value = filter[active_key].value;
+      const active = this.$MultiFilters.changeFilterActiveValue(
+        key,
+        filter,
+        active_key,
+        active_value
+      );
+      console.log(this.filters.filter_items[active].value);
+      this.filters.filter_items_active = active;
+    },
+    toggleOrder() {
+      this.sortDesc = !this.sortDesc;
+    },
+    nextSort() {
+      let index = this.headers.findIndex((h) => h.value === this.sortBy);
+      index = (index + 1) % this.headers.length;
+      this.sortBy = this.headers[index].value;
+    },
+    formatDate(date) {
+      var today = new Date(date);
+      var dd = String(today.getDate()).padStart(2, "0");
+      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = today.getFullYear();
+      return `${mm}/${dd}/${yyyy}`;
+    },
+    detailsItem(item) {
+      this.detailsReadonly = true;
+      this.editedIndex = this.lroList.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.file_name = this.editedItem.mov;
+      // this.hideProjArea = false;
+      this.dialog = true;
+    },
+    editItem(item) {
+      this.editedIndex = this.lroList.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.isEditting = true;
+      this.file_name = this.editedItem.mov == null ? [] : this.editedItem.mov;
+      // this.hideProjArea = true;
+      this.dialog = true;
+    },
 
-		deleteItem(item) {
-			this.delete_lro = item.lro_assessment_id
-			this.editedIndex = this.lroList.indexOf(item)
-			this.editedItem = Object.assign({}, item)
-			this.dialogDelete = true
-		},
+    deleteItem(item) {
+      this.delete_lro = item.lro_assessment_id;
+      this.editedIndex = this.lroList.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
 
+    addSubItem(item) {
+      this.rating_list = item.rating_tool;
+      this.assessment_id = item.lro_assessment_id;
+      this.formSubTitle = "New Domain";
+      this.editedSubItem = Object.assign({}, item);
+      this.subdialog = true;
+    },
 
-		addSubItem(item) {
-			this.rating_list = item.rating_tool;
-			this.assessment_id = item.lro_assessment_id;
-			this.formSubTitle = 'New Domain';
-			this.editedSubItem = Object.assign({}, item)
-			this.subdialog = true
-		},
+    detailsSubItem(item) {
+      this.formSubTitle = "Domain Details";
+      this.editedSubItem = Object.assign({}, item);
+      this.detailsReadonly = true;
+      this.subdialog = true;
+    },
 
-		detailsSubItem(item) {
-			this.formSubTitle = 'Domain Details';
-			this.editedSubItem = Object.assign({}, item)
-			this.detailsReadonly = true;
-			this.subdialog = true
-		},
+    editSubItem(item) {
+      this.editedIndex = 1;
+      this.edditing = true;
+      this.formSubTitle = "Edit Domain";
+      this.editedSubItem = Object.assign({}, item);
+      this.file_name = this.editedSubItem.file_attachment == null || this.editedSubItem.file_attachment.length === 0 ? [] : this.editedSubItem.file_attachment;
+      this.subdialog = true;
+    },
 
-		editSubItem(item) {
-			this.editedIndex = 1;
-			this.formSubTitle = 'Edit Domain';
-			this.editedSubItem = Object.assign({}, item)
-			this.subdialog = true
-		},
+    deleteSubItem(item) {
+      this.delete_lro_sub = item.lro_sub_id;
+      this.dialogDelete = true;
+    },
 
-		deleteSubItem(item) {
-			this.delete_lro_sub = item.lro_sub_id;
-			this.dialogDelete = true
-		},
+    deleteItemConfirm() {
+      this.btnLoader = true;
+      this.lroList.splice(this.editedIndex, 1);
 
-
-		deleteItemConfirm() {
-			this.btnLoader = true;
-			this.lroList.splice(this.editedIndex, 1)
-
-			if (this.delete_lro) {
-				axios.post('/delete-lro-assessment', {
-					delete_id: this.delete_lro
-				}).then(response => {
-					if (response.data.success) {
-						this.initialize();
-						this.$noty.success("Successfully deleted.")
-						this.closeDelete()
-					}
-				})
-			}
-
-			if (this.delete_lro_sub) {
-				axios.post('/delete-lro-sub-assessment', {
-					delete_id: this.delete_lro_sub
-				}).then(response => {
-					if (response.data.success) {
-						this.initialize();
-						this.$noty.success("Successfully deleted.")
-						this.closeDelete()
-					}
-				})
-			}
-		},
-
-		close() {
-			this.dialog = false;
-			this.btnLoader = false;
-			this.detailsReadonly = false;
-			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-			})
-		},
-
-		closeSub() {
-			this.assessment_id = '';
-			this.detailsReadonly = false;
-			this.btnLoader = false;
-			this.editedIndex = -1
-			this.subdialog = false
-		},
-
-		closeDelete() {
-			this.dialogDelete = false
-			this.btnLoader = false;
-			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-			})
-		},
-
-		save() {
-			this.btnLoader = true;
-			let validate = true;
-			if (!this.editedItem.lro_id) {
-				this.$noty.error('Name of LRO is empty!');
-				validate = false;
-			}
-			// if (!this.editedItem.domain) {
-			// 	this.$noty.error('Domain is empty!');
-			// 	validate = false;
-			// }
-			if (!this.editedItem.tool_used) {
-				this.$noty.error('Tool Used is empty!');
-				validate = false;
-			}
-			if (validate) {
-				var formData = new FormData();
-        console.log(this.editedItem)
-				formData.append('data', JSON.stringify(this.editedItem));
-				formData.append('form_mode', this.editedIndex);
-				formData.append("upload_file", this.file_attached);
-				formData.append("file_name", this.file_name);
-				axios.post('/save-lro-assessment', formData).then(response => {
-					if (response.data.success) {
-						this.initialize();
-						if (this.editedIndex < 0) {
-							this.$noty.success("Successfully Added.")
-						} else {
-							this.$noty.success("Successfully Updated.")
-						}
-						this.close();
-						this.removeFile();
-					} else {
-						this.close();
-					}
-				})
-			} else {
-				this.btnLoader = false;
-			}
-		},
-
-		saveSub() {
-			this.btnLoader = true;
-			let validate = true;
-			if (!this.editedSubItem.sub_domain) {
-				this.$noty.error('Sub Domain is empty!');
-				validate = false;
-			}
-			if (!this.editedSubItem.rating) {
-				this.$noty.error('Rating is empty!');
-				validate = false;
-			}
-      if(isNaN(this.editedSubItem.rating)){
-        this.$noty.error('Rating is Not a valid Number!')
-        validate = false
+      if (this.delete_lro) {
+        axios
+          .post("/delete-lro-assessment", {
+            delete_id: this.delete_lro,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              this.initialize();
+              this.$noty.success("Successfully deleted.");
+              this.closeDelete();
+            }
+          });
       }
-      
-			if (validate) {
-				var formData = new FormData();
-				formData.append('data', JSON.stringify(this.editedSubItem));
-				formData.append('form_mode', this.editedIndex);
-				formData.append('lro_assessment_id', this.assessment_id);
-				axios.post('/save-lro-sub-assessment', formData).then(response => {
-					if (response.data.success) {
-						this.initialize();
-						if (this.editedIndex < 0) {
-							this.$noty.success("Successfully Added.")
-						} else {
-							this.$noty.success("Successfully Updated.")
-						}
-						this.closeSub();
-					} else {
-						this.closeSub();
-					}
-				})
-			} else {
-				this.btnLoader = false;
-			}
-		},
-		newAsessment() {
-			this.dialog = true;
-		},
 
-		onButtonClick: function() {
-			this.isSelecting = true
-			window.addEventListener('focus', () => {
-				this.isSelecting = false
-			}, {
-				once: true
-			})
+      if (this.delete_lro_sub) {
+        axios
+          .post("/delete-lro-sub-assessment", {
+            delete_id: this.delete_lro_sub,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              this.initialize();
+              this.$noty.success("Successfully deleted.");
+              this.closeDelete();
+            }
+          });
+      }
+    },
 
-			this.$refs.uploader.click()
-		},
-		onFileChanged: function(e) {
-			var files = e.target.files || e.dataTransfer.files;
+    close() {
+      this.dialog = false;
+      this.btnLoader = false;
+      this.detailsReadonly = false;
+      this.isEditting = false;
+      this.isCreatingNew = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+      this.removeFile();
+    },
 
-			// if (files.length && files[0].type == 'application/pdf' ){
-			this.file_attached = files[0];
-			this.file_name = files[0].name;
-			this.isRemove = true;
-			// }
-			// else{
-			//     this.$noty.error('Invalid file type. Please upload only pdf file.');
-			// }
-		},
-		removeFile: function(item) {
-			this.file_name = "";
-			this.isRemove = false;
-			this.file_attached = "";
-		},
-		// downloadFile: function(encoded_url){
-		//     window.open("download/"+encoded_url);
-		// },
-		getLink(file) {
-			return `/downloadAssessMov/?file_name=${file}`;
-		},
-		exportExcel: function(tableName, value) {
-			this.btnLoader = true;
-			let filename = tableName + '.xlsx';
-			var formData = new FormData();
-			formData.append('tableName', tableName);
-			formData.append('category', value);
-			axios.post('/export-excel', formData, {
-				responseType: 'blob'
-			}).then(response => {
-				const url = window.URL.createObjectURL(new Blob([response.data]));
-				const link = document.createElement('a');
-				link.href = url;
-				link.setAttribute('download', filename);
-				document.body.appendChild(link);
-				link.click();
-				this.btnLoader = false;
-			});
+    closeSub() {
+      this.assessment_id = "";
+      (this.isEditting = false), (this.detailsReadonly = false);
+      this.btnLoader = false;
+      this.editedIndex = -1;
+      this.subdialog = false;
+      this.removeFile();
+    },
 
-		}
+    closeDelete() {
+      this.dialogDelete = false;
+      this.btnLoader = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
 
-	},
+    save() {
+      this.btnLoader = true;
+      let validate = true;
+      if (!this.editedItem.lro_id) {
+        this.$noty.error("Name of LRO is empty!");
+        validate = false;
+      }
+      // if (!this.editedItem.domain) {
+      // 	this.$noty.error('Domain is empty!');
+      // 	validate = false;
+      // }
+      if (!this.editedItem.tool_used) {
+        this.$noty.error("Tool Used is empty!");
+        validate = false;
+      }
+      if (validate) {
+        var formData = new FormData();
+        console.log(this.editedItem);
+        formData.append("data", JSON.stringify(this.editedItem));
+        if (this.file_name.length === 0) formData.append("delete_attachedFile", true);
+        console.log(this.file_name.length === []);
+        formData.append("form_mode", this.editedIndex);
+        formData.append("upload_file", this.file_attached);
+        formData.append("file_name", this.file_name);
+        axios.post("/save-lro-assessment", formData).then((response) => {
+          if (response.data.success) {
+            this.initialize();
+            if (this.editedIndex < 0) {
+              this.$noty.success("Successfully Added.");
+            } else {
+              this.$noty.success("Successfully Updated.");
+            }
+            this.close();
+            this.removeFile();
+          } else {
+            this.close();
+          }
+        });
+      } else {
+        this.btnLoader = false;
+      }
+    },
 
-}
+    saveSub() {
+      this.btnLoader = true;
+      let validate = true;
+      if (!this.editedSubItem.sub_domain) {
+        this.$noty.error("Sub Domain is empty!");
+        validate = false;
+      }
+      if (!this.editedSubItem.rating) {
+        this.$noty.error("Rating is empty!");
+        validate = false;
+      }
+      if (isNaN(this.editedSubItem.rating)) {
+        this.$noty.error("Rating is Not a valid Number!");
+        validate = false;
+      }
+
+      if (validate) {
+        var formData = new FormData();
+        formData.append("data", JSON.stringify(this.editedSubItem));
+        formData.append("form_mode", this.editedIndex);
+        if (this.file_name.length === 0)
+          formData.append("delete_attachedFile", true);
+        formData.append("lro_assessment_id", this.assessment_id);
+        formData.append("upload_file", this.file_attached);
+        formData.append("file_name", this.file_name);
+        axios.post("/save-lro-sub-assessment", formData).then((response) => {
+          if (response.data.success) {
+            this.initialize();
+            if (this.editedIndex < 0) {
+              this.$noty.success("Successfully Added.");
+            } else {
+              this.$noty.success("Successfully Updated.");
+            }
+            this.closeSub();
+          } else {
+            this.closeSub();
+          }
+        });
+      } else {
+        this.btnLoader = false;
+      }
+    },
+    newAsessment() {
+      this.isCreatingNew = true;
+      this.dialog = true;
+    },
+
+    onButtonClick: function () {
+      this.isSelecting = true;
+      window.addEventListener(
+        "focus",
+        () => {
+          this.isSelecting = false;
+        },
+        {
+          once: true,
+        }
+      );
+
+      this.$refs.uploader.click();
+    },
+    onFileChanged: function (e) {
+      var files = e;
+      this.file_attached = files;
+      this.file_name = files.name;
+    },
+    removeFile: function (item) {
+      this.file_name = [];
+      this.isRemove = false;
+      this.file_attached = "";
+    },
+    // downloadFile: function(encoded_url){
+    //     window.open("download/"+encoded_url);
+    // },
+    exportExcel: function (tableName, value) {
+      this.btnLoader = true;
+      let filename = tableName + ".xlsx";
+      var formData = new FormData();
+      formData.append("tableName", tableName);
+      formData.append("category", value);
+      axios
+        .post("/export-excel", formData, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", filename);
+          document.body.appendChild(link);
+          link.click();
+          this.btnLoader = false;
+        });
+    },
+  },
+};
 </script>

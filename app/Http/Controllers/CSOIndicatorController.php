@@ -140,7 +140,6 @@ class CSOIndicatorController extends Controller
                 }
             }
         }
-
         return $cso_indicator;
     }
 

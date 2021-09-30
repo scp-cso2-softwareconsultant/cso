@@ -287,7 +287,7 @@ export default {
         show: true,
         feature: {
           mark: { show: true },
-          dataView: { show: true, readOnly: false },
+          dataView: { show: true, readOnly: true },
           //restore: { show: true },
           saveAsImage: {
             show: true,
@@ -352,7 +352,7 @@ export default {
         show: true,
         feature: {
           mark: { show: true },
-          dataView: { show: true, readOnly: false },
+          dataView: { show: true, readOnly: true },
           //restore: { show: true },
           saveAsImage: {
             show: true,
@@ -463,7 +463,7 @@ export default {
         show: true,
         feature: {
           mark: { show: true },
-          //dataView: { show: true, readOnly: false },
+          //dataView: { show: true, readOnly: true },
           //restore: { show: true },
           saveAsImage: {
             show: true,
@@ -539,7 +539,7 @@ export default {
         show: true,
         feature: {
           mark: { show: true },
-          dataView: { show: true, readOnly: false },
+          dataView: { show: true, readOnly: true },
           //restore: { show: true },
           saveAsImage: {
             show: true,
@@ -551,7 +551,6 @@ export default {
         bottom: 1,
       },
       radar: {
-        // shape: 'circle',
         indicator: [],
       },
       tooltip: {
@@ -566,7 +565,7 @@ export default {
       },
       series: [
         {
-          name: "Budget vs spending",
+          name: "TR = TotalRating per domain per year\nN = Number of a Domain per year\nComputation: TR / N = Domain Point in Radar Chart\n\nExample:\n\tYear 2022:\n\tdomain\trating\t\t\tComputation:\n\tsub1\t5\t\t\tsub1 N = 3\t\t\tTotal RatingOfSub1 = 15\n\tsub1\t4\t\t\tsub2 N = 2\t\t\tTotal RatingOfSub2 = 9\n\tsub1\t6\t\t\tsub3 N = 3\t\t\tTotal RatingOfSub3 = 3\n\tsub2\t5\n\tsub2\t4\t\t\tforSub1 = 15/3 = 5\n\tsub3\t1\t\t\tforSub2 = 9/2 = 4.5\n\tsub3\t1\t\t\tforSub3 = 3/3 = 1\n\tsub3\t1\t\t\tThe result would be 3 points toward sub1 sub2 sub3 indicator\n\n\n***DATA BELOW IS THE REAL COMPUTED DATA OF THE RADAR CHART BASED ON DOMAIN OF LRO ASSESSMENT PER DATE & PER DOMAIN***\n\n\n",
           type: "radar",
           data: [],
         },

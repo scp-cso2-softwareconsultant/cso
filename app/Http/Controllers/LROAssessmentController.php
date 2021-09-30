@@ -14,7 +14,18 @@ class LROAssessmentController extends Controller
 
     public function downloadMov(Request $request){
         $file_name = $request['file_name'];
-        $path= Storage::disk('public')->path($request->file_name);
+        $path= Storage::disk('public')->path("lro_assessment/$request->file_name");
+        $content = file_get_contents($path);
+        return response($content)->withHeaders([
+            'Content-Type'=>mime_content_type($path),
+            'Content-Description' => 'File Transfer',
+            'Content-Disposition' => 'attachment;filename='.$file_name
+        ]);
+    }
+
+    public function downloadAssessSubAttach(Request $request){
+        $file_name = $request['file_name'];
+        $path= Storage::disk('public')->path("lro_assessment/sub/$request->file_name");
         $content = file_get_contents($path);
         return response($content)->withHeaders([
             'Content-Type'=>mime_content_type($path),
@@ -83,41 +94,34 @@ class LROAssessmentController extends Controller
         
         //$lro_ID = DB::table('users')->where('id',$userId )->value('roles_id')
 
+        if($request->hasFile('upload_file')){
+            $file_size = filesize($request->file('upload_file'));
+            // Get filename with the extension
+            $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('upload_file')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('upload_file')->storeAs('public/lro_assessment',$fileNameToStore);
+            $data_array['mov'] = $fileNameToStore;
+        }
+
         if($form_mode < 0) {
-            if($request->hasFile('upload_file')){
-                $file_size = filesize($request->file('upload_file'));
-                // Get filename with the extension
-                $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
-                //Get just filename
-                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-                // Get just ext
-                $extension = $request->file('upload_file')->getClientOriginalExtension();
-                // Filename to store
-                $fileNameToStore = $filename.'_'.time().'.'.$extension;
-                // Upload Image
-                $path = $request->file('upload_file')->storeAs('public/lro_assessment',$fileNameToStore);
-                $data_array['mov'] = 'lro_assessment'.$fileNameToStore;
-            }
+            
 
             $data_array['status'] = 'Entry';
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('lro_assessment')->insert($data_array);
             if($insertData) $success=true;
         }else{
-            if($request->hasFile('upload_file')){
-                $file_size = filesize($request->file('upload_file'));
-                // Get filename with the extension
-                $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
-                //Get just filename
-                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-                // Get just ext
-                $extension = $request->file('upload_file')->getClientOriginalExtension();
-                // Filename to store
-                $fileNameToStore = $filename.'_'.time().'.'.$extension;
-                // Upload Image
-                $path = $request->file('upload_file')->storeAs('public/lro_assessment',$fileNameToStore);
-                $data_array['mov'] = 'lro_assessment/'.$fileNameToStore;
-            }
+            
+
+            if($request['delete_attachedFile'])
+                $this-> deleteAssessmentMov($request);
+
             $data_array['status'] = $raw_data->status;
             $data_array['updated_at'] = date("Y-m-d h:i:s");
             $data_array['updated_by'] = $user_name;
@@ -158,6 +162,22 @@ class LROAssessmentController extends Controller
         $data_array['sub_domain'] = $raw_data->sub_domain;
         $data_array['rating'] = $raw_data->rating;
         $data_array['remarks'] = $raw_data->remarks;
+
+        if($request->hasFile('upload_file')){
+            $file_size = filesize($request->file('upload_file'));
+            // Get filename with the extension
+            $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('upload_file')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('upload_file')->storeAs('public/lro_assessment/sub',$fileNameToStore);
+            $data_array['file_attachment'] = $fileNameToStore;
+        }
+
         if($form_mode < 0) {
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('lro_assessment_sub')->insert($data_array);
@@ -165,6 +185,10 @@ class LROAssessmentController extends Controller
         }else{
             $data_array['updated_at'] = date("Y-m-d h:i:s");
             $data_array['updated_by'] = $user_name;
+
+            if($request['delete_attachedFile'])
+                $this-> deleteAssessmentSubFileAttachment($request);
+        
             $updateData = DB::table('lro_assessment_sub')->where('lro_sub_id',$raw_data->lro_sub_id)
                 ->update($data_array);
             if($updateData) $success=true;
@@ -174,6 +198,16 @@ class LROAssessmentController extends Controller
             "success" => $success
         ];
         return response()->json($data_arr, 200);
+    }
+
+    public function deleteAssessmentSubFileAttachment(Request $request){
+        $raw_data = json_decode($request['data']);
+        $deletion = DB::table('lro_assessment_sub')->where('lro_sub_id',$raw_data->lro_sub_id)->update(["file_attachment" => '']);
+    }
+
+    public function deleteAssessmentMov(Request $request){
+        $raw_data = json_decode($request['data']);
+        $deletion = DB::table('lro_assessment')->where('lro_assessment_id',$raw_data->lro_assessment_id)->update(["mov" => '']);
     }
 
     public function deleteLROAssessmenSub(Request $request){

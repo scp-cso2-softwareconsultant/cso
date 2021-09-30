@@ -75,6 +75,7 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::post('/save-lro-sub-assessment', [App\Http\Controllers\LROAssessmentController::class,'saveLROAssessmentSub'])->name('save-lro-sub-assessment')->middleware('roles_permission:Assessment,create');
         Route::post('/delete-lro-sub-assessment', [App\Http\Controllers\LROAssessmentController::class,'deleteLROAssessmenSub'])->name('delete-lro-sub-assessment')->middleware('roles_permission:Assessment,delete');
         Route::get('/downloadAssessMov', [App\Http\Controllers\LROAssessmentController::class, 'downloadMov'])->name('downloadAssessMov')->middleware('roles_permission:Assessment,download');
+        Route::get('/downloadAssessSubAttach', [App\Http\Controllers\LROAssessmentController::class, 'downloadAssessSubAttach'])->name('downloadAssessSubAttach')->middleware('roles_permission:Assessment,download');
         
     });
 // FINANCE TRACKER
