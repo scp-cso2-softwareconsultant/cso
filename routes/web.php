@@ -100,11 +100,11 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::post('/delete-participants-profile', [App\Http\Controllers\LMSController::class,'deleteParticipantsProfile'])->name('delete-participants-profile')->middleware('roles_permission:LMS,delete');
 
         Route::get('/courses', [App\Http\Controllers\LMSController::class,'getCourses'])->name('courses')->middleware('roles_permission:LMS,view');
-        Route::post('/save-courses', [App\Http\Controllers\LMSController::class,'saveCourses'])->name('save-courses')->middleware('roles_permission:LMS,save');
+        Route::post('/save-courses', [App\Http\Controllers\LMSController::class,'saveCourses'])->name('save-courses')->middleware('roles_permission:LMS,create');
         Route::post('/delete-courses', [App\Http\Controllers\LMSController::class,'deleteCourses'])->name('delete-courses')->middleware('roles_permission:LMS,delete');
 
         Route::get('/training-attendees', [App\Http\Controllers\LMSController::class,'getTrainingAttendees'])->name('training-attendees')->middleware('roles_permission:LMS,view');
-        Route::post('/save-training-attendees', [App\Http\Controllers\LMSController::class,'saveTrainingAttendees'])->name('save-training-attendees')->middleware('roles_permission:LMS,save');
+        Route::post('/save-training-attendees', [App\Http\Controllers\LMSController::class,'saveTrainingAttendees'])->name('save-training-attendees')->middleware('roles_permission:LMS,create');
         Route::post('/delete-training-attendees', [App\Http\Controllers\LMSController::class,'deleteTrainingAttendees'])->name('delete-training-attendees')->middleware('roles_permission:LMS,delete');
     });
 // COMMON
