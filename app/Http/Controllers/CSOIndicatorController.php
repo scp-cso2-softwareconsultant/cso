@@ -244,49 +244,22 @@ class CSOIndicatorController extends Controller
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
-        if($form_mode < 0) {
-            $insertData = DB::table('cso_indicator')->insert([
-                'cso_category' => $raw_data->cso_category,
-                'cso_description' => $raw_data->cso_description,
-                'cso_act_no' => $raw_data->cso_act_no,
-                //'cso_indicator_mov' => $raw_data->cso_indicator_mov,
-                'cso_remarks' => $raw_data->cso_remarks,
-                // 'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
-                'objective_1'=>  $raw_data->objective_1,
-                'objective_2'=>  $raw_data->objective_2,
-                'objective_3'=>  $raw_data->objective_3,
-                'objective_4'=>  $raw_data->objective_4,
-                'cso_lead_organization' => $raw_data->cso_lead_organization,
-                'cso_status' => 'Not Yet Started',
-                'created_by' => $user_name
-            ]);
-            if($insertData) $success=true;
-        }else{
-            //Log::info($request->all());
-            $updateData = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)
-                ->update(array(
-                    'cso_category' => $raw_data->cso_category,
-                    'cso_act_no' => $raw_data->cso_act_no,
-                    'cso_status' => $raw_data->cso_status,
-                    //'cso_indicator_mov'=> $raw_data->cso_indicator_mov,
-                    // 'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
-                    'objective_1'=>  $raw_data->objective_1,
-                    'objective_2'=>  $raw_data->objective_2,
-                    'objective_3'=>  $raw_data->objective_3,
-                    'objective_4'=>  $raw_data->objective_4,
-                    'cso_remarks'=>$raw_data -> cso_remarks,
-                    'cso_lead_organization' => $raw_data-> cso_lead_organization,
-                    'cso_description' => $raw_data->cso_description,
-                    'updated_at' => date("Y-m-d h:i:s"),
-                    'updated_by' => $user_name
-                ));
-            if($updateData) $success=true;
-            
-            if($raw_data->fileRemoveOnSave)
-                $this->deleteCSO_IndicatorMov($request);
-        }
+        $data_array = array();
 
-        if($request->hasFile('upload_file') && $form_mode >= 0){
+        $data_array['cso_category'] = $raw_data->cso_category;
+        $data_array['cso_description'] =  $raw_data->cso_description;
+        $data_array['cso_act_no'] =  $raw_data->cso_act_no;
+        //'cso_indicator_mov' => $raw_data->cso_indicator_mov,
+        $data_array['cso_remarks'] =  $raw_data->cso_remarks;
+        // 'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
+        $data_array['objective_1'] =  $raw_data->objective_1;
+        $data_array['objective_2'] =   $raw_data->objective_2;
+        $data_array['objective_3'] =  $raw_data->objective_3;
+        $data_array['objective_4'] =   $raw_data->objective_4;
+        $data_array['cso_lead_organization' ] =  $raw_data->cso_lead_organization;
+        $data_array['cso_status'] = 'Not Yet Started';
+
+        if($request->hasFile('upload_file')){
             Log::info('Theres File Woah!');
             // Get filename with the extension
             $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
@@ -298,8 +271,28 @@ class CSOIndicatorController extends Controller
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/output_mov',$fileNameToStore);
-            DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)->update(array("cso_indicator_mov" => $fileNameToStore));
+            $data_array["cso_indicator_mov"] = $fileNameToStore;
         }
+
+        if($request->fileRemoveOnSave)
+            $data_array["cso_indicator_mov"] = '';
+
+        if($form_mode < 0) {
+            $data_array['created_by'] = $user_name;
+            $insertData = DB::table('cso_indicator')->insert($data_array);
+            if($insertData) $success=true;
+        }else{
+            $data_array['updated_at'] = date("Y-m-d h:i:s");
+            $data_array['updated_by'] = $user_name;
+
+            //'cso_indicator_mov'=> $raw_data->cso_indicator_mov,
+            // 'cso_intermediate_outcome' => $raw_data -> cso_intermediate_outcome,
+                    
+            $updateData = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)
+                ->update($data_array);
+            if($updateData) $success=true;
+        }
+        
 
         $data_arr = [
             "success" => $success
@@ -323,57 +316,27 @@ class CSOIndicatorController extends Controller
         $cso_type = $request['cso_type'];
         $updateData = false;
 
+        $data_array = array();
+
+        $data_array['cso_indicator_id'] = $cso_id;
+        $data_array['indicator_no'] = $raw_data->indicator_no;
+        $data_array['indicator'] =  $raw_data->indicator;
+        $data_array['indicator_type'] =  $raw_data->indicator_type;
+        $data_array['data_source'] =  $raw_data->data_source;
+        $data_array['frequency'] =  $raw_data->frequency;
+        $data_array['unit_measure'] =  $raw_data->unit_measure;
+        $data_array['indicator_status'] =  $raw_data->indicator_status;
+        $data_array['indicator_remarks'] = $raw_data->indicator_remarks;
+        $data_array['ppr'] =  $raw_data->ppr;
+        $data_array['baseline_date'] =  (key_exists('baseline_date', $_raw_data) ? $raw_data->baseline_date : NULL);
+        $data_array['baseline_value'] =  (key_exists('baseline_value', $_raw_data) ? $raw_data->baseline_value : '');
+        $data_array['target_date'] = (key_exists('target_date', $_raw_data) ? $raw_data->target_date : NULL);
+        $data_array['target_value'] =  (key_exists('target_value', $_raw_data) ? $raw_data->target_value : '');
+        $data_array['actual_date'] = (key_exists('actual_date', $_raw_data) ? $raw_data->actual_date : NULL);
+
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
-        if($form_mode < 0) {
-            $insertData = DB::table('indicator')->insert([
-                'cso_indicator_id' => $cso_id,
-                'indicator_no' => $raw_data->indicator_no,
-                'indicator' => $raw_data->indicator,
-                'indicator_type' => $raw_data->indicator_type,
-                'data_source' => $raw_data->data_source,
-                'frequency' => $raw_data->frequency,
-                'unit_measure' => $raw_data->unit_measure,
-                'indicator_status' => $raw_data->indicator_status,
-                'indicator_remarks' => $raw_data->indicator_remarks,
-                'ppr' => $raw_data->ppr,
-                'baseline_date' => (key_exists('baseline_date', $_raw_data) ? $raw_data->baseline_date : NULL),
-                'baseline_value' => (key_exists('baseline_value', $_raw_data) ? $raw_data->baseline_value : ''),
-                'target_date' => (key_exists('target_date', $_raw_data) ? $raw_data->target_date : NULL),
-                'target_value' => (key_exists('target_value', $_raw_data) ? $raw_data->target_value : ''),
-                'actual_date' => (key_exists('actual_date', $_raw_data) ? $raw_data->actual_date : NULL),
-                'indicator_status_id' => 1,
-                'created_by' => $user_name,
-            ]);
-            $this->autoChangeStatus($cso_id);
-            if($insertData) $success=true;
-        }else{
-            $updateData = DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update(array(
-                'indicator_no' => $raw_data->indicator_no,
-                'indicator' => $raw_data->indicator,
-                'indicator_type' => $raw_data->indicator_type,
-                'data_source' => $raw_data->data_source,
-                'frequency' => $raw_data->frequency,
-                'unit_measure' => $raw_data->unit_measure,
-                'indicator_status' => $raw_data->indicator_status,
-                'indicator_remarks' => $raw_data -> indicator_remarks,
-                'ppr' => $raw_data->ppr,
-                'baseline_date' => $raw_data->baseline_date,
-                'baseline_value' => $raw_data->baseline_value,
-                'target_date' => $raw_data->target_date,
-                'target_value' => $raw_data->target_value,
-                'actual_date' => $raw_data->actual_date,
-                'updated_at' => date("Y-m-d h:i:s"),
-                'updated_by' => $user_name,
-            ));
-
-            if($raw_data->fileRemoveOnSave)
-                $this->deleteIndicatorMov($request);
-
-            $getCsoIndicatorId = DB::table('indicator')->select('cso_indicator_id')->where('indicator_id',$raw_data->indicator_id)->get();
-            $this->autoChangeStatus($getCsoIndicatorId->first()->cso_indicator_id);
-        }
 
         if($request->hasFile('upload_file')){
             $get_cso_category = DB::table('cso_indicator')->where('cso_indicator_id', $raw_data->cso_indicator_id)->first();
@@ -388,9 +351,31 @@ class CSOIndicatorController extends Controller
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/'.$get_cso_category->cso_category,$fileNameToStore);
-            DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update(array("mov_file" => $fileNameToStore));
+            $data_array["mov_file"] = $fileNameToStore;
             $this->computeCompletion($raw_data->cso_indicator_id, $get_cso_category->cso_status);
         }
+
+        if($request->fileRemoveOnSave)
+            $data_array["mov_file"] = '';
+
+        if($form_mode < 0) {
+            $data_array['created_by'] = $user_name;
+            $insertData = DB::table('indicator')->insert($data_array);
+            $this->autoChangeStatus($cso_id);
+            Log::info(json_encode($data_array));
+            if($insertData) $success=true;
+        }else{
+            $data_array['cso_indicator_id'] = $raw_data->cso_indicator_id;
+            $data_array['updated_at'] = date("Y-m-d h:i:s");
+            $data_array['updated_by'] = $user_name;
+
+            $updateData = DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update($data_array);
+
+            $getCsoIndicatorId = DB::table('indicator')->select('cso_indicator_id')->where('indicator_id',$raw_data->indicator_id)->get();
+            $this->autoChangeStatus($getCsoIndicatorId->first()->cso_indicator_id);
+        }
+
+        
         if($updateData) $success=true;
 
         $data_arr = [ "success" => $success ];

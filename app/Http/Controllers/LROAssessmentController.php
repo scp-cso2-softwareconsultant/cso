@@ -60,8 +60,6 @@ class LROAssessmentController extends Controller
             }
         }
 
-        Log::info("GETTING SUBDOMAIN");
-        Log::info(json_encode($lro_list));
         return $lro_list;
     }
 
@@ -215,12 +213,9 @@ class LROAssessmentController extends Controller
         $success = false;
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
-        Log::info($ID);
         $deleteData = DB::table('lro_assessment_sub')->where('lro_sub_id',$ID)
             ->update(array("deleted_at"=> date("Y-m-d h:i:s"), "deleted_by" => $user_name));
         if($deleteData) $success=true;
-        else
-            Log::info("FAILED");
         $data_arr = [
             "success" => $success
         ];

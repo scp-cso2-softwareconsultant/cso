@@ -162,7 +162,7 @@
               <v-col cols="12" sm="12" md="12">
                 <p class="mt-4 font-weight-bold">Attached File</p>
                 <div v-if="isEditting">
-                  <div v-if="file_name == null || file_name.length !== 0">
+                  <div v-if="file_name.length !== 0">
                     <v-chip
                       class="ma-2"
                       close
@@ -171,7 +171,7 @@
                       @click:close="removeFile"
                     >
                       <v-icon left> mdi-file </v-icon>
-                      {{ file_name }}
+                      {{ limitChipName(file_name) }}
                     </v-chip>
                   </div>
                   <div v-else>
@@ -180,25 +180,32 @@
                   </div>
                 </div>
                 <div v-else>
-                  <div v-if="file_name == null || file_name.length !== 0">
-                    <v-chip class="ma-2" color="indigo darken-3" outlined>
-                      <v-icon left> mdi-file </v-icon>
-                      {{ file_name }}
-                    </v-chip>
-                  </div>
-                  <div v-else-if="isCreatingNew">
-                    <v-file-input v-model="file_name" @change="onFileChanged">
-                    </v-file-input>
+                  <div v-if="file_name.length > 0">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-chip
+                          class="ma-2"
+                          color="indigo darken-3"
+                          outlined
+                          v-on="on"
+                        >
+                          <v-icon left> mdi-file </v-icon>
+                          <a
+                            :href="`/downloadAssessMov/?file_name=${editedItem.mov}`"
+                            target="blank"
+                          >
+                            {{ limitChipName(file_name) }}
+                          </a>
+                        </v-chip>
+                      </template>
+                      <span>Download {{ file_name }}</span>
+                    </v-tooltip>
                   </div>
                   <div v-else>
-                    <a
-                      :href="`/downloadAssessSubAttach/?file_name=${detailsItem.file_attachment}`"
-                      target="blank"
-                    >
-                      <v-icon center color="primary">
-                        mdi-file-download-outline
-                      </v-icon>
-                    </a>
+                    <v-chip class="ma-2" color="indigo darken-3" outlined>
+                      <v-icon left> mdi-file-remove-outline</v-icon>
+                      No Attached File
+                    </v-chip>
                   </div>
                 </div>
               </v-col>
@@ -903,6 +910,7 @@ export default {
     headers: [
       {
         text: "",
+        width: "2%",
         value: "data-table-expand",
       },
       {
@@ -910,7 +918,7 @@ export default {
         align: "start",
         sortable: true,
         value: "cso_name",
-        width: "15%",
+        width: "20%",
       },
       // {
       // 	text: 'Domain',
@@ -1165,16 +1173,21 @@ export default {
       this.detailsReadonly = true;
       this.editedIndex = this.lroList.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.file_name = this.editedItem.mov;
-      // this.hideProjArea = false;
+      this.file_name = this.isNotDefine(this.editedItem.mov)
+        ? []
+        : this.editedItem.mov;
       this.dialog = true;
+    },
+    isNotDefine(item) {
+      return item == null || item.length === 0 || item === undefined;
     },
     editItem(item) {
       this.editedIndex = this.lroList.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.isEditting = true;
-      this.file_name = this.editedItem.mov == null ? [] : this.editedItem.mov;
-      // this.hideProjArea = true;
+      this.file_name = this.isNotDefine(this.editedItem.mov)
+        ? []
+        : this.editedItem.mov;
       this.dialog = true;
     },
 
@@ -1197,6 +1210,10 @@ export default {
       this.formSubTitle = "Domain Details";
       this.editedSubItem = Object.assign({}, item);
       this.detailsReadonly = true;
+      this.file_name = this.isNotDefine(this.editedSubItem.file_attachment)
+        ? []
+        : this.editedSubItem.file_attachment;
+
       this.subdialog = true;
     },
 
@@ -1205,7 +1222,10 @@ export default {
       this.edditing = true;
       this.formSubTitle = "Edit Domain";
       this.editedSubItem = Object.assign({}, item);
-      this.file_name = this.editedSubItem.file_attachment == null || this.editedSubItem.file_attachment.length === 0 ? [] : this.editedSubItem.file_attachment;
+      this.file_name = this.isNotDefine(this.editedSubItem.file_attachment)
+        ? []
+        : this.editedSubItem.file_attachment;
+      console.log(this.editedSubItem);
       this.subdialog = true;
     },
 
@@ -1297,7 +1317,8 @@ export default {
         var formData = new FormData();
         console.log(this.editedItem);
         formData.append("data", JSON.stringify(this.editedItem));
-        if (this.file_name.length === 0) formData.append("delete_attachedFile", true);
+        if (this.file_name.length === 0)
+          formData.append("delete_attachedFile", true);
         console.log(this.file_name.length === []);
         formData.append("form_mode", this.editedIndex);
         formData.append("upload_file", this.file_attached);
