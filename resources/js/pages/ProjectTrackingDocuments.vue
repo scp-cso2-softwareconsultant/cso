@@ -45,18 +45,19 @@
                                     ></strong>
                                 </div>
                                 <div class="overline text-left">
-                                    <v-text-field
-                                        label="Spent To Date : "
+                                    <vuetify-money
                                         v-model="editedItem.spent_to_date"
+                                        label="Spent To Date : "
+                                        v-bind:options="options"
                                         v-on:keyup="setBurnRate"
-                                    ></v-text-field>
+                                    />
                                 </div>
                                 <div class="overline text-left">
                                     Remaining:
                                     <strong>
                                         <vue-numeric
                                             currency="$"
-                                            separator=","
+                                            separator="."
                                             read-only
                                             v-model="remaining"
                                         ></vue-numeric>
@@ -134,6 +135,13 @@ export default {
             rawDate: {
                 startDate: "2/1/2021",
                 endDate: "1/31/2024"
+            },
+            options: {
+                locale: "en-US",
+                prefix: "₱",
+                suffix: "",
+                length: 11,
+                precision: 0
             },
             burnRate: "-.-%",
             startDate: "-/-/-",

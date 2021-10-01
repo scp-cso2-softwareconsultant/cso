@@ -412,10 +412,13 @@ class commonController extends Controller
                 break;
             case "Courses":
                 $dataExport = DB::table("courses")->select(
-                    DB::raw("course_id,
+                    DB::raw(
+                    "course_id,
                     course_name,
+                    training_date,
+                    conducted_by, 
+                    number_of_participants,
                     project_area,
-                    number_of_modules,
                     developed_by,
                     created_at,
                     created_by,

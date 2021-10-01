@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 class LMSController extends Controller
 {
     public function getParticipantsProfile(){
-        	
-
         $get_profile = DB::table("participant_profile")
             ->select(
                 DB::raw("participant_profile.*"),
@@ -41,6 +39,7 @@ class LMSController extends Controller
         $data_array['participant_location'] = $raw_data->participant_location;
         $data_array['participant_address'] = $raw_data->participant_address;
         $data_array['participant_position'] = $raw_data->participant_position;
+        
         if($raw_data->participant_age!='') {
             $data_array['participant_age'] = $raw_data->participant_age;
         }
@@ -107,8 +106,10 @@ class LMSController extends Controller
         $data_array = array();
         $data_array['course_name'] = $raw_data->course_name;
         $data_array['project_area'] = $raw_data->project_area;
-        $data_array['number_of_modules'] = $raw_data->number_of_modules;
+        $data_array['number_of_participants'] = $raw_data->number_of_participants;
         $data_array['developed_by'] = $raw_data->developed_by;
+        $data_array['conducted_by'] = $raw_data->conducted_by;
+        $data_array['training_date'] = ($raw_data->training_date != '') ? $raw_data->training_date : NULL;
         if($form_mode < 0) {
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('courses')->insert($data_array);
@@ -116,8 +117,7 @@ class LMSController extends Controller
         }else{
             $data_array['updated_at'] = date("Y-m-d h:i:s");
             $data_array['updated_by'] = $user_name;
-            $updateData = DB::table('courses')->where('course_id',$raw_data->course_id)
-                ->update($data_array);
+            $updateData = DB::table('courses')->where('course_id',$raw_data->course_id)->update($data_array);
             if($updateData) $success=true;
         }
 

@@ -122,8 +122,18 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 ];
                 break;
             case "Courses":
-                $header = ["COURSE ID","COURSE NAME","PROJECT AREA","NUMBER OF MODULES","DEVELOPED BY",
-                "CREATED AT","CREATED BY","UPDATED AT","UPDATED BY"    
+                $header = [
+                    "COURSE ID",
+                    "TRAINING COURSE",
+                    "DATE OF TRAINING",
+                    "CONDUCTED BY",
+                    "NUMBER OF PARTICIPANTS",
+                    "PROJECT AREA",
+                    "DEVELOPED BY",
+                    "CREATED AT",
+                    "CREATED BY",
+                    "UPDATED AT",
+                    "UPDATED BY"    
             ];
                 break;
                 case "TrainingAttendees":
