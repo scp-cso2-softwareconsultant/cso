@@ -1443,6 +1443,7 @@ export default {
       this.cso_id = item.cso_indicator_id;
       this.formSubTitle = "New Indicator Details";
       this.removeFile();
+      this.copyItem = item;
       this.editedSubItem = Object.assign({}, item);
       this.subdialog = true;
     },

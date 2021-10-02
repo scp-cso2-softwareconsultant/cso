@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exports\csoExport;
+use App\Exports\exportMult;
 use Excel;
 use App\Models\User;
+use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
 class commonController extends Controller
 {
@@ -159,7 +161,15 @@ class commonController extends Controller
     public function exportExcel(Request $request){
         $tableName = $request['tableName'];
         $fileName = $tableName.'.xlsx';
-        $dataExport = "";
+        $dataExport = (object)[];
+
+        $data1 = (object)[];
+        $data2 = (object)[];
+        $sheets = (object)[];
+        $sheets_data = (object)[];
+
+        $Exmode = 0;
+
 
         // Get the role of the user and check if export is ok  
         // $dataExport = DB::table("roles")->select("*")->get(); 
@@ -171,6 +181,8 @@ class commonController extends Controller
 
         // LSM sub modules
         $is_lsm = false;  
+
+
         if(  $tableName == 'Training Attendees' ||  $tableName == 'Courses'  ||  $tableName == 'Participants Profile'){
             $is_lsm = true ;
         }
@@ -186,94 +198,114 @@ class commonController extends Controller
 
         switch ($tableName){
             case "CSOIndicator":
-                $dataExport = DB::table("cso_indicator")->select(
-                        DB::raw("cso_indicator.cso_category"),
-                        DB::raw("cso_indicator.cso_act_no"),
-                        DB::raw("cso_indicator.cso_description"),
-                        DB::raw("cso_indicator.cso_lead_organization"),
-                        DB::raw("cso_indicator.cso_status"),
-                        DB::raw("indicator.indicator_no"),
-                        DB::raw("indicator.indicator"),
-                        DB::raw("indicator.indicator_type"),
-                        DB::raw("indicator.data_source"),
-                        DB::raw("indicator.frequency"),
-                        DB::raw("indicator.unit_measure"),
-                        DB::raw("indicator.indicator_status"),
-                        DB::raw("indicator.indicator_remarks"),
-                        DB::raw("indicator.mov_file"),
-                        DB::raw("indicator.ppr AS PPR"),
-                        DB::raw("indicator.baseline_date"),
-                        DB::raw("indicator.baseline_value"),
-                        DB::raw("indicator.target_date"),
-                        DB::raw("indicator.target_value"),
-                        DB::raw("indicator.actual_date"),
-                    )
-                    ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
-                    ->whereRaw("cso_indicator.deleted_at IS NULL")
-                    ->whereRaw("indicator.deleted_at IS NULL")
-                    ->where("cso_indicator.cso_category", $request['category'])
-                    ->get();
+                    $result1 = DB::table("cso_indicator AS ci")
+                            ->select(DB::raw("ci.*"))
+                            ->where("ci.cso_category","Activity")
+                            ->whereNull("ci.deleted_at")
+                            ->get();
+                            
+
+                    /* 
+                        @Senpai
+                        select ci.cso_act_no ,i.* from indicator i
+                        left join cso_indicator ci on i.cso_indicator_id = ci.cso_indicator_id
+                        where
+                            ci.cso_category = 'Activity' and
+                            ci.deleted_at is null and i.deleted_at is null
+                            and ci.cso_act_no is not null 
+                    */
+                    $result2 = DB::table("indicator AS i")
+                                ->select(DB::raw("ci.cso_act_no , i.*"))
+                                ->leftJoin("cso_indicator AS ci","ci.cso_indicator_id","i.cso_indicator_id")
+                                ->where("ci.cso_category","Activity")
+                                ->whereNull("ci.deleted_at")
+                                ->whereNull("i.deleted_at")
+                                ->whereNotNull("ci.cso_act_no")
+                                ->get();
+
+                    $dataExport -> SH_HEADERS = ["Activity","Sub Activity"];
+                    $data1 -> title = $dataExport-> SH_HEADERS[0];
+                    $data1 -> dataHeaders = ["ACTIVITY NO", "LEAD ORGANIZATION", "DESCRIPTION", "STATUS", "CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data1 -> defaultHeaders = ["cso_act_no","cso_lead_organization","cso_description","cso_status","created_by","created_at","updated_by","updated_at"];
+                    $data1 -> data = $result1;
+                    $dataExport->SH_DATA[0] = json_decode(json_encode($data1));
+
+                    $data2 -> title = $dataExport-> SH_HEADERS[1];
+
+                    $data2 -> dataHeaders = ["SUB OF","SUB ACTIVITY NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
+                    $data2 -> data = $result2;
+                    $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
+
+                    $Exmode = 1;
                 break;
                 case "CSOIndicator-Impact":
-                    $dataExport = DB::table("cso_indicator")->select(
-                            DB::raw("cso_indicator.cso_category"),
-                            DB::raw("cso_indicator.cso_act_no"),
-                            DB::raw("cso_indicator.cso_description"),
-                            DB::raw("cso_indicator.cso_status"),
-                            DB::raw("indicator.indicator_no"),
-                            DB::raw("indicator.indicator"),
-                            DB::raw("indicator.indicator_type"),
-                            DB::raw("indicator.data_source"),
-                            DB::raw("indicator.frequency"),
-                            DB::raw("indicator.unit_measure"),
-                            DB::raw("indicator.indicator_status"),
-                            DB::raw("indicator.indicator_remarks"),
-                            DB::raw("indicator.mov_file"),
-                            DB::raw("indicator.ppr AS PPR"),
-                            DB::raw("indicator.baseline_date"),
-                            DB::raw("indicator.baseline_value"),
-                            DB::raw("indicator.target_date"),
-                            DB::raw("indicator.target_value"),
-                            DB::raw("indicator.actual_date"),
-                        )
-                        ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
-                        ->whereRaw("cso_indicator.deleted_at IS NULL")
-                        ->whereRaw("indicator.deleted_at IS NULL")
-                        ->where("cso_indicator.cso_category", $request['category'])
+                    $result1 = DB::table("cso_indicator AS ci")
+                            ->select(DB::raw("ci.*"))
+                            ->where("ci.cso_category","Impact")
+                            ->whereNull("ci.deleted_at")
+                            ->get();
+
+                    $result2 = DB::table("indicator AS i")
+                        ->select(DB::raw("ci.cso_act_no , i.*"))
+                        ->leftJoin("cso_indicator AS ci","ci.cso_indicator_id","i.cso_indicator_id")
+                        ->where("ci.cso_category","Impact")
+                        ->whereNull("ci.deleted_at")
+                        ->whereNull("i.deleted_at")
+                        ->whereNotNull("ci.cso_act_no")
                         ->get();
+
+                    $dataExport -> SH_HEADERS = ["Impact","Sub Impact"];
+                    $data1 -> title = $dataExport-> SH_HEADERS[0];
+                    $data1 -> dataHeaders = ["IMPACT NO", "DESCRIPTION", "STATUS", "CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data1 -> defaultHeaders = ["cso_act_no","cso_description","cso_status","created_by","created_at","updated_by","updated_at"];
+                    $data1 -> data = $result1;
+                    $dataExport->SH_DATA[0] = json_decode(json_encode($data1));
+
+                    $data2 -> title = $dataExport-> SH_HEADERS[1];
+
+                    $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
+                    $data2 -> data = $result2;
+                    $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
+
+                    $Exmode = 1;
                     break;
             case "CSOIndicator-Outcome":
-                $dataExport = DB::table("cso_indicator")->select(
-                        DB::raw("cso_indicator.cso_category"),
-                        DB::raw("cso_indicator.cso_act_no"),
-                        DB::raw("cso_indicator.cso_description"),
-                        //DB::raw("cso_indicator.cso_intermediate_outcome"),
-                        DB::raw("cso_indicator.cso_status"),
-                        DB::raw("indicator.indicator_no"),
-                        DB::raw("indicator.indicator"),
-                        DB::raw("indicator.indicator_type"),
-                        DB::raw("indicator.data_source"),
-                        DB::raw("indicator.frequency"),
-                        DB::raw("indicator.unit_measure"),
-                        DB::raw("indicator.indicator_status"),
-                        DB::raw("indicator.indicator_remarks"),
-                        DB::raw("indicator.mov_file"),
-                        DB::raw("indicator.ppr AS PPR"),
-                        DB::raw("indicator.baseline_date"),
-                        DB::raw("indicator.baseline_value"),
-                        DB::raw("indicator.target_date"),
-                        DB::raw("indicator.target_value"),
-                        DB::raw("indicator.actual_date"),
-                    )
-                    ->leftJoin("indicator","cso_indicator.cso_indicator_id", "indicator.cso_indicator_id")
-                    ->whereRaw("cso_indicator.deleted_at IS NULL")
-                    ->whereRaw("indicator.deleted_at IS NULL")
-                    ->where("cso_indicator.cso_category", $request['category'])
-                    ->get();
+                    $result1 = DB::table("cso_indicator AS ci")
+                        ->select(DB::raw("ci.*"))
+                        ->where("ci.cso_category","Outcome")
+                        ->whereNull("ci.deleted_at")
+                        ->get();
+
+                    $result2 = DB::table("indicator AS i")
+                        ->select(DB::raw("ci.cso_act_no , i.*"))
+                        ->leftJoin("cso_indicator AS ci","ci.cso_indicator_id","i.cso_indicator_id")
+                        ->where("ci.cso_category","Outcome")
+                        ->whereNull("ci.deleted_at")
+                        ->whereNull("i.deleted_at")
+                        ->whereNotNull("ci.cso_act_no")
+                        ->get();
+
+                    $dataExport -> SH_HEADERS = ["Outcome","Sub Outcome"];
+                    $data1 -> title = $dataExport-> SH_HEADERS[0];
+                    $data1 -> dataHeaders = ["OUTCOME NO", "DESCRIPTION", "STATUS", "CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data1 -> defaultHeaders = ["cso_act_no","cso_description","cso_status","created_by","created_at","updated_by","updated_at"];
+                    $data1 -> data = $result1;
+                    $dataExport->SH_DATA[0] = json_decode(json_encode($data1));
+
+                    $data2 -> title = $dataExport-> SH_HEADERS[1];
+
+                    $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
+                    $data2 -> data = $result2;
+                    $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
+
+                    $Exmode = 1;
+                    
                 break;
             case "CSOIndicator-Output":
                 $dataExport = DB::table("cso_indicator")->select(
-                    DB::raw("cso_indicator.cso_category"),
                     DB::raw("cso_indicator.cso_act_no"),
                     DB::raw("cso_indicator.cso_description"),
                     DB::raw("cso_indicator.cso_status"),
@@ -281,11 +313,11 @@ class commonController extends Controller
                     DB::raw("cso_indicator.cso_remarks"),
                 )
                 ->where("cso_indicator.cso_category", 'Output')
+                ->whereNull("deleted_at")
                 ->get();
                 break;
             case "CSOProfile":
                 $dataExport = DB::table("cso_profile")->select(
-                    
                     DB::raw("is_lro AS 'Is LRO'"),
                     DB::raw("is_lro_supported AS 'Is LRO Supported'"),
                     DB::raw("type_of_support AS 'Type Of Suppport'"),
@@ -361,23 +393,55 @@ class commonController extends Controller
                 )->whereRaw("deleted_at IS NULL")->get();
                 break;
             case "Assessment":
-                    $dataExport = DB::table("lro_assessment")->select(
-                        DB::raw("cso_profile.cso_name"),
-                        DB::raw(
-                            "lro_assessment.tool_used,
-                            lro_assessment.conducted_by,
-                            lro_assessment.created_at,
-                            lro_assessment.final_score,
-                            lro_assessment.mov,
-                            lro_assessment.status,
-                            lro_assessment.created_by,
-                            lro_assessment.updated_at,
-                            lro_assessment.updated_by
-                            ")
+
+                    $Exmode = 1;
+
+                    $result = DB::table("lro_assessment AS la")->select(
+                        DB::raw("la.lro_assessment_id, cp.cso_name, la.tool_used, la.conducted_by, la.assessment_date, la.final_score, la.mov, la.status, la.created_by, la.created_at,  la.updated_by, la.updated_at ")
                     )
-                    ->leftJoin('cso_profile','cso_profile_id','lro_id')
-                    ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))
-                    ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();
+                    ->leftJoin('cso_profile AS cp','cp.cso_profile_id','la.lro_id')
+                    ->whereRaw(DB::raw("la.deleted_at IS NULL"))
+                    ->whereRaw(DB::raw("cp.deleted_at IS NULL"))->get();
+
+
+                    /*
+                        @SENPAI
+                        
+                        For Future Dev
+
+                        **& SQL FORM OF THE BELOW QUERY &**
+                            select la.lro_assessment_id as Assessment_Record_No, cp.cso_name, ls.sub_domain, ls.rating, ls.file_attachment, ls.remarks, ls.created_at, ls.created_by from lro_assessment_sub ls
+                            left join lro_assessment la on ls.lro_assessment_id = la.lro_assessment_id
+                            right join cso_profile cp on la.lro_id = cp.cso_profile_id
+                            where ls.deleted_at is null AND cp.deleted_at is null
+                            AND la.deleted_at is null AND la.lro_assessment_id is not null AND ls.sub_domain is not null
+                            group by ls.lro_sub_id
+                    */
+                    $result2 = DB::table("lro_assessment_sub AS ls")->select(
+                        DB::raw("la.lro_assessment_id, cp.cso_name, ls.sub_domain, ls.rating , ls.file_attachment, ls.remarks,ls.created_by,ls.created_at, ls.updated_by, ls.updated_at")
+                    )
+                    ->leftJoin('lro_assessment AS la','ls.lro_assessment_id','la.lro_assessment_id')
+                    ->leftJoin('cso_profile AS cp','cp.cso_profile_id','la.lro_id')
+                    ->whereRaw(DB::raw("ls.deleted_at is null AND cp.deleted_at is null AND la.deleted_at is null AND la.lro_assessment_id is not null AND ls.sub_domain is not null"))
+                    ->get();
+
+                    $dataExport -> SH_HEADERS = ["LRO ASSESSMENT", "ASSESSMENT SUB"];
+                    
+                    $data1 -> title = $dataExport-> SH_HEADERS[0];
+                    $data2 -> title = $dataExport-> SH_HEADERS[1];
+
+                    $data1 -> dataHeaders = ["ASSESSMENT RECORD NO","NAME OF LRO","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS", "CREATED BY", "CREATED AT","UPDATED BY","UPDATED AT" ];
+                    $data1 -> defaultHeaders = ["lro_assessment_id", "cso_name", "tool_used", "conducted_by", "assessment_date", "final_score", "mov", "status", "created_by","created_at", "updated_by","updated_at"];
+
+                    $data2 -> dataHeaders = ["ASSESSMENT RECORD NO","CSO NAME","DOMAIN","RATING","FILE ATTACHMENT","REMARKS","CREATED BY","DATE CREATED","UPDATED BY","DATE UPDATED"];
+                    $data2 -> defaultHeaders = ["lro_assessment_id","cso_name","sub_domain","rating","file_attachment","remarks", "created_by","created_at", "updated_by","updated_at",];
+
+                    $data1 -> data = $result;
+                    $data2 -> data = $result2;
+                    
+                    $dataExport->SH_DATA[0] = json_decode(json_encode($data1));
+                    $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
+                    
                     break;
             case "ProjectTrackingDocuments":
                 break;
@@ -459,6 +523,12 @@ class commonController extends Controller
             break; 
         }
 
+
+        // EXAMPLe
+        //$dataExport2 = json_decode("{\"SH_HEADERS\":[\"SH1\",\"SH2\"],\"SH_DATA\":[{\"title\":\"SH1\",\"dataHeaders\":[\"Name WA\",\"Impression WA\"],\"defaultHeaders\":[\"NameZ\",\"ImpressionZ\"],\"data\":[{\"NameZ\":\"Name1\",\"ImpressionZ\":\"Nice\"},{\"NameZ\":\"Name2\",\"ImpressionZ\":\"Weeb\"}]},{\"title\":\"SH2\",\"defaultHeaders\":[\"NameX\",\"ImpressionX\"],\"dataHeaders\":[\"HELLO WA2\",\"WORLD WA3\"],\"data\":[{\"NameX\":\"Name1\",\"ImpressionX\":\"Nice\"},{\"NameX\":\"Name2\",\"ImpressionX\":\"Weeb\"}]}]}");
+        
+        if($Exmode == 1)
+            return Excel::download((new exportMult($dataExport->SH_HEADERS,$dataExport->SH_DATA)),"JERB.xlsx");
         return Excel::download( (new csoExport)->forTableName($tableName)->forDataExport($dataExport),  $fileName);
     }
 }

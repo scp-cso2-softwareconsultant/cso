@@ -32,29 +32,29 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
         switch ($this->tableName){
             case "CSOIndicator-Output":
                 $header = [
-                    'CATEGORY','NO','DESCRIPTION','INDICATOR STATUS','MOV','REMARKS'
+                    'OUTPUT NO','DESCRIPTION','INDICATOR STATUS','MOV','REMARKS'
                 ];
-                break;
-            case "CSOIndicator-Outcome":
-                $header = [
-                    'CATEGORY','NO','DESCRIPTION',/*'INTERMEDIATE OUTCOME',*/'INDICATOR STATUS','SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
-                    'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE','TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
-                ];
-                break;
-            case "CSOIndicator-Impact":
-                $header = [
-                            'CATEGORY','NO','DESCRIPTION', 'INDICATOR STATUS', 'SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
-                            'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
-                            'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
-                        ];
-                break;
-            case "CSOIndicator":
-                $header = [
-                            'CATEGORY','NO','DESCRIPTION','LEAD ORGANIZATION', 'INDICATOR STATUS', 'SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
-                            'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
-                            'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
-                        ];
-                break;
+                 break;
+            // case "CSOIndicator-Outcome":
+            //     $header = [
+            //         'OUTCOME NO','DESCRIPTION',/*'INTERMEDIATE OUTCOME',*/'INDICATOR STATUS','SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
+            //         'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE','TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
+            //     ];
+            //     break;
+            // case "CSOIndicator-Impact":
+            //     $header = [
+            //                 'IMPACT NO','DESCRIPTION', 'INDICATOR STATUS', 'SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
+            //                 'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
+            //                 'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
+            //             ];
+            //     break;
+            // case "CSOIndicator":
+            //     $header = [
+            //                 'ACTIVITY NO','DESCRIPTION','LEAD ORGANIZATION', 'INDICATOR STATUS', 'SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
+            //                 'FREQUENCY', 'UNIT OF MEASURE','(SUB)INDICATOR STATUS','(SUB)INDICATOR REMARKS','(MOV)MOV FILE', 'PPR', 'BASELINE DATE', 'BASELINE VALUE',
+            //                 'TARGET DATE', 'TARGET VALUE', 'ACTUAL DATE'
+            //             ];
+            //     break;
             case "CSOProfile":
                 $header = [
                             'IS LRO', 'IS LRO SUPPORTED', 'TYPE OF SUPPORT', 'LONGITUDE', 'LATITUDE',
@@ -95,12 +95,6 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                             'ACTUALS', 'VARIANCE', 'BURN RATE (1ST LIQ)', 'BURN RATE (2ND LIQ)', 'BURN RATE (3RD LIQ)',
                             'BURN RATE (4TH LIQ)', 'BURN RATE (TOTAL)'
                         ];
-                break;
-            case "Assessment":
-                $header = [
-                    "NAME OF LRO","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS",
-                    "CREATED BY","UPDATED AT","UPDATED BY"
-                ];  
                 break;
             case "ProjectTrackingDocument":
                 break;
@@ -155,6 +149,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
 
     public function forDataExport(string $dataExport){
         $this->dataExport = json_decode($dataExport,true);
+        Log::info("EXPORTING: ".json_encode($dataExport, true));
         return $this;
     }
 
