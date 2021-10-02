@@ -181,7 +181,7 @@
                 </div>
                 <div v-else>
                   <div v-if="file_name.length > 0">
-                    <v-tooltip bottom>
+                    <v-tooltip top>
                       <template v-slot:activator="{ on, attrs }">
                         <v-chip
                           class="ma-2"
@@ -1130,7 +1130,6 @@ export default {
         });
         this.loadLROAssessment = false;
 
-        console.log("ASSESSMENT", this.lroList);
       });
     },
     filterItems(items, search, filter) {
@@ -1151,7 +1150,6 @@ export default {
         active_key,
         active_value
       );
-      console.log(this.filters.filter_items[active].value);
       this.filters.filter_items_active = active;
     },
     toggleOrder() {
@@ -1225,7 +1223,6 @@ export default {
       this.file_name = this.isNotDefine(this.editedSubItem.file_attachment)
         ? []
         : this.editedSubItem.file_attachment;
-      console.log(this.editedSubItem);
       this.subdialog = true;
     },
 
@@ -1315,11 +1312,9 @@ export default {
       }
       if (validate) {
         var formData = new FormData();
-        console.log(this.editedItem);
         formData.append("data", JSON.stringify(this.editedItem));
         if (this.file_name.length === 0)
           formData.append("delete_attachedFile", true);
-        console.log(this.file_name.length === []);
         formData.append("form_mode", this.editedIndex);
         formData.append("upload_file", this.file_attached);
         formData.append("file_name", this.file_name);
@@ -1386,6 +1381,7 @@ export default {
     },
     newAsessment() {
       this.isCreatingNew = true;
+      this.isEditting = true;
       this.dialog = true;
     },
 

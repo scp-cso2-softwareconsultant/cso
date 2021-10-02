@@ -570,7 +570,7 @@
               >
                 <template v-slot:item.cso_indicator_mov="{ item }">
                   <div v-if="item.cso_indicator_mov">
-                    <a :href="`/downloadCSOMov/?file_name=${file_name}`">
+                    <a :href="`/downloadCSOMov/?file_name=${item.cso_indicator_mov}`">
                       <v-icon center color="primary">
                         mdi-file-download-outline
                       </v-icon>

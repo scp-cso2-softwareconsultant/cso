@@ -462,9 +462,7 @@ export default {
       toolbox: {
         show: true,
         feature: {
-          mark: { show: true },
-          //dataView: { show: true, readOnly: true },
-          //restore: { show: true },
+          mark: { show: true }, 
           saveAsImage: {
             show: true,
           },
@@ -473,9 +471,10 @@ export default {
       tooltip: {
         trigger: "axis",
         formatter: "{b}",
+        borderColor: "#8C8D8E",
         axisPointer: {
           // Use axis to trigger tooltip
-          type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+          type: "shadow", 
         },
       },
       legend: { show: false },
@@ -505,15 +504,15 @@ export default {
           name: "Direct",
           type: "bar",
           stack: "total",
-          label: {
-            formatter: "{label_white|{c}}%",
-            show: true,
-            rich: {
-              label_white: {
-                color: "#fff",
-              },
-            },
-          },
+          // label: {
+          //   formatter: "{label_white|{c}}%",
+          //   show: true,
+          //   rich: {
+          //     label_white: {
+          //       color: "#fff",
+          //     },
+          //   },
+          // },
           itemStyle: {
             borderRadius: 6,
             color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
@@ -909,7 +908,6 @@ export default {
       axios.get("/dashboard-cso-indicator").then((response) => {
         const data = response.data;
         data.forEach((i) => {
-          //console.log(lead_org);
           if (i.cso_lead_organization === lead_org) {
             var obj = DATA.find((obj) => obj.name === i.cso_status);
             var idx = DATA.indexOf(obj);
@@ -923,7 +921,6 @@ export default {
 
         var len = DATA.length
         for(var x = 0; x < len; x++){
-            console.log(DATA[x].value)
             if(DATA[x].value === 0){
                 DATA.splice(x,1)
                 x--
@@ -1089,7 +1086,6 @@ export default {
         if(idx === -1)
           indicators.push({ name: i.sub_domain, max: maxScore });
       });
-      console.log("INIT",SUBDOMAIN)
 
       DATES.forEach((date) => { //date.year
         let D = Array(indicators.length).fill(0);
@@ -1100,7 +1096,6 @@ export default {
              let findObj = indicators.find((obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase());
              let idx = indicators.indexOf(findObj);
              if(idx !== -1){
-               //console.log("PLACING To ", idx, "which contain "+D[idx], "Value of "+dom.rating)
                D[idx] += dom.rating
                Div[idx] += 1
              }
@@ -1111,8 +1106,6 @@ export default {
         legends.push(date.year.toString());
       });
 
-      console.log(maxScore)
-
       constructedDate.forEach((i)=>{
         i.value.forEach((ix,idx)=>{
           if(i.Div[idx] === 0 || i.Div[idx] === 0) return;
@@ -1120,7 +1113,7 @@ export default {
         })
       })
 
-    console.log(constructedDate)
+
       this.radarData.series[0].data = constructedDate;
       this.radarData.legend.data = legends;
       this.radarData.radar.indicator = indicators;

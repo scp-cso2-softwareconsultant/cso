@@ -53,6 +53,7 @@ class CSOIndicatorController extends Controller
     public function downloadCSOMov(Request $request){
         //Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
+        Log::info($file_name);
         $path= Storage::disk('public')->path("cso_indicators_mov/output_mov/$request->file_name");
         $content = file_get_contents($path);
         return response($content)->withHeaders([

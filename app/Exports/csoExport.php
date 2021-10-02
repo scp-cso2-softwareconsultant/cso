@@ -98,7 +98,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 break;
             case "Assessment":
                 $header = [
-                    "NAME OF LRO","DOMAIN","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS",
+                    "NAME OF LRO","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS",
                     "CREATED BY","UPDATED AT","UPDATED BY"
                 ];  
                 break;
