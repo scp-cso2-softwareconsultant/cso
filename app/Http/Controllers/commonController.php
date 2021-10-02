@@ -362,7 +362,7 @@ class commonController extends Controller
                 break;
             case "Assessment":
                     $dataExport = DB::table("lro_assessment")->select(
-                        DB::raw("cso_profile.cso_name,lro_assessment.domain"),
+                        DB::raw("cso_profile.cso_name"),
                         DB::raw(
                             "lro_assessment.tool_used,
                             lro_assessment.conducted_by,

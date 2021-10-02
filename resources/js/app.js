@@ -28,6 +28,23 @@ Vue.component('app-container', require('./components/AppContainer').default);
 import VueApexCharts from 'vue-apexcharts';
 Vue.use(VueApexCharts);
 Vue.component('apexchart', VueApexCharts);
+
+Vue.mixin({
+  methods:{
+    limitChipName(chipname) {
+      if (chipname.length >= 36) {
+        var nameOfFile = chipname.substring(0, 36);
+        var nameOfExtension = chipname.substring(chipname.lastIndexOf("."));
+        var newChipName = nameOfFile + "...." + nameOfExtension;
+        return newChipName;
+      }
+      return chipname;
+    },
+    isNotDefine(item) {
+      return item == null || item.length === 0 || item === undefined;
+    }
+  }
+})
 /**
   * Next, we will create a fresh Vue application instance and attach it to
   * the page. Then, you may begin adding components to this application
