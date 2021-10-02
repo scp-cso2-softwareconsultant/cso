@@ -38,29 +38,29 @@
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.participant_name" label="Name *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.participant_name" label="Name *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12">
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.participant_location" label="Location *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.participant_location" label="Location *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.participant_address" label="Address *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.participant_address" label="Address *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12">
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.participant_position" label="Position *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.participant_position" label="Position *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0" v-if="!detailsReadonly">
@@ -99,31 +99,31 @@
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field v-model="editedItem.participant_age"
-                                                          :readonly="detailsReadonly"
-                                                          :rules="[rules.number, rules.required]"
-                                                          label="Age *" dense></v-text-field>
+                                                        :readonly="detailsReadonly"
+                                                        :rules="[rules.number, rules.required]"
+                                                        label="Age *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
 
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.participant_skills" label="Skills *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.participant_skills" label="Skills *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.name_of_training" label="Name of Training *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.name_of_training" label="Name of Training *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12" >
                                             <v-text-field :readonly="detailsReadonly"
-                                                          :rules="[rules.required]"
-                                                          v-model="editedItem.training_organizer" label="Training organizer *" dense></v-text-field>
+                                                        :rules="[rules.required]"
+                                                        v-model="editedItem.training_organizer" label="Training organizer *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0">
