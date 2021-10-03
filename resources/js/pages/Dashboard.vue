@@ -472,6 +472,12 @@ export default {
         text: "Primary Stakeholders",
         left: "center",
       },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
+        },
+      },
       toolbox: {
         show: true,
         feature: {
