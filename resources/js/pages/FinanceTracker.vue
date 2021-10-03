@@ -54,16 +54,7 @@
                     </v-row>
                     <v-row class="mt-0">
                       <v-col cols="12" sm="12" md="12">
-                        <!-- <v-text-field
-                                                    :readonly="detailsReadonly"
-                                                    :rules="[rules.required]"
-                                                    v-model="
-                                                        editedItem.finance_name
-                                                    "
-                                                    label="Name *"
-                                                    dense
-                                                ></v-text-field>
-                                                -->
+                        <!--REPLACED BY ADDABLE SELECT
                         <v-select
                           :readonly="detailsReadonly"
                           :items="responsibleOrganization"
@@ -71,7 +62,30 @@
                           label="Name  *"
                           dense
                           :rules="[rules.required]"
-                        ></v-select>
+                        ></v-select>-->
+                          <v-combobox
+                            :readonly="detailsReadonly"
+                            :rules="[rules.required]"
+                            v-model="selected_finance_name"
+                            :items="responsibleOrganization"
+                            :search-input.sync="search"
+                            hide-selected
+                            label="Name"
+                            hint="Hit backspace to delete selected Name"
+                            multiple
+                            persistent-hint
+                            small-chips
+                          >
+                            <template v-slot:no-data>
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    No results matching "<strong>{{ search }}</strong>". Press <kbd>enter</kbd> to create a new one
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </template>
+                          </v-combobox>
                       </v-col>
                     </v-row>
                     <v-row class="mt-0">
@@ -782,6 +796,8 @@ export default {
         detailsReadonly: false,
         modelAssessmentDate: false,
         cso_name_items: [],
+        selected_finance_name: [],
+        search: null,
         status_list: [],
         searchBy: "",
         crud_guard : {
@@ -1090,7 +1106,12 @@ export default {
         },
         dialogDelete(val) {
             val || this.closeDelete();
-        }
+        },selected_finance_name (val) {
+          if (val.length > 1) {
+            this.$nextTick(() => this.selected_finance_name.pop())
+            this.$noty.error("You Can Only Use 1 Name")
+          }
+        },
     },
 
     created() {
@@ -1145,16 +1166,17 @@ export default {
             this.detailsReadonly = true;
             this.editedIndex = this.financeList.indexOf(item);
             this.editedItem = Object.assign({}, item);
+            this.selected_finance_name = [{text:item.finance_name , value:item.finance_name}]
             this.dialog = true;
             this.computeBurnRate();
         },
         editItem(item) {
             this.editedIndex = this.financeList.indexOf(item);
             this.editedItem = Object.assign({}, item);
+            this.selected_finance_name = [{text:item.finance_name, value:item.finance_name}]
             this.dialog = true;
             this.computeBurnRate();
         },
-
         deleteItem(item) {
             this.delete_finance = item.finance_id;
             this.editedIndex = this.financeList.indexOf(item);
@@ -1182,10 +1204,12 @@ export default {
         close() {
             this.dialog = false;
             this.detailsReadonly = false;
+            this.btnLoader = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
             });
+            this.selected_finance_name = []
         },
 
         closeDelete() {
@@ -1204,10 +1228,23 @@ export default {
                 this.$noty.error("Code is empty!");
                 validate = false;
             }
-            if (!this.editedItem.finance_name) {
-                this.$noty.error("Name is empty!");
-                validate = false;
+
+
+            if(this.selected_finance_name.length === 0){
+              this.validate = false;
+              this.$noty.error("Name is Empty!");
+            }else{
+              if(Object.prototype.toString.call(this.selected_finance_name[0]) === '[object Object]'){
+                this.editedItem.finance_name = this.selected_finance_name[0].value
+                //////console.log("SET AS STRING BUT ITS OBJ ", this.editedItem)
+              }
+              else{
+                this.editedItem.finance_name = this.selected_finance_name[0]
+                //////console.log("SET AS STRING BUT ITS ARR ", this.editedItem)
+              }
             }
+
+
             if (validate) {
                 axios
                     .post("/save-finance-tracker", {

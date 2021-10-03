@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class FinanceTrackerController extends Controller
 {
@@ -18,6 +20,23 @@ class FinanceTrackerController extends Controller
         }
 
         return $ft_list;
+    }
+
+    public function saveCSOLeadOrganizationIfNotExist($given_cso){
+        $result = DB::table("lead_organization")
+        ->select("organization_name")
+        ->where("organization_name",$given_cso)
+        ->get();
+
+        $user = Auth::user();
+
+        if($result->isEmpty())
+            DB::table('lead_organization')
+            ->insert([
+                "organization_name"=>$given_cso,
+                "created_by"=> $user,
+                "created_at"=> date("Y-m-d h:i:s")
+            ]);
     }
 
     public function saveFinanceTracker(Request $request){
@@ -47,8 +66,10 @@ class FinanceTrackerController extends Controller
         $finance_burn3 = $raw_data->finance_burn3 != '' ? $raw_data->finance_burn3 : 0;
         $finance_burn4 = $raw_data->finance_burn4 != '' ? $raw_data->finance_burn4 : 0;
         $finance_burn_rate = $finance_burn1 + $finance_burn2 + $finance_burn3 + $finance_burn4;
-        if($form_mode < 0) {
 
+        $this->saveCSOLeadOrganizationIfNotExist($raw_data->finance_name);
+
+        if($form_mode < 0) {
             $insertData = DB::table('finance')->insert([
                 'finance_name' => $raw_data->finance_name,
                 'finance_code' => $raw_data->finance_code,
@@ -76,7 +97,10 @@ class FinanceTrackerController extends Controller
                 'finance_burn3' => $finance_burn3,
                 'finance_burn4' => $finance_burn4,
                 'finance_burn_rate' => $finance_burn_rate,
+                'created_at' => date("Y-m-d h:i:s"),
                 'created_by' => $user_name,
+                'updated_at' => date("Y-m-d h:i:s"),
+                'updated_by' => $user_name,
             ]);
             if($insertData) $success=true;
         }else{

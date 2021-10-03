@@ -17,16 +17,18 @@ class commonController extends Controller
 {
 
     public function getDistinctAssessmentDate(){
-        $get_Dates = DB::table("lro_assessment")->selectRaw(DB::raw('Year(assessment_date) as year'))->whereRaw(DB::raw("deleted_at IS NULL"))->orderBy('year','asc')->distinct()->get(['year']);
+        $get_Dates = DB::table("lro_assessment")->selectRaw(DB::raw('Year(assessment_date) as year'))
+        ->whereRaw(DB::raw("deleted_at IS NULL"))
+        ->orderBy('year','asc')->distinct()->get(['year']);
         $ass_dates = [];
-        Log::info(json_encode($get_Dates));
+        //Log::info(json_encode($get_Dates));
         if($get_Dates)
             foreach ($get_Dates as $key => $row){
                 $ass_dates[$key] = json_decode(json_encode($row));
             }
 
-        Log::info("GETTING ASSESSMENT DATE");
-        Log::info($get_Dates);
+        //Log::info("GETTING ASSESSMENT DATE");
+        //Log::info($get_Dates);
         return $ass_dates;
     }
 
@@ -34,11 +36,11 @@ class commonController extends Controller
         $get_Dates = DB::table("finance AS f")
         ->selectRaw(DB::raw('YEAR(f.updated_at) AS year,MONTHNAME(f.updated_at) AS month, f.finance_name, count(f.finance_id) as count, sum(f2.finance_budget) as TotalBudget, sum(f2.finance_tranche1 + f2.finance_tranche2 + f2.finance_tranche3 + f2.finance_tranche4) AS TotalExpenditure'))
         ->leftJoin("finance AS f2","f2.finance_id","f.finance_id")
-        ->whereRaw(DB::raw("f.deleted_at IS NULL"))
+        ->whereRaw(DB::raw("f.deleted_at IS NULL AND f.updated_at IS NOT NULL"))
         ->groupBy(DB::raw("f.finance_name"))
         ->get(['year']);
         $ass_dates = [];
-        Log::info(json_encode($get_Dates));
+        //Log::info(json_encode($get_Dates));
         if($get_Dates)
             foreach ($get_Dates as $key => $row){
                 $ass_dates[$key] = json_decode(json_encode($row));

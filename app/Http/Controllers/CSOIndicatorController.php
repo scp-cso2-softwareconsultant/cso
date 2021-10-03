@@ -31,7 +31,7 @@ class CSOIndicatorController extends Controller
      * @return file Requested File
      */ 
     public function downloadMov(Request $request){
-        //Log::info("CALLED DOWNLOAD FILE");
+        ////Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
         $path= Storage::disk('public')->path("cso_indicators_mov/$request->category/$request->file_name");
         $content = file_get_contents($path);
@@ -51,9 +51,9 @@ class CSOIndicatorController extends Controller
      * @return file Requested File
      */ 
     public function downloadCSOMov(Request $request){
-        //Log::info("CALLED DOWNLOAD FILE");
+        ////Log::info("CALLED DOWNLOAD FILE");
         $file_name = $request['file_name'];
-        Log::info($file_name);
+        //Log::info($file_name);
         $path= Storage::disk('public')->path("cso_indicators_mov/output_mov/$request->file_name");
         $content = file_get_contents($path);
         return response($content)->withHeaders([
@@ -78,10 +78,10 @@ class CSOIndicatorController extends Controller
             ->where('cso_category',$request['category'])
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
-        //Log::info("CHECK MATCH ACT #");
-        //Log::info($request['act_no']);
-        //Log::info($request['category']);
-        //Log::info("-----------------");
+        ////Log::info("CHECK MATCH ACT #");
+        ////Log::info($request['act_no']);
+        ////Log::info($request['category']);
+        ////Log::info("-----------------");
 
         return $get_indicator;
     }
@@ -99,12 +99,14 @@ class CSOIndicatorController extends Controller
             ->where('indicator_no','LIKE','%'.$request['indicator_no'].'%')
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
-        Log::info("CHECK MATCH Sub #");
-        Log::info($request['indicator_no']);
-        Log::info($get_indicator);
+        //Log::info("CHECK MATCH Sub #");
+        //Log::info($request['indicator_no']);
+        //Log::info($get_indicator);
 
         return $get_indicator;
     }
+
+    
 
     /**
      * This returns all data from cso_indicator table with a category of 'Activity' sub data from indicator table
@@ -179,20 +181,20 @@ class CSOIndicatorController extends Controller
     }
 
     public function deleteIndicatorMov(Request $request){
-        Log::info("DELETING CSO SUB INDICATOR MOV");
+        //Log::info("DELETING CSO SUB INDICATOR MOV");
         $raw_data = json_decode($request['data']);
         $deletion = DB::table('indicator')->where('indicator_id',$raw_data->indicator_id)->update(["mov_file" => '']);
         // if($deletion){
-        //     Log::info("SUCCESS DELETION");
+        //     //Log::info("SUCCESS DELETION");
         // }
     }
 
     public function deleteCSO_IndicatorMov($request){
-        Log::info("DELETING INDICATOR MOV");
+        //Log::info("DELETING INDICATOR MOV");
         $raw_data = json_decode($request['data']);
         $deletion = DB::table('cso_indicator')->where('cso_indicator_id',$raw_data->cso_indicator_id)->update(["cso_indicator_mov" => '']);
         if($deletion){
-            Log::info("SUCCESS DELETION");
+            //Log::info("SUCCESS DELETION");
         }
     }
 
@@ -230,6 +232,23 @@ class CSOIndicatorController extends Controller
     // }
 
 
+    public function saveCSOLeadOrganizationIfNotExist($given_cso){
+        $result = DB::table("lead_organization")
+        ->select("organization_name")
+        ->where("organization_name",$given_cso)
+        ->get();
+
+        $user = Auth::user();
+
+        if($result->isEmpty())
+            DB::table('lead_organization')
+            ->insert([
+                "organization_name"=>$given_cso,
+                "created_by"=> $user,
+                "created_at"=> date("Y-m-d h:i:s")
+            ]);
+    }
+
     /**
      * This saves cso new or edited item
      *
@@ -257,10 +276,11 @@ class CSOIndicatorController extends Controller
         $data_array['objective_3'] =  $raw_data->objective_3;
         $data_array['objective_4'] =   $raw_data->objective_4;
         $data_array['cso_lead_organization' ] =  $raw_data->cso_lead_organization;
-        $data_array['cso_status'] = 'Not Yet Started';
+
+        $this->saveCSOLeadOrganizationIfNotExist($raw_data->cso_lead_organization);
 
         if($request->hasFile('upload_file')){
-            Log::info('Theres File Woah!');
+            //Log::info('Theres File Woah!');
             // Get filename with the extension
             $filenameWithExt = $request->file('upload_file')->getClientOriginalName();
             //Get just filename
@@ -278,10 +298,12 @@ class CSOIndicatorController extends Controller
             $data_array["cso_indicator_mov"] = '';
 
         if($form_mode < 0) {
+            $data_array['cso_status'] = 'Not Yet Started';
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('cso_indicator')->insert($data_array);
             if($insertData) $success=true;
         }else{
+            $data_array['cso_status'] = $raw_data->cso_status;
             $data_array['updated_at'] = date("Y-m-d h:i:s");
             $data_array['updated_by'] = $user_name;
 
@@ -362,7 +384,7 @@ class CSOIndicatorController extends Controller
             $data_array['created_by'] = $user_name;
             $insertData = DB::table('indicator')->insert($data_array);
             $this->autoChangeStatus($cso_id);
-            Log::info(json_encode($data_array));
+            //Log::info(json_encode($data_array));
             if($insertData) $success=true;
         }else{
             $data_array['cso_indicator_id'] = $raw_data->cso_indicator_id;
