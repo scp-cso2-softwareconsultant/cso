@@ -32,7 +32,7 @@ class commonController extends Controller
 
     public function getDashBoardDistinctFinance(){
         $get_Dates = DB::table("finance AS f")
-        ->selectRaw(DB::raw('YEAR(f.updated_at) AS year,MONTHNAME(f.updated_at) AS month, f.finance_name, count(f.finance_id) as count, sum(f2.finance_budget) as TotalBudget, f2.finance_budget'))
+        ->selectRaw(DB::raw('YEAR(f.updated_at) AS year,MONTHNAME(f.updated_at) AS month, f.finance_name, count(f.finance_id) as count, sum(f2.finance_budget) as TotalBudget, sum(f2.finance_tranche1 + f2.finance_tranche2 + f2.finance_tranche3 + f2.finance_tranche4) AS TotalExpenditure'))
         ->leftJoin("finance AS f2","f2.finance_id","f.finance_id")
         ->whereRaw(DB::raw("f.deleted_at IS NULL"))
         ->groupBy(DB::raw("f.finance_name"))

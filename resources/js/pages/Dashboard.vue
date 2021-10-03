@@ -611,6 +611,12 @@ export default {
           saveAsImage: {},
         },
       },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
+        },
+      },
       xAxis: {
         type: "value",
         name: "Days",
@@ -621,16 +627,7 @@ export default {
       yAxis: {
         type: "category",
         inverse: true,
-        data: [
-          "Grand Total",
-          "Funds Recieved",
-          "Other Project Direct Cost",
-          "Equipment",
-          "Project Review and Learning Meetings",
-          "Travel",
-          "Fringe Benefits",
-          "Personel",
-        ],
+        data: [ ],
         axisLabel: {
           formatter: function (value) {
             return value;
@@ -646,27 +643,18 @@ export default {
             textStyle: {
               color: "white",
               fontSize: "10",
+              fontWeight: "bold"
             },
           },
           itemStyle: {
             borderRadius: 2,
             color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
-              { offset: 1, color: "#ba9b43" },
-              { offset: 0.5, color: "#dbcd51" },
-              { offset: 0, color: "#ffe70f" },
+              { offset: 1, color: "#98182E" },
+              { offset: 0.5, color: "#F52E00" },
+              { offset: 0, color: "#FE7701" },
             ]),
           },
-          data: [
-            { value: 14000, text: "37 %" },
-            270,
-            2070,
-            4000,
-            3660,
-            450,
-            1568,
-            4050,
-          ],
-          
+          data: [],
         },
         {
           name: "Funds Received",
@@ -677,9 +665,18 @@ export default {
             textStyle: {
               color: "white",
               fontSize: "10",
+              fontWeight: "bold"
             },
           },
-          data: [40000, 9000, 7000, 4000, 6000, 3000, 5600, 9000],
+          itemStyle: {
+            borderRadius: 2,
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+              { offset: 1, color: "#1e2f97" },
+              { offset: 0.5, color: "#797ef6" },
+              { offset: 0, color: "#1aa7ec" },
+            ]),
+          },
+          data: [],
         },
       ],
     },
@@ -1087,6 +1084,7 @@ export default {
       this.CSOProfileAccreditation.accreditationMapping =
         constructedObjectMapping2;
     },
+
     //FOR PRIMARY STAKEHOLDER BARCHART
     async initPrimaryBar() {
       const Stakeholders = await this.req("/getStakeHolders", {});
@@ -1195,7 +1193,6 @@ export default {
       // assessmentSubDomainPerYearChartOptions
     },
 
-
     //FOR FINANCE TRACKER
     async financeTracker() {
       const DATA = await this.req("/getDashBoardDistinctFinance", {});
@@ -1219,13 +1216,20 @@ export default {
       })
 
       let NewLegend = [];
+      let FundsRecieved = [];
+      let Expendatitures = [];
 
       filteredData.forEach((i)=> { NewLegend.push(i.finance_name)})
+      filteredData.forEach((i)=> { FundsRecieved.push(i.TotalBudget)})
+      filteredData.forEach((i)=> {Expendatitures.push(i.TotalExpenditure)})
+
       console.log(NewLegend);
 
       //let 
 
       this.financeBarData.yAxis.data = NewLegend;
+      this.financeBarData.series[0].data = Expendatitures;
+      this.financeBarData.series[1].data = FundsRecieved;
 
     },
     ProjectTrackingDocument() {
