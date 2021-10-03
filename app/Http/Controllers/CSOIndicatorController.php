@@ -99,10 +99,9 @@ class CSOIndicatorController extends Controller
             ->where('indicator_no','LIKE','%'.$request['indicator_no'].'%')
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
-        //Log::info("CHECK MATCH Sub #");
-        //Log::info($request['indicator_no']);
-        //Log::info($request['cso_indicator_id']);
-        //Log::info("-----------------");
+        Log::info("CHECK MATCH Sub #");
+        Log::info($request['indicator_no']);
+        Log::info($get_indicator);
 
         return $get_indicator;
     }
@@ -269,7 +268,7 @@ class CSOIndicatorController extends Controller
             // Get just ext
             $extension = $request->file('upload_file')->getClientOriginalExtension();
             // Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'_'.uniqid().'.'.$extension;
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/output_mov',$fileNameToStore);
             $data_array["cso_indicator_mov"] = $fileNameToStore;
@@ -349,7 +348,7 @@ class CSOIndicatorController extends Controller
             // Get just ext
             $extension = $request->file('upload_file')->getClientOriginalExtension();
             // Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'_'.uniqid().'.'.$extension;
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/cso_indicators_mov/'.$get_cso_category->cso_category,$fileNameToStore);
             $data_array["mov_file"] = $fileNameToStore;
@@ -516,3 +515,4 @@ class CSOIndicatorController extends Controller
    
 
 }
+// CSO INDICATOR CONTROLLER

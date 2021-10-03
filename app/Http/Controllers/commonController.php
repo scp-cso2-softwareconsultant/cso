@@ -29,6 +29,22 @@ class commonController extends Controller
         Log::info($get_Dates);
         return $ass_dates;
     }
+
+    public function getDashBoardDistinctFinance(){
+        $get_Dates = DB::table("finance AS f")
+        ->selectRaw(DB::raw('YEAR(f.updated_at) AS year,MONTHNAME(f.updated_at) AS month, f.finance_name, count(f.finance_id) as count, sum(f2.finance_budget) as TotalBudget, f2.finance_budget'))
+        ->leftJoin("finance AS f2","f2.finance_id","f.finance_id")
+        ->whereRaw(DB::raw("f.deleted_at IS NULL"))
+        ->groupBy(DB::raw("f.finance_name"))
+        ->get(['year']);
+        $ass_dates = [];
+        Log::info(json_encode($get_Dates));
+        if($get_Dates)
+            foreach ($get_Dates as $key => $row){
+                $ass_dates[$key] = json_decode(json_encode($row));
+            }
+        return $ass_dates;
+    }
 /*
         select Year(la.assessment_date) as year, las.sub_domain, las.rating from lro_assessment la
         join lro_assessment_sub las on la.lro_assessment_id = las.lro_assessment_id
@@ -532,3 +548,4 @@ class commonController extends Controller
         return Excel::download( (new csoExport)->forTableName($tableName)->forDataExport($dataExport),  $fileName);
     }
 }
+

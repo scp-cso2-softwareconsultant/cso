@@ -10,7 +10,6 @@
         <v-card-title>
           <span class="text-h5">{{ formTitle }}</span>
         </v-card-title>
-
         <v-card-text>
           <v-container dense>
             <v-row class="mt-0">

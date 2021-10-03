@@ -182,6 +182,7 @@
       </v-flex>
     </div>
 
+    <!-- ASSESSMENT -->
     <div class="card p-md-5">
       <h4 class="subheading card-text">Assessment</h4>
       <div class="card-body">
@@ -197,24 +198,34 @@
       </div>
     </div>
 
+    <!-- FINCANCE TRACKER-->
     <div class="card p-md-5">
       <h4 class="subheading card-text">Finance Tracker</h4>
       <v-flex>
-        <v-card class="ma-1">
-          <v-list-item>
-            <v-list-item-content>
-              <h5 class="card-title">Budget vs Actual Expenditures</h5>
-              <div class="text-center">
-                <apexchart
-                  type="line"
-                  height="350"
-                  :options="financeTrackerBudgetChartOptions"
-                  :series="financeTrackerBudgetSeries"
-                ></apexchart>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
+        <v-card class="ma-1 m-3">
+          <v-row class="mt-0">
+            <v-col class='d-flex' cols="12" sm="12" md="12">
+              <v-select
+                chips
+                :items="financeYears"
+                v-model="selectedFinanceYear"
+                @change="financeTracker"
+                label="Select Year"
+                class="m-2"
+              ></v-select>
+              <v-select
+                chips
+                :items="financeMonths"
+                v-model="selectedFinanceMonth"
+                @change="financeTracker"
+                label="Select Month"
+                class="m-2"
+              ></v-select> </v-col
+          ></v-row>
         </v-card>
+        <div class="text-center mt-5 pt-2">
+          <MultiBar :D="financeBarData" />
+        </div>
       </v-flex>
       <v-flex>
         <v-card class="ma-1">
@@ -261,6 +272,7 @@ import PieChart from "../components/dashboard_charts/pie_chart.vue";
 import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
 import BarChart from "../components/dashboard_charts/barchart.vue";
 import RadarChart from "../components/dashboard_charts/radarchart.vue";
+import MultiBar from "../components/dashboard_charts/multi_bar.vue";
 
 export default {
   components: {
@@ -269,6 +281,7 @@ export default {
     DoughnutChart,
     BarChart,
     RadarChart,
+    MultiBar,
   },
   data: () => ({
     responsibleOrganization: [], // Lead Organizations
@@ -462,7 +475,7 @@ export default {
       toolbox: {
         show: true,
         feature: {
-          mark: { show: true }, 
+          mark: { show: true },
           saveAsImage: {
             show: true,
           },
@@ -474,7 +487,7 @@ export default {
         borderColor: "#8C8D8E",
         axisPointer: {
           // Use axis to trigger tooltip
-          type: "shadow", 
+          type: "shadow",
         },
       },
       legend: { show: false },
@@ -528,13 +541,13 @@ export default {
         },
       ],
     },
-
     //radar/spyder chart
     radarData: {
       title: {
         text: "Domain",
         left: "center",
-      },toolbox: {
+      },
+      toolbox: {
         show: true,
         feature: {
           mark: { show: true },
@@ -570,54 +583,105 @@ export default {
         },
       ],
     },
-    CSOProfilePrimaryStakeholderSeries: [
-      {
-        data: [1, 1, 1, 1, 1, 1],
+    //financeBar
+    financeYears: [],
+    selectedFinanceYear: [],
+    financeMonths: [],
+    selectedFinanceMonth: [],
+    financeBarData: {
+      title: {
+        text: "Fund Received vs Actual Expenditures as of --",
       },
-    ],
-    CSOProfilePrimaryStakeholderChartOptions: {
-      chart: {
-        type: "bar",
-        height: 350,
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 4,
-          horizontal: true,
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow",
         },
       },
-      dataLabels: {
-        enabled: false,
+      legend: {
+        bottom: "1",
+        data: ["Actual Expendature", "Funds Received", "Burn Rate"],
       },
-      xaxis: {
-        categories: [
-          "local policy makers",
-          "private sector support organizations and CSRs",
-          "peer CSOs or related networks",
-          "larger CSOs/CSO Network in Manila, Cebu or Davao",
-          "local researchers and scholars",
-          "potential donors",
+      grid: {
+        left: 100,
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          saveAsImage: {},
+        },
+      },
+      xAxis: {
+        type: "value",
+        name: "Days",
+        axisLabel: {
+          //formatter: '{value}'
+        },
+      },
+      yAxis: {
+        type: "category",
+        inverse: true,
+        data: [
+          "Grand Total",
+          "Funds Recieved",
+          "Other Project Direct Cost",
+          "Equipment",
+          "Project Review and Learning Meetings",
+          "Travel",
+          "Fringe Benefits",
+          "Personel",
         ],
+        axisLabel: {
+          formatter: function (value) {
+            return value;
+          },
+        },
       },
-    },
-
-    assessmentSubDomainPerYearSeries: [
-      {
-        name: "Series 1",
-        data: [80, 50, 30, 40, 100, 20],
-      },
-    ],
-    assessmentSubDomainPerYearChartOptions: {
-      chart: {
-        height: 450,
-        type: "radar",
-      },
-      title: {
-        text: "average of SUBDOMAIN, per YEAR",
-      },
-      xaxis: {
-        categories: ["January", "February", "March", "April", "May", "June"],
-      },
+      series: [
+        {
+          name: "Actual Expendature",
+          type: "bar",
+          label: {
+            show: true,
+            textStyle: {
+              color: "white",
+              fontSize: "10",
+            },
+          },
+          itemStyle: {
+            borderRadius: 2,
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+              { offset: 1, color: "#ba9b43" },
+              { offset: 0.5, color: "#dbcd51" },
+              { offset: 0, color: "#ffe70f" },
+            ]),
+          },
+          data: [
+            { value: 14000, text: "37 %" },
+            270,
+            2070,
+            4000,
+            3660,
+            450,
+            1568,
+            4050,
+          ],
+          
+        },
+        {
+          name: "Funds Received",
+          type: "bar",
+          itemStyle: { color: "#5797ff" },
+          label: {
+            show: true,
+            textStyle: {
+              color: "white",
+              fontSize: "10",
+            },
+          },
+          data: [40000, 9000, 7000, 4000, 6000, 3000, 5600, 9000],
+        },
+      ],
     },
 
     financeTrackerBudgetSeries: [
@@ -869,8 +933,8 @@ export default {
       this.updateCSOProfileChart();
       await this.initTop3();
       await this.initPrimaryBar();
-      this.assessment();
-      this.financeTracker();
+      await this.assessment();
+      await this.financeTracker();
       this.ProjectTrackingDocument();
 
       axios.get("/get-lead-organization").then((res) => {
@@ -957,9 +1021,9 @@ export default {
       var constructedObjectMapping = [];
       var constructedObjectMapping2 = [];
 
-      const typeOfSupport = await this.req("/types-of-support");
-      const csoProfile = await this.req("/cso-profile");
-      const accreditation = await this.req("/getAccreditations");
+      const typeOfSupport = await this.req("/types-of-support", {});
+      const csoProfile = await this.req("/cso-profile", {});
+      const accreditation = await this.req("/getAccreditations", {});
 
       typeOfSupport.forEach((i) => {
         constructedObjectMapping.push({ count: 0, tos: i.name });
@@ -1025,8 +1089,8 @@ export default {
     },
     //FOR PRIMARY STAKEHOLDER BARCHART
     async initPrimaryBar() {
-      const Stakeholders = await this.req("/getStakeHolders");
-      const csoProfile = await this.req("/cso-profile");
+      const Stakeholders = await this.req("/getStakeHolders", {});
+      const csoProfile = await this.req("/cso-profile", {});
 
       var yAxis = []; //yAxis lodi
       var data = [];
@@ -1060,17 +1124,17 @@ export default {
     },
 
     //ASYNC REQ
-    async req(url) {
+    async req(url, params) {
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, params);
         return response.data;
       } catch (err) {}
     },
 
     //FOR ASSESSMENT RADAR CHART
     async assessment() {
-      const DATES = await this.req("/getDistinctAssessmentDate");
-      const SUBDOMAIN = await this.req("/getDistinctSubDomain");
+      const DATES = await this.req("/getDistinctAssessmentDate", {});
+      const SUBDOMAIN = await this.req("/getDistinctSubDomain", {});
 
       let constructedDate = [];
       let legends = [];
@@ -1078,41 +1142,50 @@ export default {
 
       let maxScore = 0;
 
-      SUBDOMAIN.forEach((i) => { maxScore = Math.max(maxScore, i.rating); });
-
       SUBDOMAIN.forEach((i) => {
-        let search = indicators.find((obj) => obj.name.toLowerCase() === i.sub_domain.toLowerCase());
-        let idx = indicators.indexOf(search)
-        if(idx === -1)
-          indicators.push({ name: i.sub_domain, max: maxScore });
+        maxScore = Math.max(maxScore, i.rating);
       });
 
-      DATES.forEach((date) => { //date.year
+      SUBDOMAIN.forEach((i) => {
+        let search = indicators.find(
+          (obj) => obj.name.toLowerCase() === i.sub_domain.toLowerCase()
+        );
+        let idx = indicators.indexOf(search);
+        if (idx === -1) indicators.push({ name: i.sub_domain, max: maxScore });
+      });
+
+      DATES.forEach((date) => {
+        //date.year
         let D = Array(indicators.length).fill(0);
         let Div = Array(indicators.length).fill(0);
 
-        SUBDOMAIN.forEach((dom)=>{
-             if(dom.year === date.year){
-             let findObj = indicators.find((obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase());
-             let idx = indicators.indexOf(findObj);
-             if(idx !== -1){
-               D[idx] += dom.rating
-               Div[idx] += 1
-             }
-           }
-        })
+        SUBDOMAIN.forEach((dom) => {
+          if (dom.year === date.year) {
+            let findObj = indicators.find(
+              (obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase()
+            );
+            let idx = indicators.indexOf(findObj);
+            if (idx !== -1) {
+              D[idx] += dom.rating;
+              Div[idx] += 1;
+            }
+          }
+        });
 
-        constructedDate.push({ name: date.year.toString(), value: D , Div : Div});
+        constructedDate.push({
+          name: date.year.toString(),
+          value: D,
+          Div: Div,
+        });
         legends.push(date.year.toString());
       });
 
-      constructedDate.forEach((i)=>{
-        i.value.forEach((ix,idx)=>{
-          if(i.Div[idx] === 0 || i.Div[idx] === 0) return;
-          i.value[idx] /= i.Div[idx]
-        })
-      })
-
+      constructedDate.forEach((i) => {
+        i.value.forEach((ix, idx) => {
+          if (i.Div[idx] === 0 || i.Div[idx] === 0) return;
+          i.value[idx] /= i.Div[idx];
+        });
+      });
 
       this.radarData.series[0].data = constructedDate;
       this.radarData.legend.data = legends;
@@ -1121,11 +1194,39 @@ export default {
       // assessmentSubDomainPerYearSeries
       // assessmentSubDomainPerYearChartOptions
     },
-    financeTracker() {
-      // financeTrackerBudgetSeries
-      // financeTrackerBudgetChartOptions
-      // burnRateSeries
-      // burnRateChartOptions
+
+
+    //FOR FINANCE TRACKER
+    async financeTracker() {
+      const DATA = await this.req("/getDashBoardDistinctFinance", {});
+
+      this.financeYears = DATA.map((item) => item.year);
+      if(this.selectedFinanceYear.length === 0) return;
+
+      for(var x = 0; x < DATA.length ; x++){
+        var month = DATA[x].month
+        var idx = this.financeMonths.indexOf(month)
+        if(idx === -1)
+          this.financeMonths.push(month)
+      }
+
+      if(this.selectedFinanceMonth.length === 0) return;
+      this.financeBarData.title.text = "Fund Received vs Actual Expenditures (" + this.selectedFinanceMonth +", "+this.selectedFinanceYear+")";
+
+
+      let filteredData = DATA.filter((i)=>{
+        return i.year == this.selectedFinanceYear && i.month == this.selectedFinanceMonth
+      })
+
+      let NewLegend = [];
+
+      filteredData.forEach((i)=> { NewLegend.push(i.finance_name)})
+      console.log(NewLegend);
+
+      //let 
+
+      this.financeBarData.yAxis.data = NewLegend;
+
     },
     ProjectTrackingDocument() {
       // projectTrackingDocumentSeries

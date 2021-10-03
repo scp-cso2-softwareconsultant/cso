@@ -101,7 +101,7 @@ class LROAssessmentController extends Controller
             // Get just ext
             $extension = $request->file('upload_file')->getClientOriginalExtension();
             // Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'_'.uniqid().'.'.$extension;
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/lro_assessment',$fileNameToStore);
             $data_array['mov'] = $fileNameToStore;
@@ -170,7 +170,7 @@ class LROAssessmentController extends Controller
             // Get just ext
             $extension = $request->file('upload_file')->getClientOriginalExtension();
             // Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename.'_'.uniqid().'.'.$extension;
             // Upload Image
             $path = $request->file('upload_file')->storeAs('public/lro_assessment/sub',$fileNameToStore);
             $data_array['file_attachment'] = $fileNameToStore;
