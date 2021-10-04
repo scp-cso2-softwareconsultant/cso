@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <h3 class="subheading grey--text">Assessment</h3>
+    <h3 class="subheading grey--text">Assessments</h3>
     <br />
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
@@ -72,7 +72,6 @@
                 ></v-text-field>
               </v-col>
             </v-row> -->
-
             <v-row class="mt-0" v-if="!detailsReadonly">
               <v-col cols="12" sm="12" md="12">
                 <v-select

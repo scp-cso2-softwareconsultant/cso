@@ -205,6 +205,54 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="editedItem.cso_year"
+                          label="Year Established"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <!-- <v-text-field
+                          :readonly="detailsReadonly"
+                          v-model="editedItem.cso_registration"
+                          label="Registration with/Accreditation"
+                          dense
+                        ></v-text-field> -->
+                        <v-col cols="12">
+                          <v-combobox
+                            :readonly="detailsReadonly"
+                            v-model="editedItem.cso_registration"
+                            :items="accreditations"
+                            label="Registration with/Accreditation"
+                            dense
+                            multiple
+                          ></v-combobox>
+                        </v-col>
+                      </v-col>
+                    </v-row>s
+                    <v-row class="mt-0">
+                      <v-col cols="12" sm="12" md="12">
+                        <v-textarea
+                          auto-grow
+                          rows="1"
+                          :readonly="detailsReadonly"
+                          v-model="editedItem.cso_description"
+                          label="Brief CSO/CSO Network description (Vision/Mission). "
+                          dense
+                        >
+                        </v-textarea>
+                      </v-col>
+                    </v-row>
+                    <!--  ================================================================ -->
+                    <!--  ================================================================ -->
+                    <!--  ================================================================ -->
+
                     <!--                                    cso_address : '',-->
                     <v-row class="mt-0">
                       <v-col cols="12" sm="12" md="12">
@@ -354,54 +402,9 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
-
-                    <h5 class="subheading font-weight-black">CSO Background</h5>
-                    <!--                                    cso_year : '',-->
-                    <v-row class="mt-0">
-                      <v-col cols="12" sm="12" md="12">
-                        <v-text-field
-                          :readonly="detailsReadonly"
-                          v-model="editedItem.cso_year"
-                          label="Year Established"
-                          dense
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <!--                                    cso_registration : '',-->
-                    <v-row class="mt-0">
-                      <v-col cols="12" sm="12" md="12">
-                        <!-- <v-text-field
-                          :readonly="detailsReadonly"
-                          v-model="editedItem.cso_registration"
-                          label="Registration with/Accreditation"
-                          dense
-                        ></v-text-field> -->
-                        <v-col cols="12">
-                          <v-combobox
-                            :readonly="detailsReadonly"
-                            v-model="editedItem.cso_registration"
-                            :items="accreditations"
-                            label="Registration with/Accreditation"
-                            dense
-                            multiple
-                          ></v-combobox>
-                        </v-col>
-                      </v-col>
-                    </v-row>
+                    
                     <!--                                    cso_description : '',-->
-                    <v-row class="mt-0">
-                      <v-col cols="12" sm="12" md="12">
-                        <v-textarea
-                          auto-grow
-                          rows="1"
-                          :readonly="detailsReadonly"
-                          v-model="editedItem.cso_description"
-                          label="Brief CSO/CSO Network description (Vision/Mission). "
-                          dense
-                        >
-                        </v-textarea>
-                      </v-col>
-                    </v-row>
+                   
                     <!--                                    cso_beneficiaries : '',-->
                     <v-row class="mt-0">
                       <v-col cols="12" sm="12" md="12">

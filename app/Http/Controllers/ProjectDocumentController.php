@@ -23,68 +23,40 @@ class ProjectDocumentController extends Controller
     }
 
     public function getProjectTrackingDocument(){
-        $project_document = DB::table("project_tracking_document")->get()->first();
-        $first =  [$project_document];
-        $second = [DB::table("project_tracking_objectives")->select('*')->where('project_tracking_document_id',$project_document->id)->get()];
-
-        $collection = collect($first);
-        $merged     = $collection->merge($second);
-        $result[]   = $merged->all();
-
-
-        return $result;
+        $project_document = DB::table("project_tracking_document_history")->get()->last();
+        return  $project_document;
     }
-
+    public function getProjectTrackingDocumentHistory(){
+        $project_document = DB::table("project_tracking_document_history")->orderBy('created_at', 'DESC')->get();
+        return  $project_document;
+    }
     public function saveProjectTrackingDocument(Request $request ) {
         $raw_data = json_decode($request['data']);
-        $userId = Auth::id();
-        $user = User::findOrFail($userId);
-
-        
         $document= "";
-        if( $user->roles_id == 1 ){
-            if(  $raw_data->id ){
-                $document = DB::table('project_tracking_document')->where('id',$raw_data->id )->update(array(
-                    'donor_report' => $raw_data->donor_report,
-                    'actions_or_support' => $raw_data->actions_or_support,
-                    'spent_to_date' => $raw_data->spent_to_date,
-                ));
-            }else{
-                $document = DB::table('project_tracking_document')->insert([
-                    'donor_report' => $raw_data->donor_report,
-                    'actions_or_support' => $raw_data->actions_or_support,
-                    'spent_to_date' => $raw_data->spent_to_date,
-                ]);
-            }
-        }
+        $startDate = ( $raw_data->startDate != '') ? date('y-m-d',strtotime( $raw_data->startDate ) ): '';
+        $curDate = ( $raw_data->curDate != '') ? date('y-m-d',strtotime( $raw_data->curDate ) ): '';
+        $endDate = ( $raw_data->endDate != '') ? date('y-m-d',strtotime( $raw_data->endDate  ) ): '';
+        // 'burnRate' => $raw_data->burnRate != "-.-%" ? (float)$raw_data->burnRate : 0 ,
 
-        $objective = "";
-        foreach ( $raw_data->objective as $key => $row){
-            if( $row->id ){
-                $objective = DB::table('project_tracking_objectives')->where('id', $row->id )->update(array(
-                    'Implementation_vs_target' => $row->Implementation_vs_target,
-                    'Objective' => $row->Objective,
-                    'challanges' => $row->challanges,
-                    'estimated_progress' => $row->estimated_progress,
-                    'indicators' => $row->indicators,
-                    'next_month_planning' => $row->next_month_planning,
-                    "project_tracking_document_id" =>$raw_data->id 
-                ));
-               
-            }else{
-                DB::table('project_tracking_objectives')->insert([
-                    'Implementation_vs_target' => $row->Implementation_vs_target,
-                    'Objective' => $row->Objective,
-                    'challanges' => $row->challanges,
-                    'estimated_progress' => $row->estimated_progress,
-                    'indicators' => $row->indicators,
-                    'next_month_planning' => $row->next_month_planning,
-                    'project_tracking_document_id'=>$raw_data->id
-                ]);
-            }
-        }
+        $document = DB::table('project_tracking_document_history')->insert([
+            'burnRate' => $raw_data->burnRate,
+            'startDate' => $startDate,
+            'curDate' => $curDate,
+            'endDate' => $endDate,
+            'daysCompleted' => $raw_data->daysCompleted,
+            'daysLeft' => $raw_data->daysLeft,
+            'percentComplete' => $raw_data->percentComplete,
+            'remaining' => $raw_data->remaining,
+            'totalBudget' => $raw_data->totalBudget,
+            'objective_1' => $raw_data->objective_1,
+            'objective_2' => $raw_data->objective_2,
+            'objective_3' => $raw_data->objective_3,
+            'spent_to_date' => $raw_data->spent_to_date,
+            "created_at" =>  date('Y-m-d H:i:s'),
+            "updated_at" => date('Y-m-d H:i:s'),
+        ]);
     
-        return $document;
+        return $raw_data;
     }
     public function saveDocument(Request $request){
         $raw_data = json_decode($request['data']);

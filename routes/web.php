@@ -90,7 +90,9 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::post('/save-document', [App\Http\Controllers\ProjectDocumentController::class,'saveDocument'])->name('save-document')->middleware('roles_permission:ProjectTrackingDocuments,create');
         Route::post('/delete-document', [App\Http\Controllers\ProjectDocumentController::class,'deleteDocument'])->name('delete-document')->middleware('roles_permission:ProjectTrackingDocuments,delete');
         Route::get('/get-project-tracking-document', [App\Http\Controllers\ProjectDocumentController::class,'getProjectTrackingDocument'])->name('get-project-tracking-document')->middleware('roles_permission:ProjectTrackingDocuments,view');
+        Route::get('/get-project-tracking-document-history', [App\Http\Controllers\ProjectDocumentController::class,'getProjectTrackingDocumentHistory'])->name('get-project-tracking-document')->middleware('roles_permission:ProjectTrackingDocuments,view');
         Route::post('/save-project-tracking-document', [App\Http\Controllers\ProjectDocumentController::class,'saveProjectTrackingDocument'])->name('save-project-tracking-document')->middleware('roles_permission:ProjectTrackingDocuments,create');
+    
     });
 
 // LMS

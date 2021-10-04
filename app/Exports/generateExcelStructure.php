@@ -32,7 +32,7 @@ class generateExcelStructure implements FromArray, WithHeadings, WithTitle, Shou
     {   
         $map_res = [];
         foreach($this->defaultHeaders as $key => $val){
-           $map_res[] = $row->$val;
+            $map_res[] = $row->$val;
         }
         return $map_res;
     }
