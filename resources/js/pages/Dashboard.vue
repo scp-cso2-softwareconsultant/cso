@@ -220,8 +220,9 @@
                 @change="financeTracker"
                 label="Select Month"
                 class="m-2"
-              ></v-select> </v-col
-          ></v-row>
+              ></v-select> 
+            </v-col>
+          </v-row>
         </v-card>
         <div class="text-center mt-5 pt-2">
           <MultiBar :D="financeBarData" />
@@ -245,6 +246,7 @@
         </v-card>
       </v-flex>
     </div>
+
     <div class="card p-md-5">
       <h4 class="subheading card-text">Project Tracking Document</h4>
       <div class="card-body">
@@ -267,7 +269,6 @@
 import VueApexCharts from "vue-apexcharts";
 
 import * as echarts from "echarts";
-
 import PieChart from "../components/dashboard_charts/pie_chart.vue";
 import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
 import BarChart from "../components/dashboard_charts/barchart.vue";
@@ -1199,11 +1200,14 @@ export default {
       // assessmentSubDomainPerYearChartOptions
     },
 
+    consoleWarn(msg){console.warn(msg); },
+
     //FOR FINANCE TRACKER
     async financeTracker() {
       const DATA = await this.req("/getDashBoardDistinctFinance", {});
-
+  
       this.financeYears = DATA.map((item) => item.year);
+
       if(this.selectedFinanceYear.length === 0) return;
 
       for(var x = 0; x < DATA.length ; x++){
@@ -1221,23 +1225,30 @@ export default {
         return i.year == this.selectedFinanceYear && i.month == this.selectedFinanceMonth
       })
 
-      let NewLegend = [];
-      let FundsRecieved = [];
-      let Expendatitures = [];
+      let NewLegend = ["Grand Total"];
+      let FundsRecieved = [0];
+      let Expenditures = [0];
 
-      filteredData.forEach((i)=> { NewLegend.push(i.finance_name)})
-      filteredData.forEach((i)=> { FundsRecieved.push(i.TotalBudget)})
-      filteredData.forEach((i)=> {Expendatitures.push(i.TotalExpenditure)})
+      filteredData.forEach((i)=> { NewLegend.push(i.finance_name) })
+      filteredData.forEach((i)=> { 
+        FundsRecieved.push(parseFloat(i.TotalBudget));
+        FundsRecieved[0]+= parseFloat(i.TotalBudget)
+      })
+      filteredData.forEach((i)=> { 
+        Expenditures.push(parseFloat(i.TotalExpenditure))
+        Expenditures[0]+= parseFloat(i.TotalExpenditure)
+        //console.log(FundsRecieved, i.TotalExpenditure);
+      })
 
-      console.log(NewLegend);
 
       //let 
 
       this.financeBarData.yAxis.data = NewLegend;
-      this.financeBarData.series[0].data = Expendatitures;
+      this.financeBarData.series[0].data = Expenditures;
       this.financeBarData.series[1].data = FundsRecieved;
 
     },
+
     ProjectTrackingDocument() {
       // projectTrackingDocumentSeries
       // projectTrackingDocumentChartOptions

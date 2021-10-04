@@ -50,13 +50,36 @@
             </v-row>
             <v-row class="mt-0">
               <v-col cols="12" sm="12" md="12">
-                <v-select
+                <!-- <v-select
                   :items="lead_orgs"
                   v-model="editedItem.cso_lead_organization"
                   :rules="[rules.required]"
                   label="Lead Organization *"
                   dense
-                ></v-select>
+                ></v-select> -->
+                <v-combobox
+                            :readonly="detailsReadonly"
+                            :rules="[rules.required]"
+                            v-model="selected_cso_lead_organization"
+                            :items="lead_orgs"
+                            :search-input.sync="search"
+                            hide-selected
+                            label="Lead Organization *"
+                            hint="Hit backspace to delete selected Lead Org"
+                            multiple
+                            persistent-hint
+                            small-chips
+                          >
+                            <template v-slot:no-data>
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    No results matching "<strong>{{ search }}</strong>". Press <kbd>enter</kbd> to create a new one
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </template>
+                          </v-combobox>
               </v-col>
             </v-row>
             <v-row class="mt-0">
@@ -958,6 +981,8 @@ export default {
     frequency_list: [],
     status_list: [],
     lead_orgs: [],
+    selected_cso_lead_organization: [],
+    search: null,
     ppr_list: ["Yes", "No"],
     modelBaselineDate: false,
     modelTargetDate: false,
@@ -1169,7 +1194,12 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    },
+    },selected_cso_lead_organization (val) {
+          if (val.length > 1) {
+            this.$nextTick(() => this.selected_cso_lead_organization.pop())
+            this.$noty.error("You can only have 1 Lead Organization")
+          }
+        },
   },
 
   created() {
@@ -1277,7 +1307,8 @@ export default {
           return false;
         }
       } catch (error) {
-        console.log(error);
+        this.btnLoader = false;
+        //console.log(error);
       }
     },
     setFilterByStatus(status) {
@@ -1412,6 +1443,7 @@ export default {
       this.isEditting = true;
       this.isAddingNew = false;
       this.editedIndex = this.indicators_list.indexOf(item);
+      this.selected_cso_lead_organization = [{text:item.cso_lead_organization , value:item.cso_lead_organization}]
       this.editedItem = Object.assign({}, item);
 
       let objectives = [];
@@ -1527,6 +1559,7 @@ export default {
         this.editedIndex = -1;
       });
       this.cso_objective = [];
+      this.selected_cso_lead_organization = []
       this.file_name = [];
       this.isEditting = false;
     },
@@ -1573,11 +1606,6 @@ export default {
         validate = false;
       }
 
-      if (!this.editedItem.cso_lead_organization) {
-        this.$noty.error("Lead Organization is empty!");
-        validate = false;
-      }
-
       if (!this.editedItem.cso_act_no && validate) {
         this.$noty.error("Activity # is empty!");
         validate = false;
@@ -1611,6 +1639,18 @@ export default {
         }
       }
 
+      if(this.selected_cso_lead_organization.length === 0){
+        this.validate = false;
+        this.$noty.error("Name is Empty!");
+      }else{
+        if(Object.prototype.toString.call(this.selected_cso_lead_organization[0]) === '[object Object]'){
+          this.editedItem.cso_lead_organization = this.selected_cso_lead_organization[0].value
+        }
+        else{
+          this.editedItem.cso_lead_organization = this.selected_cso_lead_organization[0]
+        }
+      }
+
       if (validate) {
         var formData = new FormData();
         if (this.file_name.length === 0)
@@ -1633,6 +1673,7 @@ export default {
           } else {
             this.close();
           }
+          this.btnLoader = false;
         });
       } else {
         this.btnLoader = false;

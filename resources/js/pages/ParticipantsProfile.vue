@@ -589,7 +589,7 @@ export default {
         deleteItemConfirm () {
             this.btnLoader = true;
             this.lmsList.splice(this.editedIndex, 1)
-            console.log(this.delete_lms)
+            //console.log(this.delete_lms)
             axios.post('/delete-participants-profile', {
                 delete_id: this.delete_lms
             }).then(response => {
