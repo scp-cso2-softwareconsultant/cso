@@ -1253,7 +1253,6 @@ export default {
     burnRate(){
       const finance_tracker = axios.get('/dashboard-finance-tracker');
       const lead_organization = axios.get('/get-lead-organization');
-      console.log("HElloo world")
       axios.all([finance_tracker, lead_organization ]).then(axios.spread((...responses) => {
         var finance_tracker_data = responses[0].data;
         const lead_organization_data = responses[1].data;
@@ -1300,8 +1299,6 @@ export default {
             categories : burnRateNames
           }
         }
-        console.log( burnRateNames);
-        console.log( {burnRate1,burnRate2,burnRate3,burnRate4})
         this.burnRateChartOptions.xaxis.categories = burnRateNames;
         this.burnRateSeries = [
           {
@@ -1320,7 +1317,7 @@ export default {
           }
         ]
       })).catch(errors => {
-        console.log(errors)
+        // console.log(errors)
       })
     },
     roundUp(num){
