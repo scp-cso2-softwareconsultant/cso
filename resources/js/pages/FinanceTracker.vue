@@ -1261,6 +1261,7 @@ export default {
                             }
                             this.close();
                         } else {
+                            this.btnLoader = false;
                             this.close();
                         }
                         this.btnLoader = false;

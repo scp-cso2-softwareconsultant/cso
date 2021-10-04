@@ -321,7 +321,7 @@
                     @click:close="removeFile"
                   >
                     <v-icon left> mdi-file </v-icon>
-                    {{ file_name }}
+                    {{ limitChipName(file_name) }}
                   </v-chip>
                 </div>
                 <div v-else>

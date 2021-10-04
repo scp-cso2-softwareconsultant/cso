@@ -1414,7 +1414,7 @@ export default {
       }
     },
     exportExcel: function (tableName, value) {
-      console.log(tableName)
+      //console.log(tableName)
       this.btnLoader = true;
       let filename = tableName + ".xlsx";
       var formData = new FormData();

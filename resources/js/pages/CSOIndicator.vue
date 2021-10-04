@@ -60,7 +60,7 @@
                 <v-combobox
                             :readonly="detailsReadonly"
                             :rules="[rules.required]"
-                            v-model="selected_finance_name"
+                            v-model="selected_cso_lead_organization"
                             :items="lead_orgs"
                             :search-input.sync="search"
                             hide-selected
@@ -981,7 +981,7 @@ export default {
     frequency_list: [],
     status_list: [],
     lead_orgs: [],
-    selected_finance_name: [],
+    selected_cso_lead_organization: [],
     search: null,
     ppr_list: ["Yes", "No"],
     modelBaselineDate: false,
@@ -1194,9 +1194,9 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    },selected_finance_name (val) {
+    },selected_cso_lead_organization (val) {
           if (val.length > 1) {
-            this.$nextTick(() => this.selected_finance_name.pop())
+            this.$nextTick(() => this.selected_cso_lead_organization.pop())
             this.$noty.error("You can only have 1 Lead Organization")
           }
         },
@@ -1443,7 +1443,7 @@ export default {
       this.isEditting = true;
       this.isAddingNew = false;
       this.editedIndex = this.indicators_list.indexOf(item);
-      this.selected_finance_name = [{text:item.cso_lead_organization , value:item.cso_lead_organization}]
+      this.selected_cso_lead_organization = [{text:item.cso_lead_organization , value:item.cso_lead_organization}]
       this.editedItem = Object.assign({}, item);
 
       let objectives = [];
@@ -1559,7 +1559,7 @@ export default {
         this.editedIndex = -1;
       });
       this.cso_objective = [];
-      this.selected_finance_name = []
+      this.selected_cso_lead_organization = []
       this.file_name = [];
       this.isEditting = false;
     },
@@ -1639,15 +1639,15 @@ export default {
         }
       }
 
-      if(this.selected_finance_name.length === 0){
+      if(this.selected_cso_lead_organization.length === 0){
         this.validate = false;
         this.$noty.error("Name is Empty!");
       }else{
-        if(Object.prototype.toString.call(this.selected_finance_name[0]) === '[object Object]'){
-          this.editedItem.cso_lead_organization = this.selected_finance_name[0].value
+        if(Object.prototype.toString.call(this.selected_cso_lead_organization[0]) === '[object Object]'){
+          this.editedItem.cso_lead_organization = this.selected_cso_lead_organization[0].value
         }
         else{
-          this.editedItem.cso_lead_organization = this.selected_finance_name[0]
+          this.editedItem.cso_lead_organization = this.selected_cso_lead_organization[0]
         }
       }
 
@@ -1673,6 +1673,7 @@ export default {
           } else {
             this.close();
           }
+          this.btnLoader = false;
         });
       } else {
         this.btnLoader = false;
