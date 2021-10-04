@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+//use Illuminate\Support\Facades\Log;
 class ProjectDocumentController extends Controller
 {
     public function getDocument(){
@@ -21,6 +22,8 @@ class ProjectDocumentController extends Controller
 
         return $document_list;
     }
+
+    // Font Ligatures
 
     public function getProjectTrackingDocument(){
         $project_document = DB::table("project_tracking_document_history")->get()->last();
