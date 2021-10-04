@@ -939,6 +939,7 @@ export default {
       await this.initPrimaryBar();
       await this.assessment();
       await this.financeTracker();
+      this.burnRate();
       this.ProjectTrackingDocument();
 
       axios.get("/get-lead-organization").then((res) => {
@@ -1247,11 +1248,116 @@ export default {
       this.financeBarData.series[0].data = Expenditures;
       this.financeBarData.series[1].data = FundsRecieved;
 
+      
     },
-
+    burnRate(){
+      const finance_tracker = axios.get('/dashboard-finance-tracker');
+      const lead_organization = axios.get('/get-lead-organization');
+      console.log("HElloo world")
+      axios.all([finance_tracker, lead_organization ]).then(axios.spread((...responses) => {
+        var finance_tracker_data = responses[0].data;
+        const lead_organization_data = responses[1].data;
+        var approved_budget = [];
+        var actual_expenditure = [];
+        var budget_remaining = [];
+        var burn_rate = [];
+        var burnRateSeries = []
+        var burnRate1 = []
+        var burnRate2 = []
+        var burnRate3 = []
+        var burnRate4 = []
+        var burnRateNames = []
+        var used = {};
+        
+        for( const index in finance_tracker_data ){
+          const finance = finance_tracker_data[index];
+          const budget =  this.roundUp(parseFloat(finance['finance_budget']) );
+          const actuals = this.roundUp(parseFloat(finance['finance_actuals']));
+          const burnRate1Value = this.roundUp(parseFloat(finance['finance_burn1']));
+          const burnRate2Value = this.roundUp(parseFloat(finance['finance_burn2']));
+          const burnRate3Value = this.roundUp(parseFloat(finance['finance_burn3']));
+          const burnRate4Value = this.roundUp(parseFloat(finance['finance_burn4']));
+          let name =  finance_tracker_data[index]['finance_name']; 
+          let newName = name;
+          while (used[newName])  newName = `${name}(${used[name]++})`;
+          used[newName] = 1;
+          
+          approved_budget.push( budget )
+          actual_expenditure.push( actuals )
+          budget_remaining.push(  this.roundUp(budget-actuals)  )
+          burn_rate.push(   this.roundUp(actuals/budget) )
+        
+          burnRate1.push( burnRate1Value );
+          burnRate2.push( burnRate2Value );
+          burnRate3.push( burnRate3Value );
+          burnRate4.push( burnRate4Value );
+          burnRateNames.push(newName);
+          
+        }
+        this.burnRateChartOptions = {
+          ...this.burnRateChartOptions,
+          xaxis:{
+            categories : burnRateNames
+          }
+        }
+        console.log( burnRateNames);
+        console.log( {burnRate1,burnRate2,burnRate3,burnRate4})
+        this.burnRateChartOptions.xaxis.categories = burnRateNames;
+        this.burnRateSeries = [
+          {
+            name: "Burn Rate (1st Liq)",
+            data: burnRate1,
+          },
+          {
+            name: "Burn Rate (2st Liq)",
+            data: burnRate2,
+          }, {
+            name: "Burn Rate (3st Liq)",
+            data: burnRate3,
+          }, {
+            name: "Burn Rate (4st Liq)",
+            data: burnRate4,
+          }
+        ]
+      })).catch(errors => {
+        console.log(errors)
+      })
+    },
+    roundUp(num){
+      return Math.round((num + Number.EPSILON) * 100) / 100
+    },
     ProjectTrackingDocument() {
-      // projectTrackingDocumentSeries
-      // projectTrackingDocumentChartOptions
+
+      axios.get('/get-project-tracking-document-history').then(response => {
+        const data = response.data;
+        var date_selection = [];
+        var editedItemList = {};
+
+        for (const index in data) {
+            const value = data[index].id;
+            const text = "# " + data[index].id + " - " + data[index].created_at;
+            date_selection.push({
+                value,
+                text
+            })
+            editedItemList[value] = data[index];
+        }
+        this.date_selection = date_selection;
+        this.editedItemList = editedItemList;
+
+        this.editedItem = data[0];
+        const selected_latest = date_selection[data[0].id];
+
+        this.projectTrackingDocumentSeries = [{
+            data: [
+                this.editedItem.percentComplete,
+                this.editedItem.burnRate,
+                this.editedItem.objective_1,
+                this.editedItem.objective_2,
+                this.editedItem.objective_3,
+            ]
+        }]
+    })
     },
     generateDayWiseTimeSeries: function (baseval, count, yrange) {
       var i = 0;
