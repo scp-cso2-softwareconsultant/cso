@@ -89,7 +89,7 @@ class LROAssessmentController extends Controller
         $data_array['conducted_by'] = $raw_data->conducted_by;
         $data_array['tool_used'] = $raw_data->tool_used;
         $data_array['assessment_date'] = ($raw_data->assessment_date != '') ? $raw_data->assessment_date : NULL;
-        
+        $data_array['org_address'] = $raw_data->org_address;
         //$lro_ID = DB::table('users')->where('id',$userId )->value('roles_id')
 
         if($request->hasFile('upload_file')){

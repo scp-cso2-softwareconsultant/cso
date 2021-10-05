@@ -74,6 +74,27 @@
             </v-row> -->
             <v-row class="mt-0" v-if="!detailsReadonly">
               <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  :items="cso_name_items"
+                  v-model="editedItem.org_address"
+                  label="Address *"
+                  dense
+                  :rules="[rules.required]"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row class="mt-0" v-if="detailsReadonly">
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  v-model="editedItem.org_address"
+                  label="Address *"
+                  dense
+                  readonly
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row class="mt-0" v-if="!detailsReadonly">
+              <v-col cols="12" sm="12" md="12">
                 <v-select
                   :items="tool_list"
                   v-model="editedItem.tool_used"
@@ -1005,6 +1026,7 @@ export default {
     editedIndex: -1,
     editedItem: {
       lro_id: "",
+      org_address:"",
       proj_area: "",
       domain: "",
       tool_used: "",
@@ -1016,6 +1038,7 @@ export default {
     },
     defaultItem: {
       lro_id: "",
+      org_address:"",
       proj_area: "",
       domain: "",
       tool_used: "",
