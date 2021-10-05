@@ -25,13 +25,10 @@ class exportMult implements FromArray, WithMultipleSheets
     public function sheets(): array
     {
         $sheets = [];
-        //$sheets [] = new generateExcelStructure($this->sheets[0]->data);
         foreach ($this->sheets_data as $key => $val){ 
             Log::info("PASSING ".json_encode($val));
             $sheets[] = new generateExcelStructure($val);
         }
-            //Log::info("TIHIS HAHAD ".json_encode($this->sheets_data[0]->data));
-
         return $sheets;
     }
 }

@@ -250,7 +250,7 @@ class commonController extends Controller
 
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
 
-                    $data2 -> dataHeaders = ["SUB OF","SUB ACTIVITY NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data2 -> dataHeaders = ["SUB OF","SUB ACTIVITY NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
                     $data2 -> data = $result2;
                     $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
@@ -282,7 +282,7 @@ class commonController extends Controller
 
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
 
-                    $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
                     $data2 -> data = $result2;
                     $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
@@ -314,7 +314,7 @@ class commonController extends Controller
 
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
 
-                    $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
+                    $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
                     $data2 -> data = $result2;
                     $dataExport->SH_DATA[1] = json_decode(json_encode($data2));

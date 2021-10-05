@@ -4,7 +4,7 @@
     <br />
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
-        <v-card-title>
+        <v-card-title class="text-h5 font-weight-regular blue-grey darken-3 white--text">
           <span class="text-h5" v-if="!detailsReadonly">{{ formTitle }}</span>
           <span class="text-h5" v-else>Assessment Details</span>
         </v-card-title>
@@ -232,14 +232,13 @@
             </v-row>
           </v-container>
         </v-card-text>
-
-        <v-card-actions v-if="!detailsReadonly">
+        <v-card-actions class="blue-grey darken-3 white--text" v-if="!detailsReadonly">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close" dense>
+          <v-btn color="red lighten-5" text @click="close" dense>
             Cancel
           </v-btn>
           <v-btn
-            color="blue darken-1"
+            color="blue lighten-5"
             text
             @click="save"
             :loading="btnLoader"
@@ -251,19 +250,18 @@
       </v-card>
     </v-dialog>
     <v-dialog v-model="dialogDelete" max-width="500px">
-      <v-card>
-        <v-card-title class="text-h5"
-          >Are you sure you want to delete this item?</v-card-title
-        >
+      <v-card color="blue-grey darken-3">
+          <v-alert text color="red lighten-3" prominent type="error" icon="mdi-alert">Are you sure you want to delete this item?</v-alert>
+        <!-- <v-card-title class="text-h5 white--text">Are you sure you want to delete this item?</v-card-title> -->
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="closeDelete">No</v-btn>
           <v-btn
             color="blue darken-1"
             text
             @click="deleteItemConfirm"
             :loading="btnLoader"
-            >OK</v-btn
+            >Yes</v-btn
           >
           <v-spacer></v-spacer>
         </v-card-actions>
@@ -271,10 +269,9 @@
     </v-dialog>
     <v-dialog v-model="subdialog" max-width="500px">
       <v-card>
-        <v-card-title>
+        <v-card-title class="text-h5 font-weight-regular blue-grey darken-3 white--text">
           <span class="text-h5">{{ formSubTitle }}</span>
         </v-card-title>
-
         <v-card-text>
           <v-container dense>
             <v-row class="mt-0">
@@ -352,13 +349,13 @@
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions v-if="!detailsReadonly">
+        <v-card-actions class="blue-grey darken-3 white--text" v-if="!detailsReadonly">
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="closeSub" dense>
             Cancel
           </v-btn>
           <v-btn
-            color="blue darken-1"
+            color="blue lighten-5"
             text
             @click="saveSub"
             dense

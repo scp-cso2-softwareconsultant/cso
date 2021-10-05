@@ -28,7 +28,7 @@
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title>
+                <v-card-title  class="text-h5 font-weight-regular blue-grey darken-3 white--text">
                   <span class="text-h5" v-if="!detailsReadonly">{{
                     formTitle
                   }}</span>
@@ -234,8 +234,8 @@
                             multiple
                           ></v-combobox>
                         </v-col>
-                      </v-col>
-                    </v-row>s
+                      </v-col> </v-row
+                    >s
                     <v-row class="mt-0">
                       <v-col cols="12" sm="12" md="12">
                         <v-textarea
@@ -402,9 +402,9 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
-                    
+
                     <!--                                    cso_description : '',-->
-                   
+
                     <!--                                    cso_beneficiaries : '',-->
                     <v-row class="mt-0">
                       <v-col cols="12" sm="12" md="12">
@@ -711,13 +711,13 @@
                   </v-container>
                 </v-card-text>
 
-                <v-card-actions>
+                <v-card-actions class=" blue-grey darken-3 white--text">
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">
+                  <v-btn color="blue lighten-5" text @click="close">
                     Cancel
                   </v-btn>
                   <v-btn
-                    color="blue darken-1"
+                    color="blue lighten-5"
                     text
                     @click="save"
                     :loading="btnLoader"
@@ -728,21 +728,27 @@
               </v-card>
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="500px">
-              <v-card>
-                <v-card-title class="text-h5"
-                  >Are you sure you want to delete this item?</v-card-title
+              <v-card color="blue-grey darken-3">
+                <v-alert
+                  text
+                  color="red lighten-3"
+                  prominent
+                  type="error"
+                  icon="mdi-alert"
+                  >Are you sure you want to delete this item?</v-alert
                 >
+                <!-- <v-card-title class="text-h5 white--text">Are you sure you want to delete this item?</v-card-title> -->
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDelete"
-                    >Cancel</v-btn
+                  <v-btn color="blue lighten-5" text @click="closeDelete"
+                    >No</v-btn
                   >
                   <v-btn
-                    color="blue darken-1"
+                    color="blue lighten-5"
                     text
                     @click="deleteItemConfirm"
                     :loading="btnLoader"
-                    >OK</v-btn
+                    >Yes</v-btn
                   >
                   <v-spacer></v-spacer>
                 </v-card-actions>
@@ -1182,17 +1188,17 @@ export default {
       axios.get("/getStakeHolders").then((response) => {
         this.stakeholders = response.data;
       });
-      axios.get("/getAccreditations").then((response)=>{
+      axios.get("/getAccreditations").then((response) => {
         this.accreditations = response.data;
-      })
+      });
       axios.get("/cso-profile").then((response) => {
         var toParse = response.data;
         toParse.forEach((i) => {
           var parsed = i.cso_stakeholders.split("^^");
-          var parsed2 = i.cso_registration.split("^^")
+          var parsed2 = i.cso_registration.split("^^");
 
-          var constructed = []
-          var constructed2 = []
+          var constructed = [];
+          var constructed2 = [];
 
           parsed.forEach((item) => {
             if (item.length === 0) return;
@@ -1204,8 +1210,8 @@ export default {
             constructed2.push({ value: item, text: item });
           });
 
-          i.cso_stakeholders = constructed
-          i.cso_registration = constructed2
+          i.cso_stakeholders = constructed;
+          i.cso_registration = constructed2;
         });
 
         this.cso_profile_list = toParse;
@@ -1380,13 +1386,14 @@ export default {
         // we cant edit editedItem directly because it is bind to combobox which require
         // an array, so we made a copy
         var editedITEM = Object.assign({}, this.editedItem);
-        var t = "", t2 = "";
+        var t = "",
+          t2 = "";
 
         editedITEM.cso_stakeholders.forEach((stakeholder) => {
-            t += "^^" + stakeholder.text;
+          t += "^^" + stakeholder.text;
         });
         editedITEM.cso_registration.forEach((registration) => {
-            t2 += "^^" + registration.text;
+          t2 += "^^" + registration.text;
         });
 
         editedITEM.cso_stakeholders = t.substring(2);
@@ -1402,7 +1409,6 @@ export default {
               this.initialize();
               if (this.editedIndex < 0) {
                 this.$noty.success("Successfully Added.");
-
               } else {
                 this.$noty.success("Successfully Updated.");
               }
