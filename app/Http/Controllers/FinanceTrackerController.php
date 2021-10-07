@@ -72,13 +72,6 @@ class FinanceTrackerController extends Controller
         if($form_mode < 0) {
             $insertData = DB::table('finance')->insert([
                 'finance_name' => $raw_data->finance_name,
-                'finance_code' => $raw_data->finance_code,
-                'finance_location' => $raw_data->finance_location,
-                'finance_cost_center' => $raw_data->finance_cost_center,
-                'finance_project_code' => $raw_data->finance_project_code,
-                'finance_sof' => $raw_data->finance_sof,
-                'finance_dea' => $raw_data->finance_dea,
-                'finance_partner' => $raw_data->finance_partner,
                 'finance_budget' => $finance_budget,
                 'finance_tranche1' => $finance_tranche1,
                 'finance_tranche2' => $finance_tranche2,
@@ -107,13 +100,6 @@ class FinanceTrackerController extends Controller
             $updateData = DB::table('finance')->where('finance_id',$raw_data->finance_id)
                 ->update(array(
                     'finance_name' => $raw_data->finance_name,
-                    'finance_code' => $raw_data->finance_code,
-                    'finance_location' => $raw_data->finance_location,
-                    'finance_cost_center' => $raw_data->finance_cost_center,
-                    'finance_project_code' => $raw_data->finance_project_code,
-                    'finance_sof' => $raw_data->finance_sof,
-                    'finance_dea' => $raw_data->finance_dea,
-                    'finance_partner' => $raw_data->finance_partner,
                     'finance_budget' => $finance_budget,
                     'finance_tranche1' => $finance_tranche1,
                     'finance_tranche2' => $finance_tranche2,

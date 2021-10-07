@@ -90,10 +90,21 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 break;
             case "FinanceTracker":
                 $header = [
-                            'CODE', 'NAME', 'LOCATION', 'COST CENTER', 'PROJECT CODE', 'SOF', 'DEA', 'PARTNERS NAME',
-                            'BUDGET', '1ST TRANCHE', '2ND TRANCHE', '3RD TRANCHE', '4TH TRANCHE', 'RETENTION', 'TOTAL',
-                            'ACTUALS', 'VARIANCE', 'BURN RATE (1ST LIQ)', 'BURN RATE (2ND LIQ)', 'BURN RATE (3RD LIQ)',
-                            'BURN RATE (4TH LIQ)', 'BURN RATE (TOTAL)'
+                            'NAME', 
+                            'BUDGET', 
+                            '1ST TRANCHE', 
+                            '2ND TRANCHE', 
+                            '3RD TRANCHE', 
+                            '4TH TRANCHE', 
+                            'RETENTION', 
+                            'TOTAL',
+                            'ACTUALS', 
+                            'VARIANCE', 
+                            'BURN RATE (1ST LIQ)', 
+                            'BURN RATE (2ND LIQ)', 
+                            'BURN RATE (3RD LIQ)',
+                            'BURN RATE (4TH LIQ)', 
+                            'BURN RATE (TOTAL)'
                         ];
                 break;
             case "ProjectTrackingDocument":

@@ -386,20 +386,13 @@ class commonController extends Controller
                 break;
             case "FinanceTracker":
                 $dataExport = DB::table("finance")->select(
-                    DB::raw("finance_code,
+                    DB::raw("
                                 finance_name,
-                                finance_location,
-                                finance_cost_center,
-                                finance_project_code,
-                                finance_sof,
-                                finance_dea,
-                                finance_partner,
                                 finance_budget,
                                 finance_tranche1,
                                 finance_tranche2,
                                 finance_tranche3,
                                 finance_tranche4,
-                                finance_retention,
                                 finance_total,
                                 finance_actuals,
                                 finance_variance,
