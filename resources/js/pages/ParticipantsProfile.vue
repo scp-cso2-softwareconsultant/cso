@@ -57,8 +57,8 @@
                                     </v-row>
                                     <v-row class="mt-0" v-if="detailsReadonly">
                                         <v-col cols="12" sm="12" md="12">
-                                            <v-text-field v-model="editedItem.cso_name" label="Name of LRO *" dense
-                                                readonly></v-text-field>
+                                            <v-select :readonly="detailsReadonly" :items="cso_name_items" v-model="editedItem.lro_id"
+                                                label="Name of LRO *" dense :rules="[rules.required]"></v-select>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0" v-if="!detailsReadonly">

@@ -42,7 +42,7 @@
                                                         v-model="editedItem.course_name" label="Course Name *" dense></v-text-field>
                                         </v-col>
                                     </v-row>
-                                    <v-row class="mt-0" v-if="!detailsReadonly">
+                                    <v-row class="mt-0" >
                                         <v-col cols="12" sm="12" md="12">
                                             <v-menu
                                             ref="model_training_date"
@@ -57,13 +57,14 @@
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field
                                                 v-model="editedItem.training_date"
-                                                label="Assessment Date"
+                                                label="Date of Training"
                                                 persistent-hint
                                                 append-outer-icon="mdi-calendar"
                                                 v-bind="attrs"
                                                 v-on="on"
+                                                :readonly="detailsReadonly"
                                                 dense
-                                                ></v-text-field>
+                                            ></v-text-field>
                                             </template>
                                             <v-date-picker
                                                 v-model="editedItem.training_date"

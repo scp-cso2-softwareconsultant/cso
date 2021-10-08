@@ -71,16 +71,26 @@ class CSOProfileController extends Controller
         $user_name = $user->firstname . ' '. $user->lastname;
         if($form_mode < 0) {
             $insertData = DB::table('cso_profile')->insert([
+                
                 'cso_id' => $cso_ID,
-                'is_lro' => $raw_data->is_lro,
-                'type_of_support'=> $raw_data->type_of_support,
-                'cso_name' => $raw_data->cso_name,
-                'cso_type' => $raw_data->cso_type,
-                'cso_year' => $raw_data->cso_year,
-                'cso_registration' => $raw_data->cso_registration,
-                'cso_description' => $raw_data->cso_description,
-                'cso_beneficiaries' => $raw_data->cso_beneficiaries,
-                'cso_stakeholders' => $raw_data->cso_stakeholders,
+                "cso_year" => $raw_data->cso_year,
+                "cso_sec_registration_no" => $raw_data->cso_sec_registration_no,
+                "cso_registration" => $raw_data->cso_registration,
+                "cso_description" => $raw_data->cso_description,
+                "cso_core_service" => $raw_data->cso_core_service,
+                "cso_thematic_areas" => $raw_data->cso_thematic_areas,
+                "cso_beneficiaries" => $raw_data->cso_beneficiaries,
+                "cso_membership_non_government" => $raw_data->cso_membership_non_government,
+                "cso_membership_government" => $raw_data->cso_membership_government,
+                "cso_current_donors" => $raw_data->cso_current_donors,
+                "cso_size_funding_portfolio" => $raw_data->cso_size_funding_portfolio,
+                "cso_number_staff" => $raw_data->cso_number_staff,
+                "cso_number_networ_members" => $raw_data->cso_number_networ_members,
+                "cso_stakeholders" => $raw_data->cso_stakeholders,
+                "is_lro" => $raw_data->is_lro,
+                "type_of_support" => $raw_data->type_of_support,
+                "cso_name" => $raw_data->cso_name,
+                "cso_type" => $raw_data->cso_type,
                 
                 'created_by' => $user_name
             ]);
@@ -91,16 +101,25 @@ class CSOProfileController extends Controller
             $updateData = DB::table('cso_profile')->where('cso_profile_id',$raw_data->cso_profile_id)
                 ->update(array(
                     'cso_id' => $raw_data -> cso_id,
-                    'is_lro' => $raw_data->is_lro,
-                    'type_of_support'=> $raw_data->type_of_support,
-                    'latitude'=> $raw_data->latitude,
-                    'cso_name' => $raw_data->cso_name,
-                    'cso_type' => $raw_data->cso_type,
-                    'cso_year' => $raw_data->cso_year,
-                    'cso_registration' => $raw_data->cso_registration,
-                    'cso_description' => $raw_data->cso_description,
-                    'cso_beneficiaries' => $raw_data->cso_beneficiaries,
-                    'cso_stakeholders' => $raw_data->cso_stakeholders,
+                    
+                    "cso_year" => $raw_data->cso_year,
+                    "cso_sec_registration_no" => $raw_data->cso_sec_registration_no,
+                    "cso_registration" => $raw_data->cso_registration,
+                    "cso_description" => $raw_data->cso_description,
+                    "cso_core_service" => $raw_data->cso_core_service,
+                    "cso_thematic_areas" => $raw_data->cso_thematic_areas,
+                    "cso_beneficiaries" => $raw_data->cso_beneficiaries,
+                    "cso_membership_non_government" => $raw_data->cso_membership_non_government,
+                    "cso_membership_government" => $raw_data->cso_membership_government,
+                    "cso_current_donors" => $raw_data->cso_current_donors,
+                    "cso_size_funding_portfolio" => $raw_data->cso_size_funding_portfolio,
+                    "cso_number_staff" => $raw_data->cso_number_staff,
+                    "cso_number_networ_members" => $raw_data->cso_number_networ_members,
+                    "cso_stakeholders" => $raw_data->cso_stakeholders,
+                    "is_lro" => $raw_data->is_lro,
+                    "type_of_support" => $raw_data->type_of_support,
+                    "cso_name" => $raw_data->cso_name,
+                    "cso_type" => $raw_data->cso_type,
                     
                     'updated_at' => date("Y-m-d h:i:s"),
                     'updated_by' => $user_name

@@ -11,7 +11,6 @@
                     Courses
                 </v-tab>
             </v-tabs>
-
             <v-tabs-items v-model="LMSTab">
                 <v-tab-item :key="1" value="ParticipantsProfile">
                     <ParticipantProfile></ParticipantProfile>

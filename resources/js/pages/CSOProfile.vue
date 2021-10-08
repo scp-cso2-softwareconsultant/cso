@@ -45,6 +45,12 @@
                                         </v-row>
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_sec_registration_no"
+                                                    label="SEC Registration Number" dense></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
                                                 <v-combobox :readonly="detailsReadonly"
                                                     v-model="editedItem.cso_registration" :items="accreditations"
                                                     label="Registration with/Accreditation" multiple>
@@ -61,11 +67,62 @@
                                         </v-row>
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
+                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_core_service"
+                                                    label="Core Service and Programs (i.e. policy advocacy, training, research)" dense>
+                                                </v-textarea>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_thematic_areas"
+                                                    label="Thematic Areas of Work (i.e. climate, gender, housing, etc.)" dense>
+                                                </v-textarea>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
                                                 <v-text-field :readonly="detailsReadonly"
                                                     v-model="editedItem.cso_beneficiaries" label="Beneficiaries" dense>
                                                 </v-text-field>
                                             </v-col>
                                         </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_membership_non_government" label="Membership in Networks, Alliances, Consortia (Non-Government)" dense>
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_membership_government" label=" Membership in local initiated local bodies, Technical Working Groups, etc. (Government)" dense>
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_current_donors" label="  Current Donors (Institutional Aid Agencies, Private Sector Groups, Government)" dense>
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <div class="overline text-left">
+                                                    <vuetify-money 
+                                                        v-model="editedItem. cso_size_funding_portfolio" 
+                                                        label="Size of Funding Portfolio (in PhP) : "
+                                                        v-bind:options="cso_size_funding_portfolio_options"  
+                                                    />
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+                            
+
+
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-combobox v-model="editedItem.cso_stakeholders"
@@ -205,7 +262,18 @@
     </v-app>
 </template>
 <script>
+    import VueNumeric from "vue-numeric";
+    const days360 = require("days360");
+    import ProjectTrackingDocumentModal from "./ProjectTrackingModal";
+    import VueApexCharts from "vue-apexcharts";
+
+    import Vue from "vue";
+    import VueNoty from "vuejs-noty";
+    Vue.use(VueNoty);
     export default {
+        components: {
+            VueNumeric
+        },
         data: () => ({
             btnLoader: false,
             dialog: false,
@@ -216,6 +284,13 @@
             isEditting: false,
             isAddingNew: false,
             editedItemCopy: {},
+            cso_size_funding_portfolio_options: {
+                locale: "en-US",
+                prefix: "₱",
+                suffix: "",
+                length: 11,
+                precision: 2,
+            },
             crud_guard: {
                 create: 0,
                 delete: 0,
@@ -376,21 +451,40 @@
             editedItem: {
                 cso_id: "",
                 cso_year: "",
+                cso_sec_registration_no:"",
                 cso_registration: "",
                 cso_description: "",
+                cso_core_service:"",
+                cso_thematic_areas:"",
                 cso_beneficiaries: "",
+                cso_membership_non_government:"",
+                cso_membership_government:"",
+                cso_current_donors:"",
+                cso_size_funding_portfolio:"",
+                cso_number_staff:"",
+                cso_number_networ_members:"",
                 cso_stakeholders: "",
                 is_lro: "",
                 type_of_support: "",
                 cso_name: "",
                 cso_type: "",
+
             },
             defaultItem: {
                 cso_id: "",
                 cso_year: "",
+                cso_sec_registration_no:"",
                 cso_registration: "",
                 cso_description: "",
+                cso_core_service:"",
+                cso_thematic_areas:"",
                 cso_beneficiaries: "",
+                cso_membership_non_government:"",
+                cso_membership_government:"",
+                cso_current_donors:"",
+                cso_size_funding_portfolio:"",
+                cso_number_staff:"",
+                cso_number_networ_members:"",
                 cso_stakeholders: "",
                 is_lro: "",
                 type_of_support: "",
