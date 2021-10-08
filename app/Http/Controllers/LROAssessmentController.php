@@ -38,7 +38,7 @@ class LROAssessmentController extends Controller
         $get_lro = DB::table("lro_assessment")
             ->select(
                 DB::raw("lro_assessment.*"),
-                DB::raw("cso_profile.cso_name as cso_name, cso_profile.proj_area")
+                DB::raw("cso_profile.cso_name as cso_name")
             )
             ->leftJoin('cso_profile','cso_profile.cso_profile_id','lro_assessment.lro_id')
             ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))

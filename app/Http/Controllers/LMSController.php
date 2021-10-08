@@ -13,7 +13,7 @@ class LMSController extends Controller
         $get_profile = DB::table("participant_profile")
             ->select(
                 DB::raw("participant_profile.*"),
-                DB::raw("cso_profile.cso_name, cso_profile.proj_area")
+                DB::raw("cso_profile.cso_name")
             )
             ->leftJoin('cso_profile','cso_profile_id','lro_id')
             ->whereRaw(DB::raw("participant_profile.deleted_at IS NULL"))

@@ -14,8 +14,6 @@ class AddLongtitudeLatitudeToCsoProfileTable extends Migration
     public function up()
     {
         Schema::table('cso_profile', function (Blueprint $table) {
-            $table->string('longitude');
-            $table->string('latitude');
         });
     }
 
@@ -27,8 +25,6 @@ class AddLongtitudeLatitudeToCsoProfileTable extends Migration
     public function down()
     {
         Schema::table('cso_profile', function (Blueprint $table) {
-            $table->dropColumn('longitude');
-            $table->dropColumn('latitude');
         });
     }
 }

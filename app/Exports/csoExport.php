@@ -57,7 +57,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
             //     break;
             case "CSOProfile":
                 $header = [
-                            'IS LRO', 'IS LRO SUPPORTED', 'TYPE OF SUPPORT', 'LONGITUDE', 'LATITUDE',
+                            'IS LRO', 'IS LRO SUPPORTED', 'TYPE OF SUPPORT',
                             'PROJECT AREA', 'FULL NAME OF THE CSO/CSO NETWORK', 'TYPE OF CSO/CSO NETWORK',
                             'ABBREVIATION', 'ADDRESS', 'TELEPHONE', 'MOBILE NUMBER', 'EMAIL ADDRESS',
                             'WEBSITE/URL', 'FACEBOOK ACCOUNT', 'INSTAGRAM ACCOUNT', 'YOUTUBE ACCOUNT',

@@ -22,12 +22,6 @@
                                 </v-text-field>
                             </v-col>
                         </v-row>
-                        <v-row class="mt-0" v-if="detailsReadonly">
-                            <v-col cols="12" sm="12" md="12">
-                                <v-text-field v-model="editedItem.proj_area" label="Project Area" dense readonly>
-                                </v-text-field>
-                            </v-col>
-                        </v-row>
                         <v-row class="mt-0" v-if="editedIndex != -1 && !detailsReadonly">
                             <v-col cols="12" sm="12" md="12">
                                 <v-select :items="status_list" v-model="editedItem.status" label="Status" dense>
@@ -712,7 +706,6 @@
             editedItem: {
                 lro_id: "",
                 org_address: "",
-                proj_area: "",
                 domain: "",
                 tool_used: "",
                 conducted_by: "",
@@ -724,7 +717,6 @@
             defaultItem: {
                 lro_id: "",
                 org_address: "",
-                proj_area: "",
                 domain: "",
                 tool_used: "",
                 conducted_by: "",

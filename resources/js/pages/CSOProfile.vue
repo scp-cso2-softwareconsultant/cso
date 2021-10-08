@@ -33,6 +33,47 @@
                                                     :rules="[rules.required]"></v-text-field>
                                             </v-col>
                                         </v-row>
+                                        <!---------------------------------------------------------------->
+                                        <!---------------------------------------------------------------->
+                                        <!---------------------------------------------------------------->
+                                        <!---------------------------------------------------------------->
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_year"
+                                                    label="Year Established" dense></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-combobox :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_registration" :items="accreditations"
+                                                    label="Registration with/Accreditation" multiple>
+                                                </v-combobox>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_description"
+                                                    label="Brief CSO/CSO Network description (Vision/Mission). " dense>
+                                                </v-textarea>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_beneficiaries" label="Beneficiaries" dense>
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-combobox v-model="editedItem.cso_stakeholders"
+                                                    :items="stakeholders"
+                                                    label="Which stakeholders do you primarily work with? (Select that applies.)"
+                                                    multiple :readonly="detailsReadonly"></v-combobox>
+                                            </v-col>
+                                        </v-row>
                                         <v-row class="mt-0" v-if="!detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-select :items="isLRO_list" v-model="editedItem.is_lro"
@@ -47,20 +88,6 @@
                                         </v-row>
                                         <v-row class="mt-0" v-if="!detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="isLROSupported_list"
-                                                    v-model="editedItem.is_lro_supported" label="Is LRO Supported? *"
-                                                    dense :rules="[rules.required]"></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.is_lro_supported"
-                                                    label="Is LRO Supported? *" dense readonly></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
                                                 <v-select :items="type_of_support_list"
                                                     v-model="editedItem.type_of_support" label="Types Of Support" dense
                                                     :rules="[rules.required]"></v-select>
@@ -72,33 +99,6 @@
                                                     label="Types of support " dense readonly></v-text-field>
                                             </v-col>
                                         </v-row>
-
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="proj_area_list" v-model="editedItem.proj_area"
-                                                    label="Project Area *" dense :rules="[rules.required]"></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.proj_area" label="Project Area *"
-                                                    dense readonly></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.longitude"
-                                                    :rules="[rules.required]" label="Longitude *" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.latitude"
-                                                    :rules="[rules.required]" label="Latitude *" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_name : '',-->
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_name"
@@ -106,7 +106,6 @@
                                                     dense></v-text-field>
                                             </v-col>
                                         </v-row>
-                                        <!--                                    cso_type : '',-->
                                         <v-row class="mt-0" v-if="!detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-select :items="cso_type_list" v-model="editedItem.cso_type"
@@ -119,364 +118,11 @@
                                                 <v-text-field v-model="editedItem.cso_type"
                                                     label="Type of CSO/CSO Network *" dense readonly></v-text-field>
                                             </v-col>
-                                        </v-row>
-                                        <!--                                    cso_abbreviation : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_abbreviation" :rules="[rules.required]"
-                                                    label="Abbreviation of CSO/CSO Network Name *" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_year"
-                                                    label="Year Established" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-col cols="12">
-                                                    <v-combobox :readonly="detailsReadonly"
-                                                        v-model="editedItem.cso_registration" :items="accreditations"
-                                                        label="Registration with/Accreditation" dense multiple>
-                                                    </v-combobox>
-                                                </v-col>
-                                            </v-col>
-                                        </v-row>s
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_description"
-                                                    label="Brief CSO/CSO Network description (Vision/Mission). " dense>
-                                                </v-textarea>
-                                            </v-col>
-                                        </v-row>                             
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_address" label="CSO/CSO Network Address"
-                                                    dense></v-textarea>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_phone : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_phone"
-                                                    label="CSO/CSO Network Telephone" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_mobile : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_mobile"
-                                                    label="Mobile number of CSO/CSO Network" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_email : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_email"
-                                                    label="CSO/CSO Network Email Address" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_website : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_website" label="Website/URL" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_facebook : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_facebook" label="Facebook Account" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_twitter : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_twitter" label="Twitter Account" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_instagram : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_instagram" label="Instagram Account" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_youtube : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_youtube" label="YouTube Account" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_socmed : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_socmed" label="Other Social Media Account"
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <h5 class="subheading font-weight-black">
-                                            Head of CSO/CSO Network
-                                        </h5>
-                                        <!--                                    cso_head_name : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_head_name"
-                                                    label="Name of the Head of the CSO/CSO Network" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_head_email : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_head_email"
-                                                    label="Email address of the head" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_head_number : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_head_number"
-                                                    label="Contact number of the head" dense></v-text-field>
-                                            </v-col>
-                                        </v-row>                               cso_beneficiaries : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_beneficiaries" label="Beneficiaries" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_stakeholders : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-col cols="12">
-                                                    <v-combobox v-model="editedItem.cso_stakeholders"
-                                                        :items="stakeholders"
-                                                        label="Which stakeholders do you primarily work with? (Select that applies.)"
-                                                        multiple :readonly="detailsReadonly"></v-combobox>
-                                                </v-col>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_cause : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_cause"
-                                                    label="What is the primary cause that your CSO/CSO Network work for? "
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_membership_local : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_membership_local"
-                                                    label="In what local CSO-initiated networks, consortia, alliances, or local councils/bodies is your organization a member of?"
-                                                    dense></v-textarea>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_membership_govt : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_membership_govt"
-                                                    label="In what gov’t-initiated local networks, consortia, alliances, or local councils/bodies is your organization a member of?"
-                                                    dense></v-textarea>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_areas_precovid : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_areas_precovid"
-                                                    label="In what three (3) areas do you frequently (at least quarterly) relate with the other CSOs? (pre-Covid 19 pandemic)"
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_areas_covid : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_areas_covid"
-                                                    label="In what three (3) areas do you frequently (at least quarterly) relate with the other CSOs? (current/Covid 19 situation)"
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <h5 class="subheading font-weight-black">
-                                            Relationship with LGU/LGA
-                                        </h5>
-                                        <!--                                    cso_support : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="isLRO_list" v-model="editedItem.cso_support"
-                                                    label="Has your CSO/CSO Network RECEIVED SUPPORT from the LGU/LGA? "
-                                                    dense></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_support"
-                                                    label="Has your CSO/CSO Network RECEIVED SUPPORT from the LGU/LGA? "
-                                                    dense readonly></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <!--                                    cso_rsupport_type : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_rsupport_type" label="In what ways? " dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_rsupport_level : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="level_list" v-model="editedItem.cso_rsupport_level"
-                                                    label="Level of support  your CSO/CSO Network had RECEIVED from the LGU/LGA?"
-                                                    dense
-                                                    hint="If no support has been provided, skip this part. From a scale of 1-5 with 1 as the lowest and 5 as the highest."
-                                                    persistent-hint></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_rsupport_level"
-                                                    label="Level of support  your CSO/CSO Network had RECEIVED from the LGU/LGA?"
-                                                    hint="If no support has been provided, skip this part. From a scale of 1-5 with 1 as the lowest and 5 as the highest."
-                                                    persistent-hint dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_rsupport_changed : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="isLRO_list" v-model="editedItem.cso_rsupport_changed"
-                                                    label="Has the level of support changed as a result of the pandemic?"
-                                                    dense></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_rsupport_changed"
-                                                    label="Has the level of support changed as a result of the pandemic?"
-                                                    dense readonly></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_rsupport_changed_why-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_rsupport_changed_why" label="Why?" dense>
-                                                </v-textarea>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_psupport : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="isLRO_list" v-model="editedItem.cso_psupport"
-                                                    label="Has your organization PROVIDED SUPPORT to the LGU/LGA?"
-                                                    dense></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_psupport"
-                                                    label="Has your organization PROVIDED SUPPORT to the LGU/LGA?" dense
-                                                    readonly></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_psupport_type : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_psupport_type" label="In what ways?" dense>
-                                                </v-textarea>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_psupport_level : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="level_list" v-model="editedItem.cso_psupport_level"
-                                                    label="Please rate the level of support  your CSO/CSO Network has PROVIDED to the LGU/LGA?"
-                                                    dense
-                                                    hint="If no support has been provided, skip this part. From a scale of 1-5 with 1 as the lowest and 5 as the highest."
-                                                    persistent-hint></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_psupport_level"
-                                                    label="Please rate the level of support  your CSO/CSO Network has PROVIDED to the LGU/LGA?"
-                                                    hint="If no support has been provided, skip this part. From a scale of 1-5 with 1 as the lowest and 5 as the highest."
-                                                    persistent-hint dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-
-                                        <h5 class="subheading font-weight-black">
-                                            Relationship with the Private Sector
-                                        </h5>
-                                        <!--                                    cso_psupport_private : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="isLRO_list" v-model="editedItem.cso_psupport_private"
-                                                    label="Has your organization PROVIDED support to private sector organizations?"
-                                                    dense></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_psupport_private"
-                                                    label="Has your organization PROVIDED support to private sector organizations?"
-                                                    dense readonly></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_psupport_private_type : '',-->
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea auto-grow rows="1" :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_psupport_private_type" label="In what ways?"
-                                                    dense></v-textarea>
-                                            </v-col>
-                                        </v-row>
-                                        <!--                                    cso_psupport_private_level : '',-->
-                                        <v-row class="mt-0" v-if="!detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="level_list"
-                                                    v-model="editedItem.cso_psupport_private_level"
-                                                    label="Please rate the level of support  your CSO/CSO Network has PROVIDED to private sector organizations?"
-                                                    dense
-                                                    hint="If no support has been provided, skip this part. From a scale of 1-5 with 1 as the lowest and 5 as the highest."
-                                                    persistent-hint></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.cso_psupport_private_level"
-                                                    label="Please rate the level of support  your CSO/CSO Network has PROVIDED to private sector organizations?"
-                                                    hint="If no support has been provided, skip this part. From a scale of 1-5 with 1 as the lowest and 5 as the highest."
-                                                    persistent-hint dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
+                                        </v-row>   
+                                        <!---------------------------------------------------------------->
+                                        <!---------------------------------------------------------------->
+                                        <!---------------------------------------------------------------->
+                                        <!---------------------------------------------------------------->
                                     </v-container>
                                 </v-card-text>
 
@@ -524,12 +170,6 @@
                                 @input="changeFilterActiveValue('cso_name')" append-icon="mdi-magnify" outlined
                                 hide-details></v-text-field>
                         </v-col>
-                        <v-col cols="1" style="min-width: 100px; max-width: 70%" class="flex-grow-1 flex-shrink-0">
-                            <v-select v-model="filters.filter_items['proj_area'].value"
-                                :label="filters.filter_items['proj_area'].text"
-                                :items="filters.filter_items['proj_area'].multiple_selection"
-                                @input="changeFilterActiveValue('proj_area')" outlined hide-details></v-select>
-                        </v-col>
                     </v-row>
                     <v-row no-gutters style="flex-wrap: nowrap" class="my-3">
                         <v-col cols="1" style="min-width: 100px; max-width: 70%" class="flex-grow-1 flex-shrink-0">
@@ -543,13 +183,6 @@
                                 :label="filters.filter_items['is_lro'].text"
                                 :items="filters.filter_items['is_lro'].multiple_selection"
                                 @input="changeFilterActiveValue('is_lro')" outlined hide-details></v-select>
-                        </v-col>
-                        <v-col cols="2" style="min-width: 100px; max-width: 50%" class="flex-grow-1 flex-shrink-0">
-                            <v-select v-model="filters.filter_items['is_lro_supported'].value"
-                                :label="filters.filter_items['is_lro_supported'].text" 
-								:items="filters.filter_items['is_lro_supported'].multiple_selection" 
-								@input="changeFilterActiveValue('is_lro_supported')" outlined hide-details>
-							</v-select>
                         </v-col>
                     </v-row>
                 </template>
@@ -615,15 +248,6 @@
                 },
             ],
             type_of_support_list: [],
-            proj_area_list: [{
-                    value: "Iloilo City",
-                    text: "Iloilo City"
-                },
-                {
-                    value: "Cagayan De Oro City",
-                    text: "Cagayan De Oro City"
-                },
-            ],
             cso_type_list: [{
                     value: "Stand alone",
                     text: "Stand alone"
@@ -672,24 +296,6 @@
                         text: "Name",
                         data_value: "cso_name",
                     },
-                    proj_area: {
-                        value: "",
-                        text: "Project Area",
-                        data_value: "proj_area",
-                        multiple_selection: [{
-                                text: "None",
-                                value: ""
-                            },
-                            {
-                                value: "Iloilo City",
-                                text: "Iloilo City"
-                            },
-                            {
-                                value: "Cagayan De Oro City",
-                                text: "Cagayan De Oro City"
-                            },
-                        ],
-                    },
                     cso_type: {
                         value: "",
                         text: "CSO Type",
@@ -730,24 +336,6 @@
                             },
                         ],
                     },
-                    is_lro_supported: {
-                        value: "",
-                        text: "Is LRO supported",
-                        data_value: "is_lro_supported",
-                        multiple_selection: [{
-                                text: "None",
-                                value: ""
-                            },
-                            {
-                                value: "Yes",
-                                text: "Yes"
-                            },
-                            {
-                                value: "No",
-                                text: "No"
-                            },
-                        ],
-                    },
                 },
             },
             headers: [{
@@ -765,12 +353,6 @@
                     width: "25%",
                 },
                 {
-                    text: "Project Area",
-                    value: "proj_area",
-                    width: "15%",
-                    sortable: false,
-                },
-                {
                     text: "Type of CSO",
                     value: "cso_type",
                     width: "10%",
@@ -783,12 +365,6 @@
                     sortable: false
                 },
                 {
-                    text: "Is LRO Supported?",
-                    value: "is_lro_supported",
-                    width: "10%",
-                    sortable: false,
-                },
-                {
                     text: "Actions",
                     value: "actions",
                     width: "10%",
@@ -799,94 +375,27 @@
             editedIndex: -1,
             editedItem: {
                 cso_id: "",
-                is_lro: "",
-                is_lro_supported: "",
-                type_of_support: "",
-                longitude: "",
-                latitude: "",
-                proj_area: "",
-                cso_name: "",
-                cso_type: "",
-                cso_abbreviation: "",
-                cso_address: "",
-                cso_phone: "",
-                cso_mobile: "",
-                cso_email: "",
-                cso_website: "",
-                cso_facebook: "",
-                cso_twitter: "",
-                cso_instagram: "",
-                cso_youtube: "",
-                cso_socmed: "",
-                cso_head_name: "",
-                cso_head_email: "",
-                cso_head_number: "",
                 cso_year: "",
                 cso_registration: "",
                 cso_description: "",
                 cso_beneficiaries: "",
                 cso_stakeholders: "",
-                cso_cause: "",
-                cso_membership_local: "",
-                cso_membership_govt: "",
-                cso_areas_precovid: "",
-                cso_areas_covid: "",
-                cso_support: "",
-                cso_rsupport_type: "",
-                cso_rsupport_level: "",
-                cso_rsupport_changed: "",
-                cso_rsupport_changed_why: "",
-                cso_psupport: "",
-                cso_psupport_type: "",
-                cso_psupport_level: "",
-                cso_psupport_private: "",
-                cso_psupport_private_type: "",
-                cso_psupport_private_level: "",
+                is_lro: "",
+                type_of_support: "",
+                cso_name: "",
+                cso_type: "",
             },
             defaultItem: {
-                is_lro: "",
-                is_lro_supported: "",
-                type_of_support: "",
-                longitude: "",
-                latitude: "",
-                proj_area: "",
-                cso_name: "",
-                cso_type: "",
-                cso_abbreviation: "",
-                cso_address: "",
-                cso_phone: "",
-                cso_mobile: "",
-                cso_email: "",
-                cso_website: "",
-                cso_facebook: "",
-                cso_twitter: "",
-                cso_instagram: "",
-                cso_youtube: "",
-                cso_socmed: "",
-                cso_head_name: "",
-                cso_head_email: "",
-                cso_head_number: "",
+                cso_id: "",
                 cso_year: "",
                 cso_registration: "",
                 cso_description: "",
                 cso_beneficiaries: "",
                 cso_stakeholders: "",
-                cso_cause: "",
-                cso_membership_local: "",
-                cso_membership_govt: "",
-                cso_areas_precovid: "",
-                cso_areas_covid: "",
-                cso_support: "",
-                cso_rsupport_type: "",
-                cso_rsupport_level: "",
-                cso_rsupport_changed: "",
-                cso_rsupport_changed_why: "",
-                cso_psupport: "",
-                cso_psupport_type: "",
-                cso_psupport_level: "",
-                cso_psupport_private: "",
-                cso_psupport_private_type: "",
-                cso_psupport_private_level: "",
+                is_lro: "",
+                type_of_support: "",
+                cso_name: "",
+                cso_type: "",
             },
 
             rules: {
@@ -1103,43 +612,20 @@
                         this.$noty.error("CSO ID already exist");
                     }
                 }
-
                 if (!this.editedItem.is_lro) {
                     this.$noty.error("Is LRO is empty!");
-                    validate = false;
-                }
-                if (!this.editedItem.is_lro_supported) {
-                    this.$noty.error("Is LRO Supported is empty!");
                     validate = false;
                 }
                 if (!this.editedItem.type_of_support) {
                     this.$noty.error("type of support is empty!");
                     validate = false;
                 }
-                if (!this.editedItem.longitude) {
-                    this.$noty.error("Longitude is empty!");
-                    validate = false;
-                }
-                if (!this.editedItem.latitude) {
-                    this.$noty.error("Longitude is empty!");
-                    validate = false;
-                }
-
-                if (!this.editedItem.proj_area) {
-                    this.$noty.error("Project Area is empty!");
-                    validate = false;
-                }
-
                 if (!this.editedItem.cso_name) {
                     this.$noty.error("Full Name of the CSO/CSO Network is empty!");
                     validate = false;
                 }
                 if (!this.editedItem.cso_type) {
                     this.$noty.error("Type of CSO/CSO Network is empty!");
-                    validate = false;
-                }
-                if (!this.editedItem.cso_abbreviation) {
-                    this.$noty.error("Abbreviation of CSO/CSO Network Name is empty!");
                     validate = false;
                 }
                 if (validate) {

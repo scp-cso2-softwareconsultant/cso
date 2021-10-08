@@ -14,7 +14,6 @@ class AddIsLroSupportedToCsoProfileTable extends Migration
     public function up()
     {
         Schema::table('cso_profile', function (Blueprint $table) {
-            $table->string('is_lro_supported');
         });
     }
 
@@ -26,7 +25,6 @@ class AddIsLroSupportedToCsoProfileTable extends Migration
     public function down()
     {
         Schema::table('cso_profile', function (Blueprint $table) {
-            $table->dropColumn('is_lro_supported');
         });
     }
 }
