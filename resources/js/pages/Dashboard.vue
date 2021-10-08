@@ -565,7 +565,6 @@
                 },
                 xAxis: {
                     type: "value",
-                    name: "Days",
                     axisLabel: {
                         //formatter: '{value}'
                     },
