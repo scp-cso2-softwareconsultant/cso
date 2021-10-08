@@ -88,7 +88,7 @@
                             <v-list rounded>
                                 <v-list-item-group v-model="CSOProfileAccreditation.SELECTED" active-class="pink--text"
                                     multiple>
-                                    <v-list-item v-for="(  item, index) in CSOProfileAccreditation.accreditationMapping.slice( 3 )" :key="index">
+                                    <v-list-item v-for="(  item, index) in CSOProfileAccreditation.accreditationMapping.slice(0 , 3 )" :key="index">
                                         <v-list-item-content>
                                             <v-list-item-title v-text="item.accr"></v-list-item-title>
                                         </v-list-item-content>
@@ -565,7 +565,6 @@
                 },
                 xAxis: {
                     type: "value",
-                    name: "Days",
                     axisLabel: {
                         //formatter: '{value}'
                     },
