@@ -122,9 +122,22 @@
                                         </v-row>
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly"
-                                                    v-model="editedItem.cso_current_donors" label="  Current Donors (Institutional Aid Agencies, Private Sector Groups, Government)" dense>
-                                                </v-text-field>
+                                                <div class="overline text-left">
+                                                    <v-text-field :readonly="detailsReadonly" :rules="[rules.number]"
+                                                        v-model="editedItem.cso_number_staff" label="Number of staffs"
+                                                            dense>
+                                                    </v-text-field>
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <div class="overline text-left">
+                                                    <v-text-field :readonly="detailsReadonly" :rules="[rules.number]"
+                                                        v-model="editedItem.cso_number_networ_members" label=" Number of Network Members (if applicable)"
+                                                            dense>
+                                                    </v-text-field>
+                                                </div>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
