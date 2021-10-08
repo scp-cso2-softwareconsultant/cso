@@ -112,17 +112,21 @@
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
                                                 <div class="overline text-left">
-                                                    <vuetify-money 
-                                                        v-model="editedItem. cso_size_funding_portfolio" 
+                                                    <vuetify-money
+                                                        v-model="editedItem.cso_size_funding_portfolio" 
                                                         label="Size of Funding Portfolio (in PhP) : "
                                                         v-bind:options="cso_size_funding_portfolio_options"  
                                                     />
                                                 </div>
                                             </v-col>
                                         </v-row>
-                            
-
-
+                                        <v-row class="mt-0">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :readonly="detailsReadonly"
+                                                    v-model="editedItem.cso_current_donors" label="  Current Donors (Institutional Aid Agencies, Private Sector Groups, Government)" dense>
+                                                </v-text-field>
+                                            </v-col>
+                                        </v-row>
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-combobox v-model="editedItem.cso_stakeholders"
