@@ -34,7 +34,7 @@ class FinanceTrackerController extends Controller
             DB::table('lead_organization')
             ->insert([
                 "organization_name"=>$given_cso,
-                "created_by"=> $user,
+                "created_by"=> $user->firstname,
                 "created_at"=> date("Y-m-d h:i:s")
             ]);
     }
