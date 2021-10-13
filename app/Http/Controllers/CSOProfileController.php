@@ -91,7 +91,6 @@ class CSOProfileController extends Controller
                 "type_of_support" => $raw_data->type_of_support,
                 "cso_name" => $raw_data->cso_name,
                 "cso_type" => $raw_data->cso_type,
-                
                 'created_by' => $user_name
             ]);
             if($insertData) $success=true;

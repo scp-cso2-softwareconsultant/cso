@@ -323,10 +323,11 @@
                         text: "Choose value",
                         data_value: "participant_age",
                         inherit_value: "participant_age", // <--------------------------- Needed for the key
-                        multiple_selection: [{
-                                text: "Range",
-                                value: "range"
-                            },
+                        multiple_selection: [
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
                             {
                                 text: "Equal to",
                                 value: "=="

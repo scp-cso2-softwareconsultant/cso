@@ -19,8 +19,8 @@
                                 </v-select>
                             </v-col>
                             <v-col cols="12" v-show="catSelectedTab === 'Activity'">
-                                <v-combobox :readonly="detailsReadonly" v-model="cso_objective" :items="cso_objectives"
-                                    label="Objectives" dense multiple></v-combobox>
+                                <v-select :readonly="detailsReadonly" v-model="cso_objective" :items="cso_objectives"
+                                    label="Objectives" dense multiple></v-select>
                             </v-col>
                         </v-row>
 

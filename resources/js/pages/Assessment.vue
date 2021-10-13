@@ -515,10 +515,10 @@
                                 text: "None",
                                 value: ""
                             },
-                            {
-                                text: "Range",
-                                value: "range"
-                            },
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
                             {
                                 text: "Equal to",
                                 value: "=="
@@ -569,10 +569,11 @@
                         text: "Choose value",
                         data_value: "final_score",
                         inherit_value: "final_score", // <--------------------------- Needed for the key
-                        multiple_selection: [{
-                                text: "Range",
-                                value: "range"
-                            },
+                        multiple_selection: [
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
                             {
                                 text: "Equal to",
                                 value: "=="

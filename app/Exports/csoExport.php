@@ -6,7 +6,7 @@ namespace App\Exports;
 use App\Models\CSO_Indicator;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromCollection; 
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -34,7 +34,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 $header = [
                     'OUTPUT NO','DESCRIPTION','INDICATOR STATUS','MOV','REMARKS'
                 ];
-                 break;
+                break;
             // case "CSOIndicator-Outcome":
             //     $header = [
             //         'OUTCOME NO','DESCRIPTION',/*'INTERMEDIATE OUTCOME',*/'INDICATOR STATUS','SUBACTIVITY/INDICATOR NO', 'INDICATOR DESCRIPTION', 'TYPE', 'DATA SOURCE',
@@ -57,36 +57,28 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
             //     break;
             case "CSOProfile":
                 $header = [
-                            'IS LRO', 'IS LRO SUPPORTED', 'TYPE OF SUPPORT',
-                            'PROJECT AREA', 'FULL NAME OF THE CSO/CSO NETWORK', 'TYPE OF CSO/CSO NETWORK',
-                            'ABBREVIATION', 'ADDRESS', 'TELEPHONE', 'MOBILE NUMBER', 'EMAIL ADDRESS',
-                            'WEBSITE/URL', 'FACEBOOK ACCOUNT', 'INSTAGRAM ACCOUNT', 'YOUTUBE ACCOUNT',
-                            'OTHER SOCIAL MEDIA ACCOUNT',
-                            "NAME OF HEAD OF CSO/CSO NETWORK",
-                            "EMAIL ADDRESS OF THE HEAD",
-                            "CONTACT NUMBER OF THE HEAD",
-                            "YEAR ESTABLISHED",
-                            "REGISTRATION WITH/ACCREDITATION",
-                            "BRIEF CSO/CSO NETWORK DESCRIPTION (VISION/MISSION)",
-                            "BENEFICIARIES",
-                            "STAKEHOLDERS",
-                            "CAUSE",
-                            "MEMBERSHIP LOCAL",
-                            "MEMBERSHIP GOVT",
-                            "COVID AREAS",
-                            "PRE-COVID AREA",
-                            "SUPPORT",
-                            "RELATIOSHIP SUPPORT TYPE",
-                            "RELATIOSHIP SUPPORT LEVEL",
-                            "RELATIOSHIP SUPPORT CHANGED",
-                            "RELATIOSHIP SUPPORT CHANGED WHY",
-                            "PRIVATE SECTOR SUPPORT TYPE",
-                            "PRIVATE SECTOR SUPPORT LEVEL",
-                            "PRIVATE SECTOR SUPPORT PRIVATE",
-                            "PRIVATE SECTOR SUPPORT PRIVATE TYPE",
-                            "PRIVATE SECTOR SUPPORT PRIVATE LEVEL",
+                    'CSO_ID', 
+                    'CSO_YEAR', 
+                    'CSO_SEC_REGISTRATION_NO', 
+                    'CSO_REGISTRATION', 
+                    'CSO_DESCRIPTION', 
+                    'CSO_CORE_SERVICE', 
+                    'CSO_THEMATIC_AREAS', 
+                    'CSO_BENEFICIARIES', 
+                    'CSO_MEMBERSHIP_NON_GOVERNMENT', 
+                    'CSO_MEMBERSHIP_GOVERNMENT', 
+                    'CSO_CURRENT_DONORS', 
+                    'CSO_SIZE_FUNDING_PORTFOLIO', 
+                    'CSO_NUMBER_STAFF', 
+                    'CSO_NUMBER_NETWOR_MEMBERS', 
+                    'CSO_STAKEHOLDERS', 
+                    'IS_LRO', 
+                    'TYPE_OF_SUPPORT', 
+                    'CSO_NAME', 
+                    'CSO_TYPE', 
+                    'CREATED_BY',
 
-                        ];
+                    ];
                 break;
             case "FinanceTracker":
                 $header = [

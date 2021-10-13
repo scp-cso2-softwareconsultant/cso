@@ -397,10 +397,11 @@
                         text: "Choose value",
                         data_value: "finance_budget_selection",
                         inherit_value: "finance_budget", // <--------------------------- Needed for the key
-                        multiple_selection: [{
-                                text: "Range",
-                                value: "range"
-                            },
+                        multiple_selection: [
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
                             {
                                 text: "Equal to",
                                 value: "=="
@@ -451,10 +452,11 @@
                         text: "Choose value",
                         data_value: "finance_actuals_selection",
                         inherit_value: "finance_actuals", // <--------------------------- Needed for the key
-                        multiple_selection: [{
-                                text: "Range",
-                                value: "range"
-                            },
+                        multiple_selection: [
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
                             {
                                 text: "Equal to",
                                 value: "=="
@@ -505,10 +507,11 @@
                         text: "Choose value",
                         data_value: "finance_variance_selection",
                         inherit_value: "finance_variance", // <--------------------------- Needed for the key
-                        multiple_selection: [{
-                                text: "Range",
-                                value: "range"
-                            },
+                        multiple_selection: [
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
                             {
                                 text: "Equal to",
                                 value: "=="

@@ -522,7 +522,7 @@ export default {
           inherit_value: "training_date", // <--------------------------- Needed for the key
           multiple_selection: [
             { text: "None", value: "" },
-            { text: "Range", value: "range" },
+            // { text: "Range", value: "range" },
             { text: "Equal to", value: "==" },
             { text: "Greater than or equal to", value: ">=" },
             { text: "Less than or equal to", value: "<=" },
@@ -569,7 +569,7 @@ export default {
           data_value: "number_of_participants",
           inherit_value: "number_of_participants", // <--------------------------- Needed for the key
           multiple_selection: [
-            { text: "Range", value: "range" },
+            // { text: "Range", value: "range" },
             { text: "Equal to", value: "==" },
             { text: "Greater than or equal to", value: ">=" },
             { text: "Less than or equal to", value: "<=" },

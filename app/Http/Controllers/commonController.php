@@ -272,21 +272,17 @@ class commonController extends Controller
                         ->whereNull("i.deleted_at")
                         ->whereNotNull("ci.cso_act_no")
                         ->get();
-
                     $dataExport -> SH_HEADERS = ["Impact","Sub Impact"];
                     $data1 -> title = $dataExport-> SH_HEADERS[0];
                     $data1 -> dataHeaders = ["IMPACT NO", "DESCRIPTION", "STATUS", "CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data1 -> defaultHeaders = ["cso_act_no","cso_description","cso_status","created_by","created_at","updated_by","updated_at"];
                     $data1 -> data = $result1;
                     $dataExport->SH_DATA[0] = json_decode(json_encode($data1));
-
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
-
                     $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
                     $data2 -> data = $result2;
                     $dataExport->SH_DATA[1] = json_decode(json_encode($data2));
-
                     $Exmode = 1;
                     break;
             case "CSOIndicator-Outcome":
@@ -295,7 +291,6 @@ class commonController extends Controller
                         ->where("ci.cso_category","Outcome")
                         ->whereNull("ci.deleted_at")
                         ->get();
-
                     $result2 = DB::table("indicator AS i")
                         ->select(DB::raw("ci.cso_act_no , i.*"))
                         ->leftJoin("cso_indicator AS ci","ci.cso_indicator_id","i.cso_indicator_id")
@@ -304,16 +299,13 @@ class commonController extends Controller
                         ->whereNull("i.deleted_at")
                         ->whereNotNull("ci.cso_act_no")
                         ->get();
-
                     $dataExport -> SH_HEADERS = ["Outcome","Sub Outcome"];
                     $data1 -> title = $dataExport-> SH_HEADERS[0];
                     $data1 -> dataHeaders = ["OUTCOME NO", "DESCRIPTION", "STATUS", "CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data1 -> defaultHeaders = ["cso_act_no","cso_description","cso_status","created_by","created_at","updated_by","updated_at"];
                     $data1 -> data = $result1;
                     $dataExport->SH_DATA[0] = json_decode(json_encode($data1));
-
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
-
                     $data2 -> dataHeaders = ["SUB OF","INDICATOR NO","DESCRIPTION","TYPE","DATA SOURCE","ATTACHED FILE","FREQUENCY","UNIT OF MEASURE","STATUS","REMAKRS","PPR","BASELINE DATE","BASELINE VALUE","TARGET DATE","TARGET VALUE","ACTUAL DATE","CREATED BY","CREATED AT","UPDATED BY","UPDATED AT"];
                     $data2 -> defaultHeaders = ["cso_act_no","indicator_no","indicator","indicator_type","data_source","mov_file","frequency","unit_measure","indicator_status","indicator_remarks","ppr","baseline_date","baseline_value","target_date","target_value","actual_date","created_by","created_at","updated_by","updated_at"];
                     $data2 -> data = $result2;
@@ -336,15 +328,26 @@ class commonController extends Controller
                 break;
             case "CSOProfile":
                 $dataExport = DB::table("cso_profile")->select(
-                    DB::raw("is_lro AS 'Is LRO'"),
-                    DB::raw("type_of_support AS 'Type Of Suppport'"),
-                    DB::raw("cso_name AS 'Full name of the CSO/CSO Network'"),
-                    DB::raw("cso_type AS 'Type of CSO/CSO Network'"),
-                    DB::raw("cso_year AS 'Year Established' "),
-                    DB::raw("cso_registration AS 'Registration with/Accreditation' "),
-                    DB::raw("cso_description AS 'Brief CSO/CSO Network description (Vision/Mission)' "),
-                    DB::raw("cso_beneficiaries AS 'Beneficiaries' "),
-                    DB::raw("cso_stakeholders AS 'Stakeholders' "),
+                    DB::raw("cso_id AS 'CSO_ID'" ),
+                    DB::raw("cso_year AS 'CSO_YEAR'" ),
+                    DB::raw("cso_sec_registration_no AS 'CSO_SEC_REGISTRATION_NO'" ),
+                    DB::raw("cso_registration AS 'CSO_REGISTRATION'" ),
+                    DB::raw("cso_description AS 'CSO_DESCRIPTION'" ),
+                    DB::raw("cso_core_service AS 'CSO_CORE_SERVICE'" ),
+                    DB::raw("cso_thematic_areas AS 'CSO_THEMATIC_AREAS'" ),
+                    DB::raw("cso_beneficiaries AS 'CSO_BENEFICIARIES'" ),
+                    DB::raw("cso_membership_non_government AS 'CSO_MEMBERSHIP_NON_GOVERNMENT'" ),
+                    DB::raw("cso_membership_government AS 'CSO_MEMBERSHIP_GOVERNMENT'" ),
+                    DB::raw("cso_current_donors AS 'CSO_CURRENT_DONORS'" ),
+                    DB::raw("cso_size_funding_portfolio AS 'CSO_SIZE_FUNDING_PORTFOLIO'" ),
+                    DB::raw("cso_number_staff AS 'CSO_NUMBER_STAFF'" ),
+                    DB::raw("cso_number_networ_members AS 'CSO_NUMBER_NETWOR_MEMBERS'" ),
+                    DB::raw("cso_stakeholders AS 'CSO_STAKEHOLDERS'" ),
+                    DB::raw("is_lro AS 'IS_LRO'" ),
+                    DB::raw("type_of_support AS 'TYPE_OF_SUPPORT'" ),
+                    DB::raw("cso_name AS 'CSO_NAME'" ),
+                    DB::raw("cso_type AS 'CSO_TYPE'" ),
+                    DB::raw("created_by AS 'CREATED_BY'" ),
                     
                 )
                 ->whereRaw("deleted_at IS NULL")

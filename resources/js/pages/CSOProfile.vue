@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text">CSO Network Members Profile</h3>
+        <h3 class="subheading grey--text">Name of Organization/Network(to accommodate possibility that other participants) could come from member of LROs</h3>
         <br />
         <v-card>
             <v-data-table :headers="headers" :items="cso_profile_list" :loading="loadCSOProfile"
@@ -745,13 +745,14 @@
                     var editedITEM = Object.assign({}, this.editedItem);
                     var t = "",
                         t2 = "";
-
-                    editedITEM.cso_stakeholders.forEach((stakeholder) => {
-                        t += "^^" + stakeholder.text;
-                    });
-                    editedITEM.cso_registration.forEach((registration) => {
-                        t2 += "^^" + registration.text;
-                    });
+                    if(editedITEM.cso_stakeholders.trim().length > 0 ) 
+                        editedITEM.cso_stakeholders.forEach((stakeholder) => {
+                            t += "^^" + stakeholder.text;
+                        });
+                    if(editedITEM.cso_registration.trim().length > 0 ) 
+                        editedITEM.cso_registration.forEach((registration) => {
+                            t2 += "^^" + registration.text;
+                        });
 
                     editedITEM.cso_stakeholders = t.substring(2);
                     editedITEM.cso_registration = t2.substring(2);
