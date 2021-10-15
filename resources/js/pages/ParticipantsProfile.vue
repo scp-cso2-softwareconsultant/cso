@@ -90,6 +90,14 @@
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12">
                                             <v-text-field :readonly="detailsReadonly" :rules="[rules.required]"
+                                                v-model="editedItem.position_in_organization" label="Position in Organization *" dense>
+                                            </v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    
+                                    <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12">
+                                            <v-text-field :readonly="detailsReadonly" :rules="[rules.required]"
                                                 v-model="editedItem.name_of_training" label="Name of Training *" dense>
                                             </v-text-field>
                                         </v-col>
@@ -428,6 +436,12 @@
                     sortable: false,
                 },
                 {
+                    text: "Position in Organization",
+                    value: "position_in_organization",
+                    width: "15%",
+                    sortable: false,
+                },
+                {
                     text: "Actions",
                     value: "actions",
                     width: "10%",
@@ -446,6 +460,7 @@
                 participant_gender: "",
                 participant_age: "",
                 participant_skills: "",
+                position_in_organization:"",
                 name_of_training: "",
                 training_organizer: "",
                 remarks: "",
@@ -460,6 +475,7 @@
                 participant_gender: "",
                 participant_age: "",
                 participant_skills: "",
+                position_in_organization:"",
                 name_of_training: "",
                 training_organizer: "",
                 remarks: "",
@@ -639,6 +655,10 @@
                 }
                 if (!this.editedItem.training_organizer) {
                     this.$noty.error("Training Organizer is empty!");
+                    validate = false;
+                }
+                if (!this.editedItem.position_in_organization) {
+                    this.$noty.error("Position in Organization is empty!");
                     validate = false;
                 }
                 if (validate) {

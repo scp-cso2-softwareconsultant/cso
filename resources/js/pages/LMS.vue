@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text">LMS</h3>
+        <h3 class="subheading grey--text">Name of Organization/Network(to accommodate possibility that other participants) could come from member of LROs</h3>
         <br>
         <v-card>
             <v-tabs v-model="LMSTab" >

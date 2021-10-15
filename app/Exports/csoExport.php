@@ -108,6 +108,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                     "PARTICIPANT LOCATION",
                     "PARTICIPANT ADDRESS",
                     "NAME OF LRO",
+                    "POSITION IN ORGANIZATION",
                     "PARTICIPANT SKILLS",
                     "PARTICIPANT POSITION",
                     "PARTICIPANT GENDER",

@@ -377,11 +377,9 @@ class commonController extends Controller
                     $Exmode = 1;
 
                     $result = DB::table("lro_assessment AS la")->select(
-                        DB::raw("la.lro_assessment_id, cp.cso_name, la.tool_used, la.conducted_by, la.assessment_date, la.final_score, la.mov, la.status, la.created_by, la.created_at,  la.updated_by, la.updated_at ")
+                        DB::raw("la.lro_assessment_id, la.lro_name, la.tool_used, la.conducted_by, la.assessment_date, la.final_score, la.mov, la.status, la.created_by, la.created_at,  la.updated_by, la.updated_at ")
                     )
-                    ->leftJoin('cso_profile AS cp','cp.cso_profile_id','la.lro_id')
-                    ->whereRaw(DB::raw("la.deleted_at IS NULL"))
-                    ->whereRaw(DB::raw("cp.deleted_at IS NULL"))->get();
+                    ->whereRaw(DB::raw("la.deleted_at IS NULL"))->get();
 
 
                     /*
@@ -398,11 +396,10 @@ class commonController extends Controller
                             group by ls.lro_sub_id
                     */
                     $result2 = DB::table("lro_assessment_sub AS ls")->select(
-                        DB::raw("la.lro_assessment_id, cp.cso_name, ls.sub_domain, ls.rating , ls.file_attachment, ls.remarks,ls.created_by,ls.created_at, ls.updated_by, ls.updated_at")
+                        DB::raw("la.lro_assessment_id, la.lro_name, ls.sub_domain, ls.rating , ls.file_attachment, ls.remarks,ls.created_by,ls.created_at, ls.updated_by, ls.updated_at")
                     )
                     ->leftJoin('lro_assessment AS la','ls.lro_assessment_id','la.lro_assessment_id')
-                    ->leftJoin('cso_profile AS cp','cp.cso_profile_id','la.lro_id')
-                    ->whereRaw(DB::raw("ls.deleted_at is null AND cp.deleted_at is null AND la.deleted_at is null AND la.lro_assessment_id is not null AND ls.sub_domain is not null"))
+                    ->whereRaw(DB::raw("ls.deleted_at is null AND la.deleted_at is null AND la.lro_assessment_id is not null AND ls.sub_domain is not null"))
                     ->get();
 
                     $dataExport -> SH_HEADERS = ["LRO ASSESSMENT", "ASSESSMENT SUB"];
@@ -411,10 +408,10 @@ class commonController extends Controller
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
 
                     $data1 -> dataHeaders = ["ASSESSMENT RECORD NO","NAME OF LRO","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS", "CREATED BY", "CREATED AT","UPDATED BY","UPDATED AT" ];
-                    $data1 -> defaultHeaders = ["lro_assessment_id", "cso_name", "tool_used", "conducted_by", "assessment_date", "final_score", "mov", "status", "created_by","created_at", "updated_by","updated_at"];
+                    $data1 -> defaultHeaders = ["lro_assessment_id", "lro_name", "tool_used", "conducted_by", "assessment_date", "final_score", "mov", "status", "created_by","created_at", "updated_by","updated_at"];
 
                     $data2 -> dataHeaders = ["ASSESSMENT RECORD NO","CSO NAME","DOMAIN","RATING","FILE ATTACHMENT","REMARKS","CREATED BY","DATE CREATED","UPDATED BY","DATE UPDATED"];
-                    $data2 -> defaultHeaders = ["lro_assessment_id","cso_name","sub_domain","rating","file_attachment","remarks", "created_by","created_at", "updated_by","updated_at",];
+                    $data2 -> defaultHeaders = ["lro_assessment_id","lro_name","sub_domain","rating","file_attachment","remarks", "created_by","created_at", "updated_by","updated_at",];
 
                     $data1 -> data = $result;
                     $data2 -> data = $result2;
@@ -440,6 +437,7 @@ class commonController extends Controller
                         participant_profile.participant_location,
                         participant_profile.participant_address,
                         cso_profile.cso_name,
+                        cso_profile.position_in_organization
                         participant_profile.participant_skills,
                         participant_profile.participant_position,
                         participant_profile.participant_gender,

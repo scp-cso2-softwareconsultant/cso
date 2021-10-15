@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text">Name of Organization/Network(to accommodate possibility that other participants) could come from member of LROs</h3>
+        <h3 class="subheading grey--text">CSO Network Members Profile</h3>
         <br />
         <v-card>
             <v-data-table :headers="headers" :items="cso_profile_list" :loading="loadCSOProfile"
@@ -53,7 +53,7 @@
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-combobox :readonly="detailsReadonly"
                                                     v-model="editedItem.cso_registration" :items="accreditations"
-                                                    label="Registration with/Accreditation" multiple>
+                                                    label="other Accreditation" multiple>
                                                 </v-combobox>
                                             </v-col>
                                         </v-row>

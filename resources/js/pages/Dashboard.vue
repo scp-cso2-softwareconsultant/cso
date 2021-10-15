@@ -1148,7 +1148,7 @@
             async assessment() {
                 const DATES = await this.req("/getDistinctAssessmentDate", {});
                 const SUBDOMAIN = await this.req("/getDistinctSubDomain", {});
-
+                
                 let constructedDate = [];
                 let legends = [];
                 let indicators = [];
@@ -1158,7 +1158,7 @@
                 SUBDOMAIN.forEach((i) => {
                     maxScore = Math.max(maxScore, i.rating);
                 });
-
+                
                 SUBDOMAIN.forEach((i) => {
                     let search = indicators.find(
                         (obj) => obj.name.toLowerCase() === i.sub_domain.toLowerCase()
@@ -1169,9 +1169,8 @@
                         max: maxScore
                     });
                 });
-
                 DATES.forEach((date) => {
-                    //date.year
+                //     //date.year
                     let D = Array(indicators.length).fill(0);
                     let Div = Array(indicators.length).fill(0);
 
@@ -1187,13 +1186,14 @@
                             }
                         }
                     });
-
-                    constructedDate.push({
-                        name: date.year.toString(),
-                        value: D,
-                        Div: Div,
-                    });
-                    legends.push(date.year.toString());
+                    if(date && date.year){
+                        constructedDate.push({
+                            name: date.year.toString(),
+                            value: D,
+                            Div: Div,
+                        });
+                        legends.push(date.year.toString());
+                    }
                 });
 
                 constructedDate.forEach((i) => {

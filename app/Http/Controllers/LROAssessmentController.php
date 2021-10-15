@@ -40,7 +40,7 @@ class LROAssessmentController extends Controller
                 DB::raw("lro_assessment.*"),
                 DB::raw("cso_profile.cso_name as cso_name")
             )
-            ->leftJoin('cso_profile','cso_profile.cso_profile_id','lro_assessment.lro_id')
+            ->leftJoin('cso_profile','cso_profile.cso_profile_id','lro_assessment.lro_name')
             ->whereRaw(DB::raw("lro_assessment.deleted_at IS NULL"))
             ->whereRaw(DB::raw("cso_profile.deleted_at IS NULL"))->get();
         $lro_list = [];
@@ -83,7 +83,8 @@ class LROAssessmentController extends Controller
         $user = Auth::user();
         $user_name = $user->firstname . ' '. $user->lastname;
         $data_array = array();
-        $data_array['lro_id'] = $raw_data->lro_id;
+        $data_array['lro_name'] = $raw_data->lro_name;
+        
         //$data_array['domain'] = $raw_data->domain;
         if($raw_data->final_score >= 0) {$data_array['final_score'] = $raw_data->final_score;}
         $data_array['conducted_by'] = $raw_data->conducted_by;

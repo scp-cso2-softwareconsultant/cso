@@ -12,13 +12,13 @@
                     <v-container dense>
                         <v-row class="mt-0" v-if="!detailsReadonly">
                             <v-col cols="12" sm="12" md="12">
-                                <v-select :items="cso_name_items" v-model="editedItem.lro_id" label="Name of LRO *"
-                                    dense :rules="[rules.required]"></v-select>
+                                    <v-text-field v-model="editedItem.lro_name" label="Name of LRO *" dense >
+                                    </v-text-field>
                             </v-col>
                         </v-row>
                         <v-row class="mt-0" v-if="detailsReadonly">
                             <v-col cols="12" sm="12" md="12">
-                                <v-text-field v-model="editedItem.cso_name" label="Name of LRO *" dense readonly>
+                                <v-text-field v-model="editedItem.lro_name" label="Name of LRO *" dense readonly>
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -35,7 +35,7 @@
                         </v-row>
                         <v-row class="mt-0" v-if="!detailsReadonly">
                             <v-col cols="12" sm="12" md="12">
-                                <v-text-field :items="cso_name_items" v-model="editedItem.org_address" label="Address *"
+                                <v-text-field v-model="editedItem.org_address" label="Address *"
                                     dense :rules="[rules.required]"></v-text-field>
                             </v-col>
                         </v-row>
@@ -238,10 +238,9 @@
 
                     <v-row no-gutters style="flex-wrap: nowrap">
                         <v-col cols="1" style="min-width: 100px; max-width: 70%" class="flex-grow-1 flex-shrink-0">
-                            <v-select v-model="filters.filter_items['cso_name'].value"
-                                :label="filters.filter_items['cso_name'].text"
-                                :items="filters.filter_items['cso_name'].multiple_selection"
-                                @input="changeFilterActiveValue('cso_name')" outlined hide-details></v-select>
+                            <v-text-field v-model="filters.filter_items['lro_name'].value"
+                                :label="filters.filter_items['lro_name'].text" @input="changeFilterActiveValue('lro_name')"
+                                append-icon="mdi-magnify" outlined hide-details></v-text-field>
                         </v-col>
                         <v-col cols="4" style="min-width: 100px; max-width: 50%" class="flex-grow-1 flex-shrink-0">
                             <v-text-field v-model="filters.filter_items['domain'].value"
@@ -422,7 +421,6 @@
             detailsReadonly: false,
             modelAssessmentDate: false,
             // hideProjArea: true,
-            cso_name_items: [],
             status_list: [],
             expanded: [],
             tool_list: ["OCAT", "OPI"],
@@ -443,16 +441,12 @@
             sortBy: "fat",
             sortDesc: false,
             filters: {
-                filter_items_active: "cso_name",
+                filter_items_active: "lro_name",
                 filter_items: {
-                    cso_name: {
+                    lro_name: {
                         value: "",
                         text: "Name",
-                        data_value: "cso_name",
-                        multiple_selection: [{
-                            text: "None",
-                            value: ""
-                        }],
+                        data_value: "lro_name",
                     },
                     domain: {
                         value: "",
@@ -618,7 +612,7 @@
                     text: "Name of LRO",
                     align: "start",
                     sortable: true,
-                    value: "cso_name",
+                    value: "lro_name",
                     width: "20%",
                 },
                 // {
@@ -705,7 +699,7 @@
             lroList: [],
             editedIndex: -1,
             editedItem: {
-                lro_id: "",
+                lro_name: "",
                 org_address: "",
                 domain: "",
                 tool_used: "",
@@ -716,7 +710,7 @@
                 status: "",
             },
             defaultItem: {
-                lro_id: "",
+                lro_name: "",
                 org_address: "",
                 domain: "",
                 tool_used: "",
@@ -800,25 +794,6 @@
                     }
                 });
 
-                axios.get("/cso-name-list").then((response) => {
-                    const data = response.data;
-                    this.cso_name_items = data;
-
-                    var multiple_selection = [{
-                        text: "None",
-                        value: ""
-                    }];
-
-                    for (const value in data) {
-                        const select_text_value = data[value].text;
-                        multiple_selection.push({
-                            text: select_text_value,
-                            value: select_text_value,
-                        });
-                    }
-                    this.filters.filter_items.cso_name.multiple_selection =
-                        multiple_selection;
-                });
 
                 axios.get("/lro-status").then((response) => {
                     const data = response.data.concat([{
@@ -1004,7 +979,7 @@
             save() {
                 this.btnLoader = true;
                 let validate = true;
-                if (!this.editedItem.lro_id) {
+                if (!this.editedItem.lro_name) {
                     this.$noty.error("Name of LRO is empty!");
                     validate = false;
                 }

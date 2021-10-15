@@ -65,7 +65,7 @@ class FinanceTrackerController extends Controller
         $finance_burn2 = $raw_data->finance_burn2 != '' ? $raw_data->finance_burn2 : 0;
         $finance_burn3 = $raw_data->finance_burn3 != '' ? $raw_data->finance_burn3 : 0;
         $finance_burn4 = $raw_data->finance_burn4 != '' ? $raw_data->finance_burn4 : 0;
-        $finance_burn_rate = $finance_actuals * $finance_budget / 100; 
+        $finance_burn_rate = $finance_actuals / $finance_budget * 100; 
 
         $this->saveCSOLeadOrganizationIfNotExist($raw_data->finance_name);
 
