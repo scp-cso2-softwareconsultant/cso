@@ -314,7 +314,7 @@ export default {
             } removed due to change request to bargraph*/
     pieData: {
       title: {
-        text: "Activities Status",
+        text: "Activity Status",
         left: "0",
       },
       tooltip: {
@@ -350,7 +350,7 @@ export default {
         {
           type: "category",
           axisTick: { show: false },
-          data: ["Activities Status"],
+          data: [""],
         },
       ],
       yAxis: [
