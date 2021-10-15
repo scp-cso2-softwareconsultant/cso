@@ -75,6 +75,27 @@ class commonController extends Controller
         return $status_list;
     }
 
+    /*
+
+    select ci.cso_status as status, count(ci.cso_status) as val from cso_indicator ci
+    where ci.cso_category = 'Activity' AND ci.deleted_at is null
+    group by  ci.cso_status
+    */
+
+    public function getCSOIndicatorActivitiesStatusCount(){
+        $get_stats = DB::table("cso_indicator")
+        ->select(DB::raw("cso_status as status, count(cso_status) as val"))
+        ->whereRaw("cso_category = 'Activity' AND deleted_at is null")
+        ->groupBy(DB::raw("cso_status"))
+        ->orderBy("cso_status","desc")
+        ->get();
+        $stats_list = [];
+        if($get_stats)
+            foreach ($get_stats as $key => $row)
+                $stats_list[$key] = json_decode(json_encode($row), true);
+        return $stats_list;
+    }
+
     public function getDocumentType(){
         $get_type = DB::table("document_type")->select(DB::raw("document_type as text, document_type as value"))->get();
         $type_list = [];
