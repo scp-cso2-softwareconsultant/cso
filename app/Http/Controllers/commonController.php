@@ -57,7 +57,7 @@ class commonController extends Controller
     public function getDistinctSubDomain(){
         $get_result = DB::table("lro_assessment as la")
         ->join("lro_assessment_sub as las","la.lro_assessment_id","=","las.lro_assessment_id")
-        ->select(DB::raw('Year(la.assessment_date) as year, las.sub_domain, las.rating'))
+        ->select(DB::raw('Year(la.assessment_date) as year, la.lro_assessment_id , la.tool_used, las.sub_domain, las.rating'))
         ->whereRaw(DB::raw("la.deleted_at IS NULL"))
         ->whereRaw(DB::raw("las.deleted_at IS NULL"))
         ->orderBy('year','asc')

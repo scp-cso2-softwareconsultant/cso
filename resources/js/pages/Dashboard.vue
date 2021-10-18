@@ -592,7 +592,7 @@ export default {
     //radar/spyder chart
     radarData: {
       title: {
-        text: "Domain",
+        text: "OPI(Left) | OCAT(right)",
         left: "center",
       },
       toolbox: {
@@ -615,9 +615,7 @@ export default {
         data: [],
         bottom: 1,
       },
-      radar: {
-        indicator: [],
-      },
+      radar: [],
       tooltip: {
         trigger: "item",
         backgroundColor: "#e0465f",
@@ -629,11 +627,11 @@ export default {
         },
       },
       series: [
-        {
-          name: "TR = TotalRating per domain per year\nN = Number of a Domain per year\nComputation: TR / N = Domain Point in Radar Chart\n\nExample:\n\tYear 2022:\n\tdomain\trating\t\t\tComputation:\n\tsub1\t5\t\t\tsub1 N = 3\t\t\tTotal RatingOfSub1 = 15\n\tsub1\t4\t\t\tsub2 N = 2\t\t\tTotal RatingOfSub2 = 9\n\tsub1\t6\t\t\tsub3 N = 3\t\t\tTotal RatingOfSub3 = 3\n\tsub2\t5\n\tsub2\t4\t\t\tforSub1 = 15/3 = 5\n\tsub3\t1\t\t\tforSub2 = 9/2 = 4.5\n\tsub3\t1\t\t\tforSub3 = 3/3 = 1\n\tsub3\t1\t\t\tThe result would be 3 points toward sub1 sub2 sub3 indicator\n\n\n***DATA BELOW IS THE REAL COMPUTED DATA OF THE RADAR CHART BASED ON DOMAIN OF LRO ASSESSMENT PER DATE & PER DOMAIN***\n\n\n",
-          type: "radar",
-          data: [],
-        },
+        // {
+        //   name: "TR = TotalRating per domain per year\nN = Number of a Domain per year\nComputation: TR / N = Domain Point in Radar Chart\n\nExample:\n\tYear 2022:\n\tdomain\trating\t\t\tComputation:\n\tsub1\t5\t\t\tsub1 N = 3\t\t\tTotal RatingOfSub1 = 15\n\tsub1\t4\t\t\tsub2 N = 2\t\t\tTotal RatingOfSub2 = 9\n\tsub1\t6\t\t\tsub3 N = 3\t\t\tTotal RatingOfSub3 = 3\n\tsub2\t5\n\tsub2\t4\t\t\tforSub1 = 15/3 = 5\n\tsub3\t1\t\t\tforSub2 = 9/2 = 4.5\n\tsub3\t1\t\t\tforSub3 = 3/3 = 1\n\tsub3\t1\t\t\tThe result would be 3 points toward sub1 sub2 sub3 indicator\n\n\n***DATA BELOW IS THE REAL COMPUTED DATA OF THE RADAR CHART BASED ON DOMAIN OF LRO ASSESSMENT PER DATE & PER DOMAIN***\n\n\n",
+        //   type: "radar",
+        //   data: [],
+        // },
       ],
     },
     //financeBar
@@ -1303,6 +1301,7 @@ export default {
       const SUBDOMAIN = await this.req("/getDistinctSubDomain", {});
 
       let constructedDate = [];
+      let constructedDate2 = [];
       let legends = [];
       let indicators = [];
 
@@ -1323,13 +1322,14 @@ export default {
             max: maxScore,
           });
       });
+
       DATES.forEach((date) => {
         //     //date.year
         let D = Array(indicators.length).fill(0);
         let Div = Array(indicators.length).fill(0);
 
         SUBDOMAIN.forEach((dom) => {
-          if (dom.year === date.year) {
+          if (dom.year === date.year && dom.tool_used === 'OPI') {
             let findObj = indicators.find(
               (obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase()
             );
@@ -1340,6 +1340,8 @@ export default {
             }
           }
         });
+
+
         if (date && date.year) {
           constructedDate.push({
             name: date.year.toString(),
@@ -1350,6 +1352,36 @@ export default {
         }
       });
 
+      DATES.forEach((date) => {
+        //     //date.year
+        let D = Array(indicators.length).fill(0);
+        let Div = Array(indicators.length).fill(0);
+
+        SUBDOMAIN.forEach((dom) => {
+          if (dom.year === date.year && dom.tool_used === 'OCAT') {
+            let findObj = indicators.find(
+              (obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase()
+            );
+            let idx = indicators.indexOf(findObj);
+            if (idx !== -1) {
+              D[idx] += dom.rating;
+              Div[idx] += 1;
+            }
+          }
+        });
+
+
+        if (date && date.year) {
+          constructedDate2.push({
+            name: date.year.toString(),
+            value: D,
+            Div: Div,
+          });
+          //legends.push(date.year.toString());
+        }
+      });
+
+
       constructedDate.forEach((i) => {
         i.value.forEach((ix, idx) => {
           if (i.Div[idx] === 0 || i.Div[idx] === 0) return;
@@ -1357,12 +1389,31 @@ export default {
         });
       });
 
-      this.radarData.series[0].data = constructedDate;
-      this.radarData.legend.data = legends;
-      this.radarData.radar.indicator = indicators;
+      this.radarData.series.push(
+        {
+        "type": "radar",
+        "radarIndex":0,
+        "data": constructedDate
+        }
+      );
 
-      // assessmentSubDomainPerYearSeries
-      // assessmentSubDomainPerYearChartOptions
+      constructedDate2.forEach((i) => {
+        i.value.forEach((ix, idx) => {
+          if (i.Div[idx] === 0 || i.Div[idx] === 0) return;
+          i.value[idx] /= i.Div[idx];
+        });
+      });
+
+      this.radarData.series.push(
+        {
+        "type": "radar",
+        "radarIndex":1,
+        "data": constructedDate2
+        }
+      );
+      this.radarData.legend.data = legends;
+      this.radarData.radar.push({ indicator : indicators , center: ['25%', '50%']});
+      this.radarData.radar.push({ indicator : indicators , center: ['75%', '50%']});
     },
 
     consoleWarn(msg) {
