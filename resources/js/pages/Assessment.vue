@@ -1041,7 +1041,6 @@
 
                 if (validate) {
                     var formData = new FormData();
-                    console.log(this.editedSubItem, this.editedIndex)
                     if(!this.editedSubItem.remarks) this.editedSubItem.remarks = ''
                     formData.append("data", JSON.stringify(this.editedSubItem));
                     formData.append("form_mode", this.editedIndex);
