@@ -878,6 +878,7 @@
             },
 
             addSubItem(item) {
+                this.editedIndex = -1;
                 this.rating_list = item.rating_tool;
                 this.assessment_id = item.lro_assessment_id;
                 this.formSubTitle = "New Domain";
@@ -987,6 +988,10 @@
                 // 	this.$noty.error('Domain is empty!');
                 // 	validate = false;
                 // }
+                if(!this.editedItem.org_address){
+                    this.$noty.error("Address is Empty!")
+                    validate = false;
+                }
                 if (!this.editedItem.tool_used) {
                     this.$noty.error("Tool Used is empty!");
                     validate = false;
@@ -1036,6 +1041,8 @@
 
                 if (validate) {
                     var formData = new FormData();
+                    console.log(this.editedSubItem, this.editedIndex)
+                    if(!this.editedSubItem.remarks) this.editedSubItem.remarks = ''
                     formData.append("data", JSON.stringify(this.editedSubItem));
                     formData.append("form_mode", this.editedIndex);
                     if (this.file_name.length === 0)

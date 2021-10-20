@@ -592,7 +592,7 @@ export default {
     //radar/spyder chart
     radarData: {
       title: {
-        text: "OPI(Left) | OCAT(right)",
+        text: "OPI | OCAT",
         left: "center",
       },
       toolbox: {
