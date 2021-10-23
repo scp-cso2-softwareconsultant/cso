@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <h3 class="subheading grey--text">CSO Network Members Profile</h3>
+        <h3 class="subheading grey--text">CSO/CSO Network Identity to CSO/CSO Network Basic Information</h3>
         <br />
         <v-card>
             <v-data-table :headers="headers" :items="cso_profile_list" :loading="loadCSOProfile"
@@ -53,7 +53,7 @@
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-combobox :readonly="detailsReadonly"
                                                     v-model="editedItem.cso_registration" :items="accreditations"
-                                                    label="other Accreditation" multiple>
+                                                    label="Other Accreditation" multiple>
                                                 </v-combobox>
                                             </v-col>
                                         </v-row>
@@ -151,33 +151,35 @@
                                         <v-row class="mt-0" v-if="!detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-select :items="isLRO_list" v-model="editedItem.is_lro"
-                                                    label="Is LRO? *" dense :rules="[rules.required]"></v-select>
+                                                    label="Classification of CSO/CSO Network in CSO2 Project Context? *" dense :rules="[rules.required]"></v-select>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0" v-if="detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.is_lro" label="Is LRO? *" dense
+                                                <v-text-field v-model="editedItem.is_lro" label="Classification of CSO/CSO Network in CSO2 Project Context? *" dense
                                                     readonly></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row class="mt-0" v-if="detailsReadonly">
+                                            <v-col cols="12" sm="12" md="12">
+                                                <!-- <v-combobox :items="type_of_support_list"
+                                                    v-model="editedItem.type_of_support" label="Types Of Support" dense
+                                                    :rules="[rules.required]"></v-combobox> -->
+                                                <v-text-field v-model="editedItem.type_of_support" label="Type of CSO2 Project Support *" dense
+                                                    :rules="[rules.required]" readonly></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0" v-if="!detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
-                                                <v-select :items="type_of_support_list"
-                                                    v-model="editedItem.type_of_support" label="Types Of Support" dense
-                                                    :rules="[rules.required]"></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0" v-if="detailsReadonly">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field v-model="editedItem.type_of_support"
-                                                    label="Types of support " dense readonly></v-text-field>
+                                                <v-text-field v-model="editedItem.type_of_support" label="Type of CSO2 Project Support *" dense
+                                                    :rules="[rules.required]" ></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-text-field :readonly="detailsReadonly" v-model="editedItem.cso_name"
                                                     :rules="[rules.required]" label="Full name of the CSO/CSO Network *"
-                                                    dense></v-text-field>
+                                                    dense ></v-text-field >
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0" v-if="!detailsReadonly">
@@ -322,12 +324,16 @@
             stakeholders: [],
             accreditations: [],
             isLRO_list: [{
-                    value: "Yes",
-                    text: "Yes"
+                    value: "LRO",
+                    text: "LRO"
                 },
                 {
-                    value: "No",
-                    text: "No"
+                    value: "LRO Supported",
+                    text: "LRO Supported"
+                },
+                {
+                    value: "Others",
+                    text: "Others"
                 },
             ],
             isLROSupported_list: [{
@@ -412,19 +418,21 @@
                     },
                     is_lro: {
                         value: "",
-                        text: "Is LRO",
+                        text: "Classification of CSO/CSO",
                         data_value: "is_lro",
                         multiple_selection: [{
                                 text: "None",
                                 value: ""
+                            }, {
+                                value: "LRO",
+                                text: "LRO"
                             },
                             {
-                                value: "Yes",
-                                text: "Yes"
-                            },
-                            {
-                                value: "No",
-                                text: "No"
+                                value: "LRO Supported",
+                                text: "LRO Supported"
+                            },{
+                                value: "Others",
+                                text: "Others"
                             },
                         ],
                     },
@@ -451,7 +459,7 @@
                     sortable: false
                 },
                 {
-                    text: "Is LRO?",
+                    text: "Classification of CSO/CSO",
                     value: "is_lro",
                     width: "10%",
                     sortable: false
@@ -542,7 +550,7 @@
 
         methods: {
             initialize() {
-                document.title = "SCP: CSO² Project | CSO Network Members Profile";
+                document.title = "CSO/CSO Network Identity to CSO/CSO Network Basic Information";
                 this.loadCSOProfile = true;
                 axios.get("/user-roles-permission").then((response) => {
                     const moduleName = "CSOProfile";
@@ -724,11 +732,11 @@
                     }
                 }
                 if (!this.editedItem.is_lro) {
-                    this.$noty.error("Is LRO is empty!");
+                    this.$noty.error("Classification of CSO/CSO Network in CSO2 Project Context is empty!");
                     validate = false;
                 }
                 if (!this.editedItem.type_of_support) {
-                    this.$noty.error("type of support is empty!");
+                    this.$noty.error("Type of CSO2 Project Support is empty!");
                     validate = false;
                 }
                 if (!this.editedItem.cso_name) {
@@ -742,21 +750,28 @@
                 if (validate) {
                     // we cant edit editedItem directly because it is bind to combobox which require
                     // an array, so we made a copy
+
+                    
                     var editedITEM = Object.assign({}, this.editedItem);
-                    var t = "",
-                        t2 = "";
-                    if(editedITEM.cso_stakeholders.trim().length > 0 ) 
+                    var t = "", t2 = "";
+                    
+                    if(typeof editedITEM.cso_stakeholders === 'object' && editedITEM.cso_stakeholders.length > 0 ) 
                         editedITEM.cso_stakeholders.forEach((stakeholder) => {
-                            t += "^^" + stakeholder.text;
+                            if(  typeof stakeholder === 'object')
+                                t += "^^" + stakeholder.text;
+                            else 
+                                t += "^^" + stakeholder;
                         });
-                    if(editedITEM.cso_registration.trim().length > 0 ) 
+                    if( typeof editedITEM.cso_registration === 'object' && editedITEM.cso_registration.length > 0 ) 
                         editedITEM.cso_registration.forEach((registration) => {
-                            t2 += "^^" + registration.text;
+                            if(  typeof registration=== 'object')
+                                t2 += "^^" + registration.text;
+                            else
+                                t2 += "^^" + registration;
                         });
 
                     editedITEM.cso_stakeholders = t.substring(2);
                     editedITEM.cso_registration = t2.substring(2);
-
                     axios
                         .post("/save-cso-profile", {
                             data: JSON.stringify(editedITEM),

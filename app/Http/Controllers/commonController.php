@@ -452,6 +452,7 @@ class commonController extends Controller
                 "PARTICIPANT SKILLS"
                 */
                     $dataExport = DB::table("participant_profile")->select(
+                        // participant_profile.participant_skills,
                         DB::raw("
                         participant_profile.participant_id,
                         participant_profile.participant_name, 
@@ -459,10 +460,11 @@ class commonController extends Controller
                         participant_profile.participant_address,
                         cso_profile.cso_name,
                         cso_profile.position_in_organization
-                        participant_profile.participant_skills,
                         participant_profile.participant_position,
                         participant_profile.participant_gender,
                         participant_profile.participant_age,
+                        participant_profile.cso_affiliation,
+                        participant_profile.date_of_training
                         participant_profile.created_at,
                         participant_profile.created_by,
                         participant_profile.updated_at,

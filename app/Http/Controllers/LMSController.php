@@ -45,7 +45,9 @@ class LMSController extends Controller
         }
         $data_array['lro_id'] = $raw_data->lro_id;
         $data_array['participant_gender'] = $raw_data->participant_gender;
-        $data_array['participant_skills'] = $raw_data->participant_skills;
+        // $data_array['participant_skills'] = $raw_data->participant_skills;
+        $data_array['cso_affiliation'] = $raw_data->cso_affiliation;
+        $data_array['date_of_training'] = ($raw_data->date_of_training != '') ? $raw_data->date_of_training : NULL;
         $data_array['name_of_training'] = $raw_data->name_of_training;
         $data_array['training_organizer'] = $raw_data->training_organizer;
         $data_array['remarks'] = $raw_data->remarks;

@@ -57,15 +57,15 @@ class FinanceTrackerController extends Controller
         $finance_tranche3_date = ( $raw_data->finance_tranche3_date != '') ? date('Y-m-d',strtotime( $raw_data->finance_tranche3_date ) ): '';
         $finance_tranche4_date = ( $raw_data->finance_tranche4_date != '') ? date('Y-m-d',strtotime( $raw_data->finance_tranche4_date ) ): '';
 
-        $finance_retention = $raw_data->finance_retention != '' ? $raw_data->finance_retention : 0;
-        $finance_total = $finance_tranche1 + $finance_tranche2 + $finance_tranche3 + $finance_tranche4 + $finance_retention;
+        
+        $finance_total = $finance_tranche1 + $finance_tranche2 + $finance_tranche3 + $finance_tranche4 ;
         $finance_actuals = $raw_data->finance_actuals != '' ? $raw_data->finance_actuals : 0;
         $finance_variance = $finance_total - $finance_actuals;
         $finance_burn1 = $raw_data->finance_burn1 != '' ? $raw_data->finance_burn1 : 0;
         $finance_burn2 = $raw_data->finance_burn2 != '' ? $raw_data->finance_burn2 : 0;
         $finance_burn3 = $raw_data->finance_burn3 != '' ? $raw_data->finance_burn3 : 0;
         $finance_burn4 = $raw_data->finance_burn4 != '' ? $raw_data->finance_burn4 : 0;
-        $finance_burn_rate = $finance_actuals / $finance_budget * 100; 
+        $finance_burn_rate = $finance_actuals / ($finance_tranche1+$finance_tranche2+$finance_tranche3+$finance_tranche4)* 100; 
 
         $this->saveCSOLeadOrganizationIfNotExist($raw_data->finance_name);
 
@@ -81,7 +81,6 @@ class FinanceTrackerController extends Controller
                 'finance_tranche2_date' => $finance_tranche2_date,
                 'finance_tranche3_date' => $finance_tranche3_date,
                 'finance_tranche4_date' => $finance_tranche4_date,
-                'finance_retention' => $finance_retention,
                 'finance_total' => $finance_total,
                 'finance_actuals' => $finance_actuals,
                 'finance_variance'=> $finance_variance,
@@ -109,7 +108,6 @@ class FinanceTrackerController extends Controller
                     'finance_tranche2_date' => $finance_tranche2_date,
                     'finance_tranche3_date' => $finance_tranche3_date,
                     'finance_tranche4_date' => $finance_tranche4_date,
-                    'finance_retention' => $finance_retention,
                     'finance_total' => $finance_total,
                     'finance_actuals' => $finance_actuals,
                     'finance_variance'=> $finance_variance,

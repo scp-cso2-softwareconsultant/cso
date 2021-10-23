@@ -1181,26 +1181,36 @@ export default {
       const typeOfSupport = await this.req("/types-of-support", {});
       const csoProfile = await this.req("/cso-profile", {});
       const accreditation = await this.req("/getAccreditations", {});
-
+      // console.log( constructedObjectMapping )
       typeOfSupport.forEach((i) => {
+
         constructedObjectMapping.push({
           count: 0,
           tos: i.name,
         });
+        
       });
+
+      
       accreditation.forEach((i) => {
         constructedObjectMapping2.push({
           count: 0,
           accr: i.text,
         });
       });
-
+      
       csoProfile.forEach((item) => {
         var found = constructedObjectMapping.find(
-          (obj) => obj.tos === item.type_of_support
+          (obj) => obj.tos.trim().toLowerCase() === item.type_of_support.trim().toLowerCase()
         );
-
         if (found === undefined) {
+            const type_of_support = item.type_of_support.trim().toLowerCase(); 
+            if( type_of_support  && !constructedObjectMapping[type_of_support] ){  
+              constructedObjectMapping.push({
+                count: 1,
+                tos: type_of_support,
+              });
+            }
         } else {
           var idx = constructedObjectMapping.indexOf(found);
           constructedObjectMapping[idx] = {
@@ -1244,8 +1254,7 @@ export default {
       });
 
       this.CSOProfileAccreditation.accreditedMapping = constructedObjectMapping;
-      this.CSOProfileAccreditation.accreditationMapping =
-        constructedObjectMapping2;
+      this.CSOProfileAccreditation.accreditationMapping = constructedObjectMapping2;
     },
 
     //FOR PRIMARY STAKEHOLDER BARCHART
