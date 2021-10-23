@@ -1019,24 +1019,9 @@ export default {
 
     financeTrackerBudgetSeries: [
       {
-        name: "Approved Budget",
-        type: "column",
-        data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
-      },
-      {
-        name: "Actual Expenditure",
-        type: "column",
-        data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5],
-      },
-      {
-        name: "Budget Remaining",
-        type: "column",
-        data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5],
-      },
-      {
         name: "Burn rate",
         type: "line",
-        data: [20, 29, 37, 36, 44, 45, 50, 58],
+        data: [0,0,0,0],
       },
     ],
 
@@ -1123,17 +1108,10 @@ export default {
 
     burnRateSeries: [
       {
-        name: "Burn Rate (1st Liq)",
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+        name: "Burn",
+        data: [0,0,0],
       },
-      {
-        name: "Burn Rate (2st Liq)",
-        data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-      },
-      {
-        name: "Burn Rate (3st Liq)",
-        data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-      },
+      
     ],
     burnRateChartOptions: {
       chart: {
@@ -1160,7 +1138,7 @@ export default {
       },
       yaxis: {
         title: {
-          text: "$ (thousands)",
+          text: "Total percentage",
         },
       },
       fill: {
@@ -1169,7 +1147,7 @@ export default {
       tooltip: {
         y: {
           formatter: function (val) {
-            return "$ " + val + " thousands";
+            return  val + "%";
           },
         },
       },
@@ -1335,77 +1313,6 @@ export default {
         if (colP != -1 || colP < colors.length)
           this.pieData.color.push(colors[colP]);
       });
-
-      /* Remove due to change request to bargraph
-      axios.get("/get-indicator-status").then((response) => {
-        let labels = [];
-        const data = response.data;
-        for (let i = 0; i < data.length; i++) labels.push(data[i].value);
-        this.CSOIndicatorChartOptions = {
-          ...this.CSOIndicatorChartOptions,
-          labels: labels,
-        };
-      });
-
-      var lead_org = this.selectedOrganization.text;
-
-      if (this.selectedOrganization === "") {
-        this.pieData.title.text = "No Selected Organization";
-        return;
-      } else this.pieData.title.text = lead_org + " Project Activities";
-
-      var DATA = [
-        {
-          value: 0,
-          name: "Not Yet Started",
-        },
-        {
-          value: 0,
-          name: "In Progress",
-        },
-        {
-          value: 0,
-          name: "Completed",
-        },
-        {
-          value: 0,
-          name: "Delayed",
-        },
-        {
-          value: 0,
-          name: "Cancelled",
-        },
-      ];
-
-      axios.get("/dashboard-cso-indicator").then((response) => {
-        const data = response.data;
-        data.forEach((i) => {
-          if (i.cso_lead_organization === lead_org) {
-            var obj = DATA.find((obj) => obj.name === i.cso_status);
-            var idx = DATA.indexOf(obj);
-            DATA[idx] = {
-              value: DATA[idx].value + 1,
-              name: i.cso_status,
-            };
-          }
-        });
-        
-                    // TODO LATER IF POSSIBLE Sep 27
-                    // Correct Color via 
-                    // https://echarts.apache.org/en/option.html#legend.data.itemStyle.decal.color
-
-                    // var len = DATA.length
-                    // for(var x = 0; x < len; x++){
-                    //     if(DATA[x].value === 0){
-                    //         DATA.splice(x,1)
-                    //         x--
-                    //         len = DATA.length
-                    //     }
-                    // }
-                    
-        this.pieData.series[0].data = DATA;
-        
-      });*/
     },
 
     //FOR CSO NETWORK PROFILE DOUGHNUT CHART
@@ -1829,6 +1736,7 @@ export default {
             var used = {};
 
             for (const index in finance_tracker_data) {
+              
               const finance = finance_tracker_data[index];
               const budget = this.roundUp(
                 parseFloat(finance["finance_budget"])
@@ -1873,20 +1781,8 @@ export default {
             this.burnRateChartOptions.xaxis.categories = burnRateNames;
             this.burnRateSeries = [
               {
-                name: "Burn Rate (1st Liq)",
+                name: "Burn Rate",
                 data: burnRate1,
-              },
-              {
-                name: "Burn Rate (2st Liq)",
-                data: burnRate2,
-              },
-              {
-                name: "Burn Rate (3st Liq)",
-                data: burnRate3,
-              },
-              {
-                name: "Burn Rate (4st Liq)",
-                data: burnRate4,
               },
             ];
           })
