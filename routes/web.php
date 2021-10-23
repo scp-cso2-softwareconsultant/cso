@@ -128,9 +128,8 @@ Route::group(['middleware'=> ['auth']], function (){
     Route::get('/getDistinctSubDomain',[App\Http\Controllers\commonController::class,'getDistinctSubDomain'])->name('getDistinctSubDomain');
     Route::get('/getDistinctFinanceYear',[App\Http\Controllers\commonController::class,'getDistinctFinanceYear'])->name('get-Distinct-Finance-Year');
     Route::get('/getDashBoardDistinctFinance',[App\Http\Controllers\commonController::class,'getDashBoardDistinctFinance'])->name('get-Distinct-Finance');
-    
-    
-    
+    Route::get('/getDistinctThematicAreas',[App\Http\Controllers\commonController::class, 'getDistinctThematicAreas'])->name('get-distinct-thematic-areas');
+    Route::get('/getDistinctCoreServices',[App\Http\Controllers\commonController::class, 'getDistinctCoreServices'])->name('get-distinct-core-services');
 });
 
 Route::get('/download/{file}', function ($file='') {
