@@ -21,6 +21,36 @@ class CSOProfileController extends Controller
         return $cso_profile;
     }
 
+    public function saveThematicAreaIfNotExist($given_area){
+        $result = DB::table("thematic_areas")
+        ->select("thematic_area")
+        ->where("thematic_area",$given_area)
+        ->get();
+
+        $user = Auth::user();
+
+        if($result->isEmpty())
+            DB::table('thematic_areas')
+            ->insert([
+                "thematic_area"=>$given_area
+            ]);
+    }
+
+    public function saveCoreServiceIfNotExist($given_core_service){
+        $result = DB::table("core_services")
+        ->select("core_service")
+        ->where("core_service",$given_core_service)
+        ->get();
+
+        $user = Auth::user();
+
+        if($result->isEmpty())
+            DB::table('core_services')
+            ->insert([
+                "core_service"=>$given_core_service
+            ]);
+    }
+
     public function getCSONameList(){
         $get_profile = DB::table("cso_profile")
                         ->select(DB::raw("cso_id as value, cso_name as text"))
@@ -43,7 +73,7 @@ class CSOProfileController extends Controller
             ->whereRaw(DB::raw("deleted_at IS NULL"))
             ->get();
         //Log::info("CHECK MATCH ACT #");
-        Log::info($request['cso_id']);
+        //Log::info($request['cso_id']);
         //Log::info($request['category']);
         //Log::info("-----------------");
 
@@ -95,8 +125,8 @@ class CSOProfileController extends Controller
             ]);
             if($insertData) $success=true;
         }else{
-            Log::info('SAVING UPDATE');
-            Log::info($raw_data -> cso_id);
+            //Log::info('SAVING UPDATE');
+            //Log::info($raw_data -> cso_id);
             $updateData = DB::table('cso_profile')->where('cso_profile_id',$raw_data->cso_profile_id)
                 ->update(array(
                     'cso_id' => $raw_data -> cso_id,
@@ -119,13 +149,17 @@ class CSOProfileController extends Controller
                     "type_of_support" => $raw_data->type_of_support,
                     "cso_name" => $raw_data->cso_name,
                     "cso_type" => $raw_data->cso_type,
-                    
                     'updated_at' => date("Y-m-d h:i:s"),
                     'updated_by' => $user_name
                 ));
-            if($updateData) $success=true;
+            if($updateData){
+                $success=true;
+                foreach ($raw_data->cso_iterable_thematic_area as $key => $row)
+                    $this->saveThematicAreaIfNotExist($row);
+                foreach ($raw_data->cso_iterable_core_services as $key => $row)
+                    $this->saveCoreServiceIfNotExist($row);
+            }
         }
-
         $data_arr = [
             "success" => $success
         ];

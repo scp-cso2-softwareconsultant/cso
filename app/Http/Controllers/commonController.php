@@ -132,6 +132,37 @@ class commonController extends Controller
         return $status_list;
     }
 
+
+
+    // public function getThematicAreas(){
+    //     $get_profile = DB::table("cso_profile")->whereRaw(DB::raw("deleted_at IS NULL AND CHAR_LEN(cso_thematic_areas) > 0"))->get();;
+    //     $cso_profile = [];
+    //     if($get_profile)
+    //         foreach ($get_profile as $key => $row)
+    //             $cso_profile[$key] = json_decode(json_encode($row), true);
+    //     return $cso_profile;
+    // }
+
+    public function getDistinctCoreServices(){
+        $get_core_services = DB::table("core_services")->select(DB::raw("core_service as text, core_service as value"))->get();
+        $core_service = [];
+        if($get_core_services)
+            foreach ($get_core_services as $key => $row)
+                $core_service[$key] = json_decode(json_encode($row), true);
+        //Log::info(json_encode($thematic_area));
+        return $core_service;
+    }
+
+    public function getDistinctThematicAreas(){
+        $get_thematic_area = DB::table("thematic_areas")->select(DB::raw("thematic_area as text, thematic_area as value"))->get();
+        $thematic_area = [];
+        if($get_thematic_area)
+            foreach ($get_thematic_area as $key => $row)
+                $thematic_area[$key] = json_decode(json_encode($row), true);
+        //Log::info(json_encode($thematic_area));
+        return $thematic_area;
+    }
+
     public function getLeadOrgs(){
         $leadOrgs = DB::table("lead_organization")->select(DB::raw("organization_name as text, organization_name as value"))->get();
         $leadOrgs_list = [];

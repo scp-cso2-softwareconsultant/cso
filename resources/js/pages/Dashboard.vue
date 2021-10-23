@@ -144,6 +144,12 @@
           </v-list-item>
         </v-card>
       </v-flex>
+      <v-flex>
+        <v-card class="d-flex justify-content-around">
+            <Bar1 :D="thematicBarData" />
+            <Bar2 :D="coreServicesBarData" />
+        </v-card>
+      </v-flex>
     </div>
     <!-- ASSESSMENT -->
     <div class="card p-md-5">
@@ -227,6 +233,8 @@ import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
 import BarChart from "../components/dashboard_charts/barchart.vue";
 import RadarChart from "../components/dashboard_charts/radarchart.vue";
 import MultiBar from "../components/dashboard_charts/multi_bar.vue";
+import Bar1 from "../components/dashboard_charts/bar_d1.vue";
+import Bar2 from "../components/dashboard_charts/bar_d2.vue";
 
 export default {
   components: {
@@ -236,6 +244,8 @@ export default {
     BarChart,
     RadarChart,
     MultiBar,
+    Bar1,
+    Bar2
   },
   data: () => ({
     //responsibleOrganization: [], // Lead Organizations
@@ -589,6 +599,150 @@ export default {
         },
       ],
     },
+    //for thematic bar
+    thematicBarData:  {
+      title: {
+        text: "Thematic Areas",
+        left: "center",
+      },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
+        },
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: {
+            show: true,
+          },
+          saveAsImage: {
+            show: true,
+          },
+        },
+      },
+      tooltip: {
+        trigger: "axis",
+        formatter: "{b}",
+        borderColor: "#8C8D8E",
+        axisPointer: {
+          // Use axis to trigger tooltip
+          type: "shadow",
+        },
+      },
+      legend: {
+        show: false,
+      },
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
+      },
+      xAxis: {
+        type: "value"
+      },
+      yAxis: {
+        type: "category",
+        data: [],
+      },
+      series: [
+        {
+          name: "Direct",
+          type: "bar",
+          stack: "total",
+          // label: {
+          //   formatter: "{label_white|{c}}%",
+          //   show: true,
+          //   rich: {
+          //     label_white: {
+          //       color: "#fff",
+          //     },
+          //   },
+          // },
+          itemStyle: {
+            borderRadius: 3
+          },
+          emphasis: {
+            focus: "series",
+          },
+          data: [],
+        },
+      ],
+    },
+    //for cor services bar
+    coreServicesBarData:  {
+      title: {
+        text: "Organizational Core Services",
+        left: "center",
+      },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
+        },
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: {
+            show: true,
+          },
+          saveAsImage: {
+            show: true,
+          },
+        },
+      },
+      tooltip: {
+        trigger: "axis",
+        formatter: "{b}",
+        borderColor: "#8C8D8E",
+        axisPointer: {
+          // Use axis to trigger tooltip
+          type: "shadow",
+        },
+      },
+      legend: {
+        show: false,
+      },
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
+      },
+      xAxis: {
+        type: "value",
+      },
+      yAxis: {
+        type: "category",
+        data: [],
+      },
+      series: [
+        {
+          name: "Direct",
+          type: "bar",
+          stack: "total",
+          // label: {
+          //   formatter: "{label_white|{c}}%",
+          //   show: true,
+          //   rich: {
+          //     label_white: {
+          //       color: "#fff",
+          //     },
+          //   },
+          // },
+          itemStyle: {
+            borderRadius: 6
+          },
+          emphasis: {
+            focus: "series",
+          },
+          data: [],
+        },
+      ],
+    },
     //radar/spyder chart
     radarData: {
       title: {
@@ -640,6 +794,118 @@ export default {
     financeMonths: [],
     selectedFinanceMonth: [],
     financeBarData: {
+      title: {
+        text: "Fund Received vs Actual Expenditures as of --",
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow",
+        },
+      },
+      legend: {
+        bottom: "1",
+        data: ["Actual Expendature", "Funds Received", "Burn Rate"],
+      },
+      grid: {
+        left: 100,
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          saveAsImage: {},
+        },
+      },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
+        },
+      },
+      xAxis: {
+        type: "value",
+        axisLabel: {
+          //formatter: '{value}'
+        },
+      },
+      yAxis: {
+        type: "category",
+        inverse: true,
+        data: [],
+        axisLabel: {
+          formatter: function (value) {
+            return value;
+          },
+        },
+      },
+      series: [
+        {
+          name: "Actual Expendature",
+          type: "bar",
+          label: {
+            show: true,
+            textStyle: {
+              color: "white",
+              fontSize: "10",
+              fontWeight: "bold",
+            },
+          },
+          itemStyle: {
+            borderRadius: 2,
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+              {
+                offset: 1,
+                color: "#98182E",
+              },
+              {
+                offset: 0.5,
+                color: "#F52E00",
+              },
+              {
+                offset: 0,
+                color: "#FE7701",
+              },
+            ]),
+          },
+          data: [],
+        },
+        {
+          name: "Funds Received",
+          type: "bar",
+          itemStyle: {
+            color: "#5797ff",
+          },
+          label: {
+            show: true,
+            textStyle: {
+              color: "white",
+              fontSize: "10",
+              fontWeight: "bold",
+            },
+          },
+          itemStyle: {
+            borderRadius: 2,
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+              {
+                offset: 1,
+                color: "#1e2f97",
+              },
+              {
+                offset: 0.5,
+                color: "#797ef6",
+              },
+              {
+                offset: 0,
+                color: "#1aa7ec",
+              },
+            ]),
+          },
+          data: [],
+        },
+      ],
+    },
+
+    CSOProfileBarData: {
       title: {
         text: "Fund Received vs Actual Expenditures as of --",
       },
@@ -1022,6 +1288,7 @@ export default {
       this.updateCSOProfileChart();
       await this.initTop3();
       await this.initPrimaryBar();
+      await this.initThematicCoreService();
       await this.assessment();
       await this.financeTracker();
       this.burnRate();
@@ -1035,16 +1302,16 @@ export default {
     //FOR CSO2 INDICATOR PIE CHART
     async updateCSOIndicatorsChart() {
       let RAWDATA = await this.req("/dashboard-cso-activity-count", {});
-      let colors =  ["#ff9800", "#2196f3", "#f44336", "#4caf50","#9e9e9e"];
+      let colors = ["#ff9800", "#2196f3", "#f44336", "#4caf50", "#9e9e9e"];
       RAWDATA.forEach((data, i) => {
         var colP = -1;
-        if(data.status === "Not Yet Started") colP = 0
-        else if(data.status === "In Progress") colP = 1
-        else if(data.status === "Delayed") colP = 2
-        else if(data.status === "Completed") colP = 3
-        else if(data.status === "Cancelled") colP = 4
-            
-        this.pieData.legend.data.push(data.status)
+        if (data.status === "Not Yet Started") colP = 0;
+        else if (data.status === "In Progress") colP = 1;
+        else if (data.status === "Delayed") colP = 2;
+        else if (data.status === "Completed") colP = 3;
+        else if (data.status === "Cancelled") colP = 4;
+
+        this.pieData.legend.data.push(data.status);
         this.pieData.series.push({
           name: data.status,
           type: "bar",
@@ -1065,8 +1332,8 @@ export default {
           emphasis: { focus: "series" },
           data: [data.val],
         });
-        if(colP != - 1 || colP < colors.length)
-        this.pieData.color.push(colors[colP])
+        if (colP != -1 || colP < colors.length)
+          this.pieData.color.push(colors[colP]);
       });
 
       /* Remove due to change request to bargraph
@@ -1285,6 +1552,66 @@ export default {
       this.barData.xAxis.data = xAxis;
       this.barData.yAxis.data = yAxis;
       this.barData.series[0].data = data;
+
+    },
+
+    //for thematic & core servicces barchart
+    async initThematicCoreService(){
+      var data = await this.req("/getDistinctThematicAreas",{})
+      var data2 = await this.req("/getDistinctCoreServices",{})
+      var csoProfile = await this.req("/cso-profile",{})
+
+      data.forEach((i)=>{
+        this.thematicBarData.yAxis.data.push(i.text)
+      })
+      data2.forEach((i)=>{
+        this.coreServicesBarData.yAxis.data.push(i.text)
+      })
+
+      var xAxis = Array(this.thematicBarData.yAxis.data.length).fill(0);
+      var xAxis2 = Array(this.coreServicesBarData.yAxis.data.length).fill(0);
+
+      csoProfile.forEach((item) => {
+        var thematics = item.cso_thematic_areas.split("^^");
+        var coreServices = item.cso_core_service.split("^^")
+        thematics.forEach((thematic_area) => {
+          if(thematic_area.length.length == 0) return;
+          var idx = this.thematicBarData.yAxis.data.indexOf(thematic_area);
+          xAxis[idx] += 1;
+        });
+        coreServices.forEach((core_service) => {
+          if(core_service.length.length == 0) return;
+          var idx = this.coreServicesBarData.yAxis.data.indexOf(core_service);
+          xAxis2[idx] += 1;
+        });
+      });
+
+      var thematic = []
+      var coreService = []
+
+      xAxis.forEach((item, idx) => {
+        let name = `${this.thematicBarData.yAxis.data[idx]} : ${item}`;
+        thematic[idx] = {
+          value: item,
+          name: name,
+        };
+        xAxis[idx] = thematic[idx].value;
+      });
+      xAxis2.forEach((item, idx) => {
+        let name = `${this.coreServicesBarData.yAxis.data[idx]} : ${item}`;
+        coreService[idx] = {
+          value: item,
+          name: name,
+        };
+        xAxis[idx] = coreService[idx].value;
+      });
+
+  
+      this.thematicBarData.xAxis.data = xAxis;
+      this.thematicBarData.series[0].data = thematic;
+
+      this.coreServicesBarData.xAxis.data = xAxis2;
+      this.coreServicesBarData.series[0].data = coreService;
     },
 
     //ASYNC REQ
@@ -1329,7 +1656,7 @@ export default {
         let Div = Array(indicators.length).fill(0);
 
         SUBDOMAIN.forEach((dom) => {
-          if (dom.year === date.year && dom.tool_used === 'OPI') {
+          if (dom.year === date.year && dom.tool_used === "OPI") {
             let findObj = indicators.find(
               (obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase()
             );
@@ -1340,7 +1667,6 @@ export default {
             }
           }
         });
-
 
         if (date && date.year) {
           constructedDate.push({
@@ -1358,7 +1684,7 @@ export default {
         let Div = Array(indicators.length).fill(0);
 
         SUBDOMAIN.forEach((dom) => {
-          if (dom.year === date.year && dom.tool_used === 'OCAT') {
+          if (dom.year === date.year && dom.tool_used === "OCAT") {
             let findObj = indicators.find(
               (obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase()
             );
@@ -1370,7 +1696,6 @@ export default {
           }
         });
 
-
         if (date && date.year) {
           constructedDate2.push({
             name: date.year.toString(),
@@ -1381,7 +1706,6 @@ export default {
         }
       });
 
-
       constructedDate.forEach((i) => {
         i.value.forEach((ix, idx) => {
           if (i.Div[idx] === 0 || i.Div[idx] === 0) return;
@@ -1389,13 +1713,11 @@ export default {
         });
       });
 
-      this.radarData.series.push(
-        {
-        "type": "radar",
-        "radarIndex":0,
-        "data": constructedDate
-        }
-      );
+      this.radarData.series.push({
+        type: "radar",
+        radarIndex: 0,
+        data: constructedDate,
+      });
 
       constructedDate2.forEach((i) => {
         i.value.forEach((ix, idx) => {
@@ -1404,16 +1726,20 @@ export default {
         });
       });
 
-      this.radarData.series.push(
-        {
-        "type": "radar",
-        "radarIndex":1,
-        "data": constructedDate2
-        }
-      );
+      this.radarData.series.push({
+        type: "radar",
+        radarIndex: 1,
+        data: constructedDate2,
+      });
       this.radarData.legend.data = legends;
-      this.radarData.radar.push({ indicator : indicators , center: ['25%', '50%']});
-      this.radarData.radar.push({ indicator : indicators , center: ['75%', '50%']});
+      this.radarData.radar.push({
+        indicator: indicators,
+        center: ["25%", "50%"],
+      });
+      this.radarData.radar.push({
+        indicator: indicators,
+        center: ["75%", "50%"],
+      });
     },
 
     consoleWarn(msg) {
