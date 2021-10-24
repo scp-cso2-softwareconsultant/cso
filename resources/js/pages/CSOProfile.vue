@@ -1048,6 +1048,20 @@ export default {
             t2 += "^^" + registration.text;
           });
 
+        if(typeof editedITEM.cso_stakeholders === 'object' && editedITEM.cso_stakeholders.length > 0 ) 
+                        editedITEM.cso_stakeholders.forEach((stakeholder) => {
+                            if(  typeof stakeholder === 'object')
+                                t += "^^" + stakeholder.text;
+                            else 
+                                t += "^^" + stakeholder;
+                        });
+                    if( typeof editedITEM.cso_registration === 'object' && editedITEM.cso_registration.length > 0 ) 
+                        editedITEM.cso_registration.forEach((registration) => {
+                            if(  typeof registration=== 'object')
+                                t2 += "^^" + registration.text;
+                            else
+                                t2 += "^^" + registration;
+                        });
         editedITEM.cso_iterable_thematic_area = [];
         editedITEM.cso_iterable_core_services = [];
 
