@@ -72,8 +72,8 @@
                         </v-row>
                         <v-row v-if="catSelectedTab === 'Output'" class="mt-0">
                             <v-col cols="12" sm="12" md="12">
-                                <p class="mt-4 font-weight-bold">Attached File</p>
-                                <div v-if="isEditting">
+                                <p class="mt-4 font-weight-bold" v-if="crud_guard.upload" >Attached File</p>
+                                <div v-if="isEditting && crud_guard.upload">
                                     <div v-if="file_name.length !== 0">
                                         <v-chip class="ma-2" close color="indigo darken-3" outlined
                                             @click:close="removeFile">
@@ -81,13 +81,13 @@
                                             {{ limitChipName(file_name) }}
                                         </v-chip>
                                     </div>
-                                    <div v-else>
-                                        <v-file-input v-model="file_name" @change="onFileChanged">
+                                    <div v-else-if="crud_guard.upload">
+                                        <v-file-input  v-model="file_name" @change="onFileChanged">
                                         </v-file-input>
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div v-if="file_name.length !== 0">
+                                    <div v-if="file_name.length !== 0 && crud_guard.download">
                                         <v-tooltip top>
                                             <template>
                                                 <v-chip class="ma-2" color="indigo darken-3" outlined>
@@ -99,7 +99,7 @@
                                             <span>Download {{ file_name }}</span>
                                         </v-tooltip>
                                     </div>
-                                    <div v-else>
+                                    <div v-else-if="crud_guard.download">
                                         <v-chip class="ma-2" color="indigo darken-3" outlined>
                                             <v-icon left> mdi-file-remove-outline</v-icon>
                                             No Attached File
@@ -273,9 +273,9 @@
                         </v-row>
                         <v-row class="mt-0">
                             <v-col cols="12" sm="12" md="12">
-                                <p class="mt-4 font-weight-bold">Attached File</p>
+                                <p class="mt-4 font-weight-bold" v-if="crud_guard.upload">Attached File</p>
                                 <div v-if="isEditting">
-                                    <div v-if="file_name.length !== 0">
+                                    <div v-if="file_name.length !== 0 && crud_guard.upload">
                                         <v-chip class="ma-2" close color="indigo darken-3" outlined
                                             @click:close="removeFile">
                                             <v-icon left> mdi-file </v-icon>
@@ -283,12 +283,12 @@
                                         </v-chip>
                                     </div>
                                     <div v-else>
-                                        <v-file-input v-model="file_name" @change="onFileChanged">
+                                        <v-file-input v-if="crud_guard.upload" v-model="file_name" @change="onFileChanged">
                                         </v-file-input>
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div v-if="file_name.length > 0">
+                                    <div v-if="file_name.length > 0 && crud_guard.download">
                                         <v-tooltip bottom>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-chip class="ma-2" color="indigo darken-3" outlined v-on="on">
@@ -302,7 +302,7 @@
                                             <span>Download {{file_name}}</span>
                                         </v-tooltip>
                                     </div>
-                                    <div v-else>
+                                    <div v-else-if="crud_guard.download">
                                         <v-chip class="ma-2" color="indigo darken-3" outlined>
                                             <v-icon left> mdi-file-remove-outline</v-icon>
                                             No Attached File
@@ -349,7 +349,7 @@
                                 :single-expand="singleExpand" :expanded.sync="expanded" :search="searchBy"
                                 item-key="cso_indicator_id" :loading="loadCSOIndicator" class="elevation-1">
                                 <template v-slot:item.cso_indicator_mov="{ item }">
-                                    <div v-if="item.cso_indicator_mov">
+                                    <div v-if="item.cso_indicator_mov && crud_guard.download">
                                         <a :href="`/downloadCSOMov/?file_name=${item.cso_indicator_mov}`">
                                             <v-icon center color="primary">
                                                 mdi-file-download-outline

@@ -79,7 +79,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue lighten-5" text @click="closeDelete">No</v-btn>
-                                <v-btn color="blue lighten-5" text @click="deleteItemConfirm" :loading="btnLoader">Yes
+                                <v-btn color="blue lighten-5" text @click="deleteItemConfirm">Yes
                                 </v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>

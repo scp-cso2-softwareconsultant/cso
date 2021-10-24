@@ -94,20 +94,20 @@
                             <v-col cols="12" sm="12" md="12">
                                 <p class="mt-4 font-weight-bold">Attached File</p>
                                 <div v-if="isEditting">
-                                    <div v-if="file_name.length !== 0">
+                                    <div v-if="file_name.length !== 0 && crud_guard.upload">
                                         <v-chip class="ma-2" close color="indigo darken-3" outlined
                                             @click:close="removeFile">
                                             <v-icon left> mdi-file </v-icon>
                                             {{ limitChipName(file_name) }}
                                         </v-chip>
                                     </div>
-                                    <div v-else>
+                                    <div v-else-if="crud_guard.upload">
                                         <v-file-input v-model="file_name" @change="onFileChanged">
                                         </v-file-input>
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <div v-if="file_name.length > 0">
+                                    <div v-if="file_name.length > 0 && crud_guard.download">
                                         <v-tooltip top>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-chip class="ma-2" color="indigo darken-3" outlined v-on="on">
@@ -121,7 +121,7 @@
                                             <span>Download {{ file_name }}</span>
                                         </v-tooltip>
                                     </div>
-                                    <div v-else>
+                                    <div v-else-if="crud_guard.download">
                                         <v-chip class="ma-2" color="indigo darken-3" outlined>
                                             <v-icon left> mdi-file-remove-outline</v-icon>
                                             No Attached File
@@ -190,14 +190,14 @@
                         <v-row class="mt-0">
                             <v-col cols="12" sm="12" md="12">
                                 <p class="mt-4 font-weight-bold">Attached File</p>
-                                <div v-if="file_name.length !== 0">
+                                <div v-if="file_name.length !== 0" v-if="crud_guard.upload">
                                     <v-chip class="ma-2" close color="indigo darken-3" outlined
                                         @click:close="removeFile">
                                         <v-icon left> mdi-file </v-icon>
                                         {{ limitChipName(file_name) }}
                                     </v-chip>
                                 </div>
-                                <div v-else>
+                                <div v-else-if="crud_guard.upload">
                                     <v-file-input v-model="file_name" @change="onFileChanged">
                                     </v-file-input>
                                 </div>
@@ -353,7 +353,7 @@
                     </v-row>
                 </template>
                 <template v-slot:item.mov="{ item }">
-                    <div v-if="item.mov">
+                    <div v-if="item.mov && crud_guard.download">
                         <a :href="`/downloadAssessMov/?file_name=${item.mov}`" target="blank">
                             <v-icon center color="primary">
                                 mdi-file-download-outline
@@ -383,7 +383,7 @@
                     <td :colspan="headers.length">
                         <v-data-table :headers="subHeaders" :items="item.subItems" class="elevation-1">
                             <template v-slot:item.file_attachment="{ item }">
-                                <div v-if="item.file_attachment">
+                                <div v-if="item.file_attachment && crud_guard.download">
                                     <a :href="`/downloadAssessSubAttach/?file_name=${item.file_attachment}`"
                                         target="blank">
                                         <v-icon center color="primary">
