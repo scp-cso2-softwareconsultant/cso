@@ -246,7 +246,7 @@
                             :readonly="detailsReadonly"
                             :rules="[rules.number]"
                             v-model="editedItem.cso_number_staff"
-                            label="Number of staffs"
+                            label="Number of staff"
                             dense
                           >
                           </v-text-field>
