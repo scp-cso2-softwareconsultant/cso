@@ -190,7 +190,7 @@
                         <v-row class="mt-0">
                             <v-col cols="12" sm="12" md="12">
                                 <p class="mt-4 font-weight-bold">Attached File</p>
-                                <div v-if="file_name.length !== 0" v-if="crud_guard.upload">
+                                <div v-if="file_name.length !== 0 && crud_guard.upload">
                                     <v-chip class="ma-2" close color="indigo darken-3" outlined
                                         @click:close="removeFile">
                                         <v-icon left> mdi-file </v-icon>

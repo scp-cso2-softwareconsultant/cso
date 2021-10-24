@@ -486,12 +486,12 @@ class commonController extends Controller
                         participant_profile.participant_location,
                         participant_profile.participant_address,
                         cso_profile.cso_name,
-                        cso_profile.position_in_organization
+                        participant_profile.position_in_organization,
                         participant_profile.participant_position,
                         participant_profile.participant_gender,
                         participant_profile.participant_age,
                         participant_profile.cso_affiliation,
-                        participant_profile.date_of_training
+                        participant_profile.date_of_training,
                         participant_profile.created_at,
                         participant_profile.created_by,
                         participant_profile.updated_at,

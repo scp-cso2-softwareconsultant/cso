@@ -84,7 +84,7 @@
                                         <v-col cols="12" sm="12" md="12">
                                             <v-text-field v-model="editedItem.cso_affiliation"
                                                 :readonly="detailsReadonly" :rules="[rules.number]"
-                                                label="CSO Affiliation" dense></v-text-field>
+                                                label="Name of Organization/Network" dense></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row class="mt-0" v-if="!detailsReadonly">
@@ -424,6 +424,13 @@
                     align: "start",
                     sortable: false,
                     value: "participant_name",
+                    width: "25%",
+                },
+                {
+                    text: "Name of Organization/Network",
+                    align: "start",
+                    sortable: false,
+                    value: "cso_affiliation",
                     width: "25%",
                 },
                 {

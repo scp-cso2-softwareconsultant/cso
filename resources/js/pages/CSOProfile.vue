@@ -289,7 +289,7 @@
                         ></v-select> -->
                         <v-text-field
                           v-model="editedItem.is_lro"
-                          label="Is LRO? *"
+                          label="Type of CSO2 Project Support*"
                           dense
                           :rules="[rules.required]"
                         ></v-text-field>
@@ -299,7 +299,7 @@
                       <v-col cols="12" sm="12" md="12">
                         <v-text-field
                           v-model="editedItem.is_lro"
-                          label="Is LRO? *"
+                          label="Type of CSO2 Project Support *"
                           dense
                           readonly
                         ></v-text-field>
@@ -476,14 +476,14 @@
                 outlined
                 hide-details
               ></v-select> -->
-               <v-text-field
+               <!-- <v-text-field
                 v-model="filters.filter_items['is_lro'].value"
                 :label="filters.filter_items['is_lro'].text"
                 @input="changeFilterActiveValue('cso_name')"
                 append-icon="mdi-magnify"
                 outlined
                 hide-details
-              ></v-text-field>
+              ></v-text-field> -->
             </v-col>
           </v-row>
         </template>
@@ -670,7 +670,7 @@ export default {
         },
         is_lro: {
           value: "",
-          text: "Is LRO",
+          text: "Type of CSO2 Project Support",
           data_value: "is_lro",
           multiple_selection: [
             {
@@ -1015,7 +1015,7 @@ export default {
         }
       }
       if (!this.editedItem.is_lro) {
-        this.$noty.error("Is LRO is empty!");
+        this.$noty.error("Type of CSO2 Project Support is empty!");
         validate = false;
       }
       if (!this.editedItem.type_of_support) {
