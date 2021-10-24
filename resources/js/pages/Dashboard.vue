@@ -145,7 +145,7 @@
         </v-card>
       </v-flex>
       <v-flex>
-        <v-card class="d-flex justify-content-around mt-4">
+        <v-card class="d-flex justify-content-around mt-4 pt-4">
             <Bar1 :D="thematicBarData" />
             <Bar2 :D="coreServicesBarData" />
         </v-card>
@@ -603,7 +603,7 @@ export default {
     thematicBarData:  {
       title: {
         text: "Thematic Areas",
-        left: "center",
+        left: "0",
       },
       aria: {
         enabled: true,
@@ -675,7 +675,7 @@ export default {
     coreServicesBarData:  {
       title: {
         text: "Organizational Core Services",
-        left: "center",
+        left: "0",
       },
       aria: {
         enabled: true,
@@ -1530,11 +1530,11 @@ export default {
   
       this.thematicBarData.xAxis.data = xAxis;
       this.thematicBarData.series[0].data = thematic;
-      this.thematicBarData.xAxis.max = xAxMax + (xAxMax < 5? 2 : 0)
+      this.thematicBarData.xAxis.max = xAxMax + (xAxMax < 5? 6 : 0)
 
       this.coreServicesBarData.xAxis.data = xAxis2;
       this.coreServicesBarData.series[0].data = coreService;
-      this.coreServicesBarData.xAxis.max = xAxMax2 + (xAxMax < 5? 2 : 0) 
+      this.coreServicesBarData.xAxis.max = xAxMax2 + (xAxMax < 5? 6 : 0) 
     },
 
     //ASYNC REQ

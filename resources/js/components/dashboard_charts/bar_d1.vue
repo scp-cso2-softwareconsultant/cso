@@ -32,5 +32,5 @@ export default {
 }
 </script>
 <style scoped>
-    #bar1{  height: 60vh; width: 50vh; }
+    #bar1{  height: 60vh; width: 55vh; }
 </style>

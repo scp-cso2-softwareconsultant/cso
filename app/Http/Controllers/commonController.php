@@ -429,7 +429,7 @@ class commonController extends Controller
                     $Exmode = 1;
 
                     $result = DB::table("lro_assessment AS la")->select(
-                        DB::raw("la.lro_assessment_id, la.lro_name, la.tool_used, la.conducted_by, la.assessment_date, la.final_score, la.mov, la.status, la.created_by, la.created_at,  la.updated_by, la.updated_at ")
+                        DB::raw("la.lro_assessment_id, la.lro_name, la.org_address, la.tool_used, la.conducted_by, la.assessment_date, la.final_score, la.mov, la.status, la.created_by, la.created_at,  la.updated_by, la.updated_at ")
                     )
                     ->whereRaw(DB::raw("la.deleted_at IS NULL"))->get();
 
@@ -459,8 +459,8 @@ class commonController extends Controller
                     $data1 -> title = $dataExport-> SH_HEADERS[0];
                     $data2 -> title = $dataExport-> SH_HEADERS[1];
 
-                    $data1 -> dataHeaders = ["ASSESSMENT RECORD NO","NAME OF LRO","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS", "CREATED BY", "CREATED AT","UPDATED BY","UPDATED AT" ];
-                    $data1 -> defaultHeaders = ["lro_assessment_id", "lro_name", "tool_used", "conducted_by", "assessment_date", "final_score", "mov", "status", "created_by","created_at", "updated_by","updated_at"];
+                    $data1 -> dataHeaders = ["ASSESSMENT RECORD NO","NAME OF LRO","ADDRESS","TOOL USED","CONDUCTED BY","ASSESSMENT DATE","FINAL SCORE","MOV","STATUS", "CREATED BY", "CREATED AT","UPDATED BY","UPDATED AT" ];
+                    $data1 -> defaultHeaders = ["lro_assessment_id", "lro_name", "org_address" , "tool_used", "conducted_by", "assessment_date", "final_score", "mov", "status", "created_by","created_at", "updated_by","updated_at"];
 
                     $data2 -> dataHeaders = ["ASSESSMENT RECORD NO","CSO NAME","DOMAIN","RATING","FILE ATTACHMENT","REMARKS","CREATED BY","DATE CREATED","UPDATED BY","DATE UPDATED"];
                     $data2 -> defaultHeaders = ["lro_assessment_id","lro_name","sub_domain","rating","file_attachment","remarks", "created_by","created_at", "updated_by","updated_at",];
