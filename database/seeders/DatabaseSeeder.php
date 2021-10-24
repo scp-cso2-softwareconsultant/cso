@@ -22,8 +22,6 @@ class DatabaseSeeder extends Seeder
         DB::table('roles')->truncate();
         DB::table('roles_permission')->truncate();
         DB::table('crud_guard')->truncate();
-        DB::table('project_tracking_document')->truncate();
-        DB::table('project_tracking_objectives')->truncate();
         DB::statement("SET foreign_key_checks=1");
 
         
@@ -940,6 +938,314 @@ class DatabaseSeeder extends Seeder
                     'upload'=>false,
                 )
             ),
+
+
+            // =======================================================
+
+            'COP' => array(
+                "login"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "Users"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>false,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "Dashboard" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "CSOIndicator" => array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "Assessment" => array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "FinanceTracker" => array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>false,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "CSOProfile"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "ProjectTrackingDocuments"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "LMS"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                )
+            ),
+            // =================================================================\
+            'MEAL' => array(
+                "login"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "Users"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>false,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "Dashboard" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "CSOIndicator" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "Assessment" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "FinanceTracker" => array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "CSOProfile"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,
+                ),
+                "ProjectTrackingDocuments"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,    
+                ),
+                "LMS"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                )
+            ),
+            'ATENEO-CORD' => array(
+                "login"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "Users"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "Dashboard" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "CSOIndicator" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "Assessment" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "FinanceTracker" => array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                ),
+                "CSOProfile"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,   
+                ),
+                "ProjectTrackingDocuments"=>array(
+                    'create'=>false,
+                    'read'=>false,
+                    'update'=>false,
+                    'delete'=>false,
+                    'view'=>true,
+                    'export'=>false,
+                    'download'=>false,
+                    'print'=>false,
+                    'upload'=>false,   
+                ),
+                "LMS"=>array(
+                    'create'=>true,
+                    'read'=>true,
+                    'update'=>true,
+                    'delete'=>true,
+                    'view'=>true,
+                    'export'=>true,
+                    'download'=>true,
+                    'print'=>true,
+                    'upload'=>true,
+                )
+            ),
         );
 
         foreach ( $collection  as $role => $roles_permission){
@@ -1022,22 +1328,6 @@ class DatabaseSeeder extends Seeder
                 "next_month_planning"=>""
             )
         );
-        $project_tracking_document_id = DB::table('project_tracking_document')->insertGetId([
-            "donor_report" => "donor report test 1 ",
-            "actions_or_support" => "Actions or support test"	,
-            "spent_to_date"	=> 12345,
-        ]);
-        foreach ($project_tracking as $key => $objective ){
-            DB::table('project_tracking_objectives')->insert([
-                'Implementation_vs_target' => $objective['Implementation_vs_target'],
-                'Objective' => $objective['Objective'],
-                'challanges' =>$objective['challanges'],
-                'estimated_progress' => $objective['estimated_progress'],
-                'indicators' => $objective['indicators'],
-                'next_month_planning' => $objective['next_month_planning'],
-                'project_tracking_document_id'=>$project_tracking_document_id
-            ]);
-        }
         $typeOfSupport =  array(
             1=>'LRO',
             2=>'LRO-supported',
@@ -1053,6 +1343,5 @@ class DatabaseSeeder extends Seeder
                 'name'=> $support 
             ]);
         }
-      
     }
 }
