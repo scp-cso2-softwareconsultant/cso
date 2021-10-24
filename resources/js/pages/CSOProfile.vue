@@ -1039,15 +1039,6 @@ export default {
           t3 = "",
           t4 = "";
 
-        if (editedITEM.cso_stakeholders.length > 0)
-          editedITEM.cso_stakeholders.forEach((stakeholder) => {
-            t += "^^" + stakeholder.text;
-          });
-        if (editedITEM.cso_registration.length > 0)
-          editedITEM.cso_registration.forEach((registration) => {
-            t2 += "^^" + registration.text;
-          });
-
         if(typeof editedITEM.cso_stakeholders === 'object' && editedITEM.cso_stakeholders.length > 0 ) 
                         editedITEM.cso_stakeholders.forEach((stakeholder) => {
                             if(  typeof stakeholder === 'object')
