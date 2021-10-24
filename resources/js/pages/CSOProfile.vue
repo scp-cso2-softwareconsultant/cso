@@ -280,13 +280,19 @@
                     </v-row>
                     <v-row class="mt-0" v-if="!detailsReadonly">
                       <v-col cols="12" sm="12" md="12">
-                        <v-select
+                        <!-- <v-select
                           :items="isLRO_list"
                           v-model="editedItem.is_lro"
                           label="Is LRO? *"
                           dense
                           :rules="[rules.required]"
-                        ></v-select>
+                        ></v-select> -->
+                        <v-text-field
+                          v-model="editedItem.is_lro"
+                          label="Is LRO? *"
+                          dense
+                          :rules="[rules.required]"
+                        ></v-text-field>
                       </v-col>
                     </v-row>
                     <v-row class="mt-0" v-if="detailsReadonly">
@@ -462,14 +468,22 @@
               style="min-width: 100px; max-width: 70%"
               class="flex-grow-1 flex-shrink-0"
             >
-              <v-select
+              <!-- <v-select
                 v-model="filters.filter_items['is_lro'].value"
                 :label="filters.filter_items['is_lro'].text"
                 :items="filters.filter_items['is_lro'].multiple_selection"
                 @input="changeFilterActiveValue('is_lro')"
                 outlined
                 hide-details
-              ></v-select>
+              ></v-select> -->
+               <v-text-field
+                v-model="filters.filter_items['is_lro'].value"
+                :label="filters.filter_items['is_lro'].text"
+                @input="changeFilterActiveValue('cso_name')"
+                append-icon="mdi-magnify"
+                outlined
+                hide-details
+              ></v-text-field>
             </v-col>
           </v-row>
         </template>
@@ -697,7 +711,7 @@ export default {
         sortable: false,
       },
       {
-        text: "Is LRO?",
+        text: "Type of CSO2 Project Support",
         value: "is_lro",
         width: "10%",
         sortable: false,
