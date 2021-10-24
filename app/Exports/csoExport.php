@@ -73,7 +73,7 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                     'CSO_NUMBER_NETWOR_MEMBERS', 
                     'CSO_STAKEHOLDERS', 
                     'TYPE OF CSO2 PROJECT SUPPORT', 
-                    'TYPE_OF_SUPPORT', 
+                    'Classification of CSO/CSO Network in CSO2', 
                     'CSO_NAME', 
                     'CSO_TYPE', 
                     'CREATED_BY',

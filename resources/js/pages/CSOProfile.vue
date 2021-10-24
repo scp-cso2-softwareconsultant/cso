@@ -310,7 +310,7 @@
                         <v-select
                           :items="type_of_support_list"
                           v-model="editedItem.type_of_support"
-                          label="Types of Support"
+                          label="Classification of CSO/CSO Network in CSO2"
                           dense
                           :rules="[rules.required]"
                         ></v-select>
@@ -320,7 +320,7 @@
                       <v-col cols="12" sm="12" md="12">
                         <v-text-field
                           v-model="editedItem.type_of_support"
-                          label="Types of support "
+                          label="Classification of CSO/CSO Network in CSO2 "
                           dense
                           readonly
                         ></v-text-field>
@@ -805,7 +805,7 @@ export default {
     },
     toMultiple() {},
     initialize() {
-      document.title = "CSO/CSO Network Identity to CSO/CSO Network Basic Information";
+      document.title = "CSO/CSO Network Basic Information";
       this.loadCSOProfile = true;
       axios.get("/user-roles-permission").then((response) => {
         const moduleName = "CSOProfile";
