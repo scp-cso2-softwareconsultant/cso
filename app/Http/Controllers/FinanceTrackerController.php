@@ -61,10 +61,6 @@ class FinanceTrackerController extends Controller
         $finance_total = $finance_tranche1 + $finance_tranche2 + $finance_tranche3 + $finance_tranche4 ;
         $finance_actuals = $raw_data->finance_actuals != '' ? $raw_data->finance_actuals : 0;
         $finance_variance = $finance_total - $finance_actuals;
-        $finance_burn1 = $raw_data->finance_burn1 != '' ? $raw_data->finance_burn1 : 0;
-        $finance_burn2 = $raw_data->finance_burn2 != '' ? $raw_data->finance_burn2 : 0;
-        $finance_burn3 = $raw_data->finance_burn3 != '' ? $raw_data->finance_burn3 : 0;
-        $finance_burn4 = $raw_data->finance_burn4 != '' ? $raw_data->finance_burn4 : 0;
         $finance_burn_rate = $finance_actuals / ($finance_tranche1+$finance_tranche2+$finance_tranche3+$finance_tranche4)* 100; 
 
         $this->saveCSOLeadOrganizationIfNotExist($raw_data->finance_name);
@@ -84,10 +80,6 @@ class FinanceTrackerController extends Controller
                 'finance_total' => $finance_total,
                 'finance_actuals' => $finance_actuals,
                 'finance_variance'=> $finance_variance,
-                'finance_burn1' => $finance_burn1,
-                'finance_burn2' => $finance_burn2,
-                'finance_burn3' => $finance_burn3,
-                'finance_burn4' => $finance_burn4,
                 'finance_burn_rate' => $finance_burn_rate,
                 'created_at' => date("Y-m-d h:i:s"),
                 'created_by' => $user_name,
@@ -111,10 +103,6 @@ class FinanceTrackerController extends Controller
                     'finance_total' => $finance_total,
                     'finance_actuals' => $finance_actuals,
                     'finance_variance'=> $finance_variance,
-                    'finance_burn1' => $finance_burn1,
-                    'finance_burn2' => $finance_burn2,
-                    'finance_burn3' => $finance_burn3,
-                    'finance_burn4' => $finance_burn4,
                     'finance_burn_rate' => $finance_burn_rate,
                     'updated_at' => date("Y-m-d h:i:s"),
                     'updated_by' => $user_name,

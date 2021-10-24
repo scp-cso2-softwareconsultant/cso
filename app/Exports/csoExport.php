@@ -82,20 +82,16 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                 break;
             case "FinanceTracker":
                 $header = [
-                            'NAME', 
-                            'BUDGET', 
-                            '1ST TRANCHE', 
-                            '2ND TRANCHE', 
-                            '3RD TRANCHE', 
-                            '4TH TRANCHE', 
-                            'TOTAL',
-                            'ACTUALS', 
-                            'VARIANCE', 
-                            'BURN RATE (1ST LIQ)', 
-                            'BURN RATE (2ND LIQ)', 
-                            'BURN RATE (3RD LIQ)',
-                            'BURN RATE (4TH LIQ)', 
-                            'BURN RATE (TOTAL)'
+                    'finance_name',
+                    'finance_budget',
+                    'finance_tranche1',
+                    'finance_tranche2',
+                    'finance_tranche3',
+                    'finance_tranche4',
+                    'finance_total',
+                    'finance_actuals',
+                    'finance_variance',
+                    'finance_burn_rate', 
                         ];
                 break;
             case "ProjectTrackingDocument":

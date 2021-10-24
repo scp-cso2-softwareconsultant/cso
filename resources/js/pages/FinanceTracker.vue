@@ -124,35 +124,7 @@
                                         <v-row class="mt-0" v-if="detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-text-field v-model="editedItem.finance_variance" label="Variance"
-                                                    dense filled disabled></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="true" :rules="[rules.number]"
-                                                    v-model="editedItem.finance_burn1" label="Burn Rate (1st Liq)"
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="true" :rules="[rules.number]"
-                                                    v-model="editedItem.finance_burn2" label="Burn Rate (2nd Liq)"
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="true" :rules="[rules.number]"
-                                                    v-model="editedItem.finance_burn3" label="Burn Rate (3rd Liq)"
-                                                    dense></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="true" :rules="[rules.number]"
-                                                    v-model="editedItem.finance_burn4" label="Burn Rate (4th Liq)"
-                                                    dense></v-text-field>
+                                                    dense ></v-text-field>
                                             </v-col>
                                         </v-row>
                                         <v-row class="mt-0" v-if="detailsReadonly">
@@ -643,10 +615,6 @@
                 finance_total: "",
                 finance_actuals: "",
                 finance_variance: "",
-                finance_burn1: "",
-                finance_burn2: "",
-                finance_burn3: "",
-                finance_burn4: "",
                 finance_burn_rate: "",
             },
             defaultItem: {
@@ -663,10 +631,6 @@
                 finance_total: "",
                 finance_actuals: "",
                 finance_variance: "",
-                finance_burn1: "",
-                finance_burn2: "",
-                finance_burn3: "",
-                finance_burn4: "",
                 finance_burn_rate: "",
             },
             delete_finance: "",
@@ -875,78 +839,6 @@
                 return ((tran / budg) * 100).toFixed(2);
             },
             computeBurnRate: function () {
-                if (this.editedItem.finance_budget != "") {
-                    var CpyItm = this.editedItem;
-
-                    const burn_1 = this.getBurn(
-                        parseFloat(CpyItm.finance_tranche1),
-                        CpyItm.finance_budget
-                    );
-
-                    if (!isNaN(burn_1)) this.editedItem.finance_burn1 = burn_1;
-                    else {
-                        this.editedItem.finance_tranche1 = "";
-                        this.editedItem.finance_tranche2 = "";
-                        this.editedItem.finance_tranche3 = "";
-                        this.editedItem.finance_tranche4 = "";
-                        this.editedItem.finance_burn4 = "";
-                        this.editedItem.finance_burn3 = "";
-                        this.editedItem.finance_burn2 = "";
-                        this.editedItem.finance_burn1 = "";
-                    }
-
-                    const burn_2 = this.getBurn(
-                        parseFloat(CpyItm.finance_tranche1) +
-                        parseFloat(CpyItm.finance_tranche2),
-                        CpyItm.finance_budget
-                    );
-                    if (!isNaN(burn_2)) this.editedItem.finance_burn2 = burn_2;
-                    else {
-                        this.editedItem.finance_tranche2 = "";
-                        this.editedItem.finance_tranche3 = "";
-                        this.editedItem.finance_tranche4 = "";
-                        this.editedItem.finance_burn4 = "";
-                        this.editedItem.finance_burn3 = "";
-                        this.editedItem.finance_burn2 = "";
-                    }
-
-                    const burn_3 = this.getBurn(
-                        parseFloat(CpyItm.finance_tranche1) +
-                        parseFloat(CpyItm.finance_tranche2) +
-                        parseFloat(CpyItm.finance_tranche3),
-                        CpyItm.finance_budget
-                    );
-                    if (!isNaN(burn_3)) this.editedItem.finance_burn3 = burn_3;
-                    else {
-                        this.editedItem.finance_tranche3 = "";
-                        this.editedItem.finance_tranche4 = "";
-                        this.editedItem.finance_burn4 = "";
-                        this.editedItem.finance_burn3 = "";
-                    }
-
-                    const burn_4 = this.getBurn(
-                        parseFloat(CpyItm.finance_tranche1) +
-                        parseFloat(CpyItm.finance_tranche2) +
-                        parseFloat(CpyItm.finance_tranche3) +
-                        parseFloat(CpyItm.finance_tranche4),
-                        CpyItm.finance_budget
-                    );
-
-                    if (!isNaN(burn_4)) this.editedItem.finance_burn4 = burn_4;
-                    else {
-                        this.editedItem.finance_tranche4 = "";
-                        this.editedItem.finance_burn4 = "";
-                    }
-                } else {
-                    this.editedItem.finance_burn4 = "";
-                    this.editedItem.finance_burn3 = "";
-                    this.editedItem.finance_burn2 = "";
-                    this.editedItem.finance_burn1 = "";
-                    this.editedItem.finance_tranche1 = "";
-                    this.editedItem.finance_tranche2 = "";
-                    this.editedItem.finance_tranche3 = "";
-                    this.editedItem.finance_tranche4 = "";
-                }
             },
             formatAsCurrency: function (amt, dec) {
                 amt = parseFloat(amt);

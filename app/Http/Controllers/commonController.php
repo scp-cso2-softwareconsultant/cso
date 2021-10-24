@@ -417,10 +417,6 @@ class commonController extends Controller
                                 finance_total,
                                 finance_actuals,
                                 finance_variance,
-                                finance_burn1,
-                                finance_burn2,
-                                finance_burn3,
-                                finance_burn4,
                                 finance_burn_rate")
                 )->whereRaw("deleted_at IS NULL")->get();
                 break;

@@ -1135,13 +1135,22 @@ export default {
         colors: ["transparent"],
       },
       xaxis: {
+        
         categories: ["AHA!BD", "PICPA", "AteneoCORD"],
       },
       yaxis: {
+        max: 100,
         title: {
           text: "Total percentage",
+          formatter: (value) => { return `${val}%` },
+        },
+        tooltip: {
+          enabled: true,
+          offsetX: 0,
+          formatter: (value) => { return `${val}%` },
         },
       },
+
       fill: {
         opacity: 1,
       },
@@ -1735,10 +1744,6 @@ export default {
             var budget_remaining = [];
             var burn_rate = [];
             var burnRateSeries = [];
-            var burnRate1 = [];
-            var burnRate2 = [];
-            var burnRate3 = [];
-            var burnRate4 = [];
             var burnRateNames = [];
             var used = {};
 
@@ -1751,18 +1756,10 @@ export default {
               const actuals = this.roundUp(
                 parseFloat(finance["finance_actuals"])
               );
-              const burnRate1Value = this.roundUp(
-                parseFloat(finance["finance_burn1"])
+              const burn_rate_value = this.roundUp(
+                parseFloat(finance['finance_burn_rate'])
               );
-              const burnRate2Value = this.roundUp(
-                parseFloat(finance["finance_burn2"])
-              );
-              const burnRate3Value = this.roundUp(
-                parseFloat(finance["finance_burn3"])
-              );
-              const burnRate4Value = this.roundUp(
-                parseFloat(finance["finance_burn4"])
-              );
+              
               let name = finance_tracker_data[index]["finance_name"];
               let newName = name;
               while (used[newName]) newName = `${name}(${used[name]++})`;
@@ -1771,12 +1768,8 @@ export default {
               approved_budget.push(budget);
               actual_expenditure.push(actuals);
               budget_remaining.push(this.roundUp(budget - actuals));
-              burn_rate.push(this.roundUp(actuals / budget));
 
-              burnRate1.push(burnRate1Value);
-              burnRate2.push(burnRate2Value);
-              burnRate3.push(burnRate3Value);
-              burnRate4.push(burnRate4Value);
+              burn_rate.push(  burn_rate_value );
               burnRateNames.push(newName);
             }
             this.burnRateChartOptions = {
@@ -1789,13 +1782,13 @@ export default {
             this.burnRateSeries = [
               {
                 name: "Burn Rate",
-                data: burnRate1,
+                data: burn_rate,
               },
             ];
           })
         )
         .catch((errors) => {
-          // console.log(errors)
+          console.log(errors)
         });
     },
     roundUp(num) {
