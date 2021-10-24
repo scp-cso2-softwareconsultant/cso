@@ -641,7 +641,7 @@ export default {
         containLabel: true,
       },
       xAxis: {
-        type: "value"
+        type: "value",
       },
       yAxis: {
         type: "category",
@@ -714,7 +714,7 @@ export default {
       },
       xAxis: {
         type: "value",
-        minInterval: 1
+        mix: 10
       },
       yAxis: {
         type: "category",
@@ -1486,7 +1486,9 @@ export default {
       })
 
       var xAxis = Array(this.thematicBarData.yAxis.data.length).fill(0);
+      var xAxMax = 0
       var xAxis2 = Array(this.coreServicesBarData.yAxis.data.length).fill(0);
+      var xAxMax2 = 0
 
       csoProfile.forEach((item) => {
         var thematics = item.cso_thematic_areas.split("^^");
@@ -1513,6 +1515,7 @@ export default {
           name: name,
         };
         xAxis[idx] = thematic[idx].value;
+        xAxMax = Math.max(xAxMax, xAxis[idx])
       });
       xAxis2.forEach((item, idx) => {
         let name = `${this.coreServicesBarData.yAxis.data[idx]} : ${item}`;
@@ -1520,15 +1523,18 @@ export default {
           value: item,
           name: name,
         };
-        xAxis[idx] = coreService[idx].value;
+        xAxis2[idx] = coreService[idx].value;
+        xAxMax2 = Math.max(xAxMax2, xAxis2[idx])
       });
 
   
       this.thematicBarData.xAxis.data = xAxis;
       this.thematicBarData.series[0].data = thematic;
+      this.thematicBarData.xAxis.max = xAxMax + (xAxMax < 5? 2 : 0)
 
       this.coreServicesBarData.xAxis.data = xAxis2;
       this.coreServicesBarData.series[0].data = coreService;
+      this.coreServicesBarData.xAxis.max = xAxMax2 + (xAxMax < 5? 2 : 0) 
     },
 
     //ASYNC REQ
