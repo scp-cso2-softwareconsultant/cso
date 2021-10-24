@@ -108,13 +108,6 @@
                                                 </p>
                                             </v-col>
                                         </v-row>
-                                        <v-row class="mt-0">
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-text-field :readonly="detailsReadonly" :rules="[rules.number]"
-                                                    v-model="editedItem.finance_retention" label="Retention" dense>
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
                                         <v-row class="mt-0" v-if="detailsReadonly">
                                             <v-col cols="12" sm="12" md="12">
                                                 <v-text-field v-model="editedItem.finance_total" label="Total" dense
@@ -402,10 +395,10 @@
                             //     text: "Range",
                             //     value: "range"
                             // },
-                            {
-                                text: "Equal to",
-                                value: "=="
-                            },
+                            // {
+                            //     text: "Equal to",
+                            //     value: "=="
+                            // },
                             {
                                 text: "Greater than or equal to",
                                 value: ">="
@@ -457,10 +450,10 @@
                             //     text: "Range",
                             //     value: "range"
                             // },
-                            {
-                                text: "Equal to",
-                                value: "=="
-                            },
+                            // {
+                            //     text: "Equal to",
+                            //     value: "=="
+                            // },
                             {
                                 text: "Greater than or equal to",
                                 value: ">="
@@ -512,10 +505,10 @@
                             //     text: "Range",
                             //     value: "range"
                             // },
-                            {
-                                text: "Equal to",
-                                value: "=="
-                            },
+                            // {
+                            //     text: "Equal to",
+                            //     value: "=="
+                            // },
                             {
                                 text: "Greater than or equal to",
                                 value: ">="
@@ -562,14 +555,15 @@
                         text: "Choose value",
                         data_value: "finance_burn_rate_selection",
                         inherit_value: "finance_burn_rate", // <--------------------------- Needed for the key
-                        multiple_selection: [{
-                                text: "Range",
-                                value: "range"
-                            },
-                            {
-                                text: "Equal to",
-                                value: "=="
-                            },
+                        multiple_selection: [
+                            // {
+                            //     text: "Range",
+                            //     value: "range"
+                            // },
+                            // {
+                            //     text: "Equal to",
+                            //     value: "=="
+                            // },
                             {
                                 text: "Greater than or equal to",
                                 value: ">="
@@ -646,7 +640,6 @@
                 finance_tranche2_date: "",
                 finance_tranche3_date: "",
                 finance_tranche4_date: "",
-                finance_retention: "",
                 finance_total: "",
                 finance_actuals: "",
                 finance_variance: "",
@@ -667,7 +660,6 @@
                 finance_tranche2_date: "",
                 finance_tranche3_date: "",
                 finance_tranche4_date: "",
-                finance_retention: "",
                 finance_total: "",
                 finance_actuals: "",
                 finance_variance: "",

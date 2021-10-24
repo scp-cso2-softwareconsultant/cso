@@ -76,7 +76,7 @@ export default {
             item_list: [
                 { name: "Dashboard",text: 'Dashboard', icon: 'mdi-chart-bar-stacked', linkTo: '/dashboard', has_sub_items: false },
                 { name: "CSOIndicator", text: 'CSO² Project Indicator', icon: 'mdi-briefcase-edit', linkTo: '/cso-indicator', has_sub_items: false },
-                { name: "CSOProfile", text: 'CSO Network Members Profile', icon: 'mdi-account-network', linkTo: '/cso-profile', has_sub_items: false },
+                { name: "CSOProfile", text: 'CSO/CSO Network Identity to CSO/CSO Network Basic Information', icon: 'mdi-account-network', linkTo: '/cso-profile', has_sub_items: false },
                 { name: "Assessment", text: 'Assessment', icon: 'mdi-format-list-text', linkTo: '/assessment', has_sub_items: false },
                 { name: "FinanceTracker", text: 'Finance Tracker', icon: 'mdi-credit-card', linkTo: '/finance-tracker', has_sub_items: false },
                 { name: "ProjectTrackingDocuments", text: 'Project Tracking Document', icon: 'mdi-clipboard-text-search-outline', linkTo: '/project-tracking-documents', has_sub_items: false },

@@ -25,9 +25,20 @@
                         <v-list-item>
                             <v-list-item-content>
                                 <div class="overline text-left">
-                                    Start Date :<strong>
-                                        {{ editedItem.startDate }}
-                                    </strong>
+                                    <v-menu ref="modelStartDate" v-model="modelStartDate"
+                                        :close-on-content-click="false" transition="scale-transition" offset-y
+                                        max-width="290px" min-width="auto" dense>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-text-field v-model="editedItem.startDate " label="Start Date"
+                                                persistent-hint append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                                                @change="compute()" 
+                                                dense>
+                                            </v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="editedItem.startDate" no-title
+                                            @change="compute()" 
+                                            @input="modelStartDate = false;compute()" dense></v-date-picker>
+                                    </v-menu>
                                 </div>
                                 <div class="overline text-left">
                                     Current Date :
@@ -43,7 +54,19 @@
                                     <strong> {{ editedItem.daysLeft }} </strong>
                                 </div>
                                 <div class="overline text-left">
-                                    End Date: <strong> {{ editedItem.endDate }} </strong>
+                                    <v-menu ref="modelEndDate" v-model="modelEndDate"
+                                        :close-on-content-click="false" transition="scale-transition" offset-y
+                                        max-width="290px" min-width="auto" dense>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-text-field v-model="editedItem.endDate" label="End Date"
+                                                persistent-hint append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                                                @change="compute()"
+                                                dense>
+                                            </v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="editedItem.endDate" no-title
+                                            @change="compute()" @input="modelEndDate = false;compute()" dense></v-date-picker>
+                                    </v-menu>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
@@ -121,6 +144,8 @@
 
                 canBeSaved: false,
                 percent_complete: 0,
+                modelStartDate: false,
+                modelEndDate: false,
                 crud_guard: {
                     create: 0,
                     delete: 0,
@@ -331,6 +356,7 @@
                 axios.get("/get-project-tracking-document").then((response) => {
                     const data = response.data;
                     this.editedItem = data;
+                    this.computeDate();
                 });
                 axios.get("/dashboard-finance-tracker").then((response) => {
                     const data = response.data;
@@ -341,6 +367,7 @@
                     }
                     this.editedItem.totalBudget = total_budget;
                     this.init();
+                    
                 });
                 this.update_dashboard();
             },
@@ -363,6 +390,8 @@
                         }
                         total_activities += 1;
                     }
+
+
                     (this.editedItem.objective_1 = (objective_1 / total_activities) * 100),
                     (this.editedItem.objective_2 =
                         (objective_2 / total_activities) * 100),
@@ -412,17 +441,16 @@
                     this.editedItem.remaining = 0.0;
                 }
             },
-            init() {
-                this.setBurnRate();
+            computeDate(){
                 this.editedItem.curDate = this.getParsedDate(new Date());
-                this.editedItem.startDate = this.getParsedDate(
-                    new Date("OCTOBER/4/2019")
-                );
-                this.editedItem.endDate = this.getParsedDate(new Date("OCTOBER/4/2022"));
+                // this.editedItem.startDate = this.getParsedDate( new Date("OCTOBER/4/2019") );
+                // this.editedItem.endDate = this.getParsedDate(new Date("OCTOBER/4/2022"));
+
                 this.editedItem.daysCompleted = days360(
                     this.getRealDate(this.editedItem.startDate),
                     this.getRealDate(this.editedItem.curDate)
                 );
+
                 this.editedItem.daysLeft = days360(
                     this.getRealDate(this.editedItem.curDate),
                     this.getRealDate(this.editedItem.endDate)
@@ -432,7 +460,14 @@
                         (this.editedItem.daysLeft + this.editedItem.daysCompleted)) *
                     100
                 ).toFixed(2);
+            },
+            compute(){
+                this.setBurnRate();
+                this.computeDate();
                 this.computeRemaining();
+            },
+            init() {
+                this.compute();
             },
         },
         created() {

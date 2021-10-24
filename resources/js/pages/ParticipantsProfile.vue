@@ -82,11 +82,39 @@
                                     </v-row>
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12">
+                                            <v-text-field v-model="editedItem.cso_affiliation"
+                                                :readonly="detailsReadonly" :rules="[rules.number]"
+                                                label="CSO Affiliation" dense></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0" v-if="!detailsReadonly">
+                                        <v-col cols="12" sm="12" md="12">
+                                            <v-menu ref="dateOfTrainingModal" v-model="dateOfTrainingModal"
+                                                :close-on-content-click="false" transition="scale-transition" offset-y
+                                                max-width="290px" min-width="auto" dense>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-text-field v-model="editedItem.date_of_training" label="Date of training"
+                                                        persistent-hint append-outer-icon="mdi-calendar" v-bind="attrs" v-on="on"
+                                                        dense></v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="editedItem.date_of_training" no-title
+                                                    @input="dateOfTrainingModal = false" dense></v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-0" v-if="detailsReadonly">
+                                        <v-col cols="12" sm="12" md="12">
+                                            <v-text-field v-model="editedItem.date_of_training" label="Date of training" dense
+                                                readonly></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <!-- <v-row class="mt-0">
+                                        <v-col cols="12" sm="12" md="12">
                                             <v-text-field :readonly="detailsReadonly" :rules="[rules.required]"
                                                 v-model="editedItem.participant_skills" label="Skills *" dense>
                                             </v-text-field>
                                         </v-col>
-                                    </v-row>
+                                    </v-row> -->
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12">
                                             <v-text-field :readonly="detailsReadonly" :rules="[rules.required]"
@@ -98,7 +126,7 @@
                                     <v-row class="mt-0">
                                         <v-col cols="12" sm="12" md="12">
                                             <v-text-field :readonly="detailsReadonly" :rules="[rules.required]"
-                                                v-model="editedItem.name_of_training" label="Name of Training *" dense>
+                                                v-model="editedItem.name_of_training" label=" Training Course *" dense>
                                             </v-text-field>
                                         </v-col>
                                     </v-row>
@@ -168,7 +196,7 @@
                     </v-col>
                     <v-col cols="2" style="min-width: 50px" class="flex-grow-0 flex-shrink-1">
                         <div v-if="
-                filters.filter_items['participant_age_selection'].value !='range' ">
+                            filters.filter_items['participant_age_selection'].value !='range' ">
                             <v-text-field v-model="filters.filter_items['participant_age'].value"
                                 :label="filters.filter_items['participant_age'].text"
                                 @input="changeFilterActiveValue('participant_age')" :rules="[rules.number]" outlined
@@ -209,12 +237,12 @@
                             @input="changeFilterActiveValue('participant_location')" append-icon="mdi-magnify" outlined
                             hide-details></v-text-field>
                     </v-col>
-                    <v-col cols="2" style="min-width: 100px; max-width: 50%" class="flex-grow-1 flex-shrink-0">
+                    <!-- <v-col cols="2" style="min-width: 100px; max-width: 50%" class="flex-grow-1 flex-shrink-0">
                         <v-text-field v-model="filters.filter_items['participant_skills'].value"
                             :label="filters.filter_items['participant_skills'].text"
                             @input="changeFilterActiveValue('participant_skills')" append-icon="mdi-magnify" outlined
                             hide-details></v-text-field>
-                    </v-col>
+                    </v-col> -->
                 </v-row>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
@@ -243,6 +271,7 @@
             dialogDelete: false,
             loadLMS: false,
             detailsReadonly: false,
+            dateOfTrainingModal: false,
             crud_guard: {
                 create: 0,
                 delete: 0,
@@ -288,7 +317,7 @@
                     },
                     participant_gender: {
                         value: "",
-                        text: "Sex",
+                        text: "Gender",
                         data_value: "participant_gender",
                         multiple_selection: [{
                                 text: "None",
@@ -365,15 +394,15 @@
                         text: "Participant Location",
                         data_value: "participant_location",
                     },
-                    participant_skills: {
-                        value: "",
-                        text: "Participant Skills",
-                        data_value: "Participant Skills",
-                    },
+                    // participant_skills: {
+                    //     value: "",
+                    //     text: "Participant Skills",
+                    //     data_value: "Participant Skills",
+                    // },
 
                     name_of_training: {
                         value: "",
-                        text: "Name of Training",
+                        text: " Training Course",
                         data_value: "name_of_training",
                     },
                     training_organizer: {
@@ -398,7 +427,7 @@
                     width: "25%",
                 },
                 {
-                    text: "Sex",
+                    text: "Gender",
                     align: "start",
                     sortable: false,
                     value: "participant_gender",
@@ -418,7 +447,7 @@
                     sortable: false,
                 },
                 {
-                    text: "Name of Training",
+                    text: " Training Course",
                     value: "name_of_training",
                     width: "25%",
                     sortable: false,
@@ -429,12 +458,12 @@
                     width: "25%",
                     sortable: false,
                 },
-                {
-                    text: "Skills",
-                    value: "participant_skills",
-                    width: "15%",
-                    sortable: false,
-                },
+                // {
+                //     text: "Skills",
+                //     value: "participant_skills",
+                //     width: "15%",
+                //     sortable: false,
+                // },
                 {
                     text: "Position in Organization",
                     value: "position_in_organization",
@@ -459,7 +488,9 @@
                 lro_id: "",
                 participant_gender: "",
                 participant_age: "",
-                participant_skills: "",
+                cso_affiliation: "",
+                date_of_training: "",
+                // participant_skills: "",
                 position_in_organization:"",
                 name_of_training: "",
                 training_organizer: "",
@@ -474,7 +505,9 @@
                 lro_id: "",
                 participant_gender: "",
                 participant_age: "",
-                participant_skills: "",
+                cso_affiliation: "",
+                date_of_training: "",
+                // participant_skills: "",
                 position_in_organization:"",
                 name_of_training: "",
                 training_organizer: "",
@@ -645,12 +678,12 @@
                     this.$noty.error("Age is empty!");
                     validate = false;
                 }
-                if (!this.editedItem.participant_skills) {
-                    this.$noty.error("Skills is empty!");
-                    validate = false;
-                }
+                // if (!this.editedItem.participant_skills) {
+                //     this.$noty.error("Skills is empty!");
+                //     validate = false;
+                // }
                 if (!this.editedItem.name_of_training) {
-                    this.$noty.error("Name of Training is empty!");
+                    this.$noty.error(" Training Course is empty!");
                     validate = false;
                 }
                 if (!this.editedItem.training_organizer) {

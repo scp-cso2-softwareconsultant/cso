@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <h3 class="subheading grey--text">CSO Network Members Profile</h3>
+    <h3 class="subheading grey--text">CSO/CSO Network Identity to CSO/CSO Network Basic Information</h3>
     <br />
     <v-card>
       <v-data-table
@@ -791,7 +791,7 @@ export default {
     },
     toMultiple() {},
     initialize() {
-      document.title = "SCP: CSO² Project | CSO Network Members Profile";
+      document.title = "CSO/CSO Network Identity to CSO/CSO Network Basic Information";
       this.loadCSOProfile = true;
       axios.get("/user-roles-permission").then((response) => {
         const moduleName = "CSOProfile";
