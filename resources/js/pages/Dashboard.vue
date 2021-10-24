@@ -145,7 +145,7 @@
         </v-card>
       </v-flex>
       <v-flex>
-        <v-card class="d-flex justify-content-around">
+        <v-card class="d-flex justify-content-around mt-4">
             <Bar1 :D="thematicBarData" />
             <Bar2 :D="coreServicesBarData" />
         </v-card>
@@ -714,6 +714,7 @@ export default {
       },
       xAxis: {
         type: "value",
+        minInterval: 1
       },
       yAxis: {
         type: "category",
