@@ -1559,8 +1559,8 @@ export default {
       const DATES = await this.req("/getDistinctAssessmentDate", {});
       const SUBDOMAIN = await this.req("/getDistinctSubDomain", {});
 
-      console.log("Dates",DATES)
-      console.log("SUBDOMAINS",SUBDOMAIN)
+      //console.log("Dates",DATES)
+      //console.log("SUBDOMAINS",SUBDOMAIN)
 
       let constructedDate = [];
       let constructedDate2 = [];
@@ -1570,11 +1570,10 @@ export default {
       let maxScore = 0;
 
       SUBDOMAIN.forEach((i) => {
-        console.log("Checking maxscore rating ->",i.rating)
         maxScore = Math.max(maxScore, i.rating);
       });
 
-      console.log("maxScore is",maxScore)
+      //console.log("maxScore is",maxScore)
 
       SUBDOMAIN.forEach((i) => {
         let search = indicators.find(
@@ -1588,7 +1587,7 @@ export default {
           });
       });
 
-      console.log("INDICATORS",indicators)
+      //console.log("INDICATORS",indicators)
 
       DATES.forEach((date) => {
         //     //date.year
@@ -1602,7 +1601,10 @@ export default {
             );
             let idx = indicators.indexOf(findObj);
             if (idx !== -1) {
-              D[idx] += dom.rating;
+              if(typeof(dom.rating) === typeof(""))
+                D[idx] += parseFloat(dom.rating.replace(/[^0-9$.,]/g, ''));
+              else
+                D[idx] += dom.rating;
               Div[idx] += 1;
             }
           }
@@ -1618,7 +1620,7 @@ export default {
         }
       });
 
-      console.log("CONSTRUCTED OPI",constructedDate)
+      //console.log("CONSTRUCTED OPI",constructedDate)
 
       DATES.forEach((date) => {
         //     //date.year
@@ -1631,10 +1633,11 @@ export default {
               (obj) => obj.name.toLowerCase() === dom.sub_domain.toLowerCase()
             );
             let idx = indicators.indexOf(findObj);
-            if (idx !== -1) {
+            if(typeof(dom.rating) === typeof(""))
+                D[idx] += parseFloat(dom.rating.replace(/[^0-9.,]/g, ''));
+            else
               D[idx] += dom.rating;
-              Div[idx] += 1;
-            }
+            Div[idx] += 1;
           }
         });
 
@@ -1648,7 +1651,7 @@ export default {
         }
       });
 
-      console.log("CONSTRUCTED OCAT",constructedDate2)
+      //console.log("CONSTRUCTED OCAT",constructedDate2)
 
       constructedDate.forEach((i) => {
         i.value.forEach((ix, idx) => {
@@ -1657,7 +1660,7 @@ export default {
         });
       });
 
-      console.log("CONSTRUCTED OPI",constructedDate)
+      //console.log("CONSTRUCTED OPI",constructedDate)
 
 
       this.radarData.series.push({
@@ -1673,7 +1676,7 @@ export default {
         });
       });
 
-      console.log("CONSTRUCTED OCAT",constructedDate2)
+      //console.log("CONSTRUCTED OCAT",constructedDate2)
 
 
       this.radarData.series.push({
