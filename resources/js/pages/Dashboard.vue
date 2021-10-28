@@ -1559,6 +1559,9 @@ export default {
       const DATES = await this.req("/getDistinctAssessmentDate", {});
       const SUBDOMAIN = await this.req("/getDistinctSubDomain", {});
 
+      console.log("Dates",DATES)
+      console.log("SUBDOMAINS",SUBDOMAIN)
+
       let constructedDate = [];
       let constructedDate2 = [];
       let legends = [];
@@ -1567,8 +1570,11 @@ export default {
       let maxScore = 0;
 
       SUBDOMAIN.forEach((i) => {
+        console.log("Checking maxscore rating ->",i.rating)
         maxScore = Math.max(maxScore, i.rating);
       });
+
+      console.log("maxScore is",maxScore)
 
       SUBDOMAIN.forEach((i) => {
         let search = indicators.find(
@@ -1581,6 +1587,8 @@ export default {
             max: maxScore,
           });
       });
+
+      console.log("INDICATORS",indicators)
 
       DATES.forEach((date) => {
         //     //date.year
@@ -1610,6 +1618,8 @@ export default {
         }
       });
 
+      console.log("CONSTRUCTED OPI",constructedDate)
+
       DATES.forEach((date) => {
         //     //date.year
         let D = Array(indicators.length).fill(0);
@@ -1638,12 +1648,17 @@ export default {
         }
       });
 
+      console.log("CONSTRUCTED OCAT",constructedDate2)
+
       constructedDate.forEach((i) => {
         i.value.forEach((ix, idx) => {
           if (i.Div[idx] === 0 || i.Div[idx] === 0) return;
           i.value[idx] /= i.Div[idx];
         });
       });
+
+      console.log("CONSTRUCTED OPI",constructedDate)
+
 
       this.radarData.series.push({
         type: "radar",
@@ -1657,6 +1672,9 @@ export default {
           i.value[idx] /= i.Div[idx];
         });
       });
+
+      console.log("CONSTRUCTED OCAT",constructedDate2)
+
 
       this.radarData.series.push({
         type: "radar",
