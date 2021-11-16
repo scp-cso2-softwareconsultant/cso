@@ -96,6 +96,21 @@ class commonController extends Controller
         return $stats_list;
     }
 
+    
+    public function getCSOIndicatorOutputStatusCount(){
+        $get_stats = DB::table("cso_indicator")
+        ->select(DB::raw("cso_status as status, count(cso_status) as val"))
+        ->whereRaw("cso_category = 'Output' AND deleted_at is null")
+        ->groupBy(DB::raw("cso_status"))
+        ->orderBy("cso_status","desc")
+        ->get();
+        $stats_list = [];
+        if($get_stats)
+            foreach ($get_stats as $key => $row)
+                $stats_list[$key] = json_decode(json_encode($row), true);
+        return $stats_list;
+    }
+
     public function getDocumentType(){
         $get_type = DB::table("document_type")->select(DB::raw("document_type as text, document_type as value"))->get();
         $type_list = [];

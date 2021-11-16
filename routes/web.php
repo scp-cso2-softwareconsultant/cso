@@ -37,6 +37,7 @@ Route::group(['middleware'=> ['auth']], function (){
         Route::get('/dashboard-cso-profile', [App\Http\Controllers\CSOProfileController::class, 'getCSOProfile'])->name('dashboard-cso-profile')->middleware('roles_permission:Dashboard,view');
         Route::get('/dashboard-finance-tracker', [App\Http\Controllers\FinanceTrackerController::class,'getFinanceTracker'])->name('finance-tracker')->middleware('roles_permission:Dashboard,view');
         Route::get('/dashboard-cso-activity-count', [App\Http\Controllers\commonController::class, 'getCSOIndicatorActivitiesStatusCount'])->name('cso-indicator-activities')->middleware('roles_permission:Dashboard,view');
+        Route::get('/dashboard-cso-output-count', [App\Http\Controllers\commonController::class, 'getCSOIndicatorOutputStatusCount'])->name('cso-indicator-outputs')->middleware('roles_permission:Dashboard,view');
     });
     
     

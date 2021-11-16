@@ -17,7 +17,21 @@
             label="Responsible Organization"
           ></v-combobox>
         </center> -->
-        <PieChart :D="pieData" />
+        <BarChart1 :D="fstbarData" />
+      </div>
+      <div class="card-body">
+        <!-- <center>
+          <v-combobox
+            class="d-inline-block p-3"
+            hide-selected
+            small-chips
+            v-on:change="updateCSOIndicatorsChart()"
+            v-model="selectedOrganization"
+            :items="responsibleOrganization"
+            label="Responsible Organization"
+          ></v-combobox>
+        </center> -->
+        <BarChart2 :D="secbarData" />
       </div>
     </div>
     <!-- CSO NETWORK DOUGHNUT-->
@@ -228,7 +242,8 @@
 import VueApexCharts from "vue-apexcharts";
 
 import * as echarts from "echarts";
-import PieChart from "../components/dashboard_charts/pie_chart.vue";
+import BarChart1 from "../components/dashboard_charts/barchart1.vue";
+import BarChart2 from "../components/dashboard_charts/barchart2.vue";
 import DoughnutChart from "../components/dashboard_charts/doughnut_chart.vue";
 import BarChart from "../components/dashboard_charts/barchart.vue";
 import RadarChart from "../components/dashboard_charts/radarchart.vue";
@@ -239,7 +254,8 @@ import Bar2 from "../components/dashboard_charts/bar_d2.vue";
 export default {
   components: {
     apexchart: VueApexCharts,
-    PieChart,
+    BarChart1,
+    BarChart2,
     DoughnutChart,
     BarChart,
     RadarChart,
@@ -252,7 +268,7 @@ export default {
     //selectedOrganization: "",
 
     /*ECHART1
-            pieData: {
+            fstbarData: {
                 title: {
                     text: "No Selected Organization",
                     left: "center",
@@ -322,9 +338,57 @@ export default {
                     data: [],
                 }, ],
             } removed due to change request to bargraph*/
-    pieData: {
+    fstbarData: {
       title: {
         text: "Activity Status",
+        left: "0",
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow",
+        },
+      },
+      legend: {
+        data: [],
+      },
+      aria: {
+        enabled: true,
+        decal: {
+          show: true,
+        },
+      },
+      color: [],
+      toolbox: {
+        show: true,
+        orient: "vertical",
+        left: "right",
+        top: "center",
+        feature: {
+          mark: { show: true },
+          //dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ["line", "bar", "stack"] },
+          //restore: { show: true },
+          saveAsImage: { show: true },
+        },
+      },
+      xAxis: [
+        {
+          type: "category",
+          axisTick: { show: false },
+          data: [""],
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+        },
+      ],
+      series: [],
+    },
+    secbarData: {
+      title: {
+        text: "Output Status",
         left: "0",
       },
       tooltip: {
@@ -1273,6 +1337,7 @@ export default {
     async initialize() {
       document.title = "SCP: CSO² Project | Dashboard";
       this.updateCSOIndicatorsChart();
+      this.updateCSOIndicatorsChart2();
       this.updateCSOProfileChart();
       await this.initTop3();
       await this.initPrimaryBar();
@@ -1287,7 +1352,7 @@ export default {
       //   });
     },
 
-    //FOR CSO2 INDICATOR PIE CHART
+    //FOR CSO2 activity INDICATOR BAR CHART
     async updateCSOIndicatorsChart() {
       let RAWDATA = await this.req("/dashboard-cso-activity-count", {});
       let colors = ["#ff9800", "#2196f3", "#f44336", "#4caf50", "#9e9e9e"];
@@ -1299,8 +1364,8 @@ export default {
         else if (data.status === "Completed") colP = 3;
         else if (data.status === "Cancelled") colP = 4;
 
-        this.pieData.legend.data.push(data.status);
-        this.pieData.series.push({
+        this.fstbarData.legend.data.push(data.status);
+        this.fstbarData.series.push({
           name: data.status,
           type: "bar",
           barGap: 0,
@@ -1321,7 +1386,45 @@ export default {
           data: [data.val],
         });
         if (colP != -1 || colP < colors.length)
-          this.pieData.color.push(colors[colP]);
+          this.fstbarData.color.push(colors[colP]);
+      });
+    },
+
+    // FOR output indicator barchart
+    async updateCSOIndicatorsChart2() {
+      let RAWDATA = await this.req("/dashboard-cso-output-count", {});
+      let colors = ["#ff9800", "#2196f3", "#f44336", "#4caf50", "#9e9e9e"];
+      RAWDATA.forEach((data, i) => {
+        var colP = -1;
+        if (data.status === "Not Yet Started") colP = 0;
+        else if (data.status === "In Progress") colP = 1;
+        else if (data.status === "Delayed") colP = 2;
+        else if (data.status === "Completed") colP = 3;
+        else if (data.status === "Cancelled") colP = 4;
+
+        this.secbarData.legend.data.push(data.status);
+        this.secbarData.series.push({
+          name: data.status,
+          type: "bar",
+          barGap: 0,
+          label: {
+            show: true,
+            // position: app.config.position,
+            // distance: app.config.distance,
+            // align: app.config.align,
+            //verticalAlign: app.config.verticalAlign,
+            rotate: 50,
+            formatter: "{c}  {name|{a}}",
+            fontSize: 16,
+            rich: {
+              name: {},
+            },
+          },
+          emphasis: { focus: "series" },
+          data: [data.val],
+        });
+        if (colP != -1 || colP < colors.length)
+          this.secbarData.color.push(colors[colP]);
       });
     },
 
