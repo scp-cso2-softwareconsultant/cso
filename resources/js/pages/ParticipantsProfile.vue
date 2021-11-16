@@ -51,18 +51,6 @@
                                     </v-row>
                                     <v-row class="mt-0" v-if="!detailsReadonly">
                                         <v-col cols="12" sm="12" md="12">
-                                            <v-select :items="cso_name_items" v-model="editedItem.lro_id"
-                                                label="Name of LRO *" dense :rules="[rules.required]"></v-select>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row class="mt-0" v-if="detailsReadonly">
-                                        <v-col cols="12" sm="12" md="12">
-                                            <v-select :readonly="detailsReadonly" :items="cso_name_items" v-model="editedItem.lro_id"
-                                                label="Name of LRO *" dense :rules="[rules.required]"></v-select>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row class="mt-0" v-if="!detailsReadonly">
-                                        <v-col cols="12" sm="12" md="12">
                                             <v-select :items="genderList" v-model="editedItem.participant_gender"
                                                 :rules="[rules.required]" label="Gender *" dense></v-select>
                                         </v-col>
@@ -671,10 +659,6 @@
                 }
                 if (!this.editedItem.participant_position) {
                     this.$noty.error("Position is empty!");
-                    validate = false;
-                }
-                if (!this.editedItem.lro_id) {
-                    this.$noty.error("Name of LRO is empty!");
                     validate = false;
                 }
                 if (!this.editedItem.participant_gender) {

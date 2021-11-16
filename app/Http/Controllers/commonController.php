@@ -500,7 +500,6 @@ class commonController extends Controller
                         participant_profile.participant_name, 
                         participant_profile.participant_location,
                         participant_profile.participant_address,
-                        cso_profile.cso_name,
                         participant_profile.position_in_organization,
                         participant_profile.participant_position,
                         participant_profile.participant_gender,

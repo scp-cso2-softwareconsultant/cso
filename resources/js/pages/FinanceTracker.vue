@@ -586,7 +586,7 @@
                     align: "end",
                 },
                 {
-                    text: "BR Total",
+                    text: "Burn Rate",
                     value: "finance_burn_rate",
                     width: "8%",
                     sortable: false,
