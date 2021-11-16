@@ -88,6 +88,8 @@ class csoExport implements ShouldAutoSize, FromCollection, WithHeadings
                     'finance_tranche2',
                     'finance_tranche3',
                     'finance_tranche4',
+                    'finance_retention',
+                    'finance_retention',
                     'finance_total',
                     'finance_actuals',
                     'finance_variance',
