@@ -50,7 +50,7 @@ class FinanceTrackerController extends Controller
         $finance_tranche2 = $raw_data->finance_tranche2 != '' ? $raw_data->finance_tranche2 : 0;
         $finance_tranche3 = $raw_data->finance_tranche3 != '' ? $raw_data->finance_tranche3 : 0;
         $finance_tranche4 = $raw_data->finance_tranche4 != '' ? $raw_data->finance_tranche4 : 0;
-
+        $finance_retention = $raw_data->finance_retention != ''? $raw_data->finance_retention: 0;
 
         $finance_tranche1_date = ( $raw_data->finance_tranche1_date != '') ? date('Y-m-d',strtotime( $raw_data->finance_tranche1_date ) ): '';
         $finance_tranche2_date = ( $raw_data->finance_tranche2_date != '') ? date('Y-m-d',strtotime( $raw_data->finance_tranche2_date ) ): '';
@@ -61,7 +61,7 @@ class FinanceTrackerController extends Controller
         $finance_total = $finance_tranche1 + $finance_tranche2 + $finance_tranche3 + $finance_tranche4 ;
         $finance_actuals = $raw_data->finance_actuals != '' ? $raw_data->finance_actuals : 0;
         $finance_variance = $finance_total - $finance_actuals;
-        $finance_burn_rate = $finance_actuals / ($finance_tranche1+$finance_tranche2+$finance_tranche3+$finance_tranche4)* 100; 
+        $finance_burn_rate = $finance_actuals / ($finance_tranche1+$finance_tranche2+$finance_tranche3+$finance_tranche4+$finance_retention)* 100; 
 
         $this->saveCSOLeadOrganizationIfNotExist($raw_data->finance_name);
 
@@ -73,6 +73,7 @@ class FinanceTrackerController extends Controller
                 'finance_tranche2' => $finance_tranche2,
                 'finance_tranche3' => $finance_tranche3,
                 'finance_tranche4' => $finance_tranche4,
+                'finance_retention' => $finance_retention,
                 'finance_tranche1_date' => $finance_tranche1_date,
                 'finance_tranche2_date' => $finance_tranche2_date,
                 'finance_tranche3_date' => $finance_tranche3_date,
@@ -96,6 +97,7 @@ class FinanceTrackerController extends Controller
                     'finance_tranche2' => $finance_tranche2,
                     'finance_tranche3' => $finance_tranche3,
                     'finance_tranche4' => $finance_tranche4,
+                    'finance_retention' => $finance_retention,
                     'finance_tranche1_date' => $finance_tranche1_date,
                     'finance_tranche2_date' => $finance_tranche2_date,
                     'finance_tranche3_date' => $finance_tranche3_date,
