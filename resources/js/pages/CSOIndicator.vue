@@ -846,6 +846,7 @@
                             break;
                         }
                     }
+                    console.log(this.crud_guard)
                 });
                 category_items: ["Impact", "Outcome", "Activity"],
                     (this.loadCSOIndicator = true);

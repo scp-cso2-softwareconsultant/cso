@@ -275,6 +275,7 @@ class commonController extends Controller
         foreach ( $roles_permission as $key => $row){
             if( $row->module == $tableName  || ($is_lsm && $row->module =='LMS') ){
                 $crud_guard  = DB::table('crud_guard')->where('roles_permission_id',$row->id)->get();
+                
                 if( $crud_guard[0]->export == 0 )
                     return  response()->json(  "User not allowed", 401);
                 break; 

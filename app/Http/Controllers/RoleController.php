@@ -29,6 +29,15 @@ class RoleController extends Controller
         $roles = [];
         foreach ( $roles_permission as $key => $row){
             $crud_guard  = DB::table('crud_guard')->where('roles_permission_id',$row->id)->get(); 
+
+            // Converting db role into int because go daddy database return it as a string instead of int
+            // we don't know why.
+            foreach ($crud_guard as $key=>$value) {
+                foreach($crud_guard[$key] as $k => $v){
+                    $crud_guard[$key] -> $k = (int) $v;
+                }
+            }
+
             $roles[$row->id] =array(
                 'id'=>$row->id,
                 'name' => $row->module,
