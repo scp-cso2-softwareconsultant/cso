@@ -97,8 +97,6 @@ class FinanceTrackerController extends Controller
 
         $this->saveCSOLeadOrganizationIfNotExist($finance_name);
         
-        
-
 
         if($form_mode < 0 && $finance == null) {
             $insertData = DB::table('finance')->insert([

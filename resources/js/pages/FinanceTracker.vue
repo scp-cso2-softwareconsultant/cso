@@ -27,7 +27,7 @@
                                         
                                         <v-row class="mt-0">
                                             <v-col cols="12" sm="12" md="12">
-                                                <v-combobox :readonly="detailsReadonly" :rules="[rules.required]"
+                                                <v-combobox :readonly="editedIndex != -1" :rules="[rules.required]"
                                                     v-model="selected_finance_name" :items="responsibleOrganization"
                                                     :search-input.sync="search" hide-selected label="Name"
                                                     hint="Hit backspace to delete selected Name" multiple
