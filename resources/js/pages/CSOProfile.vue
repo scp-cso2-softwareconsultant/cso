@@ -94,7 +94,6 @@
                                                     "
                                                     label="Type of CSO/CSO Network *"
                                                     dense
-                                                    readonly
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -106,7 +105,6 @@
                                                     v-model="editedItem.is_lro"
                                                     label="Type of CSO2 Project Support *"
                                                     dense
-                                                    readonly
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -119,7 +117,6 @@
                                                     "
                                                     label="Classification of CSO/CSO Network in CSO2 "
                                                     dense
-                                                    readonly
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>

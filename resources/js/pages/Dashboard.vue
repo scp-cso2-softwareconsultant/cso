@@ -1942,11 +1942,11 @@ export default {
         this.projectTrackingDocumentSeries = [
           {
             data: [
-              this.editedItem.percentComplete,
+              this.editedItem.percentComplete.toFixed(2),
               this.editedItem.burnRate,
-              this.editedItem.objective_1,
-              this.editedItem.objective_2,
-              this.editedItem.objective_3,
+              this.editedItem.objective_1.toFixed(2),
+              this.editedItem.objective_2.toFixed(2),
+              this.editedItem.objective_3.toFixed(2),
             ],
           },
         ];

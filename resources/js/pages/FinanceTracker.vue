@@ -283,7 +283,8 @@
                 },
                 {
                     text: "Burn Rate",
-                    value: "finance_burn_rate",
+                    //value: "finance_burn_rate", no % sign
+                    value: "finance_burn_rate_perc",
                     width: "8%",
                     sortable: false,
                     align: "end",
@@ -388,6 +389,16 @@
                 this.loadFinanceTracker = true;
                 axios.get("/finance-tracker").then((response) => {
                     this.financeList = response.data;
+                    // Add new property for table that show burn rate with % sign
+                    // as requested during turn over
+                    this.financeList.forEach((finance, idx) => {
+                        let newFinance = {
+                            ...finance,
+                            finance_burn_rate_perc : `${finance.finance_burn_rate}%`
+                        }
+
+                        this.financeList[idx] = newFinance
+                    })
                     this.loadFinanceTracker = false;
                 });
                 axios.get("/get-lead-organization").then((res) => {
