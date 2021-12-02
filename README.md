@@ -63,7 +63,7 @@
 
 1.) Clone repository
 
-    git clone https://github.com/Senpai-Coders/cso.git
+    git clone https://github.com/scp-cso2-softwareconsultant/cso.git
 
 2.) Cd into the directory 
 
